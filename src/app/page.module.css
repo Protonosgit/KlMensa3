@@ -1,0 +1,10 @@
+.mealinfo {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+}
+.mealtitle {
+    height: 7rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
