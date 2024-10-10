@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./page.module.css";
 import Schedule from '@/components/schedule';
 
@@ -7,9 +8,13 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <div className={styles.container}>
+        <div >
           <h1 className={styles.headerTitle}>KL Mensa</h1>
+          <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
         </div>
+        <div style={{flex: '1 1 auto'}} />
+        <button className={styles.uploadButton}>Submit Photo</button>
+        <button className={styles.button}><Link href="/login">Login</Link></button>
       </header>
 
       <main className={styles.main}>

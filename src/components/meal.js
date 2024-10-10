@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Star, LocateIcon } from "lucide-react";
+import { Star } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./popup";
 import { useState } from "react";
@@ -19,7 +19,7 @@ export default function Meal({ meal, mealIndex }) {
             }`}
           />
         ))}
-        <span className={styles.ratingCount}>{meal.amt}</span>
+        <span className={styles.ratingCount}>{meal.rating_amt}</span>
       </div>
     );
   };

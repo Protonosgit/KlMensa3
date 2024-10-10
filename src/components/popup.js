@@ -1,12 +1,32 @@
+import Image from "next/image";
 import styles from "./popup.module.css";
-import { useState } from "react";
+import { extractDifferences } from "@/app/utils/stringtools";
+import { Star } from "lucide-react";
 
 export default function MealPopup({ meal, onClose }) {
+  const additives = extractDifferences(meal.title_with_additives, meal.title);
+
+  const renderStarRating = (meal) => {
+    return (
+      <div className={styles.starRating}>
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`${styles.star} ${
+              i < Math.floor(meal.rating) ? styles.starFilled : styles.starEmpty
+            }`}
+          />
+        ))}
+        <span className={styles.ratingCount}>{meal.rating_amt}</span>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.popupOverlay} onClick={onClose}>
-    <div className={styles.popupContent}>
+    <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
       <div className={styles.popupImageContainer}>
-        <img src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt={meal.name} className={styles.popupImage} />
+        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt={meal.title_with_additives} width={600} height={400} className={styles.popupImage} />
         <button onClick={onClose} className={styles.popupCloseButton}>
           ×
         </button>
@@ -17,23 +37,13 @@ export default function MealPopup({ meal, onClose }) {
         <div className={styles.popupPriceRating}>
           <span className={styles.popupPrice}>{meal.price} €</span>
           <div className={styles.popupRating}>
-            {[...Array(5)].map((_, i) => (
-              <span key={i} className={`${styles.star} ${i < Math.floor(meal.rating) ? styles.filled : ''}`}>★</span>
-            ))}
-            <span className={styles.ratingValue}> {meal.rating_amt}</span>
+          {renderStarRating(meal)}
+            {/* <span className={styles.ratingValue}> {meal.rating_amt}</span> */}
           </div>
         </div>
-        <p className={styles.popupDescription}>{meal.title_with_additives}</p>
-
-        <div className={styles.popupDietaryInfo}>
-          <h3>Dietary Information:</h3>
-          <div className={styles.dietaryTags}>
-            {/* {meal.dietaryInfo.map((info, index) => (
-              <span key={index} className={styles.dietaryTag}>
-                {info}
-              </span>
-            ))} */}
-          </div>
+        <p className={styles.popupDescription}><b>Additives:</b> {additives}</p>
+        <div className={styles.commentInfo}>
+          <p>Comments disabled</p>
         </div>
       </div>
     </div>
