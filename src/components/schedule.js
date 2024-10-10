@@ -1,23 +1,28 @@
 import Image from 'next/image'
 import { startOfWeek } from 'date-fns'
-import { fetchFullSchedule } from '@/app/utils/api-bridge';
+import { fetchFullSchedule, fetchMenu } from '@/app/utils/api-bridge';
 import styles from "../app/page.module.css";
 import Meal from './meal';
 export default async function Schedule() {
-  const startDate = startOfWeek(new Date())
 
-  const mealSchedule = await fetchFullSchedule()
+  const menu = await fetchMenu()
 
   return (
     <>
-        {mealSchedule.map((day, index) => {
+        {menu.map((day, dayIndex) => {
           return (
-            <div key={index} className={styles.dayContainer}>
-              <h3 className={styles.dayTitle}>{day?.$.date}</h3>
+            <div key={dayIndex} className={styles.dayContainer}>
+              <h3 className={styles.dayTitle}>{day.date}</h3>
               <div className={styles.mealGrid}>
-              {day.meal?.filter(meal => meal.title_html).map((meal, mealIndex) => (
-                <Meal key={mealIndex} meal={meal} mealIndex={mealIndex} />
-                ))}
+                {day.meals.map((meal, mealIndex) => {
+                  return (
+                    <Meal
+                      key={mealIndex}
+                      meal={meal}
+                      mealIndex={mealIndex}
+                    />
+                  )
+                })}
               </div>
             </div>
           )
