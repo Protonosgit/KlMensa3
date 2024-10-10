@@ -1,5 +1,5 @@
 /* Popup Styles */
-.popup-overlay {
+.popupOverlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -12,22 +12,21 @@
     z-index: 1000;
   }
   
-  .popup-content {
-    background-color: white;
+  .popupContent {
+    background-color: rgb(255, 255, 255);
     border-radius: 8px;
     max-width: 600px;
     width: 90%;
-    
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  .popup-image-container {
+  .popupImageContainer {
     position: relative;
   }
   
-  .popup-image {
+  .popupImage {
     width: 100%;
     height: 250px;
     object-fit: cover;
@@ -35,7 +34,7 @@
     border-top-right-radius: 8px;
   }
   
-  .popup-close-button {
+  .popupCloseButton {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -51,61 +50,61 @@
     align-items: center;
   }
   
-  .popup-details {
+  .popupDetails {
     padding: 1.5rem;
   }
   
-  .popup-title {
+  .popupTitle {
     font-size: 1.5rem;
     margin: 0 0 0.5rem;
     color: #2c3e50;
   }
   
-  .popup-location {
+  .popupLocation {
     font-size: 1rem;
     color: #7f8c8d;
     margin-bottom: 1rem;
   }
   
-  .popup-price-rating {
+  .popupPriceRating {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
   }
   
-  .popup-price {
+  .popupPrice {
     font-size: 1.2rem;
     font-weight: bold;
     color: #27ae60;
   }
   
-  .popup-description {
+  .popupDescription {
     margin-bottom: 1rem;
     line-height: 1.6;
   }
   
-  .popup-ingredients h3,
-  .popup-dietary-info h3 {
+  .popupIngredients h3,
+  .popupDietaryInfo h3 {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
     color: #2c3e50;
   }
   
-  .popup-ingredients ul {
+  .popupIngredients ul {
     list-style-type: disc;
     padding-left: 1.5rem;
     margin-bottom: 1rem;
   }
   
-  .dietary-tags {
+  .dietaryTags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 1rem;
   }
   
-  .dietary-tag {
+  .dietaryTag {
     background-color: #3498db;
     color: white;
     padding: 0.25rem 0.5rem;
@@ -113,18 +112,14 @@
     font-size: 0.9rem;
   }
   
-  .popup-calories {
+  .popupCalories {
     font-size: 1rem;
     color: #2c3e50;
   }
   
   /* Responsive Design */
   @media (max-width: 768px) {
-    .meal-grid {
-      grid-template-columns: 1fr;
-    }
-  
-    .popup-content {
+    .popupContent {
       width: 95%;
     }
   }

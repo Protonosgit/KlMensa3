@@ -1,8 +1,12 @@
+"use client";
 import Image from "next/image";
 import { Star, LocateIcon } from "lucide-react";
 import styles from "../app/page.module.css";
+import MealPopup from "./popup";
+import { useState } from "react";
 
-export default async function Meal({ meal, mealIndex }) {
+export default function Meal({ meal, mealIndex }) {
+  const [selectedMeal, setSelectedMeal] = useState(null);
 
   const renderStarRating = (rating) => {
     return (
@@ -45,16 +49,25 @@ export default async function Meal({ meal, mealIndex }) {
   };
 
   return (
-    <div key={mealIndex} className={styles.mealCard}>
-      {renderImage(meal)}
-      <div className={styles.mealInfo}>
-        <p className={styles.mealLocation}>{meal.loc[0]?.$?.name}</p>
-        <h4 className={styles.mealTitle}>{meal.title_html}</h4>
-        <div className={styles.mealFooter}>
-          <span className={styles.mealPrice}>${meal.$.price}</span>
-          {renderStarRating(meal.rating[0])}
+    <>
+      <div
+        key={mealIndex}
+        className={styles.mealCard}
+        onClick={() => setSelectedMeal(meal)}
+      >
+        {renderImage(meal)}
+        <div className={styles.mealInfo}>
+          <p className={styles.mealLocation}>{meal.loc[0]?.$?.name}</p>
+          <h4 className={styles.mealTitle}>{meal.title_html}</h4>
+          <div className={styles.mealFooter}>
+            <span className={styles.mealPrice}>${meal.$.price}</span>
+            {renderStarRating(meal.rating[0])}
+          </div>
         </div>
       </div>
-    </div>
+      {selectedMeal && (
+        <MealPopup meal={selectedMeal} onClose={() => setSelectedMeal(null)} />
+      )}
+    </>
   );
 }
