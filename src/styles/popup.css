@@ -1,0 +1,130 @@
+/* Popup Styles */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    background-color: white;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 90%;
+    
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .popup-image-container {
+    position: relative;
+  }
+  
+  .popup-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .popup-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-details {
+    padding: 1.5rem;
+  }
+  
+  .popup-title {
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem;
+    color: #2c3e50;
+  }
+  
+  .popup-location {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+  }
+  
+  .popup-price-rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .popup-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #27ae60;
+  }
+  
+  .popup-description {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  
+  .popup-ingredients h3,
+  .popup-dietary-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+  
+  .popup-ingredients ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .dietary-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .dietary-tag {
+    background-color: #3498db;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .popup-calories {
+    font-size: 1rem;
+    color: #2c3e50;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .meal-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .popup-content {
+      width: 95%;
+    }
+  }

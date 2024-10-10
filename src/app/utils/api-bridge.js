@@ -9,7 +9,9 @@ async function fetchFullSchedule() {
             'Pragma': 'no-cache',
             'Expires': '0',
             'Referrer-Policy': 'strict-origin-when-cross-origin',
-            'Content-Type': 'application/xml'
+            'Content-Type': 'application/xml',
+            'User-Agent': 'mensa-kl/3.0',
+            'Accept': 'application/xml'
         }
     });
 
