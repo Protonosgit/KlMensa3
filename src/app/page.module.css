@@ -42,6 +42,9 @@
     text-align: center;
     margin-bottom: 2rem;
   }
+  .dayContainer {
+    padding: 2rem 0;
+  }
   
   .dayTitle {
     font-size: 1.25rem;

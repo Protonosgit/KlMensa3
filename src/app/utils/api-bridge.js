@@ -44,8 +44,7 @@ async function fetchMenu() {
             'Pragma': 'no-cache',
             'Expires': '0',
             'Referrer-Policy': 'strict-origin-when-cross-origin',
-            'Content-Type': 'application/json',
-            'User-Agent': 'mensa-kl/3.0'
+            'Content-Type': 'application/json'
         }
     });
 

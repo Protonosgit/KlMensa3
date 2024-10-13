@@ -61,6 +61,7 @@
   }
   
   .popupLocation {
+    display: flex;
     font-size: 1rem;
     color: #7f8c8d;
     margin-bottom: 1rem;
