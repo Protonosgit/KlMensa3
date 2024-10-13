@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
 import styles from "../app/page.module.css";
-import MealPopup from "./popup";
+import MealPopup from "./detailsModal";
 import { useState } from "react";
 
 export default function Meal({ meal, mealIndex }) {

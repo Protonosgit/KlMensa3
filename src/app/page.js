@@ -1,6 +1,8 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import Schedule from '@/components/schedule';
+import UploadPopup from "@/components/uploadModal";
+import { Filter } from "lucide-react";
 
 export default function Home() {
 
@@ -13,19 +15,20 @@ export default function Home() {
           <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
         </div>
         <div style={{flex: '1 1 auto'}} />
-        <button className={styles.uploadButton}>Submit Photo</button>
-        <button className={styles.button}><Link href="/login">Login</Link></button>
+        <UploadPopup className={styles.uploadButton}/>
+        <a href="javascript:alert('Login functionality will be removed!');void(0)" className={styles.button}>Login</a>
       </header>
 
       <main className={styles.main}>
         <h2 className={styles.weekTitle}>
           
         </h2>
+        <button className={styles.filterButton}><Filter/>Filter</button>
         <Schedule/>
       </main>
       <footer className={styles.footer}>
         <div className={styles.container}>
-          <p>&copy; 2024 Mensa KL operated by <a href="https://www.studierendenwerk-kaiserslautern.de/" className={styles.footerLink}>Studierendenwerks Kaiserslautern.</a></p>
+          <p>&copy; 2024 Mensa KL operated by <a href="https://www.studierendenwerk-kaiserslautern.de/" className={styles.footerLink}>Studierendenwerk Kaiserslautern.</a></p>
           <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
         </div>
       </footer>

@@ -101,15 +101,16 @@
   .starRating {
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
   
   .star {
-    width: 1rem;
-    height: 1rem;
+    width: 1.2rem;
+    height: 1.2rem;
   }
   
   .starFilled {
-    color: #f6e05e;
+    color: black;
     fill: currentColor;
   }
   
@@ -151,6 +152,29 @@
     justify-content: space-between;
     align-items: center;
     justify-content: center;
+  }
+  .uploadButton {
+    border-color: #fbbf24;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+  }
+
+  .dishsnap input[type="file"] {
+    display: none;
+}
+
+  .dishsnap {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+
+  .dishsnap:hover {
+    background-color: #45a049;
   }
   
   /* Responsive Design */

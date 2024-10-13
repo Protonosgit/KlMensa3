@@ -1,5 +1,5 @@
 .container {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
     padding: 0 1rem;
   }
@@ -29,6 +29,17 @@
     border-color: #fbbf24;
     border-width: 1rem;
     background-color: transparent;
+  }
+
+  .filterButton {
+    color: #4a5568;
+    display: flex;
+    padding: 0.5rem 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    border-color: #4a5568;
+    border-width: 2px;
   }
   
   .main {
@@ -100,7 +111,7 @@
   }
   
   .mealLocation {
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     color: #718096;
     margin-bottom: 0.5rem;
   }
@@ -137,7 +148,7 @@
   }
   
   .starFilled {
-    color: #f6e05e;
+    color: black;
     fill: currentColor;
   }
   

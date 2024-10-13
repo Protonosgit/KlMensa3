@@ -1,0 +1,114 @@
+/* Popup Styles */
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popupContent {
+    background-color: rgb(255, 255, 255);
+    border-radius: 8px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+
+  .uploadModalButton {
+    border-color: #fbbf24;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+  }
+
+  .fileUploadPanel {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .uploadArea {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .uploadAreaDragging {
+    border-color: #fbbf24;
+    background-color: #9abcda;
+  }
+  .uploadText {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+  }
+  .fileInput {
+    display: none;
+  }
+  .selectButton {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #fbbf24;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .selectButton:hover {
+    background-color: #fba000;
+  }
+  .fileList {
+    margin-top: 20px;
+  }
+  .fileList h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .fileList ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .filLlist li {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .uploadButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: crimson;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .uploadButton:hover {
+    background-color: rgb(167, 20, 49);
+  }
+  .uploadButton:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .popupContent {
+      width: 95%;
+    }
+  }

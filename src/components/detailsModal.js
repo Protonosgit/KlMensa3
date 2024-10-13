@@ -1,7 +1,8 @@
 import Image from "next/image";
-import styles from "./popup.module.css";
+import styles from "./details.module.css";
 import { extractDifferences } from "@/app/utils/additives";
 import { Star, MapPin } from "lucide-react";
+import StarRating from "./starrating";
 
 export default function MealPopup({ meal, onClose }) {
   const additives = extractDifferences(meal.title_with_additives, meal.title);
@@ -37,7 +38,7 @@ export default function MealPopup({ meal, onClose }) {
         <div className={styles.popupPriceRating}>
           <span className={styles.popupPrice}>{meal.price} €</span>
           <div className={styles.popupRating}>
-          {renderStarRating(meal)}
+            <StarRating meal={meal} />
           </div>
         </div>
         <p className={styles.popupDescription}><b>Additives:</b> {additives}</p>
