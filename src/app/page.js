@@ -3,6 +3,7 @@ import styles from "./page.module.css";
 import Schedule from '@/components/schedule';
 import UploadPopup from "@/components/uploadModal";
 import { Filter } from "lucide-react";
+import FilterMenu from "@/components/filtermenu";
 
 export default function Home() {
 
@@ -23,7 +24,7 @@ export default function Home() {
         <h2 className={styles.weekTitle}>
           
         </h2>
-        <button className={styles.filterButton}><Filter/>Filter</button>
+        <FilterMenu/>
         <Schedule/>
       </main>
       <footer className={styles.footer}>

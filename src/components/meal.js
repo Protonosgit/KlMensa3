@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Star } from "lucide-react";
+import { Star, MoonIcon } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
 import { useState } from "react";
@@ -33,7 +33,10 @@ export default function Meal({ meal, mealIndex }) {
       >
         <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt="dish-image" className={styles.mealImage} width={600} height={400} />
         <div className={styles.mealInfo}>
-          <p className={styles.mealLocation}>{meal.loc_clearname}</p>
+          <p className={styles.mealLocation}>
+            {meal.loc === "Abend" || meal.loc === "AbendVegan" ? <MoonIcon size={16} style={{marginRight: '5px'}} /> : null}
+            {meal.loc_clearname}
+          </p>
           <h4 className={styles.mealTitle}>{meal.title}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>${meal.price}</span>

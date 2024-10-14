@@ -14,7 +14,11 @@
   .headerTitle {
     font-size: 1.875rem;
     font-weight: bold;
-  }  
+  }
+  .headerSubtitle {
+    font-size: 1.25rem;
+    font-weight: 400;
+  }
   .button, .uploadButton {
     background-color: #fbbf24;
     color: var(--primary-foreground);
@@ -111,6 +115,8 @@
   }
   
   .mealLocation {
+    display: flex;
+    align-items: center;
     font-size: 0.9rem;
     color: #718096;
     margin-bottom: 0.5rem;

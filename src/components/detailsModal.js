@@ -7,27 +7,11 @@ import StarRating from "./starrating";
 export default function MealPopup({ meal, onClose }) {
   const additives = extractDifferences(meal.title_with_additives, meal.title);
 
-  const renderStarRating = (meal) => {
-    return (
-      <div className={styles.starRating}>
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            className={`${styles.star} ${
-              i < Math.floor(meal.rating) ? styles.starFilled : styles.starEmpty
-            }`}
-          />
-        ))}
-        <span className={styles.ratingCount}>{meal.rating_amt}</span>
-      </div>
-    );
-  };
-
   return (
     <div className={styles.popupOverlay} onClick={onClose}>
     <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
       <div className={styles.popupImageContainer}>
-        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt={meal.title_with_additives} width={600} height={400} className={styles.popupImage} />
+        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt={meal.title_with_additives} width={600} height={400} className={styles.popupImage}/>
         <button onClick={onClose} className={styles.popupCloseButton}>
           ×
         </button>

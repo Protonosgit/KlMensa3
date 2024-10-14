@@ -1,0 +1,64 @@
+.filterButton {
+    color: #4a5568;
+    display: flex;
+    padding: 0.5rem 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    border-color: #4a5568;
+    border-width: 2px;
+    transition: background-color 0.3s;
+  }
+
+  .filterContent {
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .filterTitle {
+    font-size: 1rem;
+    font-weight: bold;
+}
+  
+  .filterButton:hover {
+    background-color: #4a5568;
+    color: white;
+  }
+
+  .filterContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .filterSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .filterItem {
+    margin-bottom: 0.3rem;
+    white-space: nowrap;
+  }
+
+  .filterLabel {
+    margin-left: 0.5rem;
+  }
+
+  .applyButton {
+    background-color: #fbbf24;
+    color: var(--primary-foreground);
+    border: none;
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+  }
+  
