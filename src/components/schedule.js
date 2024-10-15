@@ -12,7 +12,8 @@ export default async function Schedule() {
         {menu.map((day, dayIndex) => {
           return (
             <div key={dayIndex} className={styles.dayContainer}>
-              <h3 className={styles.dayTitle}>{format(new Date(), 'eeee dd.MM')}</h3>
+              <h3 className={styles.dayTitle}>{format(day.date, 'eeee dd.MM')}</h3>
+              <hr className={styles.daySeperator} />
               <div className={styles.mealGrid}>
                 {day.meals.map((meal, mealIndex) => {
                   return (

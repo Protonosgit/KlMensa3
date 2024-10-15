@@ -50,13 +50,7 @@
     flex-grow: 1;
     padding: 2rem 0;
   }
-  
-  .weekTitle {
-    font-size: 1.5rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 2rem;
-  }
+
   .dayContainer {
     padding: 2rem 0;
   }
@@ -64,8 +58,13 @@
   .dayTitle {
     font-size: 1.25rem;
     font-weight: 600;
-    margin-bottom: 1rem;
     color: #4a5568;
+  }
+
+  .daySeperator {
+    height: 2px;
+    background-color: #4a5568;
+    margin-bottom: 1rem;
   }
   
   .mealGrid {

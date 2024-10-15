@@ -6,7 +6,7 @@ async function fetchFullSchedule() {
     const response = await fetch('https://www.mensa-kl.de/?mode=mensaxml', {
         method: 'GET',
         headers: {
-            'Cache-Control': 'no-cache',
+            'Cache-Control': 'no-store, no-cache, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0',
             'Referrer-Policy': 'strict-origin-when-cross-origin',
@@ -38,9 +38,10 @@ function parseMensaSchedule(xmlData) {
 
 async function fetchMenu() {
     const response = await fetch('https://www.mensa-kl.de/api.php?format=json&date=all', {
+        cache: 'no-store',
         method: 'GET',
         headers: {
-            'Cache-Control': 'no-cache',
+            'Cache-Control': 'no-store, no-cache, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0',
             'Referrer-Policy': 'strict-origin-when-cross-origin',
@@ -81,6 +82,8 @@ function generateClearLocation(loc) {
         case "2":
             return "Ausgabe 2"
         case "1veg":
+            return "Ausgabe 1 vegan"
+        case "1vegan":
             return "Ausgabe 1 vegan"
         case "2vegan":
             return "Ausgabe 2 vegan"
