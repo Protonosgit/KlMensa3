@@ -16,8 +16,8 @@ export default function Home() {
           <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
         </div>
         <div style={{flex: '1 1 auto'}} />
-        <UploadPopup className={styles.uploadButton}/>
-        <a href="javascript:alert('Login functionality will be removed!');void(0)" className={styles.button}>Login</a>
+        <UploadPopup />
+        {/* <a href="javascript:alert('Login functionality will be removed!');void(0)" className={styles.button}>Login</a> */}
       </header>
 
       <main className={styles.main}>

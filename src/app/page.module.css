@@ -29,12 +29,6 @@
     border-radius: 0.5rem;
   }
 
-  .uploadButton {
-    border-color: #fbbf24;
-    border-width: 1rem;
-    background-color: transparent;
-  }
-
   .filterButton {
     color: #4a5568;
     display: flex;

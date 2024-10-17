@@ -65,7 +65,7 @@ function parseMenu(menuData) {
             menucollect = []
         }
 
-        menucollect.push({...menuData[i], loc_clearname: generateClearLocation(menuData[i].loc)})
+        menucollect.push({...menuData[i], loc_clearname: generateClearLocation(menuData[i].loc), loc_link: generateMapsLink(menuData[i].loc)})
     }
     if(menucollect.length > 0) {
         schedule.push({meals: menucollect, date: menuData[menuData.length-1].date})
@@ -99,6 +99,30 @@ function generateClearLocation(loc) {
             return "Salatbufett Vegan"
         default:
             return loc
+
+    }
+}
+
+function generateMapsLink(loc) {
+    switch(loc) {
+        case "1":
+            return "https://www.google.com/maps/place/49.425171,7.750353"
+        case "2":
+            return "https://www.google.com/maps/place/49.425129,7.750617"
+        case "1veg":
+            return "https://www.google.com/maps/place/49.425171,7.750353"
+        case "1vegan":
+            return "https://www.google.com/maps/place/49.425171,7.750353"
+        case "2vegan":
+            return "https://www.google.com/maps/place/49.425129,7.750617"
+        case "Grill":
+            return "https://maps.app.goo.gl/o25qX5cvWBMJQUeD9"
+        case "Abend":
+            return "https://maps.app.goo.gl/EoysAuqrYrndG69w7"
+        case "AbendVegan":
+            return "https://maps.app.goo.gl/EoysAuqrYrndG69w7"
+        default:
+            return "https://maps.app.goo.gl/kTgdA5TwexxrxRUA8"
 
     }
 }

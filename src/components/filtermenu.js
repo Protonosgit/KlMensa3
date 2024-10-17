@@ -46,9 +46,19 @@ export default function FilterMenu() {
 // Rindfleisch<br>S: Schweinefleisch<br>V: Vegetarisch<br>G: Geflügel<br>F: Fisch/Schalentier<br>W: Wild<br>K: Kalb<br>L: Lamm<br>B: Bio<br>Lfrei: ohne <br><br>Es wird  verwendet.'
 
   useEffect(() => {
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(',');
-    console.log(ca);
+
+    function getArrayFromCookie(name) {
+      const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith(name))
+        ?.split('=')[1];
+      
+      return cookieValue ? JSON.parse(cookieValue) : null;
+    }
+
+    setMealLocations(getArrayFromCookie("location"));
+    setMealAdditives(getArrayFromCookie("additive"));
+    setMealproteins(getArrayFromCookie("protein"))
   }, []);
 
   function updateLocFilter(index, value) {
@@ -77,21 +87,17 @@ export default function FilterMenu() {
 
 
   function storeFilter() {
+
     // store cookies
-    const locationCookie = mealLocations
-      .filter((location) => location.shown)
-      .map((location) => location.id).join(",");
-    document.cookie = `location=${locationCookie}; path=/; max-age=31536000`;
+    const locArray = JSON.stringify(mealLocations);
+    document.cookie = `location=${locArray}; path=/`;
 
-    const proteinCookie = mealProteins
-      .filter((protein) => protein.shown)
-      .map((protein) => protein.id).join(",");
-    document.cookie = `protein=${proteinCookie}; path=/; max-age=31536000`;
+    const protArray = JSON.stringify(mealProteins);
+    document.cookie = `protein=${protArray}; path=/`;
 
-    const additiveCookie = mealAdditives
-      .filter((additive) => additive.shown)
-      .map((additive) => additive.id).join(",");
-    document.cookie = `additive=${additiveCookie}; path=/; max-age=31536000`;
+    const addArray = JSON.stringify(mealAdditives);
+    document.cookie = `additive=${addArray}; path=/`;
+
 
     window.location.reload();
     

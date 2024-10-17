@@ -65,6 +65,8 @@
     font-size: 1rem;
     color: #7f8c8d;
     margin-bottom: 1rem;
+    text-decoration: underline;
+    cursor: pointer;
   }
   
   .popupPriceRating {

@@ -17,7 +17,7 @@ export default function MealPopup({ meal, onClose }) {
         </button>
       </div>
       <div className={styles.popupDetails}>
-      <p className={styles.popupLocation}><MapPin size={20} /> {meal.loc_clearname}</p>
+      <a href={meal.loc_link} className={styles.popupLocation}><MapPin size={20} /> {meal.loc_clearname}</a>
         <h2 className={styles.popupTitle}>{meal.title}</h2>
         <div className={styles.popupPriceRating}>
           <span className={styles.popupPrice}>{meal.price} €</span>
