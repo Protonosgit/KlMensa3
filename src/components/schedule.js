@@ -2,10 +2,11 @@ import {  fetchMenu } from '@/app/utils/api-bridge';
 import styles from "../app/page.module.css";
 import Meal from './meal';
 import { format } from 'date-fns';
+import { locFilter } from '@/app/utils/filter';
 
 export default async function Schedule() {
 
-  const menu = await fetchMenu()
+  const menu = await fetchMenu();
 
   return (
     <>

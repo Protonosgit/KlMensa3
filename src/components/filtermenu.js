@@ -16,16 +16,18 @@ export default function FilterMenu() {
     { id : 4, name: "Grill", shown: true },
     { id: 5, name: "Buffet", shown: true },
     { id: 6, name: "Atrium", shown: true },
-    { id: 7, name: "Unique", shown: true },
-    { id:  8, name: "Abendmensa", shown: true },
+    { id: 7, name: "Atrium Vegan", shown: true },
+    { id: 8, name: "Unique", shown: true },
+    { id:  9, name: "Abendmensa", shown: true },
   ]);
-  const [mealProteins, setMealproteins] = useState([
+  const [mealProteins, setMealProteins] = useState([
     { id: 1, name: "Pork", shown: true },
     { id: 2, name: "Beef", shown: true },
     { id: 3, name: "Chicken", shown: true },
     { id: 4, name: "Fish/", shown: true },
     { id: 5, name: "Boar", shown: true },
-    { id: 6, name: "Vegetarian", shown: true },
+    { id: 6, name: "Sheep", shown: true },
+    { id: 7, name: "Vegetarian", shown: true },
   ]);
 
   const [mealAdditives, setMealAdditives] = useState([
@@ -56,9 +58,15 @@ export default function FilterMenu() {
       return cookieValue ? JSON.parse(cookieValue) : null;
     }
 
-    setMealLocations(getArrayFromCookie("location"));
-    setMealAdditives(getArrayFromCookie("additive"));
-    setMealproteins(getArrayFromCookie("protein"))
+    if(getArrayFromCookie("location") !== null) {
+      setMealLocations(getArrayFromCookie("location"));
+    }
+    if(getArrayFromCookie("additive") !== null) {
+      setMealAdditives(getArrayFromCookie("additive"));
+    }
+    if(getArrayFromCookie("protein") !== null) {
+      setMealProteins(getArrayFromCookie("protein"))
+    }
   }, []);
 
   function updateLocFilter(index, value) {
@@ -70,7 +78,7 @@ export default function FilterMenu() {
   }
 
   function updateProtFilter(index, value) {
-    setMealproteins((prev) => {
+    setMealProteins((prev) => {
       const updated = [...prev];
       updated[index].shown = value;
       return updated;
