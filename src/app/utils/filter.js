@@ -19,14 +19,14 @@ function locFilter(meal, cookies) {
         case "AtriumMenü":
             return cookies[5]?.shown;
         case "Abend":
-            return cookies[7]?.shown;
+            return cookies[8]?.shown;
         case "AbendVegan":
-            return cookies[7]?.shown;
+            return cookies[9]?.shown;
         case "SalatbufettV+":
-            return cookies[4]?.shown;
+            return cookies[7]?.shown;
         case "Grill":
             return cookies[3]?.shown;
-        case "Grill":
+        case "Wok":
             return cookies[2]?.shown;
         default:
             return true
