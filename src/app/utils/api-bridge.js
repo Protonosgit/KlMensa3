@@ -83,6 +83,8 @@ function generateClearLocation(loc) {
             return "Ausgabe 2"
         case "1veg":
             return "Ausgabe 1 vegan"
+        case "2veg":
+            return "Ausgabe 2 vegan"
         case "1vegan":
             return "Ausgabe 1 vegan"
         case "2vegan":

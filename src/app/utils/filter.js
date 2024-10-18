@@ -14,6 +14,8 @@ function locFilter(meal, cookies) {
             return cookies[1]?.shown;
         case "2vegan":
             return cookies[1]?.shown;
+        case "2veg":
+            return cookies[1]?.shown;
         case "AtriumMenüVegan":
             return cookies[6]?.shown;
         case "AtriumMenü":

@@ -9,6 +9,7 @@ import { Filter } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function FilterMenu() {
+  // WARNING !!!! Filter is defined by cookies and cannot be updated once set!!!!
   const [mealLocations, setMealLocations] = useState([
     { id: 1, name: "Ausgabe 1/2", shown: true },
     { id: 2, name: "Ausgabe 1/2 vegan", shown: true },
@@ -161,7 +162,7 @@ export default function FilterMenu() {
               ))}
             </ul>
           </div>
-          <div className={styles.filterSection}>
+          <div className={styles.filterSection} style={{display: "none"}}>
             <p className={styles.filterTitle}>Select Additives:</p>
             <ul className={styles.filterList}>
               {mealAdditives.map((additive, index) => (
@@ -182,6 +183,7 @@ export default function FilterMenu() {
           </div>
         </div>
         <button onClick={storeFilter} className={styles.applyButton}>Apply</button>
+        <p>We use cookies to store your preferences.</p>
       </PopoverContent>
     </Popover>
   );
