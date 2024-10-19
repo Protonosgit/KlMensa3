@@ -27,14 +27,23 @@
     background-color: #fbbf24;
     color: var(--primary-foreground);
     border: none;
-    padding: 0.5rem 1rem;
+    font-weight: 500;
+    padding: 0.3rem 0.2rem;
     font-size: 1rem;
     cursor: pointer;
     border-radius: 0.5rem;
     transition: background-color 0.3s;
   }
+
   .uploadModalButton:hover {
     background-color: rgb(234, 151, 8);
+  }
+
+  @media (min-width: 768px) {
+  .uploadModalButton {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
   }
 
   .fileUploadPanel {

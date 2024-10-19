@@ -34,18 +34,18 @@ export default function FilterMenu() {
   ]);
 
   const [mealAdditives, setMealAdditives] = useState([
-    { id: 1, name: "Farbstoff", shown: true },
-    { id: 2, name: "Konservierungsstoff", shown: true },
-    { id: 3, name: "Antioxidationsmittel", shown: true },
-    { id: 4, name: "Geschmacksverstärker", shown: true },
-    { id: 5, name: "Geschwefelt", shown: true },
-    { id: 6, name: "Geschwärzt", shown: true },
-    { id: 7, name: "Gewachst", shown: true },
-    { id: 8, name: "Phosphat", shown: true },
-    { id: 9, name: "Süßungsmittel", shown: true },
-    { id: 10, name: "Phenylalalninquelle", shown: true },
-    { id: 11, name: "Laktose", shown: true },
-    { id: 12, name: "Jodsalz", shown: true },
+    { id: 1, name: "Laktose", shown: true },
+    { id: 2, name: "Gluten", shown: true },
+    { id: 3, name: "Farbstoff", shown: true },
+    { id: 4, name: "Konservierungsstoff", shown: true },
+    { id: 5, name: "Antioxidationsmittel", shown: true },
+    { id: 6, name: "Geschwefelt", shown: true },
+    { id: 7, name: "Phosphat", shown: true },
+    { id: 8, name: "Süßungsmittel", shown: true },
+    { id: 9, name: "Eier", shown: true },
+    { id: 10, name: "Soja", shown: true },
+    { id: 11, name: "Restalkohol", shown: true },
+    { id: 12, name: "Schalenfrüchte", shown: true },
   ]);
 
 // Rindfleisch<br>S: Schweinefleisch<br>V: Vegetarisch<br>G: Geflügel<br>F: Fisch/Schalentier<br>W: Wild<br>K: Kalb<br>L: Lamm<br>B: Bio<br>Lfrei: ohne <br><br>Es wird  verwendet.'

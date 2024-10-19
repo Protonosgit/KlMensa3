@@ -64,4 +64,28 @@ function protFilter(meal, cookies) {
     }
 }
 
-export { locFilter, protFilter };
+function addFilter(meal, cookies) {
+    if(meal === null || cookies === null) return true
+    if(cookies.length < 6) return true
+
+    switch(meal.icon) {
+        case "pork":
+            return cookies[0].shown;
+        case "beef":
+            return cookies[1].shown;
+        case "chicken":
+            return cookies[2].shown;
+        case "fish":
+            return cookies[3].shown;
+        case "boar":
+            return cookies[4].shown;
+        case "sheep":
+            return cookies[5].shown;
+        case "":
+            return cookies[6].shown;
+        default:
+            return true
+    }
+}
+
+export { locFilter, protFilter, addFilter };

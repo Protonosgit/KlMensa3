@@ -16,17 +16,8 @@
     font-weight: bold;
   }
   .headerSubtitle {
-    font-size: 1.25rem;
-    font-weight: 400;
-  }
-  .button, .uploadButton {
-    background-color: #fbbf24;
-    color: var(--primary-foreground);
-    border: none;
-    padding: 0.5rem 1rem;
     font-size: 1rem;
-    cursor: pointer;
-    border-radius: 0.5rem;
+    font-weight: 400;
   }
 
   .filterButton {
@@ -56,7 +47,7 @@
   }
 
   .daySeperator {
-    height: 2px;
+    height: 3px;
     background-color: #4a5568;
     margin-bottom: 1rem;
   }
@@ -71,11 +62,18 @@
     .mealGrid {
       grid-template-columns: repeat(2, 1fr);
     }
+    .headerSubtitle {
+      font-size: 1.25rem;
+    }
   }
   
   @media (min-width: 1024px) {
     .mealGrid {
       grid-template-columns: repeat(3, 1fr);
+    }
+    .button, .uploadButton {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
     }
   }
   
@@ -180,6 +178,7 @@
   
   .footerLink {
     color: var(--primary-color);
+    margin-left: 1rem;
   }
   
   .footerLink:hover {
