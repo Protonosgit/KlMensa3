@@ -1,11 +1,11 @@
 import Image from "next/image";
 import styles from "./details.module.css";
-import { extractDifferences } from "@/app/utils/additives";
+import { extractAdditives } from "@/app/utils/additives";
 import { Star, MapPin } from "lucide-react";
 import StarRating from "./starrating";
 
 export default function MealPopup({ meal, onClose }) {
-  const additives = extractDifferences(meal.title_with_additives, meal.title);
+  const additives = extractAdditives(meal.title_with_additives);
 
   return (
     <div className={styles.popupOverlay} onClick={onClose}>

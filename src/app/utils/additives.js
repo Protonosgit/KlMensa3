@@ -1,33 +1,49 @@
-function extractDifferences(string1, string2) {
-    const words1 = string1.split(' ');
-    const words2 = string2.split(' ');
-    const differences = [];
-    let i = 0, j = 0;
+const additiveMap = {
+    'la': 'Laktose',
+    'gl': 'Gluten',
+    'g': 'Geflügel',
+    '1': 'Farbstoff',
+    '2': 'Konservierungsstoff',
+    '3': 'Antioxidationsmittel',
+    '5': 'Geschwefelt',
+    '8': 'Phosphat',
+    '9': 'Süßungsmittel',
+    'r': 'Rind',
+    'l': 'Lamm',
+    's': 'Schwein',
+    'k': 'Kalb',
+    'fi': 'Fisch',
+    'ei': 'Eier',
+    'sl': 'Sellerie',
+    'sf': 'Senf',
+    'so': 'Soja',
+    'a': 'Restalkohol',
+    'nu': 'Schalenfrüchte',
+    'sw': 'Schwefeldioxid'
+};
 
-    while (i < words1.length && j < words2.length) {
-        if (words1[i] === words2[j]) {
-            i++;
-            j++;
-        } else {
-            const match = words1[i].match(/\((.*?)\)/);
-            if (match) {
-                differences.push(match[1]); // Extract content inside parentheses
-            }
-            i++;
-        }
-    }
+function extractAdditives(inputString) {
+    // Regular expression to match content inside parentheses
+    const regex = /\(([^)]+)\)/g;
+    const matches = inputString.match(regex);
 
-    // Check for any remaining words in string1
-    while (i < words1.length) {
-        const match = words1[i].match(/\((.*?)\)/);
-        if (match) {
-            differences.push(match[1]); // Extract content inside parentheses
-        }
-        i++;
-    }
+    if (!matches) return '';
 
-    // Join the differences and remove all spaces
-    return differences.join(',').replace(/\s+/g, '');
+    // Extract additives from matches
+    const additives = matches.flatMap(match => 
+        match.slice(1, -1).split(',').map(item => item.trim().toLowerCase())
+    );
+
+    // Remove duplicates
+    const uniqueAdditives = [...new Set(additives)];
+
+    // Map additives to their full names and filter out unmapped additives
+    const mappedAdditives = uniqueAdditives
+        .map(additive => additiveMap[additive] || additive)
+        .filter(additive => additive !== additive.toLowerCase());
+
+    // Join the additives with commas
+    return mappedAdditives.join(', ');
 }
 
-export { extractDifferences }
+export { extractAdditives }
