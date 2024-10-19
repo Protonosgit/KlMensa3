@@ -4,7 +4,7 @@ import { Star, MoonIcon } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
 import { useEffect, useState } from "react";
-import { locFilter } from '@/app/utils/filter';
+import { locFilter, protFilter } from '@/app/utils/filter';
 
 export default function Meal({ meal, mealIndex }) {
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -22,7 +22,7 @@ export default function Meal({ meal, mealIndex }) {
       return cookieValue ? JSON.parse(cookieValue) : null;
     }
     const locOn = locFilter(meal, getArrayFromCookie("location"));
-    const protOn = locFilter(meal, getArrayFromCookie("protein"));
+    const protOn = protFilter(meal, getArrayFromCookie("protein"));
     if(!locOn || !protOn) {
       setFilteredOut(true);
     }
