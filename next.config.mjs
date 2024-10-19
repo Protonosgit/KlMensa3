@@ -4,9 +4,9 @@ const nextConfig = {
         remotePatterns: [
           {
             protocol: 'https',
-            hostname: 'www.mensa-kl.de',
+            hostname: '**',
             port: '',
-            pathname: '/mimg/**',
+            pathname: '**',
           },
         ],
       },

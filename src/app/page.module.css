@@ -160,6 +160,16 @@
     font-size: 0.875rem;
     color: #718096;
   }
+
+  .adReason {
+    margin-left: 1rem;
+    font-size: 0.875rem;
+    color: #718096;
+    cursor: pointer;
+  }
+  .adReason:hover {
+    text-decoration: underline;
+  }
   
   .footer {
     background-color: #edf2f7;

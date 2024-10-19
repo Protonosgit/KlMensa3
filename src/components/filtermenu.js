@@ -21,7 +21,7 @@ export default function FilterMenu() {
     { id: 8, name: "Salatbuffet", shown: true },
     { id:  9, name: "Abendmensa", shown: true },
     { id:  10, name: "Abendmensa vegan", shown: true },
-    { id:  11, name: "News", shown: true },
+    { id:  11, name: "News (soon ads)", shown: true },
   ]);
   const [mealProteins, setMealProteins] = useState([
     { id: 1, name: "Pork", shown: true },

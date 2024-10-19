@@ -21,9 +21,7 @@ export default function Home() {
       </header>
 
       <main className={styles.main}>
-        <h2 className={styles.weekTitle}>
-          
-        </h2>
+        
         <FilterMenu/>
         <Schedule/>
       </main>

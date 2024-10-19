@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Star, MoonIcon } from "lucide-react";
+import { Star, MoonIcon, Megaphone } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
 import { useEffect, useState } from "react";
@@ -11,7 +11,6 @@ export default function Meal({ meal, mealIndex }) {
   const [filteredOut, setFilteredOut] = useState(false);
 
   useEffect(() => {
-
     function getArrayFromCookie(name) {
 
       const cookieValue = document.cookie
@@ -52,6 +51,19 @@ export default function Meal({ meal, mealIndex }) {
     );
   };
 
+  const IconPot = (meal) => {
+    switch (meal.meal) {
+      case "Abend":
+        return <MoonIcon size={16} style={{marginRight: '5px'}} />;
+      case "AbendVegan":
+        return <MoonIcon size={16} style={{marginRight: '5px'}} />;
+      case "News":
+        return <Megaphone size={18} style={{marginRight: '5px'}} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
       <div
@@ -62,7 +74,7 @@ export default function Meal({ meal, mealIndex }) {
         <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt="dish-image" className={styles.mealImage} width={600} height={400} />
         <div className={styles.mealInfo}>
           <p className={styles.mealLocation}>
-            {meal.loc === "Abend" || meal.loc === "AbendVegan" ? <MoonIcon size={16} style={{marginRight: '5px'}} /> : null}
+            <IconPot meal={meal.loc} />
             {meal.loc_clearname}
           </p>
           <h4 className={styles.mealTitle}>{meal.title}</h4>

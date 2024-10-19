@@ -1,0 +1,33 @@
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .main {
+    height: 80vh;
+  }
+  .title {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  .text {
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .footer {
+    background-color: #edf2f7;
+    padding: 1rem 0;
+    text-align: center;
+    color: #4a5568;
+  }
+  
+  .footerLink {
+    color: var(--primary-color);
+  }
+  
+  .footerLink:hover {
+    text-decoration: underline;
+  }

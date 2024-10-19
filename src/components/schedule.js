@@ -2,7 +2,7 @@ import {  fetchMenu } from '@/app/utils/api-bridge';
 import styles from "../app/page.module.css";
 import Meal from './meal';
 import { format } from 'date-fns';
-import { locFilter } from '@/app/utils/filter';
+import AdInjector from '@/components/ad-injector';
 
 export default async function Schedule() {
 
@@ -25,6 +25,9 @@ export default async function Schedule() {
                     />
                   )
                 })}
+                {dayIndex === 0 && 
+                  <AdInjector link={day.ad_link} title={day.ad_title} image={day.ad_image} />
+                }
               </div>
             </div>
           )
