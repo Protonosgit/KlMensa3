@@ -49,10 +49,10 @@ export default function UploadPopup({}) {
       }
     };
     
-    fetch(`https://www.mensa-kl.de/ajax/fileuploader.php?page=public&qqfile=${files[0]}}`, options)
-      .then(response => response.json())
-      .then(response => console.log(response))
-      .catch(err => console.error(err));
+    // fetch(`https://www.mensa-kl.de/ajax/fileuploader.php?page=public&qqfile=${files[0]}}`, options)
+    //   .then(response => response.json())
+    //   .then(response => console.log(response))
+    //   .catch(err => console.error(err));
     toast.loading('Uploading...');
     setTimeout(() => {
       setIsUploading(false);

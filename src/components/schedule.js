@@ -8,6 +8,14 @@ export default async function Schedule() {
 
   const menu = await fetchMenu();
 
+  if(!menu) {
+    return (
+      <div>
+        <p>Loading...</p>
+      </div>
+    )
+  }
+
   return (
     <>
         {menu.map((day, dayIndex) => {
@@ -25,9 +33,9 @@ export default async function Schedule() {
                     />
                   )
                 })}
-                {dayIndex === 0 && 
+                {/* {dayIndex === 0 && 
                   <AdInjector link={day.ad_link} title={day.ad_title} image={day.ad_image} />
-                }
+                } */}
               </div>
             </div>
           )

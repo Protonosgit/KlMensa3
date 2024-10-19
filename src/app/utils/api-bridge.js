@@ -37,22 +37,39 @@ function parseMensaSchedule(xmlData) {
 }
 
 async function fetchMenu() {
-    const response = await fetch('https://www.mensa-kl.de/api.php?format=json&date=all', {
-        cache: 'no-store',
-        method: 'GET',
-        headers: {
-            'Cache-Control': 'no-store, no-cache, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0',
-            'Referrer-Policy': 'strict-origin-when-cross-origin',
-            'Content-Type': 'application/json'
+    try {
+        const response = await fetch('https://www.mensa-kl.de/api.php?format=json&date=all', {
+            cache: 'no-store',
+            method: 'GET',
+            headers: {
+                'Cache-Control': 'no-store, no-cache, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+                'Referrer-Policy': 'strict-origin-when-cross-origin',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            console.error(`Error fetching menu: ${response.status} ${response.statusText}\n${errorMessage}`);
+            return null; // Return null instead of throwing an error
         }
-    });
 
-    const menuSchedule = parseMenu(await response.json());
+        const menuSchedule = parseMenu(await response.json());
 
-    return menuSchedule;
+        if (!menuSchedule || !Array.isArray(menuSchedule) || menuSchedule.length === 0) {
+            console.error('Failed to parse menu schedule');
+            return null; // Return null instead of throwing an error
+        }
+
+        return menuSchedule;
+    } catch (error) {
+        console.error('Network error or server not responding:', error.message);
+        return null; // Return null for any network errors
+    }
 }
+
 function parseMenu(menuData) {
     let pastdate = menuData[0].date;
     let menucollect = []
