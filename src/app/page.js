@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <div >
+        <div className={styles.headerContent} >
           <h1 className={styles.headerTitle}>KL Mensa</h1>
           <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
         </div>
