@@ -2,7 +2,6 @@ import Link from "next/link";
 import styles from "./page.module.css";
 import Schedule from '@/components/schedule';
 import UploadPopup from "@/components/uploadModal";
-import { Filter } from "lucide-react";
 import FilterMenu from "@/components/filtermenu";
 
 export default function Home() {
@@ -17,7 +16,6 @@ export default function Home() {
         </div>
         <div style={{flex: '1 1 auto'}} />
         <UploadPopup />
-        {/* <a href="javascript:alert('Login functionality will be removed!');void(0)" className={styles.button}>Login</a> */}
       </header>
 
       <main className={styles.main}>
