@@ -63,6 +63,9 @@ async function fetchMenu() {
             return null; // Return null instead of throwing an error
         }
 
+
+        // return new Promise((resolve) => setTimeout(() => resolve(menuSchedule), 3000));
+
         return menuSchedule;
     } catch (error) {
         console.error('Network error or server not responding:', error.message);

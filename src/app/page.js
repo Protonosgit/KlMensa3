@@ -3,8 +3,17 @@ import styles from "./page.module.css";
 import Schedule from '@/components/schedule';
 import UploadPopup from "@/components/uploadModal";
 import FilterMenu from "@/components/filtermenu";
+import { Suspense } from "react";
 
 export default function Home() {
+
+  const SkeletonLoading = () => (
+    <>
+    {[...Array(20)].map((_, i) => <SkeletonLoading key={i} />)}
+    
+    
+    </>
+  )
 
 
   return (
@@ -21,7 +30,10 @@ export default function Home() {
       <main className={styles.main}>
         
         <FilterMenu/>
+        {/* <Suspense fallback={[...Array(20)].map((_, i) => <div className={styles.skeleton} key={i} />)}> */}
+        <Suspense fallback={<div className={styles.skeleton}/>}>
         <Schedule/>
+        </Suspense>
       </main>
       <footer className={styles.footer}>
         <div className={styles.container}>

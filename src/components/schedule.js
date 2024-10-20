@@ -34,7 +34,7 @@ export default async function Schedule() {
                   )
                 })}
                 {/* {dayIndex === 0 && 
-                  <AdInjector link={day.ad_link} title={day.ad_title} image={day.ad_image} />
+                  <AdInjector link={'https://kl-mensa.vercel.app'} title={'Developed by Protonos'} image={day.ad_image} />
                 } */}
               </div>
             </div>

@@ -5,9 +5,9 @@ import styles from "../app/page.module.css";
 import Link from "next/link";
 
 
-// This will replace in schedule "News"
+// This will replace scheduled "News"
 // Internal distribution system on supabase
-// Might add cookie to disable this
+// Might add cookie to disable this seperately
 
 export default function AdInjector({link, title, image  }) {
 
