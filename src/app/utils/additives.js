@@ -42,6 +42,8 @@ function extractAdditives(inputString) {
         .map(additive => additiveMap[additive] || additive)
         .filter(additive => additive !== additive.toLowerCase());
 
+    return mappedAdditives;
+
     // Join the additives with commas
     return mappedAdditives.join(', ');
 }

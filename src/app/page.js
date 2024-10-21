@@ -4,6 +4,7 @@ import Schedule from '@/components/schedule';
 import UploadPopup from "@/components/uploadModal";
 import FilterMenu from "@/components/filtermenu";
 import { Suspense } from "react";
+import { Settings } from "lucide-react";
 
 export default function Home() {
 
@@ -25,6 +26,7 @@ export default function Home() {
         </div>
         <div style={{flex: '1 1 auto'}} />
         <UploadPopup />
+        <button style={{display: 'none'}} className={styles.settingsButton}><Settings size={20} /></button>
       </header>
 
       <main className={styles.main}>

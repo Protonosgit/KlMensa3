@@ -1,8 +1,10 @@
 import Image from "next/image";
 import styles from "./details.module.css";
 import { extractAdditives } from "@/app/utils/additives";
-import { Star, MapPin } from "lucide-react";
+import {  MapPin } from "lucide-react";
 import StarRating from "./starrating";
+import { Badge } from "@/components/ui/badge"
+
 
 export default function MealPopup({ meal, onClose }) {
   const additives = extractAdditives(meal.title_with_additives);
@@ -25,7 +27,7 @@ export default function MealPopup({ meal, onClose }) {
             <StarRating meal={meal} />
           </div>
         </div>
-        <p className={styles.popupDescription}><b>Additives:</b> {additives}</p>
+        {additives.length > 1 && <p className={styles.popupDescription}><b>Additives:</b> {additives.map((additive) => <Badge style={{marginRight: '5px'}} key={additive}>{additive}</Badge>)}</p>}
         <div className={styles.commentInfo}>
           <p>Comments disabled</p>
         </div>

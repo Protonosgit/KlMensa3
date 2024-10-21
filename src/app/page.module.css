@@ -20,6 +20,22 @@
     font-weight: 400;
   }
 
+  .settingsButton {
+    margin-left: 1rem;
+    padding: 0.5rem 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    border-color: #4a5568;
+    border-width: 2px;
+    transition: background-color 0.3s;
+  }
+
+  .settingsButton:hover {
+    background-color: #4a5568;
+    color: white;
+  }
+
   .filterButton {
     color: #4a5568;
     display: flex;
@@ -77,25 +93,6 @@
     gap: 1.5rem;
   }
   
-  @media (min-width: 768px) {
-    .mealGrid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .headerSubtitle {
-      font-size: 1.25rem;
-    }
-  }
-  
-  @media (min-width: 1024px) {
-    .mealGrid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    .button, .uploadButton {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-    }
-  }
-  
   .mealCard {
     display: flex;
     flex-direction: column;
@@ -108,7 +105,7 @@
   }
   
   .mealCard:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
   }
   
   .mealImage {
@@ -189,6 +186,7 @@
   }
   
   .footer {
+    border-radius: 0.5rem 0.5rem 0 0;
     background-color: #edf2f7;
     padding: 1rem 0;
     text-align: center;
@@ -198,6 +196,25 @@
   .footerLink {
     color: var(--primary-color);
     margin-left: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .mealGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .headerSubtitle {
+      font-size: 1.25rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .mealGrid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .button, .uploadButton {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+    }
   }
   
   .footerLink:hover {

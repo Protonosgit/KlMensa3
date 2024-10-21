@@ -25,7 +25,7 @@ const mprot =[
   { id: 1, name: "Pork", shown: true },
   { id: 2, name: "Beef", shown: true },
   { id: 3, name: "Chicken", shown: true },
-  { id: 4, name: "Fish/", shown: true },
+  { id: 4, name: "Fish", shown: true },
   { id: 5, name: "Boar", shown: true },
   { id: 6, name: "Sheep", shown: true },
   { id: 7, name: "Vegetarian", shown: true },
