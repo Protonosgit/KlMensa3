@@ -40,19 +40,20 @@ export default function UploadPopup({}) {
       headers: {
         Accept: '*/*',
         'X-Requested-With': 'XMLHttpRequest',
-        'X-File-Name': 'network.js',
+        'X-File-Name': files[0],
         'Content-Type': 'application/octet-stream',
         Origin: 'https://www.mensa-kl.de',
         Connection: 'keep-alive',
         Referer: 'https://www.mensa-kl.de/',
-
-      }
+      },
+      body: files[0],
     };
     
-    // fetch(`https://www.mensa-kl.de/ajax/fileuploader.php?page=public&qqfile=${files[0]}}`, options)
-    //   .then(response => response.json())
-    //   .then(response => console.log(response))
-    //   .catch(err => console.error(err));
+    
+    fetch(`/api/relay?rating=${files[0]}`, options)
+      .then(response => response.json())
+      .then(response => console.log(response))
+      .catch(err => console.error(err));
     toast.loading('Uploading...');
     setTimeout(() => {
       setIsUploading(false);

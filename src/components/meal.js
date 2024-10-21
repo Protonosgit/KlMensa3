@@ -84,6 +84,7 @@ export default function Meal({ meal, mealIndex }) {
           </div>
         </div>
       </div>
+      {/* Maybe always render this modal */}
       {selectedMeal && (
         <MealPopup meal={selectedMeal} onClose={() => setSelectedMeal(null)} />
       )}

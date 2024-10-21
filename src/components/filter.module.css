@@ -52,14 +52,37 @@
     margin-left: 0.5rem;
   }
 
+  .buttonBar {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
   .applyButton {
     background-color: #fbbf24;
     color: var(--primary-foreground);
     border: none;
     margin: 1rem 0;
+    flex: 1;
     padding: 0.5rem 1rem;
     font-size: 1rem;
     cursor: pointer;
     border-radius: 0.5rem;
+  }
+  
+  .resetButton {
+    background-color: transparent;
+    color: var(--primary-foreground);
+    border: 2px solid #fbbf24;
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s;
+  }
+
+  .resetButton:hover {
+    background-color: #fbbf24;
   }
   

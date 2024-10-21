@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import styles from "./filter.module.css";
-import { Filter } from "lucide-react";
+import { Filter, CookingPot } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function FilterMenu() {
@@ -183,7 +183,10 @@ export default function FilterMenu() {
             </ul>
           </div>
         </div>
-        <button onClick={storeFilter} className={styles.applyButton}>Apply</button>
+        <div className={styles.buttonBar}>
+          <button onClick={storeFilter} className={styles.applyButton}>Apply</button>
+          <button onClick={storeFilter} className={styles.resetButton}><CookingPot size={20} /></button>
+        </div>
         <p>We use cookies to store your preferences.</p>
       </PopoverContent>
     </Popover>

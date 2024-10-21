@@ -24,7 +24,7 @@ export default function StarRating({ meal }) {
     }
 
   return (
-    <div className={styles.starRating} onMouseEnter={() => setHover(1)} onMouseLeave={() => setHover(0)}>
+    <div className={styles.starRating} onMouseEnter={() => setHover(1)} onMouseLeave={() => setHover(0)} title="Press star to submit rating">
     {[...Array(5)].map((_, i) => (
       <Star
         key={i}
