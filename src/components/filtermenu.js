@@ -8,47 +8,49 @@ import styles from "./filter.module.css";
 import { Filter, CookingPot } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const mloc = [
+  { id: 1, name: "Ausgabe 1/2", shown: true },
+  { id: 2, name: "Ausgabe 1/2 vegan", shown: true },
+  { id: 3, name: "Wok", shown: true },
+  { id : 4, name: "Grill", shown: true },
+  { id: 5, name: "Buffet", shown: true },
+  { id: 6, name: "Atrium", shown: true },
+  { id: 7, name: "Atrium Vegan", shown: true },
+  { id: 8, name: "Salatbuffet", shown: true },
+  { id:  9, name: "Abendmensa", shown: true },
+  { id:  10, name: "Abendmensa vegan", shown: true },
+  { id:  11, name: "News (soon ads)", shown: true },
+]
+const mprot =[
+  { id: 1, name: "Pork", shown: true },
+  { id: 2, name: "Beef", shown: true },
+  { id: 3, name: "Chicken", shown: true },
+  { id: 4, name: "Fish/", shown: true },
+  { id: 5, name: "Boar", shown: true },
+  { id: 6, name: "Sheep", shown: true },
+  { id: 7, name: "Vegetarian", shown: true },
+]
+const madd = [
+  { id: 1, name: "Laktose", shown: true },
+  { id: 2, name: "Gluten", shown: true },
+  { id: 3, name: "Farbstoff", shown: true },
+  { id: 4, name: "Konservierungsstoff", shown: true },
+  { id: 5, name: "Antioxidationsmittel", shown: true },
+  { id: 6, name: "Geschwefelt", shown: true },
+  { id: 7, name: "Phosphat", shown: true },
+  { id: 8, name: "Süßungsmittel", shown: true },
+  { id: 9, name: "Eier", shown: true },
+  { id: 10, name: "Soja", shown: true },
+  { id: 11, name: "Restalkohol", shown: true },
+  { id: 12, name: "Schalenfrüchte", shown: true },
+]
+
 export default function FilterMenu() {
   // WARNING !!!! Filter is defined by cookies and cannot be updated once set!!!!
-  const [mealLocations, setMealLocations] = useState([
-    { id: 1, name: "Ausgabe 1/2", shown: true },
-    { id: 2, name: "Ausgabe 1/2 vegan", shown: true },
-    { id: 3, name: "Wok", shown: true },
-    { id : 4, name: "Grill", shown: true },
-    { id: 5, name: "Buffet", shown: true },
-    { id: 6, name: "Atrium", shown: true },
-    { id: 7, name: "Atrium Vegan", shown: true },
-    { id: 8, name: "Salatbuffet", shown: true },
-    { id:  9, name: "Abendmensa", shown: true },
-    { id:  10, name: "Abendmensa vegan", shown: true },
-    { id:  11, name: "News (soon ads)", shown: true },
-  ]);
-  const [mealProteins, setMealProteins] = useState([
-    { id: 1, name: "Pork", shown: true },
-    { id: 2, name: "Beef", shown: true },
-    { id: 3, name: "Chicken", shown: true },
-    { id: 4, name: "Fish/", shown: true },
-    { id: 5, name: "Boar", shown: true },
-    { id: 6, name: "Sheep", shown: true },
-    { id: 7, name: "Vegetarian", shown: true },
-  ]);
+  const [mealLocations, setMealLocations] = useState(mloc);
+  const [mealProteins, setMealProteins] = useState(mprot);
+  const [mealAdditives, setMealAdditives] = useState(madd);
 
-  const [mealAdditives, setMealAdditives] = useState([
-    { id: 1, name: "Laktose", shown: true },
-    { id: 2, name: "Gluten", shown: true },
-    { id: 3, name: "Farbstoff", shown: true },
-    { id: 4, name: "Konservierungsstoff", shown: true },
-    { id: 5, name: "Antioxidationsmittel", shown: true },
-    { id: 6, name: "Geschwefelt", shown: true },
-    { id: 7, name: "Phosphat", shown: true },
-    { id: 8, name: "Süßungsmittel", shown: true },
-    { id: 9, name: "Eier", shown: true },
-    { id: 10, name: "Soja", shown: true },
-    { id: 11, name: "Restalkohol", shown: true },
-    { id: 12, name: "Schalenfrüchte", shown: true },
-  ]);
-
-// Rindfleisch<br>S: Schweinefleisch<br>V: Vegetarisch<br>G: Geflügel<br>F: Fisch/Schalentier<br>W: Wild<br>K: Kalb<br>L: Lamm<br>B: Bio<br>Lfrei: ohne <br><br>Es wird  verwendet.'
 
   useEffect(() => {
 
@@ -98,7 +100,6 @@ export default function FilterMenu() {
 
 
   function storeFilter() {
-
     // store cookies
     const locArray = JSON.stringify(mealLocations);
     document.cookie = `location=${locArray}; path=/`;
@@ -111,7 +112,15 @@ export default function FilterMenu() {
 
 
     window.location.reload();
-    
+  }
+
+  function resetFilter() {
+    // delete all cookies
+    document.cookie = "location=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    document.cookie = "protein=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    document.cookie = "additive=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+
+    window.location.reload();
   }
 
   return (
@@ -184,8 +193,8 @@ export default function FilterMenu() {
           </div>
         </div>
         <div className={styles.buttonBar}>
-          <button onClick={storeFilter} className={styles.applyButton}>Apply</button>
-          <button onClick={storeFilter} className={styles.resetButton}><CookingPot size={20} /></button>
+          <button title="Apply filter" onClick={storeFilter} className={styles.applyButton}>Apply</button>
+          <button title="Reset filter" onClick={resetFilter} className={styles.resetButton}><CookingPot size={20} /></button>
         </div>
         <p>We use cookies to store your preferences.</p>
       </PopoverContent>

@@ -68,6 +68,7 @@ export default function UploadPopup({}) {
       <button
         className={styles.uploadModalButton}
         onClick={() => setModalVisible(true)}
+        title="Upload a photo of your meal"
       >
         Submit photo
       </button>
