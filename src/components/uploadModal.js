@@ -49,7 +49,6 @@ export default function UploadPopup({}) {
       body: files[0],
     };
     
-    
     fetch(`/api/relay?rating=${files[0]}`, options)
       .then(response => response.json())
       .then(response => console.log(response))

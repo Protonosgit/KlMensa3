@@ -46,14 +46,18 @@ const madd = [
 ]
 
 export default function FilterMenu() {
+  //
   // WARNING !!!! Filter is defined by cookies and cannot be updated once set!!!!
+  // WARNING !!!! Filter is defined by cookies and cannot be updated once set!!!!
+  //
   const [mealLocations, setMealLocations] = useState(mloc);
   const [mealProteins, setMealProteins] = useState(mprot);
   const [mealAdditives, setMealAdditives] = useState(madd);
+  const [filterActive, setFilterActive] = useState(false);
 
 
   useEffect(() => {
-
+    // Get filter values from cookies
     function getArrayFromCookie(name) {
       const cookieValue = document.cookie
         .split('; ')
@@ -63,14 +67,20 @@ export default function FilterMenu() {
       return cookieValue ? JSON.parse(cookieValue) : null;
     }
 
+    // load filter1 in ui thread
     if(getArrayFromCookie("location") !== null) {
       setMealLocations(getArrayFromCookie("location"));
+      setFilterActive(true);
     }
+    // load filter2 in ui thread
     if(getArrayFromCookie("additive") !== null) {
       setMealAdditives(getArrayFromCookie("additive"));
+      setFilterActive(true);
     }
+    // load filter3 in ui thread
     if(getArrayFromCookie("protein") !== null) {
       setMealProteins(getArrayFromCookie("protein"))
+      setFilterActive(true);
     }
   }, []);
 
@@ -98,9 +108,8 @@ export default function FilterMenu() {
     });
   }
 
-
   function storeFilter() {
-    // store cookies
+    // store cookies with filters
     const locArray = JSON.stringify(mealLocations);
     document.cookie = `location=${locArray}; path=/`;
 
@@ -194,7 +203,7 @@ export default function FilterMenu() {
         </div>
         <div className={styles.buttonBar}>
           <button title="Apply filter" onClick={storeFilter} className={styles.applyButton}>Apply</button>
-          <button title="Reset filter" onClick={resetFilter} className={styles.resetButton}><CookingPot size={20} /></button>
+          <button title="Reset filter" onClick={resetFilter} className={styles.resetButton} style={{display: filterActive ? "block" : "none"}}><CookingPot size={20} /></button>
         </div>
         <p>We use cookies to store your preferences.</p>
       </PopoverContent>

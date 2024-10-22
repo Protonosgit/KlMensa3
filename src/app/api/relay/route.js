@@ -1,5 +1,12 @@
 import { NextResponse } from 'next/server';
 
+// Relay API for bypassing cors protection
+// Update on backend required to remove this
+// Maybe someone will feel the need to fix this someday so no request have to intercepted but for now just use this
+// This is untested btw and uploads are broken :o
+// ;) :o :P :D
+
+// Rate endpoint
 export async function GET(req, res) {
   const url = new URL(req.url);
   const rating = url.searchParams.get('rating');
@@ -16,10 +23,12 @@ export async function GET(req, res) {
       },
     });
 
+    // Check if response is ok
     if (!response.ok) {
       return res.status(response.status).end();
     }
 
+    // Parse response and find errors because the api does not do this with codes for some reason ;)
     let data;
     if (response.headers.get('content-type')?.includes('application/json')) {
       data = await response.json();
@@ -34,6 +43,7 @@ export async function GET(req, res) {
   }
 }
 
+// Post dish image endpoint
 export async function POST(req, res) {
   const url = new URL(req.url);
   const fname = url.searchParams.get('qqfile');
@@ -54,10 +64,12 @@ export async function POST(req, res) {
       body: file
     });
 
+    // Check if response is ok
     if (!response.ok) {
       return res.status(response.status).end();
     }
 
+    // same as above
     let data;
     if (response.headers.get('content-type')?.includes('application/json')) {
       data = await response.json();

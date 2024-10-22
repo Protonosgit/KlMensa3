@@ -6,8 +6,8 @@ import Link from "next/link";
 
 
 // This will replace scheduled "News"
-// Internal distribution system on supabase
-// Might add cookie to disable this seperately
+// Internal distribution system will be on supabase
+// Might add cookie to disable this seperately from filters
 
 export default function AdInjector({link, title, image  }) {
 

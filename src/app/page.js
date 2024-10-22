@@ -9,11 +9,13 @@ import { createClient } from '@/app/utils/supabase/server';
 
 export default function Home() {
 
+  // just for testing
   async function alertModal() {
     const supabase = createClient();
     const { data: alerts } = await supabase.from("alerts").select();
   }
 
+  // Skeleton loading animation
   const SkeletonLoading = () => (
     <>
     {[...Array(20)].map((_, i) => <SkeletonLoading key={i} />)}

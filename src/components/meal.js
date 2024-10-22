@@ -11,6 +11,7 @@ export default function Meal({ meal, mealIndex }) {
   const [filteredOut, setFilteredOut] = useState(false);
 
   useEffect(() => {
+    // Get filter values from cookies
     function getArrayFromCookie(name) {
 
       const cookieValue = document.cookie
@@ -20,6 +21,8 @@ export default function Meal({ meal, mealIndex }) {
     
       return cookieValue ? JSON.parse(cookieValue) : null;
     }
+    // Check if current meal card does match a filter profile
+    // If not it is hidden
     const locOn = locFilter(meal, getArrayFromCookie("location"));
     const protOn = protFilter(meal, getArrayFromCookie("protein"));
     if(!locOn || !protOn) {
@@ -31,10 +34,12 @@ export default function Meal({ meal, mealIndex }) {
 
   }, [meal]);
 
+  // show nothing :(
     if(filteredOut) {
       return null;
     }
 
+    // render stars (non interactive)
   const renderStarRating = (meal) => {
     return (
       <div className={styles.starRating}>
@@ -51,6 +56,7 @@ export default function Meal({ meal, mealIndex }) {
     );
   };
 
+  // render icons next to location
   const IconPot = (meal) => {
     switch (meal.meal) {
       case "Abend":

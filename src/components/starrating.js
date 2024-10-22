@@ -9,9 +9,9 @@ export default function StarRating({ meal }) {
     const [rating, setRating] = useState(meal.rating);
 
     async function sendrating(rating) {
-
         toast.loading('Please wait...'); 
-        const response = await fetch(`/api/relay?rating=${999999}&m_id=${meal.m_id}`, {
+        // const response = await fetch(`/api/relay?rating=${999999}&m_id=${meal.m_id}`, {
+        const response = await fetch(`/api/relay?rating=${rating}&m_id=${meal.m_id}`, {
             method: 'GET',
             headers: {
             }

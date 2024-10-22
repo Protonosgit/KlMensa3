@@ -6,6 +6,7 @@ import AdInjector from '@/components/ad-injector';
 
 export default async function Schedule() {
 
+  // This triggers the api bridge to fetch the uncached current data
   const menu = await fetchMenu();
 
   if(!menu) {
