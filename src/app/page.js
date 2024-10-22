@@ -5,14 +5,18 @@ import UploadPopup from "@/components/uploadModal";
 import FilterMenu from "@/components/filtermenu";
 import { Suspense } from "react";
 import { Settings } from "lucide-react";
+import { createClient } from '@/app/utils/supabase/server';
 
 export default function Home() {
+
+  async function alertModal() {
+    const supabase = createClient();
+    const { data: alerts } = await supabase.from("alerts").select();
+  }
 
   const SkeletonLoading = () => (
     <>
     {[...Array(20)].map((_, i) => <SkeletonLoading key={i} />)}
-    
-    
     </>
   )
 
