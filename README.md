@@ -1,2 +1,13 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# KL Mensa 3
+![Vercel](https://vercelbadge.vercel.app/api/[Protonosgit]/[KlMensa3 ])
+
+## Built with:
+- NextJS 14
+- Supabase
+- Shadcn
+- Lucide React
+
+## Contributions
+Are always wellcome so feel free to help out!
+Just clone the repo (`git clone https://github.com/Protonosgit/KlMensa3`) and run `npm install`.
 
