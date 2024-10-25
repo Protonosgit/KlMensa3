@@ -10,7 +10,9 @@ export default function WhyAds() {
       <main className={styles.main}>
         <h1 className={styles.title}>Why Ads</h1>
         <h2 className={styles.text}>Ads can either be shown by an official entity of the rptu or an admin.<br/>
-          Topics may include: upcomming events, special offers, news or information about Non-profit organizations.
+          Topics may include: Upcomming events, special offers, news or informations about Non-profit organizations.<br/>
+          Ads are not designed to earn money and will not be monetized in any way! <br/>
+          They can be disabled like any other content, using filter settings on menu page.
         </h2>
       </main>
       <footer className={styles.footer}>

@@ -126,6 +126,11 @@
     color: black;
     fill: currentColor;
   }
+
+  .starHover {
+    color: rgb(252, 223, 0);
+    fill: currentColor;
+  }
   
   .starEmpty {
     color: #c6cbd1;

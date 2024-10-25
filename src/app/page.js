@@ -8,6 +8,7 @@ import { Settings } from "lucide-react";
 import { createClient } from '@/app/utils/supabase/server';
 
 export default function Home() {
+ 
 
   // just for testing
   async function alertModal() {

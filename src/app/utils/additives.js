@@ -12,6 +12,7 @@ const additiveMap = {
     'l': 'Lamm',
     's': 'Schwein',
     'k': 'Kalb',
+    'w': 'Wild',
     'fi': 'Fisch',
     'ei': 'Eier',
     'sl': 'Sellerie',
@@ -19,7 +20,8 @@ const additiveMap = {
     'so': 'Soja',
     'a': 'Restalkohol',
     'nu': 'Schalenfrüchte',
-    'sw': 'Schwefeldioxid'
+    'sw': 'Schwefeldioxid',
+    'se': 'Sesam',
 };
 
 function extractAdditives(inputString) {
@@ -37,14 +39,14 @@ function extractAdditives(inputString) {
     // Remove duplicates
     const uniqueAdditives = [...new Set(additives)];
 
-    // Map additives to their full names and filter out unmapped additives
+    // Map additives to full names and filter out unmapped additives
     const mappedAdditives = uniqueAdditives
         .map(additive => additiveMap[additive] || additive)
         .filter(additive => additive !== additive.toLowerCase());
 
     return mappedAdditives;
 
-    // Join the additives with commas
+    // Join the additives with commas (deprecated)
     return mappedAdditives.join(', ');
 }
 

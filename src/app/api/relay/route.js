@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { createClient } from '@/app/utils/supabase/server';
 
 // Relay API for bypassing cors protection
 // Update on backend required to remove this
@@ -11,6 +12,12 @@ export async function GET(req, res) {
   const url = new URL(req.url);
   const rating = url.searchParams.get('rating');
   const mid = url.searchParams.get('m_id');
+
+  const supabase = await createClient();
+  const user = await supabase.auth.getUser();
+  if (!user.data.user) {
+    return NextResponse.json({ message: 'Error unauthorized', error: 'Unauthorized' })
+  }
 
   try {
     const response = await fetch(`https://www.mensa-kl.de/ajax/rate.php?m_id=${mid}&rating=${rating}`, {
@@ -47,7 +54,14 @@ export async function GET(req, res) {
 export async function POST(req, res) {
   const url = new URL(req.url);
   const fname = url.searchParams.get('qqfile');
-  const file = req.body
+  const file = req.body;
+
+  // Minor spam protection
+  const supabase = await createClient();
+  const user = await supabase.auth.getUser();
+  if (!user.data.user) {
+    return NextResponse.json({ message: 'Error unauthorized', error: 'Unauthorized' })
+  }
 
 
   try {

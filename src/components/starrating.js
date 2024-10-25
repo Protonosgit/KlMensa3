@@ -28,9 +28,7 @@ export default function StarRating({ meal }) {
     {[...Array(5)].map((_, i) => (
       <Star
         key={i}
-        className={`${styles.star} ${
-          i < rating ? styles.starFilled : styles.starEmpty
-        }`}
+        className={`${styles.star} ${ i < rating ? styles.starFilled : (i < hover ? styles.starHover : styles.starEmpty) } ${i < hover ? styles.starHover : ""}`}
         onMouseEnter={() => setHover(i + 1)}
         onMouseLeave={() => setHover(0)}
         onClick={() => sendrating(i + 1)}

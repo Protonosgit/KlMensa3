@@ -85,7 +85,7 @@ export default function Meal({ meal, mealIndex }) {
           </p>
           <h4 className={styles.mealTitle}>{meal.title}</h4>
           <div className={styles.mealFooter}>
-            <span className={styles.mealPrice}>{meal.price} €</span>
+            <span className={styles.mealPrice}>{meal.price} {meal.price && '€'}</span>
             {renderStarRating(meal)}
           </div>
         </div>
