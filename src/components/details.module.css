@@ -22,7 +22,6 @@
     }
 }
 
-  
   .popupContent {
     background-color: rgb(255, 255, 255);
     border-radius: 8px;
@@ -118,8 +117,8 @@
   }
   
   .star {
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1.3rem;
+    height: 1.3rem;
   }
   
   .starFilled {
@@ -199,5 +198,14 @@
   @media (max-width: 768px) {
     .popupContent {
       width: 95%;
+    }
+    .popupTitle {
+      font-size: 1.2rem;
+    }
+    .popupLocation {
+      font-size: 0.9rem;
+    }
+    .popupPrice {
+      font-size: 1rem;
     }
   }

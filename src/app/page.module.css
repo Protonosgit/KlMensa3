@@ -20,22 +20,6 @@
     font-weight: 400;
   }
 
-  .settingsButton {
-    margin-left: 1rem;
-    padding: 0.5rem 0.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 0.5rem;
-    border-color: #4a5568;
-    border-width: 2px;
-    transition: background-color 0.3s;
-  }
-
-  .settingsButton:hover {
-    background-color: #4a5568;
-    color: white;
-  }
-
   .filterButton {
     color: #4a5568;
     display: flex;
@@ -110,7 +94,7 @@
   
   .mealImage {
     width: 100%;
-    height: 12rem;
+    height: 9rem;
     object-fit: cover;
   }
   
@@ -204,6 +188,10 @@
     }
     .headerSubtitle {
       font-size: 1.25rem;
+    }
+    .mealImage {
+      width: 90%;
+      height: 12rem;
     }
   }
   

@@ -8,6 +8,8 @@ import styles from "./filter.module.css";
 import { Filter, CookingPot } from "lucide-react";
 import { useEffect, useState } from "react";
 
+// TODO: Add ids/shortcodes for the filters that can  actually use them!
+
 const mloc = [
   { id: 1, name: "Ausgabe 1/2", shown: true },
   { id: 2, name: "Ausgabe 1/2 vegan", shown: true },
@@ -28,21 +30,26 @@ const mprot =[
   { id: 4, name: "Fish", shown: true },
   { id: 5, name: "Boar", shown: true },
   { id: 6, name: "Sheep", shown: true },
-  { id: 7, name: "Vegetarian", shown: true },
+  { id: 7, name: "Duck", shown: true },
+  { id: 8, name: "Vegetarian", shown: true },
 ]
 const madd = [
-  { id: 1, name: "Laktose", shown: true },
-  { id: 2, name: "Gluten", shown: true },
-  { id: 3, name: "Farbstoff", shown: true },
-  { id: 4, name: "Konservierungsstoff", shown: true },
-  { id: 5, name: "Antioxidationsmittel", shown: true },
-  { id: 6, name: "Geschwefelt", shown: true },
-  { id: 7, name: "Phosphat", shown: true },
-  { id: 8, name: "Süßungsmittel", shown: true },
-  { id: 9, name: "Eier", shown: true },
-  { id: 10, name: "Soja", shown: true },
-  { id: 11, name: "Restalkohol", shown: true },
-  { id: 12, name: "Schalenfrüchte", shown: true },
+  { id: 'la', name: "Laktose", shown: true },
+  { id: 'gl', name: "Gluten", shown: true },
+  { id: '1', name: "Farbstoff", shown: true },
+  { id: '2', name: "Konservierungsstoff", shown: true },
+  { id: '3', name: "Antioxidationsmittel", shown: true },
+  { id: '5', name: "Geschwefelt", shown: true },
+  { id: '8', name: "Phosphat", shown: true },
+  { id: '9', name: "Süßungsmittel", shown: true },
+  { id: 'ei', name: "Eier", shown: true },
+  { id: 'so', name: "Soja", shown: true },
+  { id: 'a', name: "Restalkohol", shown: true },
+  { id: 'nu', name: "Schalenfrüchte", shown: true },
+  { id: 'sw', name: "Schwefeldioxid", shown: true },
+  { id: 'se', name: "Sesam", shown: true },
+  { id: 'sf', name: "Senf", shown: true },
+  { id: 'sl', name: "Sellerie", shown: true },
 ]
 
 export default function FilterMenu() {
@@ -161,6 +168,7 @@ export default function FilterMenu() {
                 </li>
               ))}
             </ul>
+            <div className={styles.seperator}/>
           </div>
           <div className={styles.filterSection}>
             <p className={styles.filterTitle}>Pick a Protein:</p>
@@ -180,8 +188,9 @@ export default function FilterMenu() {
                 </li>
               ))}
             </ul>
+            <div className={styles.seperator}/>
           </div>
-          <div className={styles.filterSection} style={{display: "none"}}>
+          <div className={styles.filterSection}>
             <p className={styles.filterTitle}>Select Additives:</p>
             <ul className={styles.filterList}>
               {mealAdditives.map((additive, index) => (

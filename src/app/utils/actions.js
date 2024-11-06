@@ -16,3 +16,7 @@ export async function login() {
         console.log(data, error)
     }
 }
+
+export async function rotateIdentity() {
+
+}

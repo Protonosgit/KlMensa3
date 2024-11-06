@@ -1,5 +1,7 @@
 "use client";
 
+import { extractAdditives } from "./additives";
+
 function locFilter(meal, cookies) {
     if(meal === null || cookies === null) return true
     if(cookies.length < 10) return true
@@ -57,8 +59,12 @@ function protFilter(meal, cookies) {
             return cookies[4].shown;
         case "sheep":
             return cookies[5].shown;
-        case "":
+        case "duck":
             return cookies[6].shown;
+        case "berk":
+            return cookies[0].shown && cookies[1].shown;
+        case "":
+            return cookies[7].shown;
         default:
             return true
     }
@@ -68,24 +74,14 @@ function addFilter(meal, cookies) {
     if(meal === null || cookies === null) return true
     if(cookies.length < 6) return true
 
-    switch(meal.icon) {
-        case "pork":
-            return cookies[0].shown;
-        case "beef":
-            return cookies[1].shown;
-        case "chicken":
-            return cookies[2].shown;
-        case "fish":
-            return cookies[3].shown;
-        case "boar":
-            return cookies[4].shown;
-        case "sheep":
-            return cookies[5].shown;
-        case "":
-            return cookies[6].shown;
-        default:
-            return true
-    }
+    // TODO: Add specific function which returns only shortcodes of additives
+    const containedAdditives = extractAdditives(meal.title_with_additives)
+
+    return containedAdditives.every(additive => {
+        const cookie = cookies.find(c => c.name === additive);
+        return cookie ? cookie.shown : true;
+    });
+
 }
 
 export { locFilter, protFilter, addFilter };

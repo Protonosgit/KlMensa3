@@ -4,9 +4,9 @@ import Schedule from '@/components/schedule';
 import UploadPopup from "@/components/uploadModal";
 import FilterMenu from "@/components/filtermenu";
 import { Suspense } from "react";
-import { Settings } from "lucide-react";
+import SettingsModal from "@/components/settings";
 import { createClient } from '@/app/utils/supabase/server';
-
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 export default function Home() {
  
 
@@ -33,7 +33,7 @@ export default function Home() {
         </div>
         <div style={{flex: '1 1 auto'}} />
         <UploadPopup />
-        <button style={{display: 'none'}} className={styles.settingsButton}><Settings size={20} /></button>
+        <SettingsModal />
       </header>
 
       <main className={styles.main}>
@@ -51,6 +51,7 @@ export default function Home() {
           <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>V3 developed by protonos</a>
         </div>
       </footer>
+      <ScrollToTopButton />
     </div>
   )
 }

@@ -4,7 +4,7 @@ import { Star, MoonIcon, Megaphone } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
 import { useEffect, useState } from "react";
-import { locFilter, protFilter } from '@/app/utils/filter';
+import { locFilter, protFilter, addFilter } from '@/app/utils/filter';
 
 export default function Meal({ meal, mealIndex }) {
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -25,7 +25,8 @@ export default function Meal({ meal, mealIndex }) {
     // If not it is hidden
     const locOn = locFilter(meal, getArrayFromCookie("location"));
     const protOn = protFilter(meal, getArrayFromCookie("protein"));
-    if(!locOn || !protOn) {
+    const addon = addFilter(meal, getArrayFromCookie("additive"));
+    if(!locOn || !protOn || !addon) {
       setFilteredOut(true);
     }
     else {
@@ -77,7 +78,7 @@ export default function Meal({ meal, mealIndex }) {
         className={styles.mealCard}
         onClick={() => setSelectedMeal(meal)}
       >
-        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt="dish-image" className={styles.mealImage} width={600} height={400} />
+        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={600} height={400} />
         <div className={styles.mealInfo}>
           <p className={styles.mealLocation}>
             <IconPot meal={meal.loc} />

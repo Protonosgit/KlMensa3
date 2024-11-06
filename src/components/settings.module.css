@@ -1,0 +1,113 @@
+.scrollToTopButton {
+  position: fixed;
+  bottom: 5rem;
+  background-color: #dcdcdc;
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  z-index: 2;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.settingsButton {
+    margin-left: 1rem;
+    padding: 0.5rem 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    border-color: #4a5568;
+    border-width: 2px;
+    transition: background-color 0.3s;
+  }
+
+  .settingsButton:hover {
+    background-color: #4a5568;
+    color: white;
+  }
+
+  .popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadein 0.3s ease-in-out;
+  }
+  @keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+  
+  .popupContent {
+    background-color: rgb(255, 255, 255);
+    border-radius: 8px;
+    max-height: 90vh;
+    max-width: 90vw;
+    min-width: 20%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+
+  .popupTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .popupTabs {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  .popupTabsList {
+    width: 100%;
+    display: flex;
+  }
+  .popupTabsTrigger {
+    flex: 1;
+  }
+  .popupOption {
+    display: flex;
+    align-items: center;
+    margin: 1rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .popupButton {
+    margin-top: 1rem;
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    border-color: #4a5568;
+    border-width: 2px;
+    transition: background-color 0.3s;
+  }
+
+  
+@media (min-width: 768px) {
+  .scrollToTopButton {
+    bottom: 2rem;
+    right: 4rem;
+    transform: translateX(50%);
+  }
+}

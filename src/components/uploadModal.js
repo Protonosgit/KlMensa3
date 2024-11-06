@@ -1,9 +1,8 @@
 "use client";
 import styles from "./upload.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useCallback } from "react";
 import { toast, Toaster } from 'react-hot-toast';
-import { login } from "@/app/utils/actions";
 
 export default function UploadPopup({}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -11,10 +10,6 @@ export default function UploadPopup({}) {
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
-
-  useEffect(() => {
-    login();
-  }, []);
 
   const onDragOver = useCallback((e) => {
     e.preventDefault();
