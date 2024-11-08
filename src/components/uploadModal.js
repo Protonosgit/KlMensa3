@@ -88,7 +88,7 @@ export default function UploadPopup({}) {
         onDrop={onDrop}
       >
         <p className={styles.uploadText}>
-          Upload a photo of your meal.<br/> Photos will be conjugated using the files metadata
+          Upload a photo of your meal.<br/> Photos will be conjugated using metadata
         </p>
         <input
           type="file"

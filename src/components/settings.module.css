@@ -4,17 +4,16 @@
   background-color: #dcdcdc;
   color: var(--primary-foreground);
   border: none;
-  border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
+  border-radius: 6px;
+  height: 2rem;
+  padding: 1rem;
+  margin-right: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   transition: background-color 0.3s;
   z-index: 2;
-  right: 50%;
-  transform: translateX(50%);
 }
 
 .settingsButton {

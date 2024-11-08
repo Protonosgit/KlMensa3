@@ -9,13 +9,19 @@ export default async function Schedule() {
   // This triggers the api bridge to fetch the uncached current data
   const menu = await fetchMenu();
 
-  if(!menu) {
+  if (!menu || !menu?.length) {
     return (
-      <div>
-        <p>Loading...</p>
+      <div className={styles.emptyList}>
+        <p>No schedule data found!</p>
       </div>
-    )
+    );
   }
+
+  const AdInjectorProxy = ({day}) => {
+    // TODO: Fetch info from supabase
+    const campainTargetDays = ["2024-11-99","2024-11-99"]
+    return campainTargetDays.includes(format(day.date, 'yyyy-MM-dd')) ? <AdInjector /> : null;
+  };
 
   return (
     <>
@@ -34,9 +40,7 @@ export default async function Schedule() {
                     />
                   )
                 })}
-                {/* {dayIndex === 0 && 
-                  <AdInjector link={'https://kl-mensa.vercel.app'} title={'Developed by Protonos'} image={day.ad_image} />
-                } */}
+                <AdInjectorProxy day={day} />
               </div>
             </div>
           )

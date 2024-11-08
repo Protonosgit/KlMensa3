@@ -78,7 +78,7 @@ export default function Meal({ meal, mealIndex }) {
         className={styles.mealCard}
         onClick={() => setSelectedMeal(meal)}
       >
-        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={600} height={400} />
+        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={300} height={200} />
         <div className={styles.mealInfo}>
           <p className={styles.mealLocation}>
             <IconPot meal={meal.loc} />

@@ -51,23 +51,31 @@
     background-color: #4a5568;
     margin-bottom: 1rem;
   }
+
+  .skeletonGrid {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
   .skeleton {
-    width: 100%;
-    height: 70vh;
     border-radius: 0.5rem;
+    overflow: hidden;
+    width: 100%;
+    height: 200px;
     background-color: #e2e8f0;
-    animation: pulse 1.5s infinite;
+    animation: pulse 1.3s infinite;
   }
   
   @keyframes pulse {
     0% {
-      opacity: 0.6;
+      opacity: 0.5;
     }
     50% {
       opacity: 1;
     }
     100% {
-      opacity: 0.6;
+      opacity: 0.5;
     }
   }
   
@@ -86,6 +94,7 @@
     overflow: hidden;
     transition: transform 0.3s ease;
     cursor: pointer;
+    border: 1px solid #e5e9ef;
   }
   
   .mealCard:hover {
@@ -94,7 +103,7 @@
   
   .mealImage {
     width: 100%;
-    height: 9rem;
+    height: 7rem;
     object-fit: cover;
   }
   
@@ -190,7 +199,7 @@
       font-size: 1.25rem;
     }
     .mealImage {
-      width: 90%;
+      width: 100%;
       height: 12rem;
     }
   }

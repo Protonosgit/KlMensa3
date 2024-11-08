@@ -97,6 +97,9 @@
     .filterContainer {
       flex-direction: row;
     }
+    .seperator {
+      display: none;
+    }
   }
 
   

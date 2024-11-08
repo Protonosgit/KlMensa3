@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import AnnouncementModal from "@/components/announcements";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <AnnouncementModal />
       </body>
     </html>
   );
