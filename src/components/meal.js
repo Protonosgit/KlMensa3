@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Star, MoonIcon, Megaphone } from "lucide-react";
+import { Star, MoonIcon, Megaphone, Bookmark } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import { locFilter, protFilter, addFilter } from '@/app/utils/filter';
 export default function Meal({ meal, mealIndex }) {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [filteredOut, setFilteredOut] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
     // Get filter values from cookies
@@ -31,6 +32,15 @@ export default function Meal({ meal, mealIndex }) {
     }
     else {
       setFilteredOut(false);
+      // set bookmark status
+      const cookieValue = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("bookmarks"))
+        ?.split("=")[1];
+      if (cookieValue) {
+        const bookmarks = JSON.parse(cookieValue);
+        setIsBookmarked(bookmarks.includes(meal.m_id));
+      }
     }
 
   }, [meal]);
@@ -71,6 +81,26 @@ export default function Meal({ meal, mealIndex }) {
     }
   };
 
+  async function handleBookmark(e) {
+
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("bookmarks"))
+      ?.split("=")[1];
+    const bookmarks = cookieValue ? JSON.parse(cookieValue) : [];
+    const bookmarkIndex = bookmarks.indexOf(meal.m_id);
+
+    if (bookmarkIndex !== -1) {
+      bookmarks.splice(bookmarkIndex, 1); // Remove bookmark if present
+    } else {
+      bookmarks.push(meal.m_id); // Add bookmark if not present
+    }
+
+    document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
+    setIsBookmarked(!isBookmarked);
+    e.stopPropagation();
+  }
+
   return (
     <>
       <div
@@ -78,6 +108,7 @@ export default function Meal({ meal, mealIndex }) {
         className={styles.mealCard}
         onClick={() => setSelectedMeal(meal)}
       >
+        <Bookmark size={20} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')} onClick={handleBookmark} />
         <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={300} height={200} />
         <div className={styles.mealInfo}>
           <p className={styles.mealLocation}>

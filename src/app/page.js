@@ -41,7 +41,6 @@ export default function Home() {
       <main className={styles.main}>
         
         <FilterMenu/>
-        {/* <Suspense fallback={[...Array(20)].map((_, i) => <div className={styles.skeleton} key={i} />)}> */}
         <Suspense fallback={<SkeletonLoading />}>
         <Schedule/>
         </Suspense>
