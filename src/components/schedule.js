@@ -2,7 +2,6 @@ import {  fetchMenu } from '@/app/utils/api-bridge';
 import styles from "../app/page.module.css";
 import Meal from './meal';
 import { format } from 'date-fns';
-import AdInjector from '@/components/ad-injector';
 
 export default async function Schedule() {
 
@@ -17,11 +16,6 @@ export default async function Schedule() {
     );
   }
 
-  const AdInjectorProxy = ({day}) => {
-    // TODO: Fetch info from supabase
-    const campainTargetDays = ["2024-11-99","2024-11-99"]
-    return campainTargetDays.includes(format(day.date, 'yyyy-MM-dd')) ? <AdInjector /> : null;
-  };
 
   return (
     <>
@@ -40,7 +34,6 @@ export default async function Schedule() {
                     />
                   )
                 })}
-                <AdInjectorProxy day={day} />
               </div>
             </div>
           )

@@ -21,7 +21,8 @@ const mloc = [
   { id: 8, name: "Salatbuffet", shown: true },
   { id:  9, name: "Abendmensa", shown: true },
   { id:  10, name: "Abendmensa vegan", shown: true },
-  { id:  11, name: "News (soon ads)", shown: true },
+  { id:  11, name: "News", shown: true },
+  { id:  12, name: "Robotic Kitchen", shown: true },
 ]
 const mprot =[
   { id: 1, name: "Pork", shown: true },
@@ -34,22 +35,22 @@ const mprot =[
   { id: 8, name: "Vegetarian", shown: true },
 ]
 const madd = [
-  { id: 'la', name: "Laktose", shown: true },
-  { id: 'gl', name: "Gluten", shown: true },
-  { id: '1', name: "Farbstoff", shown: true },
-  { id: '2', name: "Konservierungsstoff", shown: true },
-  { id: '3', name: "Antioxidationsmittel", shown: true },
-  { id: '5', name: "Geschwefelt", shown: true },
-  { id: '8', name: "Phosphat", shown: true },
-  { id: '9', name: "Süßungsmittel", shown: true },
-  { id: 'ei', name: "Eier", shown: true },
-  { id: 'so', name: "Soja", shown: true },
-  { id: 'a', name: "Restalkohol", shown: true },
-  { id: 'nu', name: "Schalenfrüchte", shown: true },
-  { id: 'sw', name: "Schwefeldioxid", shown: true },
-  { id: 'se', name: "Sesam", shown: true },
-  { id: 'sf', name: "Senf", shown: true },
-  { id: 'sl', name: "Sellerie", shown: true },
+{ id: 'la', name: "Lactose", shown: true },
+{ id: 'gl', name: "Gluten", shown: true },
+{ id: '1', name: "Coloring agent", shown: true },
+{ id: '2', name: "Preservative", shown: true },
+{ id: '3', name: "Antioxidant", shown: true },
+{ id: '5', name: "Sulphured", shown: true },
+{ id: '8', name: "Phosphate", shown: true },
+{ id: '9', name: "Sweetener", shown: true },
+{ id: 'ei', name: "Eggs", shown: true },
+{ id: 'so', name: "Soy", shown: true },
+{ id: 'a', name: "Residual alcohol", shown: true },
+{ id: 'nu', name: "Tree nuts", shown: true },
+{ id: 'sw', name: "Sulfur dioxide", shown: true },
+{ id: 'se', name: "Sesame", shown: true },
+{ id: 'sf', name: "Mustard", shown: true },
+{ id: 'sl', name: "Celery", shown: true }
 ]
 
 export default function FilterMenu() {

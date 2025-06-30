@@ -22,7 +22,8 @@ function locFilter(meal, cookies) {
       "SalatbufettV+": 7,
       "Abend": 8,
       "AbendVegan": 9,
-      "News": 10
+      "News": 10,
+      "RK": 11
     };
   
     const locKey = meal.loc;
