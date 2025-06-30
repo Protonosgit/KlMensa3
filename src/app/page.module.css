@@ -33,11 +33,11 @@
   
   .main {
     flex-grow: 1;
-    padding: 2rem 0;
+    padding: 0.5rem 0;
   }
 
   .dayContainer {
-    padding: 2rem 0;
+    padding: 0.8rem 0;
   }
   
   .dayTitle {
@@ -82,7 +82,7 @@
   .mealGrid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 1.5rem;
+    gap: 0.7rem;
   }
   
   .mealCard {
@@ -137,7 +137,7 @@
   }
   
   .mealInfo {
-    padding: 1rem;
+    padding: 0.5rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -148,13 +148,13 @@
     align-items: center;
     font-size: 0.9rem;
     color: #718096;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.1rem;
   }
   
   .mealTitle {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     flex-grow: 1;
   }
   
@@ -162,7 +162,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 0.5rem;
+    padding-top: 0.3rem;
     border-top: 1px solid #e2e8f0;
   }
   
@@ -219,6 +219,10 @@
     color: var(--primary-color);
     margin-left: 1rem;
   }
+  
+  .footerLink:hover {
+    text-decoration: underline;
+  }
 
   @media (min-width: 768px) {
     .mealGrid {
@@ -231,6 +235,21 @@
       width: 100%;
       height: 12rem;
     }
+    .mealInfo {
+      padding: 1rem;
+    }
+    .mealLocation {
+      padding-bottom: 0.5rem;
+    }
+    .mealGrid {
+      gap: 1.5rem;
+    }
+    .main {
+      padding: 2rem 0;
+    }
+    .dayContainer {
+      padding: 2rem 0;
+    }
   }
   
   @media (min-width: 1024px) {
@@ -241,8 +260,8 @@
       padding: 0.5rem 1rem;
       font-size: 1rem;
     }
-  }
-  
-  .footerLink:hover {
-    text-decoration: underline;
+    .mealTitle {
+      font-size: 1rem;
+      margin-bottom: 0.5;
+    }
   }
