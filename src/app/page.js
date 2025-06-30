@@ -28,14 +28,17 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.headerContent} >
-          <h1 className={styles.headerTitle}>KL Mensa</h1>
-          <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
+      <header className={styles.headerContainer}>
+        <div className={styles.headerWrapper}>
+          <div className={styles.headerContent}>
+            <div className={styles.headerTitleSection}>
+              <h1 className={styles.headerTitle}>KL Mensa</h1>
+              <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
+            </div>
+              <UploadPopup />
+              <SettingsModal />
+          </div>
         </div>
-        <div style={{flex: '1 1 auto'}} />
-        <UploadPopup />
-        <SettingsModal />
       </header>
 
       <main className={styles.main}>

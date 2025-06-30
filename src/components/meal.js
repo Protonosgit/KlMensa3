@@ -108,11 +108,13 @@ export default function Meal({ meal, mealIndex }) {
         className={styles.mealCard}
         onClick={() => setSelectedMeal(meal)}
       >
-        <Bookmark size={20} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')} onClick={handleBookmark} />
+        <div className={styles.bookmarkContainer}>
+          <Bookmark size={14} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')} onClick={handleBookmark} />
+        </div>
+      
         <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={300} height={200} />
         <div className={styles.mealInfo}>
           <p className={styles.mealLocation}>
-            <IconPot meal={meal.loc} />
             {meal.loc_clearname}
           </p>
           <h4 className={styles.mealTitle}>{meal.title}</h4>

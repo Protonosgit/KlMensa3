@@ -3,68 +3,74 @@
     margin: 0 auto;
     padding: 0 1rem;
   }
-  
-  .header {
-    color: var(--primary-foreground);
-    padding: 1rem 0;
-    display: flex;
-    align-items: center;
-  }
-  
-  .headerTitle {
-    font-size: 1.875rem;
-    font-weight: bold;
-  }
-  .headerSubtitle {
-    font-size: 1rem;
-    font-weight: 400;
-  }
+  /* Header Styles */
+.headerContainer {
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  top: 0;
+  z-index: 10;
+}
 
-  .filterButton {
-    color: #4a5568;
-    display: flex;
-    padding: 0.5rem 0.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 0.5rem;
-    border-color: #4a5568;
-    border-width: 2px;
-  }
-  
-  .main {
-    flex-grow: 1;
-    padding: 0.5rem 0;
-  }
+.headerWrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
 
-  .dayContainer {
-    padding: 0.8rem 0;
-  }
-  
-  .dayTitle {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #4a5568;
-  }
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+}
 
-  .daySeperator {
-    height: 3px;
-    background-color: #4a5568;
-    margin-bottom: 1rem;
-  }
+.headerTitleSection {
+  flex: 1;
+}
 
-  .skeletonGrid {
-    margin-top: 3rem;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-  .skeleton {
-    border-radius: 0.5rem;
-    overflow: hidden;
-    width: 100%;
-    height: 200px;
-    background-color: #e2e8f0;
-    animation: pulse 1.3s infinite;
+.headerTitle {
+  font-size: 25px;
+  font-weight: bold;
+  color: #111827;
+}
+
+.headerSubtitle {
+  font-size: 14px;
+  color: #4b5563;
+  margin-top: 4px;
+}
+
+
+
+.main {
+  flex-grow: 1;
+  padding: 0.5rem 0;
+}
+.dayContainer {
+  padding: 0.8rem 0;
+}
+
+.dayTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #d1d5db;
+  margin-bottom: 0.5rem;
+}
+
+.skeletonGrid {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.skeleton {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  width: 100%;
+  height: 200px;
+  background-color: #e2e8f0;
+  animation: pulse 1.3s infinite;
   }
   
   @keyframes pulse {
@@ -108,27 +114,18 @@
     object-fit: cover;
   }
 
-  .bookmark {
+  .bookmarkContainer {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
-    border: none;
+    top: 0.4rem;
+    left: 0.4rem;
+    padding: 0.6rem;
     display: flex;
-    fill: rgb(0, 0, 0);
+    border-radius: 0.2rem;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    background-color: white;
   }
-  .bookmark:active {
-    animation: bounce 0.8s ease-in-out;
-  }
-  
-  @keyframes bounce {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(3);
-    }
+  .bookmark {
+    fill: rgb(0, 0, 0);
   }
 
   .bookmarkActive {
@@ -143,13 +140,17 @@
     flex-grow: 1;
   }
   
-  .mealLocation {
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    color: #718096;
-    margin-bottom: 0.1rem;
-  }
+.mealLocation {
+  font-size: 12px;
+  background-color: #f3f4f6;
+  color: #374151;
+  padding: 0.2rem;
+  border-radius: 4px;
+  border: none;
+  font-weight: 600;
+  display: inline-block;
+  width: fit-content;
+}
   
   .mealTitle {
     font-size: 0.9rem;
@@ -169,7 +170,7 @@
   .mealPrice {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #718096;
+    color: #2563eb;
   }
   
   .starRating {
@@ -195,16 +196,6 @@
     margin-left: 0.25rem;
     font-size: 0.875rem;
     color: #718096;
-  }
-
-  .adReason {
-    margin-left: 1rem;
-    font-size: 0.875rem;
-    color: #718096;
-    cursor: pointer;
-  }
-  .adReason:hover {
-    text-decoration: underline;
   }
   
   .footer {
@@ -238,9 +229,6 @@
     .mealInfo {
       padding: 1rem;
     }
-    .mealLocation {
-      padding-bottom: 0.5rem;
-    }
     .mealGrid {
       gap: 1.5rem;
     }
@@ -249,6 +237,9 @@
     }
     .dayContainer {
       padding: 2rem 0;
+    }
+    .mealPrice {
+      font-size: 1rem;
     }
   }
   
