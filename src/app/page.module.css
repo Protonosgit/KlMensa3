@@ -1,7 +1,7 @@
 .container {
     max-width: 1300px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 0.3rem;
   }
   /* Header Styles */
 .headerContainer {
@@ -23,6 +23,11 @@
   justify-content: space-between;
   padding: 16px 0;
 }
+.headerButtonSection {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end; 
+}
 
 .headerTitleSection {
   flex: 1;
@@ -41,21 +46,26 @@
 }
 
 
-
 .main {
   flex-grow: 1;
-  padding: 0.5rem 0;
+  padding: 0.8rem 0;
 }
 .dayContainer {
-  padding: 0.8rem 0;
+  padding: 2rem 0;
+}
+.dayHeader {
+  padding:  0 0.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #374151;
+  border-bottom: 2px solid #d1d5db;
+  margin-bottom: 0.5rem;
 }
 
 .dayTitle {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #374151;
-  border-bottom: 2px solid #d1d5db;
-  margin-bottom: 0.5rem;
 }
 
 .skeletonGrid {
@@ -90,6 +100,12 @@
     grid-template-columns: repeat(1, 1fr);
     gap: 0.7rem;
   }
+
+  
+  .mealGridMobileNew {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
   
   .mealCard {
     position: relative; 
@@ -105,7 +121,7 @@
   }
   
   .mealCard:hover {
-    transform: scale(1.03);
+    transform: scale(1.01);
   }
   
   .mealImage {
@@ -142,9 +158,9 @@
   
 .mealLocation {
   font-size: 12px;
-  background-color: #f3f4f6;
+  background-color: #ecedef;
   color: #374151;
-  padding: 0.2rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 4px;
   border: none;
   font-weight: 600;
@@ -153,7 +169,7 @@
 }
   
   .mealTitle {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: 0.3rem;
     flex-grow: 1;
@@ -241,6 +257,12 @@
     .mealPrice {
       font-size: 1rem;
     }
+    .container {
+      padding: 0 2rem;
+    }
+.headerButtonSection {
+  justify-content: flex-start; 
+}
   }
   
   @media (min-width: 1024px) {

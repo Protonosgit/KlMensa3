@@ -4,35 +4,12 @@ import { Star, MoonIcon, Megaphone, Bookmark } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
 import { useEffect, useState } from "react";
-import { locFilter, protFilter, addFilter } from '@/app/utils/filter';
 
 export default function Meal({ meal, mealIndex }) {
   const [selectedMeal, setSelectedMeal] = useState(null);
-  const [filteredOut, setFilteredOut] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
-    // Get filter values from cookies
-    function getArrayFromCookie(name) {
-
-      const cookieValue = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith(name))
-        ?.split("=")[1];
-    
-      return cookieValue ? JSON.parse(cookieValue) : null;
-    }
-    // Check if current meal card does match a filter profile
-    // If not it is hidden
-    const locOn = locFilter(meal, getArrayFromCookie("location"));
-    const protOn = protFilter(meal, getArrayFromCookie("protein"));
-    const addon = addFilter(meal, getArrayFromCookie("additive"));
-    if(!locOn || !protOn || !addon) {
-      setFilteredOut(true);
-    }
-    else {
-      setFilteredOut(false);
-      // set bookmark status
       const cookieValue = document.cookie
         .split("; ")
         .find((row) => row.startsWith("bookmarks"))
@@ -41,14 +18,7 @@ export default function Meal({ meal, mealIndex }) {
         const bookmarks = JSON.parse(cookieValue);
         setIsBookmarked(bookmarks.includes(meal.m_id));
       }
-    }
-
   }, [meal]);
-
-  // show nothing :(
-    if(filteredOut) {
-      return null;
-    }
 
     // render stars (non interactive)
   const renderStarRating = (meal) => {

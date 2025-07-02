@@ -7,14 +7,8 @@ import { Suspense } from "react";
 import SettingsModal from "@/components/settings";
 import { createClient } from '@/app/utils/supabase/server';
 import ScrollToTopButton from "@/components/ScrollToTopButton";
-export default function Home() {
- 
 
-  // just for testing
-  async function alertModal() {
-    const supabase = createClient();
-    const { data: alerts } = await supabase.from("alerts").select();
-  }
+export default function Home() {   
 
   // Skeleton loading animation
   const SkeletonLoading = () => (
@@ -35,15 +29,17 @@ export default function Home() {
               <h1 className={styles.headerTitle}>KL Mensa</h1>
               <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
             </div>
+            
               <UploadPopup />
-              <SettingsModal />
           </div>
         </div>
       </header>
 
       <main className={styles.main}>
-        
-        <FilterMenu/>
+        <div className={styles.headerButtonSection}>
+          <SettingsModal />
+          <FilterMenu/>
+        </div>
         <Suspense fallback={<SkeletonLoading />}>
         <Schedule/>
         </Suspense>

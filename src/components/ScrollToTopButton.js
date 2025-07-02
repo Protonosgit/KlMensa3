@@ -37,7 +37,6 @@ const ScrollToTopButton = () => {
           aria-label="Scroll to top"
         >
           <ArrowUp size={24} />
-          <p>Back to top</p>
         </button>
       )}
     </>

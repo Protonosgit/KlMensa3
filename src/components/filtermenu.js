@@ -8,59 +8,63 @@ import styles from "./filter.module.css";
 import { Filter, CookingPot } from "lucide-react";
 import { useEffect, useState } from "react";
 
-// TODO: Add ids/shortcodes for the filters that can  actually use them!
 
-const mloc = [
-  { id: 1, name: "Ausgabe 1/2", shown: true },
-  { id: 2, name: "Ausgabe 1/2 vegan", shown: true },
-  { id: 3, name: "Wok", shown: true },
-  { id : 4, name: "Grill", shown: true },
-  { id: 5, name: "Buffet", shown: true },
-  { id: 6, name: "Atrium", shown: true },
-  { id: 7, name: "Atrium Vegan", shown: true },
-  { id: 8, name: "Salatbuffet", shown: true },
-  { id:  9, name: "Abendmensa", shown: true },
-  { id:  10, name: "Abendmensa vegan", shown: true },
-  { id:  11, name: "News", shown: true },
-  { id:  12, name: "Robotic Kitchen", shown: true },
-]
-const mprot =[
-  { id: 1, name: "Pork", shown: true },
-  { id: 2, name: "Beef", shown: true },
-  { id: 3, name: "Chicken", shown: true },
-  { id: 4, name: "Fish", shown: true },
-  { id: 5, name: "Boar", shown: true },
-  { id: 6, name: "Sheep", shown: true },
-  { id: 7, name: "Duck", shown: true },
-  { id: 8, name: "Vegetarian", shown: true },
-]
-const madd = [
-{ id: 'la', name: "Lactose", shown: true },
-{ id: 'gl', name: "Gluten", shown: true },
-{ id: '1', name: "Coloring agent", shown: true },
-{ id: '2', name: "Preservative", shown: true },
-{ id: '3', name: "Antioxidant", shown: true },
-{ id: '5', name: "Sulphured", shown: true },
-{ id: '8', name: "Phosphate", shown: true },
-{ id: '9', name: "Sweetener", shown: true },
-{ id: 'ei', name: "Eggs", shown: true },
-{ id: 'so', name: "Soy", shown: true },
-{ id: 'a', name: "Residual alcohol", shown: true },
-{ id: 'nu', name: "Tree nuts", shown: true },
-{ id: 'sw', name: "Sulfur dioxide", shown: true },
-{ id: 'se', name: "Sesame", shown: true },
-{ id: 'sf', name: "Mustard", shown: true },
-{ id: 'sl', name: "Celery", shown: true }
-]
+const mealLocationClearname = [
+  { name: "Ausgabe 1", codes: ["1"] },
+  { name: "Ausgabe 1 vegan", codes: ["1veg","1vegan"] },
+  { name: "Ausgabe 2", codes: ["2"] },
+  { name: "Ausgabe 2 vegan", codes: ["2veg","2vegan"] },
+  { name: "Wok", codes: ["Wok"] },
+  { name: "Grill", codes: ["Grill"] },
+  { name: "Grill Vegan", codes: ["GrillV+"] },
+  { name: "Buffet", codes: ["Buffet"] },
+  { name: "Atrium", codes: ["AtriumMenü"] },
+  { name: "Atrium Vegan", codes: ["AtriumMenüVegan"] },
+  { name: "Salatbuffet", codes: ["SalatbufettV+"] },
+  { name: "Abendmensa", codes: ["Abend"] },
+  { name: "Abendmensa vegan", codes: ["AbendVegan"] },
+  { name: "Robotic Kitchen", codes: ["RK"] },
+  { name: "Robotic Kitchen Vegan", codes: ["RKVegan"] },
+  { name: "News", codes: ["News"] }
+];
+
+const mealAdditiveClearname = [
+  { name: "Lactose", code: "la" },
+  { name: "Gluten", code: "gl" },
+  { name: "Coloring agent", code: "1" },
+  { name: "Preservative", code: "2" },
+  { name: "Antioxidant", code: "3" },
+  { name: "Sulphured", code: "5" },
+  { name: "Phosphate", code: "8" },
+  { name: "Sweetener", code: "9" },
+  { name: "Eggs", code: "ei" },
+  { name: "Soy", code: "so" },
+  { name: "Residual alcohol", code: "a" },
+  { name: "Tree nuts", code: "nu" },
+  { name: "Sulfur dioxide", code: "sw" },
+  { name: "Sesame", code: "se" },
+  { name: "Mustard", code: "sf" },
+  { name: "Celery", code: "sl" }
+];
+
+const mealProteinClearname = [
+  { name: "Poultry/Chicken", code: "g" },
+  { name: "Beef", code: "r" },
+  { name: "Lamb", code: "l" },
+  { name: "Pork", code: "s" },
+  { name: "Veal", code: "k" },
+  { name: "Boar", code: "w" },
+  { name: "Fish", code: "fi" },
+  { name: "Eggs", code: "ei" },
+  { name: "Shrimp", code: "shrimp" }
+];
+
 
 export default function FilterMenu() {
-  //
-  // WARNING !!!! Filter is defined by cookies and cannot be updated once set!!!!
-  // WARNING !!!! Filter is defined by cookies and cannot be updated once set!!!!
-  //
-  const [mealLocations, setMealLocations] = useState(mloc);
-  const [mealProteins, setMealProteins] = useState(mprot);
-  const [mealAdditives, setMealAdditives] = useState(madd);
+
+  const [mealLocations, setMealLocations] = useState([]);
+  const [mealProteins, setMealProteins] = useState([]);
+  const [mealAdditives, setMealAdditives] = useState([]);
   const [filterActive, setFilterActive] = useState(false);
 
 
@@ -92,29 +96,42 @@ export default function FilterMenu() {
     }
   }, []);
 
-  function updateLocFilter(index, value) {
+
+  function updateLocFilter(index) {
+    const currentIndex = mealLocations.findIndex((item) =>
+      mealLocationClearname[index].codes.some((code) => item === code)
+    );
     setMealLocations((prev) => {
-      const updatedLocations = [...prev];
-      updatedLocations[index].shown = value;
-      return updatedLocations;
+      if (currentIndex === -1) {
+        return prev.concat(mealLocationClearname[index].codes);
+      } else {
+        return prev.filter((item) => !mealLocationClearname[index].codes.includes(item));
+      }
     });
   }
 
-  function updateProtFilter(index, value) {
+  function updateProtFilter(index) {
+    const currentIndex = mealProteins.indexOf(mealProteinClearname[index]?.code);
     setMealProteins((prev) => {
-      const updated = [...prev];
-      updated[index].shown = value;
-      return updated;
+      if (currentIndex === -1) {
+        return [...prev, mealProteinClearname[index]?.code];
+      } else {
+        return prev.filter((item) => item !== mealProteinClearname[index]?.code);
+      }
     });
   }
 
-  function updateAddFilter(index, value) {
+  function updateAddFilter(index) {
+    const currentIndex = mealAdditives.indexOf(mealAdditiveClearname[index]?.code);
     setMealAdditives((prev) => {
-      const updated = [...prev];
-      updated[index].shown = value;
-      return updated;
+      if (currentIndex === -1) {
+        return [...prev, mealAdditiveClearname[index]?.code];
+      } else {
+        return prev.filter((item) => item !== mealAdditiveClearname[index]?.code);
+      }
     });
   }
+
 
   function storeFilter() {
     // store cookies with filters
@@ -144,24 +161,23 @@ export default function FilterMenu() {
     <Popover className={styles.filterMenu}>
       <PopoverTrigger className={styles.filterButton}>
         <Filter />
-        Filter
       </PopoverTrigger>
       <PopoverContent className={styles.filterContent}>
         <div className={styles.filterContainer}>
           <div className={styles.filterSection}>
             <p className={styles.filterTitle}>Location:</p>
             <ul className={styles.filterList}>
-              {mealLocations.map((location, index) => (
+              {mealLocationClearname.map((location, index) => (
                 <li key={index} className={styles.filterItem}>
                   <input
                     type="checkbox"
-                    checked={location.shown}
+                    checked={!mealLocations.includes(location.codes[0])}
                     id={index}
-                    onChange={(e) => updateLocFilter(index, e.target.checked)}
+                    onChange={(e) => updateLocFilter(index)}
                     className={styles.filterCheckbox}
                   />
                   <label
-                    htmlFor={location.index}
+                    htmlFor={location.name}
                     className={styles.filterLabel}
                   >
                     {location.name}
@@ -172,18 +188,18 @@ export default function FilterMenu() {
             <div className={styles.seperator}/>
           </div>
           <div className={styles.filterSection}>
-            <p className={styles.filterTitle}>Pick a Protein:</p>
+            <p className={styles.filterTitle}>Protein:</p>
             <ul className={styles.filterList}>
-              {mealProteins.map((protein, index) => (
+              {mealProteinClearname.map((protein, index) => (
                 <li key={index} className={styles.filterItem}>
                   <input
                     type="checkbox"
                     id={index}
                     onChange={(e) => updateProtFilter(index, e.target.checked)}
-                    checked={protein.shown}
+                    checked={!mealProteins.includes(protein.code)}
                     className={styles.filterCheckbox}
                   />
-                  <label htmlFor={protein.index} className={styles.filterLabel}>
+                  <label htmlFor={protein.name} className={styles.filterLabel}>
                     {protein.name}
                   </label>
                 </li>
@@ -192,18 +208,18 @@ export default function FilterMenu() {
             <div className={styles.seperator}/>
           </div>
           <div className={styles.filterSection}>
-            <p className={styles.filterTitle}>Select Additives:</p>
+            <p className={styles.filterTitle}>Additives:</p>
             <ul className={styles.filterList}>
-              {mealAdditives.map((additive, index) => (
+              {mealAdditiveClearname.map((additive, index) => (
                 <li key={index} className={styles.filterItem}>
                   <input
                     type="checkbox"
                     id={index}
                     onChange={(e) => updateAddFilter(index, e.target.checked)}
-                    checked={additive.shown}
+                    checked={!mealAdditives.includes(additive.code)}
                     className={styles.filterCheckbox}
                   />
-                  <label htmlFor={additive.index} className={styles.filterLabel}>
+                  <label htmlFor={additive.name} className={styles.filterLabel}>
                     {additive.name}
                   </label>
                 </li>

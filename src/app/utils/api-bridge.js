@@ -84,7 +84,7 @@ function parseMenu(menuData) {
             menucollect = []
         }
         // Append meal to day
-        menucollect.push({...menuData[i], loc_clearname: generateClearLocation(menuData[i].loc), loc_link: generateMapsLink(menuData[i].loc)})
+        menucollect.push({...menuData[i], loc_clearname: generateClearLocation(menuData[i].loc), title: menuData[i].title.replace(/&quot;/g, '"'), loc_link: generateMapsLink(menuData[i].loc)})
     }
     // Push last day to schedule
     if(menucollect.length > 0) {
