@@ -120,7 +120,9 @@ function generateClearLocation(loc) {
         case "SalatbufettV+":
             return "Salatbufett Vegan"  
         case "RK":
-            return "Robotic Kitchen"    
+            return "Robotic Kitchen"
+        case "RKVegan":
+            return "Robotic Kitchen Vegan"      
         default:
             return loc
 

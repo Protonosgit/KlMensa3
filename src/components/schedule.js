@@ -17,7 +17,6 @@ export default async function Schedule() {
 
   if(settingsCookie?.value) {
     settings = JSON.parse(settingsCookie.value);
-    console.log(settings);
   }
 
 

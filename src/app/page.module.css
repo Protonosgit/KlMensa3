@@ -1,3 +1,4 @@
+
 .container {
     max-width: 1300px;
     margin: 0 auto;
@@ -5,8 +6,8 @@
   }
   /* Header Styles */
 .headerContainer {
-  background-color: white;
-  border-bottom: 1px solid #e5e7eb;
+  background-color: --bg-color;
+  border-bottom: 1px solid var(--border-color);
   top: 0;
   z-index: 10;
 }
@@ -35,13 +36,12 @@
 
 .headerTitle {
   font-size: 25px;
-  font-weight: bold;
-  color: #111827;
+  font-weight: 700;
 }
 
 .headerSubtitle {
   font-size: 14px;
-  color: #4b5563;
+  color: var(--subtitle-color);
   margin-top: 4px;
 }
 
@@ -58,8 +58,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #374151;
-  border-bottom: 2px solid #d1d5db;
+  color: var(--subtitle-color);
+  border-bottom: 2px solid var(--border-color);
   margin-bottom: 0.5rem;
 }
 
@@ -79,7 +79,7 @@
   overflow: hidden;
   width: 100%;
   height: 200px;
-  background-color: #e2e8f0;
+  background-color: var(--skeleton-bg);
   animation: pulse 1.3s infinite;
   }
   
@@ -111,13 +111,13 @@
     position: relative; 
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: var(--bg-color);
     border-radius: 0.5rem;
     box-shadow: -5px 5px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: transform 0.3s ease;
     cursor: pointer;
-    border: 1px solid #e5e9ef;
+    border: 1px solid var(--border-color);
   }
   
   .mealCard:hover {
@@ -158,8 +158,8 @@
   
 .mealLocation {
   font-size: 12px;
-  background-color: #ecedef;
-  color: #374151;
+  background-color: var(--bg-infobox);
+  color: --subtitle-color;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   border: none;
@@ -180,13 +180,13 @@
     justify-content: space-between;
     align-items: center;
     padding-top: 0.3rem;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid --border-color;
   }
   
   .mealPrice {
     font-size: 0.875rem;
-    font-weight: 600;
-    color: #2563eb;
+    font-weight: bold;
+    color: var(--price-color);
   }
   
   .starRating {
@@ -200,26 +200,26 @@
   }
   
   .starFilled {
-    color: black;
+    color: var(--primary-color);
     fill: currentColor;
   }
   
   .starEmpty {
-    color: #c6cbd1;
+    color: var(--info-box-bg);
   }
   
   .ratingCount {
     margin-left: 0.25rem;
     font-size: 0.875rem;
-    color: #718096;
+    color: var(--subtitle-color);
   }
   
   .footer {
     border-radius: 0.5rem 0.5rem 0 0;
-    background-color: #edf2f7;
+    background-color: var(--bg-color);
     padding: 1rem 0;
     text-align: center;
-    color: #4a5568;
+    color: var(--subtitle-color);
   }
   
   .footerLink {

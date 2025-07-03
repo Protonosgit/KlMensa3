@@ -6,47 +6,48 @@ import { toast, Toaster } from 'react-hot-toast';
 import { login } from "@/app/utils/actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
-import { set } from "date-fns";
+import Switch from "react-switch";
 
-const settingsList = [
-  { id: "dark", name: "Dark mode" },
+const settingslist =[ 
+  { id: "dark", name: "Dark mode"},
   { id: "by2lay", name: "Better mobile layout" },
-  { id: "intitle", name: "Additives in popup title" },
-];
+  { id: "intitle", name: "Additives in popup title" }]
 
 export default function SettingsModal({}) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [settings, setSettings] = useState({});
+  const [settings, setSettings] = useState([false,false,false,false,false]);
 
   useEffect(() => {
-    if(!getCookie('noid') === 'true') {
-        login();
-    }
     // fetch cookies
     const settingscookie = getCookie('settings');
-    setSettings(settingscookie ? JSON.parse(settingscookie) : {});
+    const settingsObject = settingscookie ? JSON.parse(settingscookie) : {};
+    const settingsArray = settingslist.map(setting => !!settingsObject[setting.id]);
+    setSettings(settingsArray);
   }, []);
 
-  function saveSettings() {
-    setCookie('settings', JSON.stringify(settings));
+
+  function toggleSwitch(index, state) {
+    setSettings((prevSettings) => {
+      const updatedSettings = [...prevSettings];
+      updatedSettings[index] = state;
+      return updatedSettings;
+    });
+    const updatedSettings = [...settings];
+    updatedSettings[index] = state;
+    const mappedSettings = settingslist.map((setting, index) => ({[setting.id]: updatedSettings[index]})).reduce((acc, cur) => ({...acc, ...cur}), {});
+    console.log(mappedSettings);
+    setCookie('settings', JSON.stringify(mappedSettings));
+
+
     toast.success('Settings saved!');
-    setModalVisible(false);
-    window.location.reload();
+    if(settingslist[index].id === "dark") {
+      document.documentElement.setAttribute('data-theme', state ? "dark" : "light");
+    }
+    if(settingslist[index].id === "by2lay") {
+      window.location.reload();
+    }   
   }
 
-  const Switch = ({ id, name }) => {
-    return (
-      <div className={styles.popupOption}>
-        <label className={styles.switch}>
-          <input type="checkbox" id={id} name={name} 
-          checked={settings[id]} onChange={(e) => {setSettings({ ...settings, [id]: e.target.checked });}}
-          />
-          <span className={styles.slider}></span>
-        </label>
-        <p htmlFor={id}>{name}</p>
-      </div>
-    );
-  };
 
   return (
     <>
@@ -63,20 +64,22 @@ export default function SettingsModal({}) {
                     <TabsTrigger className={styles.popupTabsTrigger} value="identity">Identity</TabsTrigger>
                 </TabsList>
                 <TabsContent value="general">
-                  {settingsList.map((setting) => (
-                    <div key={setting.id} className={styles.popupOption}>
-                      <Switch id={setting.id} name={setting.name} />
+                  {settingslist.map((setting, index) => (
+                    <div key={index} className={styles.popupOption}>
+                      <label htmlFor={setting.id} className={styles.popupOptionLabel}>
+                        <Switch onChange={(e) => toggleSwitch(index, e)} checked={settings[index]} onColor="#fbbf24"  />
+                        <span>{setting.name}</span>
+                      </label>
                     </div>
                   ))}
                 </TabsContent>
                 <TabsContent value="identity">
+                  <p>Shibboleth login for comments and images?</p>
                 <div className={styles.popupOption}>
-                    <Switch id="noid" name="noid" />
-                    <p htmlFor="noid">Ghost Mode👻 (No identity cookie)</p>
                 </div>
                 </TabsContent>
             </Tabs>
-            <button className={styles.popupButton} onClick={saveSettings}>Save</button>
+            <button className={styles.popupButton} onClick={() => setModalVisible(false)}>Close</button>
           </div>
         </div>
       )}
