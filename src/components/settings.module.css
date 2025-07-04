@@ -17,7 +17,7 @@
 }
 
 .scrollToTopButton:hover {
-  background-color: #fbbf24;
+  background-color: var(--primary-color);
 }
 
 .settingsButton {
@@ -33,7 +33,7 @@
   }
 
   .settingsButton:hover {
-    background-color: #d1d5db;
+    background-color: var(--primary-color);
   }
 
   .popupOverlay {
@@ -83,15 +83,22 @@
   .popupTabsList {
     width: 100%;
     display: flex;
+    gap: 0.5rem;
   }
   .popupTabsTrigger {
     flex: 1;
+    border-bottom: var(--border-color) solid 2px;
   }
+  .popupTabsTrigger[data-state="active"] {
+    border-bottom: var(--primary-color) solid 3px;
+    font-weight: bold;
+}
+
   .popupOption {
     display: flex;
     align-items: center;
     margin: 0.7rem 0.5rem;
-    gap: 0.5rem;
+    gap: 0.5rem;  
   }
 
   .popupOptionLabel {
@@ -111,17 +118,17 @@
   width: 100%;
   cursor: pointer;
   border-radius: 0.5rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-width: 2px;
   transition: background-color 0.3s;
 }
 
   .popupButton:hover {
-    background-color: #d1d5db;
+    background-color: var(--bg-infobox);
   }
 
   .popupButton:active {
-    background-color: #fbbf24;
+    background-color: var(--primary-color);
   }
 
   

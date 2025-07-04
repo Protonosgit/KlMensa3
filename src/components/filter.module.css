@@ -4,16 +4,16 @@
   align-items: center;
   gap: 8px;
   background-color: transparent;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
   }
-.filterButton:hover {
-  background-color: #d1d5db;
-}
 
+.filterButton:hover {
+  background-color: var(--primary-color);
+}
 .filterContent {
   padding: 1rem;
   width: 110%;
@@ -21,6 +21,7 @@
   flex-direction: column;
   font-size: 1rem;
   cursor: pointer;
+  background-color: var(--bg-color);
 }
 .filterTitle {
   font-size: 1rem;
@@ -56,15 +57,16 @@
   appearance: none;
   width: 18px;
   height: 18px;
-  border: 2px solid #fbbf24; /* Using the same color as your buttons */
+  border: 2px solid var(--primary-color);
   border-radius: 4px;
   background-color: transparent;
   cursor: pointer;
   position: relative;
+  color: var(--bg-color);
 }
 
 .filterCheckbox:checked {
-  background-color: #fbbf24;
+  background-color: var(--primary-color);
 }
 
 .filterCheckbox:checked::after {
@@ -83,8 +85,8 @@
 }
 
 .applyButton {
-  background-color: #fbbf24;
-  color: var(--primary-foreground);
+  background-color: var(--primary-color);
+  color: var(--bg-color);
   border: none;
   margin: 1rem 0;
   flex: 1;
@@ -97,7 +99,7 @@
 .resetButton {
   background-color: transparent;
   color: var(--primary-foreground);
-  border: 2px solid #fbbf24;
+  border: 2px solid var(--primary-color);
   margin: 1rem 0;
   padding: 0.5rem 1rem;
   font-size: 1rem;
@@ -106,12 +108,12 @@
   transition: background-color 0.3s;
 }
 .resetButton:hover {
-  background-color: #fbbf24;
+  background-color: var(--primary-color);
 }
 .seperator {
   height: 1px;
   width: 100%;
-  background-color: #4a5568;
+  background-color: var(--border-color);
   margin-bottom: 1rem;
 }
 

@@ -23,7 +23,7 @@
 }
 
   .popupContent {
-    background-color: rgb(255, 255, 255);
+    background-color: var(--bg-color);
     border-radius: 8px;
     max-width: 600px;
     width: 90%;
@@ -48,7 +48,8 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: var(--semiop-bg);
+    color: var(--text-color);
     border: none;
     border-radius: 50%;
     width: 30px;
@@ -67,13 +68,13 @@
   .popupTitle {
     font-size: 1.5rem;
     margin: 0 0 0.5rem;
-    color: #2c3e50;
+    color: var(--text-color);
   }
   
   .popupLocation {
     display: flex;
     font-size: 1rem;
-    color: #7f8c8d;
+    color: var(--subtitle-color);
     margin-bottom: 1rem;
     text-decoration: underline;
     cursor: pointer;
@@ -83,13 +84,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin: 1rem 0;
   }
   
   .popupPrice {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #2563eb;
+    color: var(--price-color);
   }
   
   .popupDescription {
@@ -101,7 +102,7 @@
   .popupDietaryInfo h3 {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
-    color: #2c3e50;
+    color: var(--text-color);
   }
   
   .popupIngredients ul {
@@ -122,47 +123,34 @@
   }
   
   .starFilled {
-    color: black;
+    color: var(--text-color);
     fill: currentColor;
   }
 
   .starHover {
-    color: rgb(252, 223, 0);
+    color: var(--primary-color);
     fill: currentColor;
   }
   
   .starEmpty {
-    color: #c6cbd1;
+    color: var(--info-box-bg);
   }
   
   .ratingCount {
     margin-left: 0.25rem;
     font-size: 0.875rem;
-    color: #718096;
-  }
-  
-  .dietaryTags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    color: var(--subtitle-color);
   }
   
   .dietaryTag {
-    background-color: #3498db;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.9rem;
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    margin-right: 0.5rem;
+    margin-top: 0.4rem;
   }
   
-  .popupCalories {
-    font-size: 1rem;
-    color: #2c3e50;
-  }
-
   .commentInfo {
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--border-color);
     padding-top: 1rem;
     margin-top: 1rem;
     display: flex;

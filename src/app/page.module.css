@@ -138,7 +138,7 @@
     display: flex;
     border-radius: 0.2rem;
     cursor: pointer;
-    background-color: white;
+    background-color: var(--semiop-bg);
   }
   .bookmark {
     fill: rgb(0, 0, 0);
