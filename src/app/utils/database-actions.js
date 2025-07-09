@@ -3,16 +3,9 @@ import { createClient } from "./supabase/server";
 
 export async function fetchComments(articleIds) {
     const supabase = await createClient();
-    const { data, error } = await supabase.rpc("get_meal_comments_by_article_ids", {
+    const { data, error } = await supabase.rpc("get_mealcomments_by_artid", {
         article_ids: articleIds,
     });
-  if(error) return {error: "Login failed"}
-
-  return data
-}
-export async function fetchOwnComments(articleIds) {
-    const supabase = await createClient();
-    const { data, error } = await supabase.from("meal_comments").select().in("article_id", articleIds);
   if(error) return {error: "Login failed"}
 
   return data
@@ -47,11 +40,12 @@ export async function deleteComment(id) {
     return {error: null, data: data}
 }
 
-export async function reportComment(commentId) {
+export async function reportComment(commentId, imageId) {
     const supabase = await createClient();
     const { data, error } = await supabase.from("user_reports").insert({ 
-        comment_id: commentId
+        comment_id: commentId,
+        image_id: imageId
     });
-    if(error) return {error: "Reporting comment failed", data: null}
+    if(error) return {error: "Reporting failed", data: null}
     return {error: null, data: data}
 }

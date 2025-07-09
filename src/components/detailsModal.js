@@ -7,10 +7,10 @@ import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie } from "@/app/utils/cookie-monster";
-import { publishComment,updateComment,deleteComment,fetchComments,fetchOwnComments, reportComment } from "@/app/utils/database-actions";
+import { publishComment,updateComment,deleteComment,fetchComments, reportComment } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { BananaIcon, BanIcon, CookingPot, FlagIcon, Vegan } from "lucide-react";
+import { BananaIcon, BanIcon, CookingPot, FlagIcon, Plus, UploadIcon, Vegan } from "lucide-react";
 
 export default function MealPopup({ meal, onClose }) {
   const [stars, setStars] = useState(0);
@@ -21,6 +21,7 @@ export default function MealPopup({ meal, onClose }) {
   const [mealComments, setMealComments] = useState([]);
   const [commentId, setCommentId] = useState(null);
   const [actionPending, setActionPending] = useState(false);
+  const [datachanged, setDataChanged] = useState(false);
 
     useEffect(() => {
       setAdditives(extractAdditives(meal.zsnumnamen));
@@ -35,20 +36,22 @@ export default function MealPopup({ meal, onClose }) {
           setUser(data?.user);
         }
       }
+      fetchUserData();
+    }, [meal]);
+
+    useEffect(() => {
       async function fetchMealComments() {
-        const ownComment = await fetchOwnComments([meal.artikel_id]);
-        if(ownComment.length > 0) {
+        const result = await fetchComments([meal.artikel_id]);
+        const ownComment = result?.filter(c => c.user_id !== null);
+        if (ownComment.length > 0) {
           setStars(ownComment[0]?.rating);
           setComment(ownComment[0]?.comment_text);
           setCommentId(ownComment[0]?.id);
         }
-        const result = await fetchComments([meal.artikel_id]);
         setMealComments(result);
       }
       fetchMealComments();
-      fetchUserData();
-    }, [meal]);
-
+    }, [datachanged]);
     
 
 
@@ -73,6 +76,7 @@ export default function MealPopup({ meal, onClose }) {
       toast.success("Comment published!");
     }
     setActionPending(false);
+    setDataChanged(!datachanged);
   }
 
   async function handleDeleteRating() {
@@ -87,13 +91,33 @@ export default function MealPopup({ meal, onClose }) {
       setCommentId(null);
     }
     setActionPending(false);
+    setDataChanged(!datachanged);
   }
 
-  async function handleReportRequest(commentId) {
-    if(confirm("Report the comment for being: offensive, spam, irrelevant or a threat to our constitution?")) {
+  async function handleReportRequest(commentId, imageId) {
+    // will be handled in seperate form on different page in the future!!
+    if(confirm("Report the content for being: offensive, spam, irrelevant or a threat to our constitution?")) {
       toast.success("Report sent!");
-      reportComment(commentId);
+      reportComment(commentId, imageId);
     }
+  }
+
+  async function handleUploadMealImage() {
+    const supabase = createClient();
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.onchange = async () => {
+      const artikelId = meal.artikel_id.replace(/\./g, '');
+      const file = fileInput.files[0];
+      const { data, error } = await supabase.storage
+        .from('meal-images')
+        .upload(artikelId+"_"+Date.now(), file);
+      if (error) {
+        toast.error("Error uploading image!");
+      }
+    };
+    fileInput.click();
   }
 
   return (
@@ -101,9 +125,11 @@ export default function MealPopup({ meal, onClose }) {
     <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
       <div className={styles.popupImageContainer}>
         <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt={meal.titleCombined} width={600} height={500} className={styles.popupImage}/>
-        <button onClick={onClose} className={styles.popupCloseButton}>
-          ×
-        </button>
+        <div className={styles.overlayActionsBar}>
+          <button onClick={handleUploadMealImage} className={styles.popupActionButton}><UploadIcon /></button>
+          <button onClick={() => handleReportRequest(null, null)} className={styles.popupActionButton}><FlagIcon /></button>
+          <button onClick={onClose} className={styles.popupActionButton}>×</button>
+        </div>
       </div>
       <div className={styles.popupDetails}>
       <a href={meal.loc_link} title="Click for directions to location" className={styles.popupLocation}>{meal.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}{meal.dpartname}</a>
@@ -138,8 +164,12 @@ export default function MealPopup({ meal, onClose }) {
 
           {mealComments.map((comment, index) => (
             <div key={index} className={styles.foreignComment}>
-              <StarRating mealRating={comment.rating} disabled={true} />
-              <p className={styles.commentText}>{comment.comment_text} <FlagIcon onClick={() => handleReportRequest(comment?.id)} size={16} fill="var(--text-color)" /></p>
+              <div className={styles.commentInfo}>
+                 <StarRating mealRating={comment.rating} disabled={true} />
+                <span className={styles.commentDate}>{new Date(comment.created_at).toLocaleString("de-DE", { year: "numeric", month: "2-digit", day: "2-digit"})}</span>
+                <FlagIcon onClick={() => handleReportRequest(comment?.id)} size={16} fill="var(--text-color)" />
+              </div>
+              <p className={styles.commentText}>{comment.comment_text}</p>
             </div>
           ))}
         </div>
