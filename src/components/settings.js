@@ -12,7 +12,9 @@ import { createClient } from "@/app/utils/supabase/client";
 const settingslist =[ 
   { id: "dark", name: "Dark mode"},
   { id: "by2lay", name: "Better mobile layout" },
-  { id: "intitle", name: "Additives in popup title" }]
+  { id: "intitle", name: "Additives in popup title" },
+  { id: "shortitle", name: "Supershort meal title" },
+  { id: "nolimit", name: "Remove limit of 8 days" }]
 
 export default function SettingsModal({}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -50,12 +52,13 @@ export default function SettingsModal({}) {
     setCookie('settings', JSON.stringify(mappedSettings));
 
     toast.success('Settings saved!');
-    if(settingslist[index].id === "dark") {
+    const changedSetting = settingslist[index].id;
+    if(changedSetting === "dark") {
       document.documentElement.setAttribute('data-theme', state ? "dark" : "light");
     }
-    if(settingslist[index].id === "by2lay") {
+    if(changedSetting === "by2lay" || changedSetting === "nolimit" || changedSetting === "shortitle") {
       window.location.reload();
-    }   
+    }
   }
 
   async function handleLogin() {

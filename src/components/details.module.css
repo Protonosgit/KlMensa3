@@ -11,6 +11,7 @@
     align-items: center;
     z-index: 1000;
     animation: fadein 0.3s ease-in-out;
+    overflow: hidden;
 }
 
 @keyframes fadein {
@@ -175,6 +176,12 @@
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     color: var(--text-color);
+  }
+  .commentText {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
   }
   .ownComent {
     margin-bottom: 1rem;

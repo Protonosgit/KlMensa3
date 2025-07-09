@@ -13,13 +13,15 @@ export default async function Schedule() {
   const settingsCookie = cookieStore.get('settings') || null;
 
   let settings;
-  const menu = await fetchMenu();
+  let menu = await fetchMenu();
 
   if(settingsCookie?.value) {
     settings = JSON.parse(settingsCookie.value);
   }
 
-  await fetchMenu();
+  if(!settings?.nolimit) {
+    menu = menu.slice(0, 8);
+  }
 
   if (!menu || !menu?.length) {
     return (

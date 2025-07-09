@@ -181,8 +181,8 @@ async function parseMenu(menuData) {
             meals: items
         };
     });
-    
-    return updatedmenu
+
+    return updatedmenu; 
 }
 async function matchMenuToUdat(schedule) {
     const rebuildmatchedMenu = schedule;

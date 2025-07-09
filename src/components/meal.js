@@ -4,14 +4,18 @@ import { Star,Vegan,Megaphone, Bookmark } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
 import { useEffect, useState } from "react";
+import { getCookie } from "@/app/utils/cookie-monster";
 
 export default function Meal({ meal, mealIndex }) {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  console.log(meal.menuekennztext == "V+");
-
+  const [settings, setSettings] = useState();
 
   useEffect(() => {
+      const settingsCookie = getCookie('settings') || null;
+      if(settingsCookie) {
+        setSettings(JSON.parse(settingsCookie));
+      }
       const cookieValue = document.cookie
         .split("; ")
         .find((row) => row.startsWith("bookmarks"))
@@ -21,6 +25,8 @@ export default function Meal({ meal, mealIndex }) {
         setIsBookmarked(bookmarks.includes(meal.artikel_id));
       }
   }, [meal]);
+
+
 
     // render stars (non interactive)
   const renderStarRating = (meal) => {
@@ -57,6 +63,7 @@ export default function Meal({ meal, mealIndex }) {
     document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
     setIsBookmarked(!isBookmarked);
     e.stopPropagation();
+    console.log(meal);
   }
 
   return (
@@ -70,15 +77,15 @@ export default function Meal({ meal, mealIndex }) {
           <Bookmark size={14} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')}/>
         </div>
       
-        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={300} height={200} />
+        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={300} height={200} />
         <div className={styles.mealInfo}>
           <p className={styles.mealLocation}>
-            {meal.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}
-            {meal.dpartname}
+            {meal?.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}
+            {meal?.dpartname}
           </p>
-          <h4 className={styles.mealTitle}>{(meal.frei1 && meal.frei1 + ". ") + meal.titleCombined}</h4>
+          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.dpname : meal?.titleCombined)+(". "+meal.frei1)}</h4>
           <div className={styles.mealFooter}>
-            <span className={styles.mealPrice}>{meal.price}</span>
+            <span className={styles.mealPrice}>{meal?.price}</span>
             {renderStarRating(meal)}
           </div>
         </div>

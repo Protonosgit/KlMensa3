@@ -7,17 +7,12 @@ import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie } from "@/app/utils/cookie-monster";
-import { publishComment,updateComment,deleteComment,fetchComments,fetchOwnComments } from "@/app/utils/database-actions";
+import { publishComment,updateComment,deleteComment,fetchComments,fetchOwnComments, reportComment } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { BanIcon, CookingPot, Delete, DeleteIcon, Vegan } from "lucide-react";
-import { usePathname, useRouter } from 'next/navigation';
+import { BananaIcon, BanIcon, CookingPot, FlagIcon, Vegan } from "lucide-react";
 
 export default function MealPopup({ meal, onClose }) {
-  const pathname = usePathname();
-  const router = useRouter();
-
-
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState("");
   const [additives, setAdditives] = useState([]);
@@ -61,8 +56,8 @@ export default function MealPopup({ meal, onClose }) {
     if(stars<1) {toast.error("Please rate the meal!"); return;}
     setActionPending(true);
     if(commentId) {
-      const error = await updateComment(commentId, stars, comment);
-      if(error) {
+      const response = await updateComment(commentId, stars, comment);
+      if(response?.error) {
         toast.error("Error updating comment!");
       } else {
         toast.success("Comment updated!");
@@ -70,10 +65,11 @@ export default function MealPopup({ meal, onClose }) {
       setActionPending(false);
       return;
     }
-    const error = await publishComment(meal?.artikel_id, stars, comment);
-    if(error) {
-      toast.error("Error publishing comment!");
+    const response = await publishComment(meal?.artikel_id, stars, comment);
+    if(response?.error) {
+      toast.error(response?.error);
     } else {
+      setCommentId(response?.data[0]?.id);
       toast.success("Comment published!");
     }
     setActionPending(false);
@@ -81,8 +77,8 @@ export default function MealPopup({ meal, onClose }) {
 
   async function handleDeleteRating() {
     setActionPending(true);
-    const error = await deleteComment(commentId);
-    if(error) {
+    const response = await deleteComment(commentId);
+    if(response?.error) {
       toast.error("Error deleting comment!");
     } else {
       toast.success("Comment deleted!");
@@ -91,6 +87,13 @@ export default function MealPopup({ meal, onClose }) {
       setCommentId(null);
     }
     setActionPending(false);
+  }
+
+  async function handleReportRequest(commentId) {
+    if(confirm("Report the comment for being: offensive, spam, irrelevant or a threat to our constitution?")) {
+      toast.success("Report sent!");
+      reportComment(commentId);
+    }
   }
 
   return (
@@ -115,7 +118,7 @@ export default function MealPopup({ meal, onClose }) {
         </div>
 
         <div className={styles.commentsSection}>
-          <h3 className={styles.commentsTitle}>Comments</h3>
+          <h3 className={styles.commentsTitle}>Comments {mealComments.length}</h3>
           <div className={styles.ownComent} style={{display: user? "flex" : "none"}}>
             <StarRating mealRating={stars} starsSet={setStars} />
             <textarea
@@ -136,7 +139,7 @@ export default function MealPopup({ meal, onClose }) {
           {mealComments.map((comment, index) => (
             <div key={index} className={styles.foreignComment}>
               <StarRating mealRating={comment.rating} disabled={true} />
-              <p className={styles.commentText}>{comment.comment_text}</p>
+              <p className={styles.commentText}>{comment.comment_text} <FlagIcon onClick={() => handleReportRequest(comment?.id)} size={16} fill="var(--text-color)" /></p>
             </div>
           ))}
         </div>

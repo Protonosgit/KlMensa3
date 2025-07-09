@@ -27,7 +27,7 @@ export default function Home() {
           <div className={styles.headerContent}>
             <div className={styles.headerTitleSection}>
               <h1 className={styles.headerTitle}>KL Mensa</h1>
-              <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
+              <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau indev</p>
             </div>
             
           </div>
