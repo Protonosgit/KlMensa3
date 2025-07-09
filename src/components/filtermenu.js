@@ -10,22 +10,13 @@ import { useEffect, useState } from "react";
 
 
 const mealLocationClearname = [
-  { name: "Ausgabe 1", codes: ["1"] },
-  { name: "Ausgabe 1 vegan", codes: ["1veg","1vegan"] },
-  { name: "Ausgabe 2", codes: ["2"] },
-  { name: "Ausgabe 2 vegan", codes: ["2veg","2vegan"] },
-  { name: "Wok", codes: ["Wok"] },
-  { name: "Grill", codes: ["Grill"] },
-  { name: "Grill Vegan", codes: ["GrillV+"] },
-  { name: "Buffet", codes: ["Buffet"] },
-  { name: "Atrium", codes: ["AtriumMenü"] },
-  { name: "Atrium Vegan", codes: ["AtriumMenüVegan"] },
-  { name: "Salatbuffet", codes: ["SalatbufettV+"] },
-  { name: "Abendmensa", codes: ["Abend"] },
-  { name: "Abendmensa vegan", codes: ["AbendVegan"] },
-  { name: "Robotic Kitchen", codes: ["RK"] },
-  { name: "Robotic Kitchen Vegan", codes: ["RKVegan"] },
-  { name: "News", codes: ["News"] }
+  { name: "Ausgabe 1", codes: [1] },
+  { name: "Ausgabe 2", codes: [2] },
+  { name: "Wok", codes: [] },
+  { name: "Grill", codes: [10] },
+  { name: "Atrium", codes: [16,17,18] },
+  { name: "Eintopf (Atrium)", codes: [13] },
+  { name: "Abendmensa", codes: [4] },
 ];
 
 const mealAdditiveClearname = [
@@ -56,7 +47,7 @@ const mealProteinClearname = [
   { name: "Boar", code: "w" },
   { name: "Fish", code: "fi" },
   { name: "Eggs", code: "ei" },
-  { name: "Shrimp", code: "shrimp" }
+  { name: "Crustaceans", code: "kr" }
 ];
 
 

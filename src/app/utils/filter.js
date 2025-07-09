@@ -10,16 +10,13 @@ function applyClientFilters(locCookie, protCookie, adiCookie, meals) {
 
 
   const filteredMeals = meals.filter(meal => {
-    if (locationArray.includes(meal.loc)) {
+    if (locationArray.includes(meal.dispoart_id)) {
       return false;
     }
-    if (proteinArray.includes(meal.protein)) {
+    if (proteinArray.some(protein => extractAdditiveCodes(meal.zsnummern).includes(protein))) {
       return false;
     }
-    if (proteinArray.some(protein => extractAdditiveCodes(meal.title_with_additives).includes(protein))) {
-      return false;
-    }
-    if (additiveArray.some(additive => extractAdditiveCodes(meal.title_with_additives).includes(additive))) {
+    if (additiveArray.some(additive => extractAdditiveCodes(meal.zsnummern).includes(additive))) {
       return false;
     }
     return true;

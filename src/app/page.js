@@ -30,7 +30,6 @@ export default function Home() {
               <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
             </div>
             
-              <UploadPopup />
           </div>
         </div>
       </header>
@@ -46,9 +45,10 @@ export default function Home() {
       </main>
       <footer className={styles.footer}>
         <div className={styles.container}>
-          <p>&copy; 2024 Mensa KL operated by <a href="https://www.studierendenwerk-kaiserslautern.de/" className={styles.footerLink}>Studierendenwerk Kaiserslautern.</a></p>
+          <p>&copy; 2024 Kl-mensa <a href="https://www.studierendenwerk-kaiserslautern.de/" className={styles.footerLink}>Studierendenwerk</a></p>
           <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
-          <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>V3 developed by protonos</a>
+          <a href="https://www.mensa-kl.de/" className={styles.footerLink}>Images from <b>mensa-kl.de</b></a>
+          <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Developer</a>
         </div>
       </footer>
       <ScrollToTopButton />

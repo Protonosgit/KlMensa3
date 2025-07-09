@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import {  fetchMenu } from '@/app/utils/api-bridge';
+import {  fetchMenuLegacy,fetchMealUserData, fetchMenu } from '@/app/utils/api-bridge';
 import styles from "../app/page.module.css";
 import Meal from './meal';
 import { format } from 'date-fns';
@@ -19,6 +19,7 @@ export default async function Schedule() {
     settings = JSON.parse(settingsCookie.value);
   }
 
+  await fetchMenu();
 
   if (!menu || !menu?.length) {
     return (
@@ -48,6 +49,8 @@ export default async function Schedule() {
                     />
                   )
                 })}
+
+ 
               </div>
             </div>
           )

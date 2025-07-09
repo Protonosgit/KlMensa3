@@ -1,41 +1,45 @@
 "use client";
 import styles from "./details.module.css";
 import { Star } from "lucide-react";
-import { useState } from "react";
-import { toast, Toaster } from 'react-hot-toast';
+import { useEffect, useState } from "react";
 
-export default function StarRating({ meal }) {
+export default function StarRating({ mealRating, disabled, starsSet }) {
     const [hover, setHover] = useState(null);
-    const [rating, setRating] = useState(meal.rating);
+    const [rating, setRating] = useState(0);
 
-    async function sendrating(rating) {
-        toast.loading('Please wait...'); 
-        // const response = await fetch(`/api/relay?rating=${999999}&m_id=${meal.m_id}`, {
-        const response = await fetch(`/api/relay?rating=${rating}&m_id=${meal.m_id}`, {
-            method: 'GET',
-            headers: {
-            }
-        })
-        setTimeout(() => {
-            toast.dismiss();
-            // This should be verified but not now!
-            toast.success('Thank you for your rating!');
-        }, 1000);
-    }
+    useEffect(() => {
+      setRating(mealRating);
+    }, [mealRating]);
+
+    const handleMouseIn = (i) => {
+      if (disabled) return;
+      setHover(i + 1);
+    };
+
+    const handleMouseOut = () => {
+      if (disabled) return;
+      setHover(0);
+    };
+
+    const handleRating = (rating) => {
+      if (disabled) return;
+      setRating(rating);
+      starsSet(rating);
+    };
 
   return (
-    <div className={styles.starRating} onMouseEnter={() => setHover(1)} onMouseLeave={() => setHover(0)} title="Press star to submit rating">
+    <div className={styles.starRating} onMouseEnter={disabled ? undefined : () => setHover(1)} onMouseLeave={disabled ? undefined : () => setHover(0)}>
     {[...Array(5)].map((_, i) => (
       <Star
         key={i}
-        className={`${styles.star} ${ i < rating ? styles.starFilled : (i < hover ? styles.starHover : styles.starEmpty) } ${i < hover ? styles.starHover : ""}`}
-        onMouseEnter={() => setHover(i + 1)}
-        onMouseLeave={() => setHover(0)}
-        onClick={() => sendrating(i + 1)}
+        className={`${styles.star} ${ i < rating ? styles.starFilled : (i < hover ? styles.starHover : styles.starEmpty) } ${i < hover && !disabled ? styles.starHover : ""}`}
+        style={disabled ? undefined : {height: "1.7rem", width: "1.7rem"}}
+        onMouseEnter={disabled ? undefined : () => handleMouseIn(i)}
+        onMouseLeave={disabled ? undefined : () => handleMouseOut()}
+        onClick={disabled ? undefined : () => handleRating(i + 1)}
       />
     ))}
-    <span className={styles.ratingCount}>{meal.rating_amt}</span>
-    <Toaster />
+
   </div>
   )
 }

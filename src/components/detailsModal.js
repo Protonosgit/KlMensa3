@@ -1,42 +1,144 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./details.module.css";
 import { extractAdditives } from "@/app/utils/additives";
-import {  MapPin } from "lucide-react";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie } from "@/app/utils/cookie-monster";
-
+import { publishComment,updateComment,deleteComment,fetchComments,fetchOwnComments } from "@/app/utils/database-actions";
+import { createClient } from "@/app/utils/supabase/client";
+import toast from "react-hot-toast";
+import { BanIcon, CookingPot, Delete, DeleteIcon, Vegan } from "lucide-react";
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function MealPopup({ meal, onClose }) {
-  const additives = extractAdditives(meal.title_with_additives);
-  const settingsCookie = getCookie('settings') || null;
-  let settings;
-  if(settingsCookie) {
-    settings = JSON.parse(settingsCookie);
+  const pathname = usePathname();
+  const router = useRouter();
+
+
+  const [stars, setStars] = useState(0);
+  const [comment, setComment] = useState("");
+  const [additives, setAdditives] = useState([]);
+  const [user, setUser] = useState();
+  const [settings, setSettings] = useState();
+  const [mealComments, setMealComments] = useState([]);
+  const [commentId, setCommentId] = useState(null);
+  const [actionPending, setActionPending] = useState(false);
+
+    useEffect(() => {
+      setAdditives(extractAdditives(meal.zsnumnamen));
+      const settingsCookie = getCookie('settings') || null;
+      if(settingsCookie) {
+        setSettings(JSON.parse(settingsCookie));
+      }
+      async function fetchUserData() {
+        const supabase = createClient();
+        const { data, error } = await supabase.auth.getUser();
+        if(data?.user) {
+          setUser(data?.user);
+        }
+      }
+      async function fetchMealComments() {
+        const ownComment = await fetchOwnComments([meal.artikel_id]);
+        if(ownComment.length > 0) {
+          setStars(ownComment[0]?.rating);
+          setComment(ownComment[0]?.comment_text);
+          setCommentId(ownComment[0]?.id);
+        }
+        const result = await fetchComments([meal.artikel_id]);
+        setMealComments(result);
+      }
+      fetchMealComments();
+      fetchUserData();
+    }, [meal]);
+
+    
+
+
+  async function handlePublishRating() {
+    if(stars<1) {toast.error("Please rate the meal!"); return;}
+    setActionPending(true);
+    if(commentId) {
+      const error = await updateComment(commentId, stars, comment);
+      if(error) {
+        toast.error("Error updating comment!");
+      } else {
+        toast.success("Comment updated!");
+      }
+      setActionPending(false);
+      return;
+    }
+    const error = await publishComment(meal?.artikel_id, stars, comment);
+    if(error) {
+      toast.error("Error publishing comment!");
+    } else {
+      toast.success("Comment published!");
+    }
+    setActionPending(false);
+  }
+
+  async function handleDeleteRating() {
+    setActionPending(true);
+    const error = await deleteComment(commentId);
+    if(error) {
+      toast.error("Error deleting comment!");
+    } else {
+      toast.success("Comment deleted!");
+      setStars(0);
+      setComment("");
+      setCommentId(null);
+    }
+    setActionPending(false);
   }
 
   return (
     <div style={{display: meal? "flex" : "none"}} className={styles.popupOverlay} onClick={onClose}>
     <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
       <div className={styles.popupImageContainer}>
-        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt={meal.title_with_additives} width={600} height={400} className={styles.popupImage}/>
+        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal.image : "/plate_placeholder.png"} alt={meal.titleCombined} width={600} height={500} className={styles.popupImage}/>
         <button onClick={onClose} className={styles.popupCloseButton}>
           ×
         </button>
       </div>
       <div className={styles.popupDetails}>
-      <a href={meal.loc_link} title="Click for directions to location" className={styles.popupLocation}><MapPin size={20} /> {meal.loc_clearname}</a>
-        <h2 className={styles.popupTitle} title={meal?.title_with_additives}>{settings?.intitle ? meal.title_with_additives : meal.title}</h2>
-                {additives.length > 1 && <p><b>Additives:</b> {additives.map((additive) => <Badge title={additive} className={styles.dietaryTag} key={additive}>{additive}</Badge>)}</p>}
+      <a href={meal.loc_link} title="Click for directions to location" className={styles.popupLocation}>{meal.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}{meal.dpartname}</a>
+        <h2 className={styles.popupTitle} title={meal?.titleCombined}>{settings?.intitle ? meal.titleAdditivesCombined : meal.titleCombined}</h2>
+                {additives.length > 1 && <p><b>Additives:</b> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</p>}
         <div className={styles.popupPriceRating}>
-          <span title="This price is only for students!" className={styles.popupPrice}>{meal.price} {meal.price && '€'}</span>
+          <span title="This price is only for students!" className={styles.popupPrice}>{meal.price}</span>
           <div className={styles.popupRating}>
-            <StarRating meal={meal} />
+            <StarRating mealRating={meal.rating} disabled={true} />
+            <span className={styles.ratingCount}>{meal.rating_amt}</span>
           </div>
         </div>
 
-        <div className={styles.commentInfo}>
-          <p title="Not implemented yet">Comments disabled</p>
+        <div className={styles.commentsSection}>
+          <h3 className={styles.commentsTitle}>Comments</h3>
+          <div className={styles.ownComent} style={{display: user? "flex" : "none"}}>
+            <StarRating mealRating={stars} starsSet={setStars} />
+            <textarea
+              type="text"
+              placeholder="Comment (optional)"
+              className={styles.commentInput}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              maxLength={100}
+            ></textarea>
+            <p className={styles.commentCounter}>{comment.length}/100</p>
+            <div className={styles.commentButtons}>
+              <button className={styles.commentButton} disabled={actionPending} title="Publish" style={{opacity: actionPending? 0.5 : 1, width: "100%"}} onClick={handlePublishRating}>Publish</button>
+              <button className={styles.commentButton} disabled={actionPending} title="Delete" style={{opacity: actionPending? 0.5 : 1, display: commentId? "flex" : "none"}} onClick={handleDeleteRating}><CookingPot /></button>
+            </div>
+          </div>
+
+          {mealComments.map((comment, index) => (
+            <div key={index} className={styles.foreignComment}>
+              <StarRating mealRating={comment.rating} disabled={true} />
+              <p className={styles.commentText}>{comment.comment_text}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

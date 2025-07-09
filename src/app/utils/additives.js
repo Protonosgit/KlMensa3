@@ -26,36 +26,17 @@ const additiveMap = {
 
 
 function extractAdditives(inputString) {
-
-    const regex = /\(([^)]+)\)/g;
-    // Use a Set to store unique additives and avoid duplicates
-    const additives = new Set();
-    // Use a for loop to iterate over the matches
-    for (const match of inputString.matchAll(regex)) {
-      // Split contents of parentheses and add item to Set
-      for (const item of match[1].split(',').map(item => item.trim().toLowerCase())) {
-        additives.add(item);
-      }
-    }
-
-    // Map additives to names
-    return [...additives].map(additive => additiveMap[additive] || additive).filter(additive => additive !== additive.toLowerCase());
-  }
+    const additives = inputString.split(',').map(item => {
+      const [code,name] = item.trim().split('=');
+      return {code: code.toLowerCase(), name};
+    });
+    return additives;
+}
 
   function extractAdditiveCodes(inputString) {
-
-    const regex = /\(([^)]+)\)/g;
-    // Use a Set to store unique additives and avoid duplicates
-    const additives = [];
-    // Use a for loop to iterate over the matches
-    for (const match of inputString.matchAll(regex)) {
-      // Split contents of parentheses and add item to Set
-      for (const item of match[1].split(',').map(item => item.trim().toLowerCase())) {
-        additives.push(item);
-      }
-    }
-    // Map additives to names
-    return additives;
+    if(!inputString) return [];
+    const codes = inputString.split(',').map(item => item.trim().toLowerCase());
+    return codes;
   }
 
 export { extractAdditives,extractAdditiveCodes }
