@@ -1,11 +1,8 @@
-import Link from "next/link";
 import styles from "./page.module.css";
 import Schedule from '@/components/schedule';
-import UploadPopup from "@/components/uploadModal";
 import FilterMenu from "@/components/filtermenu";
 import { Suspense } from "react";
 import SettingsModal from "@/components/settings";
-import { createClient } from '@/app/utils/supabase/server';
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 export default function Home() {   
@@ -27,7 +24,7 @@ export default function Home() {
           <div className={styles.headerContent}>
             <div className={styles.headerTitleSection}>
               <h1 className={styles.headerTitle}>KL Mensa</h1>
-              <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau indev</p>
+              <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
             </div>
             
           </div>

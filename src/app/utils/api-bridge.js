@@ -1,3 +1,4 @@
+"use server"
 const  priceRelationsLookup = {
     // artgebname : price
     "Port.": { "stu": "3,50 €", "bed": "5,30 €", "gas": "6,25 €" }, 
@@ -83,7 +84,6 @@ const  priceRelationsLookup = {
     "Warmer Snack / Imbiss (34)": { "price": "6,00 €" },
 };
 
-
 async function fetchMenu() {
     try {
         // download latest uncached version of the mensa menu
@@ -149,16 +149,20 @@ async function fetchMealUserData() {
 }
 
 
+const murmur = require('murmurhash');
 
 async function parseMenu(menuData) {
     const locationFiltered = menuData.filter(item => item.ort_id === 310 || item.ort_id === 410);
     
     const combinedKeys = locationFiltered.map(obj => {
+        const titleAdder = ((obj.atextohnezsz1 || '') +" "+ (obj.atextohnezsz2 || '') +" "+ (obj.atextohnezsz3 || '' ) +" "+ (obj.atextohnezsz4 || '') +" "+ (obj.atextohnezsz5 || '')).trim()
       return {
         ...obj,
-        titleCombined: ((obj.atextohnezsz1 || '') +" "+ (obj.atextohnezsz2 || '') +" "+ (obj.atextohnezsz3 || '' ) +" "+ (obj.atextohnezsz4 || '') +" "+ (obj.atextohnezsz5 || '')).trim(),
+        titleCombined: titleAdder,
         titleAdditivesCombined: ((obj.atextz1 || '') +" "+ (obj.atextz2 || '') +" "+ (obj.atextz3 || '' ) +" "+ (obj.atextz4 || '') +" "+ (obj.atextz5 || '')).trim(),
         price: priceRelationsLookup[obj.artgebname]?.stu || priceRelationsLookup[obj.artgebname]?.price,
+        // Hotfix because api is broken :o
+        artikel_id: murmur.v3(titleAdder).toString(16).substring(0, 8),
       };
     });
 

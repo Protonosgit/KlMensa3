@@ -39,6 +39,14 @@ export default function SettingsModal({}) {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    if (modalVisible) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [modalVisible]);
+
 
   function toggleSwitch(index, state) {
     setSettings((prevSettings) => {

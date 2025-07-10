@@ -10,22 +10,37 @@ export default function Meal({ meal, mealIndex }) {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [settings, setSettings] = useState();
-
+  const [relevantImages, setRelevantImages] = useState(
+    // initialImages?.filter(image => {
+    //   const imagePrefix = image?.image_name?.split('_')[0];
+    //   return imagePrefix === String(meal?.artikel_id).replace(/\./g, "");
+    // }) || []
+  );
+  //const [relevantComments, setRelevantComments] = useState(initialComments.filter(comment => comment.article_id === meal.artikel_id) || []);
   useEffect(() => {
-      const settingsCookie = getCookie('settings') || null;
-      if(settingsCookie) {
-        setSettings(JSON.parse(settingsCookie));
-      }
-      const cookieValue = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("bookmarks"))
-        ?.split("=")[1];
-      if (cookieValue) {
-        const bookmarks = JSON.parse(cookieValue);
-        setIsBookmarked(bookmarks.includes(meal.artikel_id));
-      }
+    const settingsCookie = getCookie('settings') || null;
+    if(settingsCookie) {
+      setSettings(JSON.parse(settingsCookie));
+    }
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("bookmarks"))
+      ?.split("=")[1];
+    if (cookieValue) {
+      const bookmarks = JSON.parse(cookieValue);
+      setIsBookmarked(bookmarks.includes(meal.artikel_id));
+    }
   }, [meal]);
 
+
+
+  useEffect(() => {
+    if (selectedMeal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [selectedMeal]);
 
 
     // render stars (non interactive)
@@ -63,7 +78,6 @@ export default function Meal({ meal, mealIndex }) {
     document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
     setIsBookmarked(!isBookmarked);
     e.stopPropagation();
-    console.log(meal);
   }
 
   return (
@@ -77,7 +91,8 @@ export default function Meal({ meal, mealIndex }) {
           <Bookmark size={14} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')}/>
         </div>
       
-        <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={300} height={200} />
+        {/* <Image src={relevantImages[0]?.image_url ? "https://gbxuqreqhbkcxrwfeeig.supabase.co"+relevantImages[0]?.image_url :(meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png")} alt="dish-image" priority className={styles.mealImage} width={300} height={200} /> */}
+         <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={300} height={200} />
         <div className={styles.mealInfo}>
           <p className={styles.mealLocation}>
             {meal?.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}
@@ -90,7 +105,6 @@ export default function Meal({ meal, mealIndex }) {
           </div>
         </div>
       </div>
-      {/* Maybe always render this modal */}
       {selectedMeal && (
         <MealPopup meal={selectedMeal} onClose={() => setSelectedMeal(null)} />
       )}

@@ -1,15 +1,26 @@
 "use server";
 import { createClient } from "./supabase/server";
 
+export async function fetchImages(articleIds) {
+    const flatArticleIds = articleIds?.map(id => id.replace(/\./g, ""));
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc("get_mealimages_by_artid", {
+        article_ids: flatArticleIds,
+    });
+  if(error) return {error: "api call failed"}
+
+  return data
+}
 export async function fetchComments(articleIds) {
     const supabase = await createClient();
     const { data, error } = await supabase.rpc("get_mealcomments_by_artid", {
         article_ids: articleIds,
     });
-  if(error) return {error: "Login failed"}
+  if(error) return {error: "Api call failed"}
 
   return data
 }
+
 export async function publishComment(articleId,rating,comment) {
     if(rating<1 || rating>5) return "Rating must be between 1 and 5";
     const supabase = await createClient();

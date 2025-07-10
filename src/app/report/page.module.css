@@ -1,0 +1,73 @@
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 0.3rem;
+}
+.headerContainer {
+  background-color: --bg-color;
+  border-bottom: 1px solid var(--border-color);
+  top: 0;
+  z-index: 10;
+}
+.headerWrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+.headerButtonSection {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end; 
+}
+.headerTitleSection {
+  flex: 1;
+}
+.headerTitle {
+  font-size: 25px;
+  font-weight: 700;
+}
+.headerSubtitle {
+  font-size: 14px;
+  color: var(--subtitle-color);
+  margin-top: 4px;
+}
+.main {
+  padding: 2rem 0;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+.subtitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+.button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 10rem;
+}
+
+.list {
+    list-style:disc;
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}

@@ -7,12 +7,12 @@ import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie } from "@/app/utils/cookie-monster";
-import { publishComment,updateComment,deleteComment,fetchComments, reportComment } from "@/app/utils/database-actions";
+import { publishComment,updateComment,deleteComment,fetchComments, reportComment, fetchImages } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
 import { BananaIcon, BanIcon, CookingPot, FlagIcon, Plus, UploadIcon, Vegan } from "lucide-react";
 
-export default function MealPopup({ meal, onClose }) {
+export default function MealPopup({ meal, onClose,initialComments,initialImages}) {
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState("");
   const [additives, setAdditives] = useState([]);
@@ -61,11 +61,12 @@ export default function MealPopup({ meal, onClose }) {
     if(commentId) {
       const response = await updateComment(commentId, stars, comment);
       if(response?.error) {
-        toast.error("Error updating comment!");
+        toast.error(response?.error);
       } else {
         toast.success("Comment updated!");
       }
       setActionPending(false);
+      setDataChanged(!datachanged);
       return;
     }
     const response = await publishComment(meal?.artikel_id, stars, comment);
@@ -83,7 +84,7 @@ export default function MealPopup({ meal, onClose }) {
     setActionPending(true);
     const response = await deleteComment(commentId);
     if(response?.error) {
-      toast.error("Error deleting comment!");
+      toast.error(response?.error);
     } else {
       toast.success("Comment deleted!");
       setStars(0);
@@ -103,18 +104,26 @@ export default function MealPopup({ meal, onClose }) {
   }
 
   async function handleUploadMealImage() {
+    if(!user) {
+      toast.error("You need to be logged in to upload images!");
+      return;
+    }
     const supabase = createClient();
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
     fileInput.onchange = async () => {
+      toast.loading("Uploading image...");
       const artikelId = meal.artikel_id.replace(/\./g, '');
       const file = fileInput.files[0];
       const { data, error } = await supabase.storage
         .from('meal-images')
         .upload(artikelId+"_"+Date.now(), file);
+        toast.dismiss();
       if (error) {
-        toast.error("Error uploading image!");
+        toast.error("Error while uploading, maybe you already posted an image!");
+      } else { 
+        toast.success("Image uploaded successfully!");
       }
     };
     fileInput.click();
