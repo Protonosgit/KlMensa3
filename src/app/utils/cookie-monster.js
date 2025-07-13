@@ -1,13 +1,11 @@
 "use client";
 
-function setCookie(name,value,days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
+function setCookie(name, value, days) {
+    if (typeof days !== "number" || days <= 0) {
+        days = 365 * 6;
     }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    const expires = "; expires=" + new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${value || ""}${expires}; path=/`;
 }
 
 function getCookie(name) {

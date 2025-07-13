@@ -75,6 +75,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
     setIsBookmarked(!isBookmarked);
     e.stopPropagation();
+    console.log(meal);
   }
 
   return (

@@ -157,15 +157,17 @@ async function parseMenu(menuData) {
     const locationFiltered = menuData.filter(item => item.ort_id === 310 || item.ort_id === 410);
     
     const combinedKeys = locationFiltered.map(obj => {
-        const titleAdder = ((obj.atextohnezsz1 || '') +" "+ (obj.atextohnezsz2 || '') +" "+ (obj.atextohnezsz3 || '' ) +" "+ (obj.atextohnezsz4 || '') +" "+ (obj.atextohnezsz5 || '')).trim();
-        const hashId = murmur.v3(titleAdder).toString(16).substring(0, 8);
+        const titleAdder = ((obj.atextohnezsz1.trim() || '') + (obj.atextohnezsz2.trim() || '')+ (obj.atextohnezsz3.trim() || '' ) + (obj.atextohnezsz4.trim() || '') + (obj.atextohnezsz5.trim() || '')).trim();
+        const additivesTitleAdder = ((obj.atextz1 || '') +" "+ (obj.atextz2 || '') +" "+ (obj.atextz3 || '' ) +" "+ (obj.atextz4 || '') +" "+ (obj.atextz5 || '')).trim()
+        
+        const hashId = murmur.v3(obj.atextohnezsz1+obj.atextohnezsz2+obj.atextohnezsz3+obj.atextohnezsz4+obj.atextohnezsz5).toString(16).substring(0, 8);
         if (!hashIdList.includes(hashId)) {
             hashIdList.push(hashId);
         }
       return {
         ...obj,
         titleCombined: titleAdder,
-        titleAdditivesCombined: ((obj.atextz1 || '') +" "+ (obj.atextz2 || '') +" "+ (obj.atextz3 || '' ) +" "+ (obj.atextz4 || '') +" "+ (obj.atextz5 || '')).trim(),
+        titleAdditivesCombined: additivesTitleAdder,
         price: priceRelationsLookup[obj.artgebname]?.stu || priceRelationsLookup[obj.artgebname]?.price,
         // Hotfix because api is broken :o
         artikel_id: hashId,

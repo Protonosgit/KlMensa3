@@ -200,7 +200,7 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
       </div>
       <div className={styles.popupDetails}>
       <a href={meal.loc_link} title="Click for directions to location" className={styles.popupLocation}>{meal.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}{meal.dpartname}</a>
-        <h2 className={styles.popupTitle} title={meal?.titleCombined}>{settings?.intitle ? meal.titleAdditivesCombined : meal.titleCombined}</h2>
+        <h2 className={styles.popupTitle} title={meal?.titleCombined}>{settings?.intitle ? (meal.titleAdditivesCombined.replace("(Veganes Menü[1]:", " oder ").replace("(Veganes Menü[2]:", "").replace("(Veganes Menü[3]:", "").replace("(Veganes Menü[4]:", "").replace("(Veganes Menü[5]:", "")) : meal.titleCombined}</h2>
                 {additives.length > 1 && <div><b>Additives:</b> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</div>}
         <div className={styles.popupPriceRating}>
           <span title="This price is only for students!" className={styles.popupPrice}>{meal.price}</span>
