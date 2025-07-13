@@ -3,20 +3,16 @@ import Image from "next/image";
 import { Star,Vegan,Megaphone, Bookmark } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { getCookie } from "@/app/utils/cookie-monster";
 
-export default function Meal({ meal, mealIndex }) {
+export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [settings, setSettings] = useState();
-  const [relevantImages, setRelevantImages] = useState(
-    // initialImages?.filter(image => {
-    //   const imagePrefix = image?.image_name?.split('_')[0];
-    //   return imagePrefix === String(meal?.artikel_id).replace(/\./g, "");
-    // }) || []
-  );
-  //const [relevantComments, setRelevantComments] = useState(initialComments.filter(comment => comment.article_id === meal.artikel_id) || []);
+  const [images,setImages] = useState(mealImages  || []);
+  const [comments, setComments] = useState(mealComments || []);
+
   useEffect(() => {
     const settingsCookie = getCookie('settings') || null;
     if(settingsCookie) {
@@ -61,6 +57,7 @@ export default function Meal({ meal, mealIndex }) {
   };
 
 
+
   async function handleBookmark(e) {
     const cookieValue = document.cookie
       .split("; ")
@@ -91,8 +88,23 @@ export default function Meal({ meal, mealIndex }) {
           <Bookmark size={14} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')}/>
         </div>
       
-        {/* <Image src={relevantImages[0]?.image_url ? "https://gbxuqreqhbkcxrwfeeig.supabase.co"+relevantImages[0]?.image_url :(meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png")} alt="dish-image" priority className={styles.mealImage} width={300} height={200} /> */}
-         <Image src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"} alt="dish-image" priority className={styles.mealImage} width={300} height={200} />
+         {(images && images.length > 0) ? (
+          <Image 
+              placeholder="blur"
+              blurDataURL="/plate_placeholder.png"
+              priority={false} loading={"lazy"}
+              src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" 
+              className={styles.mealImage} 
+              width={300} height={200} />
+          ) : (
+            <Image 
+              priority={false} 
+              loading={"lazy"} 
+              src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"} 
+              alt="dish-image" className={styles.mealImage} 
+              width={300} height={200} />
+          )}
+
         <div className={styles.mealInfo}>
           <p className={styles.mealLocation}>
             {meal?.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}
@@ -106,7 +118,7 @@ export default function Meal({ meal, mealIndex }) {
         </div>
       </div>
       {selectedMeal && (
-        <MealPopup meal={selectedMeal} onClose={() => setSelectedMeal(null)} />
+        <MealPopup meal={selectedMeal} comments={comments} setComments={setComments} images={images} setImages={setImages} onClose={() => setSelectedMeal(null)} />
       )}
     </>
   );

@@ -19,9 +19,9 @@ export const metadata = {
   description: "Kl mensa v3 - See what's on the menu",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
   let settings;
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const settingsCookie = cookieStore.get('settings') || null;
   if(settingsCookie?.value) {
     settings = JSON.parse(settingsCookie.value);

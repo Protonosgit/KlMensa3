@@ -84,6 +84,7 @@ const  priceRelationsLookup = {
     "Warmer Snack / Imbiss (34)": { "price": "6,00 €" },
 };
 
+import { createClient } from './supabase/server';
 async function fetchMenu() {
     try {
         // download latest uncached version of the mensa menu
@@ -152,19 +153,25 @@ async function fetchMealUserData() {
 const murmur = require('murmurhash');
 
 async function parseMenu(menuData) {
+    const hashIdList = [];
     const locationFiltered = menuData.filter(item => item.ort_id === 310 || item.ort_id === 410);
     
     const combinedKeys = locationFiltered.map(obj => {
-        const titleAdder = ((obj.atextohnezsz1 || '') +" "+ (obj.atextohnezsz2 || '') +" "+ (obj.atextohnezsz3 || '' ) +" "+ (obj.atextohnezsz4 || '') +" "+ (obj.atextohnezsz5 || '')).trim()
+        const titleAdder = ((obj.atextohnezsz1 || '') +" "+ (obj.atextohnezsz2 || '') +" "+ (obj.atextohnezsz3 || '' ) +" "+ (obj.atextohnezsz4 || '') +" "+ (obj.atextohnezsz5 || '')).trim();
+        const hashId = murmur.v3(titleAdder).toString(16).substring(0, 8);
+        if (!hashIdList.includes(hashId)) {
+            hashIdList.push(hashId);
+        }
       return {
         ...obj,
         titleCombined: titleAdder,
         titleAdditivesCombined: ((obj.atextz1 || '') +" "+ (obj.atextz2 || '') +" "+ (obj.atextz3 || '' ) +" "+ (obj.atextz4 || '') +" "+ (obj.atextz5 || '')).trim(),
         price: priceRelationsLookup[obj.artgebname]?.stu || priceRelationsLookup[obj.artgebname]?.price,
         // Hotfix because api is broken :o
-        artikel_id: murmur.v3(titleAdder).toString(16).substring(0, 8),
+        artikel_id: hashId,
       };
     });
+
 
     const matchedMenu = await matchMenuToUdat(combinedKeys);
 
@@ -179,14 +186,14 @@ async function parseMenu(menuData) {
       return acc;
     }, {});
 
-    const updatedmenu = Object.entries(groupedByDate).map(([date, items]) => {
+    const splitMenu = Object.entries(groupedByDate).map(([date, items]) => {
         return {
             date,
             meals: items
         };
     });
 
-    return updatedmenu; 
+    return {splitMenu, hashIdList}; 
 }
 async function matchMenuToUdat(schedule) {
     const rebuildmatchedMenu = schedule;
@@ -217,7 +224,6 @@ async function matchMenuToUdat(schedule) {
                 }
             }
         }
-
         return rebuildmatchedMenu
     } catch (error) {
         return rebuildmatchedMenu

@@ -1,7 +1,7 @@
 "use client";
 import styles from "./settings.module.css";
 import { useEffect, useRef, useState } from "react";
-import { Settings } from "lucide-react";
+import { Settings, X } from "lucide-react";
 import { toast, Toaster } from 'react-hot-toast';
 import { login,logout, signup } from "@/app/utils/auth-actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -10,11 +10,12 @@ import Switch from "react-switch";
 import { createClient } from "@/app/utils/supabase/client";
 
 const settingslist =[ 
-  { id: "dark", name: "Dark mode"},
-  { id: "by2lay", name: "Better mobile layout" },
-  { id: "intitle", name: "Additives in popup title" },
-  { id: "shortitle", name: "Supershort meal title" },
-  { id: "nolimit", name: "Remove limit of 8 days" }]
+  { id: "dark", name: "Dark mode", enabled: true},
+  { id: "by2lay", name: "Better mobile layout", enabled: true },
+  { id: "intitle", name: "Additives in popup title", enabled: true },
+  { id: "shortitle", name: "Supershort meal title", enabled: true },
+  { id: "nolimit", name: "Remove limit of 8 days", enabled: true },
+]
 
 export default function SettingsModal({}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -108,7 +109,7 @@ export default function SettingsModal({}) {
       {modalVisible && (
         <div className={styles.popupOverlay} onClick={() => setModalVisible(false)}>
             <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-              <button onClick={() => setModalVisible(false)} className={styles.popupCloseButton}>x</button>
+              <button onClick={() => setModalVisible(false)} className={styles.popupCloseButton}><X /></button>
             <h2 className={styles.popupTitle}>Settings</h2>
             <Tabs defaultValue="general" className={styles.popupTabs}>
                 <TabsList className={styles.popupTabsList}>
@@ -119,7 +120,7 @@ export default function SettingsModal({}) {
                   {settingslist.map((setting, index) => (
                     <div key={index} className={styles.popupOption}>
                       <label htmlFor={setting.id} className={styles.popupOptionLabel}>
-                        <Switch onChange={(e) => toggleSwitch(index, e)} checked={settings[index]} onColor="#fbbf24"  />
+                        <Switch onChange={(e) => toggleSwitch(index, e)} disabled={!setting.enabled} checked={settings[index]} onColor="#fbbf24"  />
                         <span>{setting.name}</span>
                       </label>
                     </div>

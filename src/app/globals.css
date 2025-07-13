@@ -13,7 +13,7 @@
   --price-color: #2563eb;
   --primary-color: #f6c32c;
   --vegan-color: #1ea750;
-  --semiop-bg:rgba(255, 255, 255, 0.7)
+  --semiop-bg:rgba(255, 255, 255, 0.5)
 }
 
 [data-theme="dark"] {
@@ -26,7 +26,7 @@
   --price-color: #3b82f6;
   --primary-color: #f6c32c;
   --vegan-color: #22c55e;
-  --semiop-bg:rgba(255, 255, 255, 0.6)
+  --semiop-bg:rgba(255, 255, 255, 0.5)
 }
 
 body {

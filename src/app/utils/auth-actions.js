@@ -24,7 +24,6 @@ export async function signup(useremail,userpassword) {
 
   const supabase = await createClient()
   const { error,data } = await supabase.auth.signUp({email: useremail, password: userpassword})
-  console.log(error,data)
   if(error) return {error: "Signup failed"}
 
   return data
