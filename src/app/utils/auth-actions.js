@@ -9,7 +9,6 @@ export async function login(useremail,userpassword) {
   
   const supabase = await createClient();
   const { error, data } = await supabase.auth.signInWithPassword({email: useremail, password: userpassword});
-  console.log("Login response:", error, data);
   if(error?.code === 'user_banned') {
     return {error: "Account deactivated by a moderator!"}
   }
@@ -25,7 +24,8 @@ export async function signup(useremail,userpassword) {
 
   const supabase = await createClient()
   const { error,data } = await supabase.auth.signUp({email: useremail, password: userpassword})
-  if(error) return {error: "Login failed"}
+  console.log(error,data)
+  if(error) return {error: "Signup failed"}
 
   return data
 }
