@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 const mealLocationClearname = [
   { name: "Ausgabe 1", codes: [1] },
   { name: "Ausgabe 2", codes: [2] },
-  { name: "Wok", codes: [] },
+  { name: "Wok", codes: [-10] },
   { name: "Grill", codes: [10] },
   { name: "Atrium", codes: [16,17,18] },
   { name: "Eintopf (Atrium)", codes: [13] },

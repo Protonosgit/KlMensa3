@@ -10,7 +10,7 @@ import { getCookie } from "@/app/utils/cookie-monster";
 import { publishComment,updateComment,deleteComment,fetchComments, reportComment, fetchImages } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { BananaIcon, BanIcon, CookingPot, FlagIcon, MedalIcon, Plus, UploadIcon, Vegan } from "lucide-react";
+import { BananaIcon, BanIcon, CookingPot, Delete, DeleteIcon, FlagIcon, Share2Icon, UploadIcon, Vegan } from "lucide-react";
 
 export default function MealPopup({ meal, onClose, comments, setComments, images, setImages}) {
   const [stars, setStars] = useState(0);
@@ -21,6 +21,7 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
   const [commentId, setCommentId] = useState(null);
   const [actionPending, setActionPending] = useState(false);
   const [datachanged, setDataChanged] = useState(0);
+  const [ownsImage, setOwnsImage] = useState('');
 
     useEffect(() => {
       setAdditives(extractAdditives(meal.zsnumnamen));
@@ -43,13 +44,16 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
           setComment(ownComment[0]?.comment_text);
           setCommentId(ownComment[0]?.id);
         }
+      const ownImage = images?.filter(c => c.owner_id !== null);
+        if (ownImage.length > 0) {
+          setOwnsImage(ownImage[0]?.image_name);
+        }
     }, [meal]);
 
     useEffect(() => {
       if(datachanged === 0) return;
       async function fetchMealComments() {
         const newComments = await fetchComments([meal?.artikel_id]);
-        console.log(newComments);
         if (newComments && newComments.length > 0) {
           setComments(prevComments => {
             // Remove any comment with the same id as in newComments
@@ -127,44 +131,74 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
     if (!user) {
       toast.error("You need to be logged in to upload images!");
       return;
+    }if(ownsImage) {
+      if (confirm("You already have an image for this meal. Do you want to delete it?")) {
+        const supabase = createClient();
+        await supabase.storage.from("meal-images").remove([ownsImage]);
+        toast.success("Image deleted!");
+        setDataChanged((prev) => prev + 1);
+      }
+      return;
     }
     const supabase = createClient();
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/png, image/jpeg, image/webp";
     fileInput.onchange = async () => {
-      toast.loading("Processing image...");
-      const artikelId = meal.artikel_id.replace(/\./g, '');
       const file = fileInput.files[0];
+      if (
+        file.name.toLowerCase().endsWith(".heic") ||
+        file.name.toLowerCase().endsWith(".heif")
+      ) {
+        toast.error(
+          "HEIC/HEIF images are not supported. Please select a JPG, PNG, or WEBP file."
+        );
+        return;
+      }
+      toast.loading("Processing image...");
+      const artikelId = meal.artikel_id.replace(/\./g, "");
 
       // Convert image to webp and compress
-      const img = document.createElement('img');
+      const img = document.createElement("img");
       const reader = new FileReader();
       reader.onload = async (e) => {
         img.src = e.target.result;
         img.onload = async () => {
-          const canvas = document.createElement('canvas');
+          const canvas = document.createElement("canvas");
           canvas.width = img.width;
           canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
+          const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0);
           // Compress and convert to webp
-          canvas.toBlob(async (blob) => {
-            toast.loading("Uploading image...");
-            const { data, error } = await supabase.storage
-              .from('meal-images')
-              .upload(artikelId + "_" + Date.now() + ".webp", blob, {
-                contentType: 'image/webp'
-              });
-            toast.dismiss();
-            if (error) {
-              toast.error("Error while uploading, maybe you already posted an image!");
-            } else {
-              toast.success("Image uploaded successfully!");
-              setDataChanged(prev => prev + 1);
-            }
-          }, 'image/webp', 0.8); // 0.8 is quality/compression
+          canvas.toBlob(
+            async (blob) => {
+              toast.loading("Uploading image...");
+              const { data, error } = await supabase.storage
+                .from("meal-images")
+                .upload(artikelId + "_" + Date.now() + ".webp", blob, {
+                  contentType: "image/webp",
+                });
+              toast.dismiss();
+              if (error) {
+                toast.error(
+                  "Error while uploading, maybe you already posted an image!"
+                );
+              } else {
+                toast.success("Image uploaded successfully!");
+                setDataChanged((prev) => prev + 1);
+              }
+            },
+            "image/webp",
+            0.8
+          ); // 0.8 is quality/compression
         };
+        img.onerror = (err) => {
+          toast.dismiss();
+          toast.error("Failed to process image.");
+        };
+      };
+      reader.onerror = (err) => {
+        toast.error("Failed to read image file.");
       };
       reader.readAsDataURL(file);
     };
@@ -193,14 +227,15 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
               width={600} height={500} />
           )}
         <div className={styles.overlayActionsBar}>
-          <button onClick={handleUploadMealImage} className={styles.popupActionButton}><UploadIcon /></button>
+          <button onClick={handleUploadMealImage} className={styles.popupActionButton}>{ownsImage ? <CookingPot /> : <UploadIcon />}</button>
           <button onClick={() => handleReportRequest(null, images[0]?.image_name)} className={styles.popupActionButton}><FlagIcon /></button>
+          <button className={styles.popupActionButton}><Share2Icon /></button>
           <button onClick={onClose} className={styles.popupActionButton}>×</button>
         </div>
       </div>
       <div className={styles.popupDetails}>
       <a href={meal.loc_link} title="Click for directions to location" className={styles.popupLocation}>{meal.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}{meal.dpartname}</a>
-        <h2 className={styles.popupTitle} title={meal?.titleCombined}>{settings?.intitle ? (meal.titleAdditivesCombined.replace("(Veganes Menü[1]:", " oder ").replace("(Veganes Menü[2]:", "").replace("(Veganes Menü[3]:", "").replace("(Veganes Menü[4]:", "").replace("(Veganes Menü[5]:", "")) : meal.titleCombined}</h2>
+        <h2 className={styles.popupTitle} title={meal?.titleCombined}>{settings?.intitle ? (meal.titleAdditivesCombined) : meal.titleCombined}</h2>
                 {additives.length > 1 && <div><b>Additives:</b> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</div>}
         <div className={styles.popupPriceRating}>
           <span title="This price is only for students!" className={styles.popupPrice}>{meal.price}</span>
@@ -220,9 +255,9 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
               className={styles.commentInput}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              maxLength={100}
+              maxLength={120}
             ></textarea>
-            <p className={styles.commentCounter}>{comment.length}/100</p>
+            <p className={styles.commentCounter}>{comment.length}/120</p>
             <div className={styles.commentButtons}>
               <button className={styles.commentButton} disabled={actionPending} title="Publish" style={{opacity: actionPending? 0.5 : 1, width: "100%"}} onClick={handlePublishRating}>Publish</button>
               <button className={styles.commentButton} disabled={actionPending} title="Delete" style={{opacity: actionPending? 0.5 : 1, display: commentId? "flex" : "none"}} onClick={handleDeleteRating}><CookingPot /></button>

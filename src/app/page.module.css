@@ -201,8 +201,8 @@
   }
   
   .star {
-    width: 1rem;
-    height: 1rem;
+    width: 0.9rem;
+    height: 0.9rem;
   }
   
   .starFilled {
@@ -265,6 +265,10 @@
     }
     .container {
       padding: 0 2rem;
+    }
+    .star {
+      width: 1.2rem;
+      height: 1.2rem;
     }
 .headerButtonSection {
   justify-content: flex-start; 

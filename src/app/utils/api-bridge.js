@@ -157,8 +157,15 @@ async function parseMenu(menuData) {
     const locationFiltered = menuData.filter(item => item.ort_id === 310 || item.ort_id === 410);
     
     const combinedKeys = locationFiltered.map(obj => {
-        const titleAdder = ((obj.atextohnezsz1.trim() || '') + (obj.atextohnezsz2.trim() || '')+ (obj.atextohnezsz3.trim() || '' ) + (obj.atextohnezsz4.trim() || '') + (obj.atextohnezsz5.trim() || '')).trim();
-        const additivesTitleAdder = ((obj.atextz1 || '') +" "+ (obj.atextz2 || '') +" "+ (obj.atextz3 || '' ) +" "+ (obj.atextz4 || '') +" "+ (obj.atextz5 || '')).trim()
+        const titleAdder = (
+        obj.atextohnezsz1 + (obj.atextohnezsz2?.startsWith(',') ? '' : ' ') +
+        obj.atextohnezsz2 + (obj.atextohnezsz3?.startsWith(',') ? '' : ' ') +
+        obj.atextohnezsz3 + (obj.atextohnezsz4?.startsWith(',') ? '' : ' ') +
+        obj.atextohnezsz4 + (obj.atextohnezsz5?.startsWith(',') ? '' : ' ') +
+        obj.atextohnezsz5).replace("(Veganes Menü[1]:"," oder ");
+        
+        
+        const additivesTitleAdder = ((obj.atextz1 || '') +" "+ (obj.atextz2 || '') +" "+ (obj.atextz3 || '' ) +" "+ (obj.atextz4 || '') +" "+ (obj.atextz5 || '')).trim().replace("(Veganes Menü[1]:"," oder ");
         
         const hashId = murmur.v3(obj.atextohnezsz1+obj.atextohnezsz2+obj.atextohnezsz3+obj.atextohnezsz4+obj.atextohnezsz5).toString(16).substring(0, 8);
         if (!hashIdList.includes(hashId)) {

@@ -75,7 +75,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
     setIsBookmarked(!isBookmarked);
     e.stopPropagation();
-    console.log(meal);
+    console.log(images);
   }
 
   return (
@@ -111,7 +111,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
             {meal?.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}
             {meal?.dpartname}
           </p>
-          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.dpname : meal?.titleCombined)+(". "+meal.frei1)}</h4>
+          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined+(". "+meal?.frei1+meal?.frei2))}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>{meal?.price}</span>
             {renderStarRating(meal)}
