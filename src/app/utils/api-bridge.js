@@ -83,9 +83,14 @@ const  priceRelationsLookup = {
     "Warmer Snack / Imbiss (33)": { "price": "5,90 €" },
     "Warmer Snack / Imbiss (34)": { "price": "6,00 €" },
 };
+let cachedMenuData = null;
+let cachedMenuIds = null;
+let lastMenuCachedAt = null;
 
-import { createClient } from './supabase/server';
 async function fetchMenu() {
+    if (lastMenuCachedAt && Date.now() - lastMenuCachedAt < 5*60*60*1000) {
+        return {splitMenu: cachedMenuData, hashIdList: cachedMenuIds};
+    }
     try {
         // download latest uncached version of the mensa menu
         const response = await fetch('https://www.studierendenwerk-kaiserslautern.de/fileadmin/templates/stw-kl/loadcsv/load_db_speiseplan.php?canteens=1', {
@@ -201,6 +206,10 @@ async function parseMenu(menuData) {
             meals: items
         };
     });
+
+    cachedMenuData = splitMenu;
+    cachedMenuIds = hashIdList;
+    lastMenuCachedAt = new Date();
 
     return {splitMenu, hashIdList}; 
 }

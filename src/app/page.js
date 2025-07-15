@@ -26,10 +26,13 @@ export default function Home() {
               <h1 className={styles.headerTitle}>KL Mensa</h1>
               <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
             </div>
-            
           </div>
         </div>
       </header>
+
+      <div className={styles.newsBox} style={{display: "none"}}>
+        <p className={styles.newsText}>⚠️ Der Rückmeldezeitraum für das Wintersemester 2025/2026 endet nächsten Montag; am 28.07. Details auf rptu.de.</p>
+      </div>
 
       <main className={styles.main}>
         <div className={styles.headerButtonSection}>

@@ -205,6 +205,12 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
     fileInput.click();
   }
 
+  const shareData = {
+  title: "MDN",
+  text: "Learn web development on MDN!",
+  url: "https://developer.mozilla.org",
+};
+
 
   return (
     <div style={{display: meal? "flex" : "none"}} className={styles.popupOverlay} onClick={onClose}>
@@ -229,7 +235,7 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
         <div className={styles.overlayActionsBar}>
           <button onClick={handleUploadMealImage} className={styles.popupActionButton}>{ownsImage ? <CookingPot /> : <UploadIcon />}</button>
           <button onClick={() => handleReportRequest(null, images[0]?.image_name)} className={styles.popupActionButton}><FlagIcon /></button>
-          <button className={styles.popupActionButton}><Share2Icon /></button>
+          <button onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal.artikel_id) && toast.success("Link copied to clipboard!")} className={styles.popupActionButton}><Share2Icon /></button>
           <button onClick={onClose} className={styles.popupActionButton}>×</button>
         </div>
       </div>

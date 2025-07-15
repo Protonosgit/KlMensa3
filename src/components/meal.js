@@ -26,6 +26,11 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
       const bookmarks = JSON.parse(cookieValue);
       setIsBookmarked(bookmarks.includes(meal.artikel_id));
     }
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchArtId = urlParams.get('artid');
+    if (searchArtId && searchArtId === meal.artikel_id.toString() && !selectedMeal) {
+      //setSelectedMeal(meal);
+    }
   }, [meal]);
 
 
@@ -75,7 +80,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
     setIsBookmarked(!isBookmarked);
     e.stopPropagation();
-    console.log(images);
+    // console.log(meal);
   }
 
   return (
@@ -95,7 +100,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
               blurDataURL="/plate_placeholder.png"
               priority={false} loading={"lazy"}
               src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" 
-              className={styles.mealImage} 
+              className={styles.mealImage}
               width={300} height={200} />
           ) : (
             <Image 

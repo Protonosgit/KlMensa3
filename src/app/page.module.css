@@ -27,7 +27,8 @@
 .headerButtonSection {
   display: flex;
   gap: 0.6rem;
-  justify-content: flex-end; 
+  justify-content: flex-end;
+  padding: 1rem 0;
 }
 
 .headerTitleSection {
@@ -48,18 +49,18 @@
 
 .main {
   flex-grow: 1;
-  padding: 0.8rem 0;
+  padding: 0rem 0;
 }
 .dayContainer {
-  padding: 2rem 0;
+  padding: 0rem 0;
 }
 .dayHeader {
-  padding:  0 0.3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid var(--subtitle-color);
   margin: 1rem 0;
+  margin-top: 2.5rem;
 }
 
 .dayTitle {
@@ -153,6 +154,7 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    gap: 0.3rem
   }
   
 .mealLocation {
@@ -168,7 +170,6 @@
   width: fit-content;
   gap: 0.3rem;
   align-items: center;
-  margin-bottom: 0.3rem
 }
 .veganIcon {
   color: var(--vegan-color);
@@ -185,7 +186,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 0.3rem;
     border-top: 1px solid --border-color;
   }
   
@@ -218,6 +218,18 @@
     margin-left: 0.25rem;
     font-size: 0.875rem;
     color: var(--subtitle-color);
+  }
+
+  .newsBox {
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    background-color: var(--newsbox-bg);
+    cursor: pointer;
+  }
+  .newsText {
+    font-size: 1rem;
+    color: var(--bg-color);
   }
   
   .footer {
@@ -254,25 +266,22 @@
     .mealGrid {
       gap: 1.5rem;
     }
-    .main {
-      padding: 2rem 0;
-    }
-    .dayContainer {
-      padding: 2rem 0;
-    }
     .mealPrice {
       font-size: 1rem;
     }
     .container {
       padding: 0 2rem;
     }
+    .dayHeader {
+      margin: 1.3rem 0;
+    }
     .star {
       width: 1.2rem;
       height: 1.2rem;
     }
-.headerButtonSection {
-  justify-content: flex-start; 
-}
+    .headerButtonSection {
+      justify-content: flex-start; 
+    }
   }
   
   @media (min-width: 1024px) {
