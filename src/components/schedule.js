@@ -37,7 +37,7 @@ export default async function Schedule() {
     <>
         {menu.map((day, dayIndex) => {
           return (
-            <div key={dayIndex} className={styles.dayContainer}>
+            <div key={dayIndex} title={day.date} className={styles.dayContainer}>
               <div className={styles.dayHeader}>
                 <h3 className={styles.dayTitle}>{format(day.date, 'eeee')}</h3>
                 <h3 className={styles.dayTitle}>{format(day.date, 'dd.MM')}</h3>

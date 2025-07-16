@@ -150,7 +150,7 @@ export default function FilterMenu() {
 
   return (
     <Popover className={styles.filterMenu}>
-      <PopoverTrigger className={styles.filterButton}>
+      <PopoverTrigger title="Filter" className={styles.filterButton}>
         <Filter />
       </PopoverTrigger>
       <PopoverContent className={styles.filterContent}>

@@ -14,7 +14,6 @@ export default function DataBridge({ mealDay,index, comments, images, set}) {
         setLocationFilter(JSON.parse(getCookie('location')));
         setProteinFilter(JSON.parse(getCookie('protein')));
         setAdditiveFilter(JSON.parse(getCookie('additive')));
-        //
       }, []);
 
   return (

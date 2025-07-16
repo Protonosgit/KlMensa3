@@ -89,6 +89,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
         key={mealIndex}
         className={styles.mealCard}
         onClick={() => setSelectedMeal(meal)}
+        title={meal.atextohnezsz1}
       >
         <div className={styles.bookmarkContainer} onClick={handleBookmark} >
           <Bookmark size={14} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')}/>

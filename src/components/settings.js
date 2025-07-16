@@ -103,7 +103,7 @@ export default function SettingsModal({}) {
 
   return (
     <>
-      <button className={styles.settingsButton} onClick={() => setModalVisible(true)}>
+      <button className={styles.settingsButton} title="Settings and Account" onClick={() => setModalVisible(true)}>
         <Settings />
       </button>
       {modalVisible && (

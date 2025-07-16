@@ -23,6 +23,8 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
   const [datachanged, setDataChanged] = useState(0);
   const [ownsImage, setOwnsImage] = useState('');
 
+
+
     useEffect(() => {
       setAdditives(extractAdditives(meal.zsnumnamen));
       const settingsCookie = getCookie('settings') || null;
@@ -233,9 +235,9 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
               width={600} height={500} />
           )}
         <div className={styles.overlayActionsBar}>
-          <button onClick={handleUploadMealImage} className={styles.popupActionButton}>{ownsImage ? <CookingPot /> : <UploadIcon />}</button>
-          <button onClick={() => handleReportRequest(null, images[0]?.image_name)} className={styles.popupActionButton}><FlagIcon /></button>
-          <button onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal.artikel_id) && toast.success("Link copied to clipboard!")} className={styles.popupActionButton}><Share2Icon /></button>
+          <button title="Upload image" onClick={handleUploadMealImage} className={styles.popupActionButton}>{ownsImage ? <CookingPot /> : <UploadIcon />}</button>
+          <button title="Report violation" onClick={() => handleReportRequest(null, images[0]?.image_name)} className={styles.popupActionButton}><FlagIcon /></button>
+          <button title="Copy link" onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal.artikel_id) && toast.success("Link copied to clipboard!")} className={styles.popupActionButton}><Share2Icon /></button>
           <button onClick={onClose} className={styles.popupActionButton}>×</button>
         </div>
       </div>

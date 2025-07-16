@@ -88,6 +88,7 @@ let cachedMenuIds = null;
 let lastMenuCachedAt = null;
 
 async function fetchMenu() {
+    // maybe add a check to see if the last request was the same day or not
     if (lastMenuCachedAt && Date.now() - lastMenuCachedAt < 5*60*60*1000) {
         return {splitMenu: cachedMenuData, hashIdList: cachedMenuIds};
     }
