@@ -12,6 +12,8 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
   const [settings, setSettings] = useState();
   const [images,setImages] = useState(mealImages  || []);
   const [comments, setComments] = useState(mealComments || []);
+  const [rating, setRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
 
   useEffect(() => {
     const settingsCookie = getCookie('settings') || null;
@@ -26,6 +28,12 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
       const bookmarks = JSON.parse(cookieValue);
       setIsBookmarked(bookmarks.includes(meal.artikel_id));
     }
+    const sumOfRatings = comments.reduce((acc, curr) => acc + curr.rating, 0);
+    const fullSum = sumOfRatings + (meal.rating*meal.rating_amt || 0);
+    const fullCount = comments.length  + (meal.rating_amt || 0);
+    setRating(fullSum/fullCount);
+    setRatingCount(fullCount);
+
     const urlParams = new URLSearchParams(window.location.search);
     const searchArtId = urlParams.get('artid');
     if (searchArtId && searchArtId === meal.artikel_id.toString() && !selectedMeal) {
@@ -45,18 +53,18 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
 
 
     // render stars (non interactive)
-  const renderStarRating = (meal) => {
+  const renderStarRating = () => {
     return (
       <div className={styles.starRating}>
         {[...Array(5)].map((_, i) => (
           <Star
             key={i}
             className={`${styles.star} ${
-              i < Math.floor(meal.rating) ? styles.starFilled : styles.starEmpty
+              i < Math.floor(rating) ? styles.starFilled : styles.starEmpty
             }`}
           />
         ))}
-        <span className={styles.ratingCount}>{meal.rating_amt}</span>
+        <span className={styles.ratingCount}>{ratingCount}</span>
       </div>
     );
   };
@@ -80,7 +88,6 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
     setIsBookmarked(!isBookmarked);
     e.stopPropagation();
-    // console.log(meal);
   }
 
   return (
@@ -89,9 +96,8 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
         key={mealIndex}
         className={styles.mealCard}
         onClick={() => setSelectedMeal(meal)}
-        title={meal.atextohnezsz1}
       >
-        <div className={styles.bookmarkContainer} onClick={handleBookmark} >
+        <div className={styles.bookmarkContainer} title="Bookmark" onClick={handleBookmark} >
           <Bookmark size={14} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')}/>
         </div>
       
@@ -100,7 +106,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
               placeholder="blur"
               blurDataURL="/plate_placeholder.png"
               priority={false} loading={"lazy"}
-              src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" 
+              src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" title={meal.atextohnezsz1}
               className={styles.mealImage}
               width={300} height={200} />
           ) : (
@@ -108,7 +114,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
               priority={false} 
               loading={"lazy"} 
               src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"} 
-              alt="dish-image" className={styles.mealImage} 
+              alt="dish-image" title={meal.atextohnezsz1} className={styles.mealImage} 
               width={300} height={200} />
           )}
 
@@ -120,7 +126,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
           <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined+(". "+meal?.frei1+meal?.frei2))}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>{meal?.price}</span>
-            {renderStarRating(meal)}
+            {renderStarRating()}
           </div>
         </div>
       </div>

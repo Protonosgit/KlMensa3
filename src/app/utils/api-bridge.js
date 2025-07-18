@@ -168,11 +168,14 @@ async function parseMenu(menuData) {
         obj.atextohnezsz2 + (obj.atextohnezsz3?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz3 + (obj.atextohnezsz4?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz4 + (obj.atextohnezsz5?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz5).replace("(Veganes Menü[1]:"," oder ");
-        
-        
-        const additivesTitleAdder = ((obj.atextz1 || '') +" "+ (obj.atextz2 || '') +" "+ (obj.atextz3 || '' ) +" "+ (obj.atextz4 || '') +" "+ (obj.atextz5 || '')).trim().replace("(Veganes Menü[1]:"," oder ");
-        
+        obj.atextohnezsz5).replace("(Veganes Menü[1]:"," oder ").trim();
+        const titleAdditiveAdder = (
+        obj.atextz1 + (obj.atextz2?.startsWith(',') ? '' : ' ') +
+        obj.atextz2 + (obj.atextz3?.startsWith(',') ? '' : ' ') +
+        obj.atextz3 + (obj.atextz4?.startsWith(',') ? '' : ' ') +
+        obj.atextz4 + (obj.atextz5?.startsWith(',') ? '' : ' ') +
+        obj.atextz5).replace("(Veganes Menü[1]:"," oder ").trim();
+
         const hashId = murmur.v3(obj.atextohnezsz1+obj.atextohnezsz2+obj.atextohnezsz3+obj.atextohnezsz4+obj.atextohnezsz5).toString(16).substring(0, 8);
         if (!hashIdList.includes(hashId)) {
             hashIdList.push(hashId);
@@ -180,9 +183,9 @@ async function parseMenu(menuData) {
       return {
         ...obj,
         titleCombined: titleAdder,
-        titleAdditivesCombined: additivesTitleAdder,
+        titleAdditivesCombined: titleAdditiveAdder,
         price: priceRelationsLookup[obj.artgebname]?.stu || priceRelationsLookup[obj.artgebname]?.price,
-        // Hotfix because api is broken :o
+        // Hotfix because api seems broken :o
         artikel_id: hashId,
       };
     });

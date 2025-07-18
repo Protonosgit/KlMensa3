@@ -15,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "KLMensa",
-  description: "Kl mensa v3 - See what's on the menu",
+  title: "KL-Mensa - Der Mensaplan der RPTU in Kaiserslautern / Landau",
+  description: "Kl Mensa 3 ermöglicht das einsehen des Speiseplans, sowie das abgeben von Bewertungen und Bildern zu Mahlzeiten",
 };
 
 export default async function RootLayout({ children }) {

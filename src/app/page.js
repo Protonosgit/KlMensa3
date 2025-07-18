@@ -24,7 +24,7 @@ export default function Home() {
           <div className={styles.headerContent}>
             <div className={styles.headerTitleSection}>
               <h1 className={styles.headerTitle}>KL Mensa</h1>
-              <p className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</p>
+              <h2 className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</h2>
             </div>
           </div>
         </div>
@@ -45,7 +45,8 @@ export default function Home() {
       </main>
       <footer className={styles.footer}>
         <div className={styles.container}>
-          <p>&copy; 2024 Kl-mensa <a href="https://www.studierendenwerk-kaiserslautern.de/" className={styles.footerLink}>Studierendenwerk</a></p>
+          <p>2025 Kl-mensa <a href="https://www.studierendenwerk-kaiserslautern.de/" className={styles.footerLink}>Studierendenwerk</a></p>
+          <a href="https://rptu.de" className={styles.footerLink}>RPTU</a>
           <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
           <a href="https://www.mensa-kl.de/" className={styles.footerLink}>Images from <b>mensa-kl.de</b></a>
           <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Developer</a>

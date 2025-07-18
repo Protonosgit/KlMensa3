@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./details.module.css";
 import { extractAdditives } from "@/app/utils/additives";
@@ -11,6 +12,8 @@ import { publishComment,updateComment,deleteComment,fetchComments, reportComment
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
 import { BananaIcon, BanIcon, CookingPot, Delete, DeleteIcon, FlagIcon, Share2Icon, UploadIcon, Vegan } from "lucide-react";
+const heic2any = dynamic(() => import("heic2any"), { ssr: false });
+
 
 export default function MealPopup({ meal, onClose, comments, setComments, images, setImages}) {
   const [stars, setStars] = useState(0);
@@ -22,7 +25,8 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
   const [actionPending, setActionPending] = useState(false);
   const [datachanged, setDataChanged] = useState(0);
   const [ownsImage, setOwnsImage] = useState('');
-
+  const [rating, setRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
 
 
     useEffect(() => {
@@ -50,6 +54,12 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
         if (ownImage.length > 0) {
           setOwnsImage(ownImage[0]?.image_name);
         }
+
+      const sumOfRatings = comments.reduce((acc, curr) => acc + curr.rating, 0);
+      const fullSum = sumOfRatings + (meal.rating*meal.rating_amt || 0);
+      const fullCount = comments.length  + (meal.rating_amt || 0);
+      setRating(fullSum/fullCount);
+      setRatingCount(fullCount);
     }, [meal]);
 
     useEffect(() => {
@@ -123,13 +133,15 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
 
   async function handleReportRequest(commentId, imageId) {
     // will be handled in seperate form on different page in the future!!
-    if(confirm("Report the content for being: offensive, spam, irrelevant or a threat to our constitution?")) {
+    if(confirm("Report the content for being: offensive, spam, irrelevant or harmfull in any way?")) {
       toast.success("Report sent!");
       reportComment(commentId, imageId);
     }
   }
 
-  async function handleUploadMealImage() {
+
+
+async function handleUploadMealImage() {
     if (!user) {
       toast.error("You need to be logged in to upload images!");
       return;
@@ -153,12 +165,13 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
         file.name.toLowerCase().endsWith(".heif")
       ) {
         toast.error(
-          "HEIC/HEIF images are not supported. Please select a JPG, PNG, or WEBP file."
+          "HEIC/HEIF images are not supported yet. Please select a JPG, PNG, or WEBP file."
         );
         return;
       }
       toast.loading("Processing image...");
       const artikelId = meal.artikel_id.replace(/\./g, "");
+      
 
       // Convert image to webp and compress
       const img = document.createElement("img");
@@ -207,15 +220,13 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
     fileInput.click();
   }
 
-  const shareData = {
-  title: "MDN",
-  text: "Learn web development on MDN!",
-  url: "https://developer.mozilla.org",
-};
+  const MealTitle = () => {
+    return <h2 className={styles.popupTitle} title={meal?.titleAdditivesCombined}>{settings?.intitle ? (meal.titleAdditivesCombined) : meal.titleCombined}</h2>;
+  }
 
 
   return (
-    <div style={{display: meal? "flex" : "none"}} className={styles.popupOverlay} onClick={onClose}>
+    <div style={{display: meal? "flex" : "none"}} title="" className={styles.popupOverlay} onClick={onClose}>
     <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
       <div className={styles.popupImageContainer}>
         {(images && images.length > 0) ? (
@@ -223,14 +234,14 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
               placeholder="blur"
               blurDataURL="/plate_placeholder.png"
               priority={false} loading={"lazy"}
-              src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image"
+              src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" title={meal.atextohnezsz1}
               className={styles.popupImage}
               width={600} height={500} />
           ) : (
             <Image 
               priority={false} 
               loading={"lazy"} 
-              src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"} 
+              src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"}  title={meal.atextohnezsz1}
               alt="dish-image" className={styles.popupImage} 
               width={600} height={500} />
           )}
@@ -242,14 +253,14 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
         </div>
       </div>
       <div className={styles.popupDetails}>
-      <a href={meal.loc_link} title="Click for directions to location" className={styles.popupLocation}>{meal.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}{meal.dpartname}</a>
-        <h2 className={styles.popupTitle} title={meal?.titleCombined}>{settings?.intitle ? (meal.titleAdditivesCombined) : meal.titleCombined}</h2>
+      <a href={meal.loc_link} title="Location" className={styles.popupLocation}>{meal.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}{meal.dpartname}</a>
+        <MealTitle />
                 {additives.length > 1 && <div><b>Additives:</b> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</div>}
         <div className={styles.popupPriceRating}>
-          <span title="This price is only for students!" className={styles.popupPrice}>{meal.price}</span>
+          <span title="Price" className={styles.popupPrice}>{meal.price}</span>
           <div className={styles.popupRating}>
-            <StarRating mealRating={meal.rating} disabled={true} />
-            <span className={styles.ratingCount}>{meal.rating_amt}</span>
+            <StarRating mealRating={rating} disabled={true} />
+            <span className={styles.ratingCount}>{ratingCount}</span>
           </div>
         </div>
 
