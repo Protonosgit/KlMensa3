@@ -8,7 +8,7 @@ import styles from "./filter.module.css";
 import { Filter, CookingPot } from "lucide-react";
 import { useEffect, useState } from "react";
 
-
+// Define clear names and codes for meal locations, additives, and proteins.
 const mealLocationClearname = [
   { name: "Ausgabe 1", codes: [1] },
   { name: "Ausgabe 2", codes: [2] },
@@ -52,7 +52,7 @@ const mealProteinClearname = [
 
 
 export default function FilterMenu() {
-
+  // State variables
   const [mealLocations, setMealLocations] = useState([]);
   const [mealProteins, setMealProteins] = useState([]);
   const [mealAdditives, setMealAdditives] = useState([]);
@@ -60,7 +60,7 @@ export default function FilterMenu() {
 
 
   useEffect(() => {
-    // Get filter values from cookies
+    // Load filter values from cookies and update state variables
     function getArrayFromCookie(name) {
       const cookieValue = document.cookie
         .split('; ')
@@ -70,17 +70,17 @@ export default function FilterMenu() {
       return cookieValue ? JSON.parse(cookieValue) : null;
     }
 
-    // load filter1 in ui thread
+    // Load location filter from cookies.
     if(getArrayFromCookie("location") !== null) {
       setMealLocations(getArrayFromCookie("location"));
       setFilterActive(true);
     }
-    // load filter2 in ui thread
+    // Load additive filter from cookies.
     if(getArrayFromCookie("additive") !== null) {
       setMealAdditives(getArrayFromCookie("additive"));
       setFilterActive(true);
     }
-    // load filter3 in ui thread
+    // Load protein filter from cookies.
     if(getArrayFromCookie("protein") !== null) {
       setMealProteins(getArrayFromCookie("protein"))
       setFilterActive(true);
@@ -88,6 +88,7 @@ export default function FilterMenu() {
   }, []);
 
 
+  // Update location filter based on user selection.
   function updateLocFilter(index) {
     const currentIndex = mealLocations.findIndex((item) =>
       mealLocationClearname[index].codes.some((code) => item === code)
@@ -101,6 +102,7 @@ export default function FilterMenu() {
     });
   }
 
+  // Update protein filter based on user selection.
   function updateProtFilter(index) {
     const currentIndex = mealProteins.indexOf(mealProteinClearname[index]?.code);
     setMealProteins((prev) => {
@@ -112,6 +114,7 @@ export default function FilterMenu() {
     });
   }
 
+  // Update additive filter based on user selection.
   function updateAddFilter(index) {
     const currentIndex = mealAdditives.indexOf(mealAdditiveClearname[index]?.code);
     setMealAdditives((prev) => {
@@ -124,6 +127,7 @@ export default function FilterMenu() {
   }
 
 
+  // Store selected filters in cookies and reload the page.
   function storeFilter() {
     // store cookies with filters
     const locArray = JSON.stringify(mealLocations);
@@ -139,6 +143,7 @@ export default function FilterMenu() {
     window.location.reload();
   }
 
+  // Reset all filters by clearing cookies and reload the page.
   function resetFilter() {
     // delete all cookies
     document.cookie = "location=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
@@ -148,6 +153,7 @@ export default function FilterMenu() {
     window.location.reload();
   }
 
+  // Render the filter menu UI.
   return (
     <Popover className={styles.filterMenu}>
       <PopoverTrigger title="Filter" className={styles.filterButton}>
@@ -155,6 +161,7 @@ export default function FilterMenu() {
       </PopoverTrigger>
       <PopoverContent className={styles.filterContent}>
         <div className={styles.filterContainer}>
+          {/* Render location filter section */}
           <div className={styles.filterSection}>
             <p className={styles.filterTitle}>Location:</p>
             <ul className={styles.filterList}>
@@ -178,6 +185,7 @@ export default function FilterMenu() {
             </ul>
             <div className={styles.seperator}/>
           </div>
+          {/* Render protein filter section */}
           <div className={styles.filterSection}>
             <p className={styles.filterTitle}>Protein:</p>
             <ul className={styles.filterList}>
@@ -198,6 +206,7 @@ export default function FilterMenu() {
             </ul>
             <div className={styles.seperator}/>
           </div>
+          {/* Render additive filter section */}
           <div className={styles.filterSection}>
             <p className={styles.filterTitle}>Additives:</p>
             <ul className={styles.filterList}>
@@ -218,6 +227,7 @@ export default function FilterMenu() {
             </ul>
           </div>
         </div>
+        {/* Render action buttons */}
         <div className={styles.buttonBar}>
           <button title="Apply filter" onClick={storeFilter} className={styles.applyButton}>Apply</button>
           <button title="Reset filter" onClick={resetFilter} className={styles.resetButton} style={{display: filterActive ? "block" : "none"}}><CookingPot size={20} /></button>

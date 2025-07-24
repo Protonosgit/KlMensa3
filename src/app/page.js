@@ -4,8 +4,11 @@ import FilterMenu from "@/components/filtermenu";
 import { Suspense } from "react";
 import SettingsModal from "@/components/settings";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import { InfoIcon, OctagonAlert } from "lucide-react";
+import { fetchNews } from "./utils/internal-api";
 
-export default function Home() {   
+export default function Home() { 
+  fetchNews();  
 
   // Skeleton loading animation
   const SkeletonLoading = () => (
@@ -30,8 +33,8 @@ export default function Home() {
         </div>
       </header>
 
-      <div className={styles.newsBox} style={{display: "none"}}>
-        <p className={styles.newsText}>⚠️ Der Rückmeldezeitraum für das Wintersemester 2025/2026 endet nächsten Montag; am 28.07. Details auf rptu.de.</p>
+      <div className={styles.newsBox}>
+        <p className={styles.newsText}><InfoIcon />Developer version do not use real data!</p>
       </div>
 
       <main className={styles.main}>
@@ -49,7 +52,8 @@ export default function Home() {
           <a href="https://rptu.de" className={styles.footerLink}>RPTU</a>
           <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
           <a href="https://www.mensa-kl.de/" className={styles.footerLink}>Images from <b>mensa-kl.de</b></a>
-          <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Developer</a>
+          <a href="https://github.com/Protonosgit/KlMensa3/issues" className={styles.footerLink}>Report issue</a>
+          <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Source</a>
         </div>
       </footer>
       <ScrollToTopButton />

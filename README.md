@@ -2,7 +2,7 @@
 ![Vercel](https://vercelbadge.vercel.app/api/[Protonosgit]/[KlMensa3])
 
 ## Built with:
-- NextJS 14
+- NextJS 15
 - Supabase
 - Shadcn
 - Lucide React

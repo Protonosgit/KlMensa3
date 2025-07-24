@@ -1,25 +1,28 @@
 "use client";
 import Image from "next/image";
-import { Star,Vegan,Megaphone, Bookmark } from "lucide-react";
+import { Star, Vegan, Megaphone, Bookmark, Bot, Moon, Columns4, Tally1, Tally2, Sun } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
 import { Suspense, useEffect, useState } from "react";
 import { getCookie } from "@/app/utils/cookie-monster";
 
 export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
+  // State variables
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [settings, setSettings] = useState();
-  const [images,setImages] = useState(mealImages  || []);
+  const [images, setImages] = useState(mealImages || []);
   const [comments, setComments] = useState(mealComments || []);
   const [rating, setRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
 
   useEffect(() => {
+    // Load settings and bookmarks from cookies
     const settingsCookie = getCookie('settings') || null;
-    if(settingsCookie) {
+    if (settingsCookie) {
       setSettings(JSON.parse(settingsCookie));
     }
+
     const cookieValue = document.cookie
       .split("; ")
       .find((row) => row.startsWith("bookmarks"))
@@ -28,22 +31,24 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
       const bookmarks = JSON.parse(cookieValue);
       setIsBookmarked(bookmarks.includes(meal.artikel_id));
     }
+
+    // Calculate the average rating of the meal.
     const sumOfRatings = comments.reduce((acc, curr) => acc + curr.rating, 0);
-    const fullSum = sumOfRatings + (meal.rating*meal.rating_amt || 0);
-    const fullCount = comments.length  + (meal.rating_amt || 0);
-    setRating(fullSum/fullCount);
+    const fullSum = sumOfRatings + (meal.rating * meal.rating_amt || 0);
+    const fullCount = comments.length + (meal.rating_amt || 0);
+    setRating(fullSum / fullCount);
     setRatingCount(fullCount);
 
+    // DISABLED because it doesn't work and should be in a component not rendered more than once during load!!
     const urlParams = new URLSearchParams(window.location.search);
     const searchArtId = urlParams.get('artid');
     if (searchArtId && searchArtId === meal.artikel_id.toString() && !selectedMeal) {
-      //setSelectedMeal(meal);
+      // setSelectedMeal(meal);
     }
   }, [meal]);
 
-
-
   useEffect(() => {
+    // Disable page scrolling when the meal popup is open.
     if (selectedMeal) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -51,8 +56,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     }
   }, [selectedMeal]);
 
-
-    // render stars (non interactive)
+  // Render star rating for the meal (non-interactive).
   const renderStarRating = () => {
     return (
       <div className={styles.starRating}>
@@ -69,8 +73,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     );
   };
 
-
-
+  // Handle bookmarking/unbookmarking the meal.
   async function handleBookmark(e) {
     const cookieValue = document.cookie
       .split("; ")
@@ -88,8 +91,10 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
     setIsBookmarked(!isBookmarked);
     e.stopPropagation();
+    console.log(meal);
   }
 
+  // Render the meal card and popup.
   return (
     <>
       <div
@@ -97,39 +102,55 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
         className={styles.mealCard}
         onClick={() => setSelectedMeal(meal)}
       >
-        <div className={styles.bookmarkContainer} title="Bookmark" onClick={handleBookmark} >
-          <Bookmark size={14} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')}/>
+        {/* Bookmark button */}
+        <div className={styles.bookmarkContainer} title="Bookmark" onClick={handleBookmark}>
+          <Bookmark size={14} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')} />
         </div>
-      
-         {(images && images.length > 0) ? (
-          <Image 
-              placeholder="blur"
-              blurDataURL="/plate_placeholder.png"
-              priority={false} loading={"lazy"}
-              src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" title={meal.atextohnezsz1}
-              className={styles.mealImage}
-              width={300} height={200} />
-          ) : (
-            <Image 
-              priority={false} 
-              loading={"lazy"} 
-              src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"} 
-              alt="dish-image" title={meal.atextohnezsz1} className={styles.mealImage} 
-              width={300} height={200} />
-          )}
 
+        {/* Meal image */}
+        {(images && images.length > 0) ? (
+          <Image
+            placeholder="blur"
+            blurDataURL="/plate_placeholder.png"
+            priority={false} loading={"lazy"}
+            src={"https://gbxuqreqhbkcxrwfeeig.supabase.co" + images[0]?.image_url} alt="dish-image" title={meal.atextohnezsz1}
+            className={styles.mealImage}
+            width={300} height={200} />
+        ) : (
+          <Image
+            priority={false} loading={"lazy"}
+            src={meal.image ? "https://www.mensa-kl.de/mimg/" + meal?.image : "/plate_placeholder.png"}
+            alt="dish-image" title={meal.atextohnezsz1} className={styles.mealImage}
+            width={300} height={200} />
+        )}
+
+        {/* Meal details */}
         <div className={styles.mealInfo}>
-          <p className={styles.mealLocation}>
-            {meal?.menuekennztext=="V+" ? <Vegan size={14} className={styles.veganIcon} /> : ""}
-            {meal?.dpartname}
-          </p>
-          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined+(". "+meal?.frei1+meal?.frei2))}</h4>
+          <div className={styles.mealContextLabels}>
+            <p className={styles.mealLocation}>
+              {/* {meal?.dpartname == "Abendmensa" ? <Moon size={18} /> : ""}
+              {meal?.dpartname == "Grill" ? <Columns4 size={18} /> : ""}
+              {meal?.dpartname == "Essen 2" ? <Tally2 size={18} /> : ""}
+              {meal?.dpartname == "Essen 1" ? <Tally1 size={18} /> : ""}
+              {meal?.dpartname.includes("Mittagsmenü") ? <Sun size={18} /> : ""} */}
+              {meal?.dpartname}
+              {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
+              {meal?.veganOption ? <><Vegan size={18} className={styles.otherIcon} /></> : ""}
+              {meal?.menuekennztext == "V+" ? <Vegan size={18} className={styles.veganIcon} /> : ""} 
+            </p>
+            <p className={styles.mealIcons}>
+
+            </p>
+          </div>
+          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined + (". " + meal?.frei1 + meal?.frei2))}</h4>
           <div className={styles.mealFooter}>
-            <span className={styles.mealPrice}>{meal?.price}</span>
+            <span className={styles.mealPrice}>{(meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             {renderStarRating()}
           </div>
         </div>
       </div>
+
+      {/* Meal popup */}
       {selectedMeal && (
         <MealPopup meal={selectedMeal} comments={comments} setComments={setComments} images={images} setImages={setImages} onClose={() => setSelectedMeal(null)} />
       )}

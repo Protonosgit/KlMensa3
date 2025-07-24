@@ -87,13 +87,26 @@ let cachedMenuData = null;
 let cachedMenuIds = null;
 let lastMenuCachedAt = null;
 
+
+function isToday(timestamp) {
+  const inputDate = new Date(timestamp);
+  const today = new Date();
+
+  return (
+    inputDate.getFullYear() === today.getFullYear() &&
+    inputDate.getMonth() === today.getMonth() &&
+    inputDate.getDate() === today.getDate()
+  );
+}
+
+// Retreive the mensa menu
 async function fetchMenu() {
-    // maybe add a check to see if the last request was the same day or not
-    if (lastMenuCachedAt && Date.now() - lastMenuCachedAt < 5*60*60*1000) {
-        return {splitMenu: cachedMenuData, hashIdList: cachedMenuIds};
+    // Invalidate cache if no last cachedate exists, length of data is 0 or last cached date is older than 8 hours or the schedule is from yesterday
+    if(lastMenuCachedAt && cachedMenuData?.length > 0 && Date.now() - lastMenuCachedAt < 8 * 60 * 60 * 1000 && isToday(lastMenuCachedAt)) {
+        return { splitMenu: cachedMenuData, hashIdList: cachedMenuIds };
     }
     try {
-        // download latest uncached version of the mensa menu
+        // download latest uncached version of the mensa menu (canteens=1 does nothing?)
         const response = await fetch('https://www.studierendenwerk-kaiserslautern.de/fileadmin/templates/stw-kl/loadcsv/load_db_speiseplan.php?canteens=1', {
             cache: 'no-store',
             method: 'GET',
@@ -115,7 +128,7 @@ async function fetchMenu() {
         // parse response
         const menuSchedule = await parseMenu(await response.json());
 
-        // return new Promise((resolve) => setTimeout(() => resolve(menuSchedule), 3000));
+        // return new Promise((resolve) => setTimeout(() => resolve(menuSchedule), 3000)); for debugging!
         return menuSchedule;
     } catch (error) {
         console.error('Network error or server not responding:', error.message);
@@ -123,7 +136,7 @@ async function fetchMenu() {
     }
 }
 
-
+// Fetch images and ratings from thrid party provider
 async function fetchMealUserData() {
     try {
         // download latest uncached version of the mensa menu
@@ -141,7 +154,7 @@ async function fetchMealUserData() {
         // Check if request went through
         if (!response.ok) {
             const errorMessage = await response.text();
-            console.error(`Error fetching menu: ${response.status} ${response.statusText}\n${errorMessage}`);
+            console.warn(`Error fetching menu: ${response.status} ${response.statusText}\n${errorMessage}`);
             return null;
         }
 
@@ -150,52 +163,61 @@ async function fetchMealUserData() {
 
         return menuSchedule;
     } catch (error) {
-        console.error('Network error or server not responding:', error.message);
+        console.warn('Network error or server not responding:', error.message);
         return null;
     }
 }
 
 
 const murmur = require('murmurhash');
-
+// Sort, truncate and add fields neccessary for the frontend to the raw mensa schedule
 async function parseMenu(menuData) {
     const hashIdList = [];
+
+    // Only return rptu mensa and robotic kitchen
     const locationFiltered = menuData.filter(item => item.ort_id === 310 || item.ort_id === 410);
+
+
     
+    // Add all title fields
     const combinedKeys = locationFiltered.map(obj => {
         const titleAdder = (
         obj.atextohnezsz1 + (obj.atextohnezsz2?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz2 + (obj.atextohnezsz3?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz3 + (obj.atextohnezsz4?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz4 + (obj.atextohnezsz5?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz5).replace("(Veganes Menü[1]:"," oder ").trim();
-        const titleAdditiveAdder = (
+        obj.atextohnezsz5);
+    const titleAdditiveAdder = (
         obj.atextz1 + (obj.atextz2?.startsWith(',') ? '' : ' ') +
         obj.atextz2 + (obj.atextz3?.startsWith(',') ? '' : ' ') +
         obj.atextz3 + (obj.atextz4?.startsWith(',') ? '' : ' ') +
         obj.atextz4 + (obj.atextz5?.startsWith(',') ? '' : ' ') +
-        obj.atextz5).replace("(Veganes Menü[1]:"," oder ").trim();
+        obj.atextz5);
 
+        // Generate noncrypto hash for unique mealid
         const hashId = murmur.v3(obj.atextohnezsz1+obj.atextohnezsz2+obj.atextohnezsz3+obj.atextohnezsz4+obj.atextohnezsz5).toString(16).substring(0, 8);
         if (!hashIdList.includes(hashId)) {
             hashIdList.push(hashId);
         }
       return {
         ...obj,
-        titleCombined: titleAdder,
-        titleAdditivesCombined: titleAdditiveAdder,
-        price: priceRelationsLookup[obj.artgebname]?.stu || priceRelationsLookup[obj.artgebname]?.price,
+        titleCombined: titleAdder.replace("(Veganes Menü[1]:"," oder ").trim(),
+        titleAdditivesCombined: titleAdditiveAdder.replace("(Veganes Menü[1]:"," oder ").trim(),
+        price: priceRelationsLookup[obj.artgebname],
         // Hotfix because api seems broken :o
         artikel_id: hashId,
+        veganOption: titleAdditiveAdder?.includes('Veganes Menü[1]')
       };
     });
 
 
+    // Combine both studierendenwerk and mensa-kl apis
     const matchedMenu = await matchMenuToUdat(combinedKeys);
 
+    // Group by date
     const groupedByDate = matchedMenu.reduce((acc, item) => {
       const key = item.proddatum;
-    
+
       if (!acc[key]) {
         acc[key] = [];
       }
@@ -205,18 +227,29 @@ async function parseMenu(menuData) {
     }, {});
 
     const splitMenu = Object.entries(groupedByDate).map(([date, items]) => {
+        // Sort meals by dpartname works fine but disabled for now
+        const predefinedOrder = ["Essen 1", "Essen 2", "Grill", "Wok", "Eintopf 1", "Eintopf 2", "Mittagsmenü 1", "Mittagsmenü 2", "Mittagsmenü 3","Mittagsmenü 4", "Abendmensa"];
+        const sortedMeals = items.slice().sort((a, b) => {
+            const aIndex = predefinedOrder.indexOf(a.dpartname);
+            const bIndex = predefinedOrder.indexOf(b.dpartname);
+            if (aIndex < bIndex) return -1;
+            if (aIndex > bIndex) return 1;
+            return 0;
+        });
         return {
             date,
-            meals: items
+            meals: sortedMeals
         };
     });
 
+    // Cache
     cachedMenuData = splitMenu;
     cachedMenuIds = hashIdList;
     lastMenuCachedAt = new Date();
 
     return {splitMenu, hashIdList}; 
 }
+// Add mensa-kl data to studierendenwerk api data
 async function matchMenuToUdat(schedule) {
     const rebuildmatchedMenu = schedule;
 

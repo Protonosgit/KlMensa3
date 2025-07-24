@@ -10,24 +10,29 @@ export default async function Schedule() {
   const settingsCookie = cookieStore.get('settings') || null;
 
   let settings;
+
+  // Get menu, images and comments from supabase and legacy api
   const menuData = await fetchMenu();
   let menu = menuData?.splitMenu;
   const hashIds = menuData?.hashIdList;
   const comments = await fetchComments(hashIds);
   const images = await fetchImages(hashIds);
 
+  // Get settings
   if(settingsCookie?.value) {
     settings = JSON.parse(settingsCookie.value);
   }
 
+  // Show unlimeted menu dates
   if(!settings?.nolimit) {
     menu = menu?.slice(0, 8);
   }
 
+  // Check if menu data is available
   if (!menu || !menu?.length) {
     return (
       <div className={styles.emptyList}>
-        <p>No schedule data found!</p>
+        <p>Server did not return a valid menu!</p>
       </div>
     );
   }
@@ -37,7 +42,7 @@ export default async function Schedule() {
     <>
         {menu.map((day, dayIndex) => {
           return (
-            <div key={dayIndex} title={day.date} className={styles.dayContainer}>
+            <div key={dayIndex} className={styles.dayContainer}>
               <div className={styles.dayHeader}>
                 <h3 className={styles.dayTitle}>{format(day.date, 'eeee')}</h3>
                 <h3 className={styles.dayTitle}>{format(day.date, 'dd.MM')}</h3>

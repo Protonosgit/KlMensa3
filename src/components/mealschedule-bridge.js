@@ -4,12 +4,13 @@ import { applyClientFilters } from '@/app/utils/filter.js';
 import { getCookie } from "@/app/utils/cookie-monster";
 import { useEffect, useState } from 'react';
 
-
-export default function DataBridge({ mealDay,index, comments, images, set}) {
+// Bridge between server and client
+export default function DataBridge({ mealDay,index, comments, images}) {
     const [locationFilter, setLocationFilter] = useState([])
     const [proteinFilter, setProteinFilter] = useState([])
     const [additiveFilter, setAdditiveFilter] = useState([])
 
+    // Load filters from cookies
     useEffect(() => {
         setLocationFilter(JSON.parse(getCookie('location')));
         setProteinFilter(JSON.parse(getCookie('protein')));
@@ -24,6 +25,7 @@ export default function DataBridge({ mealDay,index, comments, images, set}) {
         additiveFilter,
         mealDay?.meals
       ).map((meal, mealIndex) => {
+        // Filter comments to match the current meal
         const filteredComments = () => {
           if (comments && comments.length > 0) {
             return comments.filter(
@@ -32,6 +34,8 @@ export default function DataBridge({ mealDay,index, comments, images, set}) {
           }
           return [];
         };
+
+        // Filter images to match the current meal
         const filteredImages = () => {
           if (images && images.length > 0) {
             return images.filter(

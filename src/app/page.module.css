@@ -28,6 +28,7 @@
   display: flex;
   gap: 0.6rem;
   justify-content: flex-end;
+  align-items: center;
   padding: 1rem 0;
 }
 
@@ -96,12 +97,14 @@
   .mealGrid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, minmax(0, 1fr));
     gap: 0.7rem;
   }
 
   
   .mealGridMobileNew {
     grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
   }
   
@@ -125,6 +128,7 @@
     width: 100%;
     height: 7rem;
     object-fit: cover;
+    border-radius: 0.5rem 0.5rem 0 0;
   }
 
   .bookmarkContainer {
@@ -143,9 +147,10 @@
   }
 
   .bookmarkActive {
-    fill: rgb(234, 151, 8);
-    color: rgb(234, 151, 8);
+    fill: var(--primary-color);
+    color: var(--primary-color);
   }
+
   
   .mealInfo {
     padding: 0.5rem;
@@ -166,8 +171,21 @@
   display: flex;
   flex-direction: row;
   width: fit-content;
-  gap: 0.3rem;
+  gap: 0.4rem;
   align-items: center;
+}
+.mealContextLabels {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3rem;
+  justify-content: space-between;
+}
+.mealIcons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3rem;
 }
 .veganIcon {
   color: var(--vegan-color);
@@ -178,6 +196,9 @@
     font-weight: 600;
     margin-bottom: 0.3rem;
     flex-grow: 1;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
   }
   
   .mealFooter {
@@ -221,11 +242,15 @@
   .newsBox {
     border-radius: 0.5rem;
     padding: 0.5rem;
+    display: flex;
     margin: 1rem 0;
     background-color: var(--newsbox-bg);
     cursor: pointer;
   }
   .newsText {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
     font-size: 1rem;
     color: var(--bg-color);
   }

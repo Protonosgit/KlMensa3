@@ -9,31 +9,36 @@ import { getCookie, setCookie } from "@/app/utils/cookie-monster";
 import Switch from "react-switch";
 import { createClient } from "@/app/utils/supabase/client";
 
-const settingslist =[ 
-  { id: "dark", name: "Dark mode", enabled: true},
-  { id: "by2lay", name: "Better mobile layout", enabled: true },
-  { id: "intitle", name: "Additives in popup title", enabled: true },
-  { id: "shortitle", name: "Supershort meal title", enabled: true },
-  { id: "nolimit", name: "Remove limit of 8 days", enabled: true },
-]
 
 export default function SettingsModal({}) {
+  // State variables for managing modal visibility, settings, and user authentication.
   const [modalVisible, setModalVisible] = useState(false);
-  const [settings, setSettings] = useState([false,false,false,false,false]);
-  const [user,setUser] = useState();
-  const [usermail,setUsermail] = useState("");
-  const [userpass,setUserpass] = useState("");
+    const [settings, setSettings] = useState({
+    dark: false,
+    by2lay: false,
+    intitle: false,
+    shortitle: false,
+    nolimit: false,
+    pricecat: "stu",
+    gridStructure: 0,
+    language: 'en',
+  });
+  const [user, setUser] = useState();
+  const [usermail, setUsermail] = useState("");
+  const [userpass, setUserpass] = useState("");
 
   useEffect(() => {
-    // fetch cookies
-    const settingscookie = getCookie('settings');
-    const settingsObject = settingscookie ? JSON.parse(settingscookie) : {};
-    const settingsArray = settingslist.map(setting => !!settingsObject[setting.id]);
-    setSettings(settingsArray);
+    // Fetch settings from cookies and initialize state.
+    const settingsString = getCookie('settings');
+    if (settingsString && settingsString.length > 0) {
+      const parsed = JSON.parse(settingsString);
+      setSettings(parsed);
+    }
+    // Fetch user data from Supabase.
     async function fetchUserData() {
       const supabase = createClient();
       const { data, error } = await supabase.auth.getUser();
-      if(data?.user) {
+      if (data?.user) {
         setUser(data?.user);
       }
     }
@@ -41,6 +46,7 @@ export default function SettingsModal({}) {
   }, []);
 
   useEffect(() => {
+    // Disable page scrolling when the settings modal is open.
     if (modalVisible) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -49,27 +55,24 @@ export default function SettingsModal({}) {
   }, [modalVisible]);
 
 
-  function toggleSwitch(index, state) {
-    setSettings((prevSettings) => {
-      const updatedSettings = [...prevSettings];
-      updatedSettings[index] = state;
-      return updatedSettings;
-    });
-    const updatedSettings = [...settings];
-    updatedSettings[index] = state;
-    const mappedSettings = settingslist.map((setting, index) => ({[setting.id]: updatedSettings[index]})).reduce((acc, cur) => ({...acc, ...cur}), {});
-    setCookie('settings', JSON.stringify(mappedSettings));
+  // Toggle individual settings and update cookies.
+    const handleSettingChange = (key, value) => {
+    const updatedSettings = { ...settings, [key]: value };
+    setSettings(updatedSettings);
+    setCookie('settings', JSON.stringify(updatedSettings));
 
-    toast.success('Settings saved!');
-    const changedSetting = settingslist[index].id;
-    if(changedSetting === "dark") {
-      document.documentElement.setAttribute('data-theme', state ? "dark" : "light");
+    // Apply specific changes based on the setting toggled.
+    if (key === "dark") {
+      document.documentElement.setAttribute('data-theme', value ? "dark" : "light");
     }
-    if(changedSetting === "by2lay" || changedSetting === "nolimit" || changedSetting === "shortitle") {
+    if (key === "by2lay" || key === "nolimit" || key === "shortitle" || key === "pricecat") {
       window.location.reload();
     }
-  }
+  };
 
+
+
+  // Handle user login.
   async function handleLogin() {
     const response = await login(usermail,userpass);
     if(!response?.error) {
@@ -80,6 +83,7 @@ export default function SettingsModal({}) {
     }
   }
 
+  // Handle user signup.
   async function handleSignup() {
     const response = await signup(usermail,userpass);
     if(!response?.error) {
@@ -90,6 +94,7 @@ export default function SettingsModal({}) {
     }
   }
 
+  // Handle user logout.
   async function handleLogout() {
     const error = await logout();
     if(!error) {
@@ -101,49 +106,102 @@ export default function SettingsModal({}) {
   }
 
 
+  // Render the settings modal UI.
   return (
     <>
+      {/* Button to open the settings modal */}
       <button className={styles.settingsButton} title="Settings and Account" onClick={() => setModalVisible(true)}>
         <Settings />
       </button>
       {modalVisible && (
         <div className={styles.popupOverlay} onClick={() => setModalVisible(false)}>
-            <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-              <button onClick={() => setModalVisible(false)} className={styles.popupCloseButton}><X /></button>
+          <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+            {/* Close button */}
+            <button onClick={() => setModalVisible(false)} className={styles.popupCloseButton}><X /></button>
             <h2 className={styles.popupTitle}>Settings</h2>
             <Tabs defaultValue="general" className={styles.popupTabs}>
-                <TabsList className={styles.popupTabsList}>
-                    <TabsTrigger className={styles.popupTabsTrigger} value="general">General</TabsTrigger>
-                    <TabsTrigger className={styles.popupTabsTrigger} value="identity">Identity</TabsTrigger>
-                </TabsList>
-                <TabsContent value="general">
-                  {settingslist.map((setting, index) => (
-                    <div key={index} className={styles.popupOption}>
-                      <label htmlFor={setting.id} className={styles.popupOptionLabel}>
-                        <Switch onChange={(e) => toggleSwitch(index, e)} disabled={!setting.enabled} checked={settings[index]} onColor="#fbbf24"  />
-                        <span>{setting.name}</span>
-                      </label>
-                    </div>
-                  ))}
-                </TabsContent>
-                <TabsContent value="identity">
+              <TabsList className={styles.popupTabsList}>
+                {/* Tabs for general settings and identity management */}
+                <TabsTrigger className={styles.popupTabsTrigger} value="general">General</TabsTrigger>
+                <TabsTrigger className={styles.popupTabsTrigger} value="identity">Identity</TabsTrigger>
+              </TabsList>
+              <TabsContent value="general">
+               { /* Render general settings */}
+
+
+                        <div className={styles.popupOption}>
+                          <Switch onChange={(e) => handleSettingChange("dark", e)} checked={settings.dark} onColor="#fbbf24"  />
+                        <label className={styles.popupOptionLabel}>
+                          <span>Dark mode</span>
+                          <p className={styles.popupOptionDescription}>Turn of the lights</p>
+                        </label>
+                        </div>
+
+                        <div className={styles.popupOption}>
+                          <Switch onChange={(e) => handleSettingChange("intitle", e)} checked={settings.intitle} onColor="#fbbf24"  />
+                        <label className={styles.popupOptionLabel}>
+                          <span>Show additive title</span>
+                          <p className={styles.popupOptionDescription}>Display additives in the title of the popup</p>
+                        </label>
+                        </div>
+
+                        <div className={styles.popupOption}>
+                          <Switch onChange={(e) => handleSettingChange("shortitle", e)} checked={settings.shortitle} onColor="#fbbf24"  />
+                        <label className={styles.popupOptionLabel}>
+                          <span>Short title</span>
+                          <p className={styles.popupOptionDescription}>Only show a shortened version of the meal title</p>
+                        </label>
+                        </div>
+                        <div className={styles.popupOption}>
+                          <Switch onChange={(e) => handleSettingChange("by2lay", e)} checked={settings.by2lay} onColor="#fbbf24"  />
+                        <label className={styles.popupOptionLabel}>
+                          <span>New mobile layout</span>
+                          <p className={styles.popupOptionDescription}>Show two instead of one meal in the same row</p>
+                        </label>
+                        </div>
+
+                        <div className={styles.popupOption}>
+                          <Switch onChange={(e) => handleSettingChange("nolimit", e)} checked={settings.nolimit} onColor="#fbbf24"  />
+                        <label className={styles.popupOptionLabel}>
+                          <span>Remove limiter</span>
+                          <p className={styles.popupOptionDescription}>Remove the limit to display more than 8 days in advance</p>
+                        </label>
+                        </div>
+
+                        <div className={styles.seperator}></div>
+
+
+                        <div className={styles.popupOption}>
+                          <span style={{width: "100%", textAlign: "left"}}>Price category: </span>
+                          <select className={styles.popupSelect} value={settings.pricecat} onChange={(e) => handleSettingChange("pricecat", e.target.value)} >
+                          <option value="stu">Students</option>
+                          <option value="bed">Employees</option>
+                          <option value="gas">Guests</option>
+                          </select>
+                        </div>
+
+                        </TabsContent>
+
+                        <TabsContent value="identity">
+                        {/* Render identity management options */}
                 <div className={styles.popupOption}>
                   {user ? (
-                  <button className={styles.popupButton} onClick={() => handleLogout()}>Logout</button>
-                  ) : (<div className={styles.popupUserContainer}>
-                    <div className={styles.popupInputContainer}>
-                      <input type="email" placeholder="Email" value={usermail} onChange={(e) => setUsermail(e.target.value)} className={styles.popupInput} />
-                      <input type="password" placeholder="Password" value={userpass} onChange={(e) => setUserpass(e.target.value)} className={styles.popupInput} />
+                    <button className={styles.popupButton} onClick={() => handleLogout()}>Logout</button>
+                  ) : (
+                    <div className={styles.popupUserContainer}>
+                      {/* Login and signup inputs */}
+                      <div className={styles.popupInputContainer}>
+                        <input type="email" placeholder="Email" value={usermail} onChange={(e) => setUsermail(e.target.value)} className={styles.popupInput} />
+                        <input type="password" placeholder="Password" value={userpass} onChange={(e) => setUserpass(e.target.value)} className={styles.popupInput} />
                       </div>
                       <div className={styles.popupButtonContainer}>
-                      <button className={styles.popupButton} onClick={() => handleLogin()}>Login</button>
-                      <button className={styles.popupButton} onClick={() => handleSignup()}>Signup</button>
+                        <button className={styles.popupButton} onClick={() => handleLogin()}>Login</button>
+                        <button className={styles.popupButton} onClick={() => handleSignup()}>Signup</button>
                       </div>
                     </div>
                   )}
-                  
                 </div>
-                </TabsContent>
+              </TabsContent>
             </Tabs>
           </div>
         </div>

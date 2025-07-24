@@ -6,19 +6,22 @@ import styles from "./settings.module.css";
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const toggleVisibility = () => {
-        if (window.scrollY > 400) {
-            setIsVisible(true);
-          } else {
-            setIsVisible(false);
-          }
+useEffect(() => {
+  const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
     };
+  };
 
-    window.addEventListener("scroll", toggleVisibility);
+  const toggleVisibility = debounce(() => {
+    setIsVisible(window.scrollY > 400);
+  }, 200);
 
-    return () => window.removeEventListener("scroll", toggleVisibility);
-  }, []);
+  window.addEventListener("scroll", toggleVisibility);
+  return () => window.removeEventListener("scroll", toggleVisibility);
+}, []);
 
   const scrollToTop = () => {
     window.scrollTo({

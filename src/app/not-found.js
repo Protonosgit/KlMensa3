@@ -1,50 +1,50 @@
 'use client'
 import Link from 'next/link'
- 
-export default function NotFound() {
 
+export default function NotFound() {
   return (
-    <div className="container">
-      <h1>404</h1>
-      <p>Oops! The page you're looking for doesn't exist.</p>
-      <p><Link href="/">Go back to homepage</Link></p>
+    <div className="wrapper">
+      <h1>Page Not Found</h1>
+      <p>Sorry, we couldn’t find what you were looking for.</p>
+      <p>
+        <Link href="/">Return home</Link>
+      </p>
 
       <style jsx>{`
-        .container {
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-          background-color: #f7f7f7;
-          color: #333;
+        .wrapper {
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
           height: 100vh;
           width: 100vw;
-          margin: 0;
+          background: #fff;
+          color: #444;
           text-align: center;
+          font-family: system-ui, sans-serif;
         }
         h1 {
-          font-size: 4rem;
-          margin-bottom: 0;
+          font-size: 3.5rem;
+          margin: 0;
         }
         p {
-          font-size: 1.2rem;
-          margin-top: 0.5rem;
+          font-size: 1.1rem;
+          margin: 0.8rem 0;
         }
         a {
-          color: #0077cc;
-          text-decoration: none;
-          border-bottom: 1px solid #0077cc;
-          transition: border-bottom-color 0.2s ease-in-out;
+          color: #0066cc;
+          text-decoration: underline;
         }
         a:hover {
-          border-bottom-color: transparent;
+          color: #004999;
         }
       `}</style>
+
       <style jsx global>{`
         body {
           margin: 0;
           padding: 0;
+          background: #fff;
         }
       `}</style>
     </div>
