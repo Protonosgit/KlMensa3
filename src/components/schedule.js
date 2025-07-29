@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import {  fetchMenu, fetchMealComments } from '@/app/utils/api-bridge';
+import {  fetchMenu } from '@/app/utils/api-bridge';
 import styles from "../app/page.module.css";
 import { format } from 'date-fns';
 import { fetchComments,fetchImages } from '@/app/utils/database-actions';
@@ -10,14 +10,12 @@ export default async function Schedule() {
   const settingsCookie = cookieStore.get('settings') || null;
 
   let settings;
-
   // Get menu, images and comments from supabase and legacy api
   const menuData = await fetchMenu();
   let menu = menuData?.splitMenu;
   const hashIds = menuData?.hashIdList;
   const comments = await fetchComments(hashIds);
   const images = await fetchImages(hashIds);
-
   // Get settings
   if(settingsCookie?.value) {
     settings = JSON.parse(settingsCookie.value);
@@ -27,6 +25,7 @@ export default async function Schedule() {
   if(!settings?.nolimit) {
     menu = menu?.slice(0, 8);
   }
+
 
   // Check if menu data is available
   if (!menu || !menu?.length) {

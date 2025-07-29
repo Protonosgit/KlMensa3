@@ -199,14 +199,16 @@ async function parseMenu(menuData) {
         if (!hashIdList.includes(hashId)) {
             hashIdList.push(hashId);
         }
+
       return {
         ...obj,
-        titleCombined: titleAdder.replace("(Veganes Menü[1]:"," oder ").trim(),
-        titleAdditivesCombined: titleAdditiveAdder.replace("(Veganes Menü[1]:"," oder ").trim(),
+        titleCombined: titleAdder.replace("Veganes Menü[1]:"," oder ").replace("Plant-based Menü[1]:"," oder ").replace("Vegetarisches Menü[1]:"," oder ").trim(),
+        titleAdditivesCombined: titleAdditiveAdder.replace("(Veganes Menü[1]:"," oder ").replace("Plant-based Menü[1]:"," oder ").replace("Vegetarisches Menü[1]:"," oder ").trim(),
         price: priceRelationsLookup[obj.artgebname],
         // Hotfix because api seems broken :o
         artikel_id: hashId,
-        veganOption: titleAdditiveAdder?.includes('Veganes Menü[1]')
+        veganOption: titleAdditiveAdder?.includes('Veganes Menü[1]') || titleAdditiveAdder?.includes('Plant-based Menü[1]'),
+        vegiOption: titleAdditiveAdder?.includes('Vegetarisches Menü[1]'),
       };
     });
 

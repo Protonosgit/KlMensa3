@@ -11,8 +11,10 @@ import { getCookie } from "@/app/utils/cookie-monster";
 import { publishComment,updateComment,deleteComment,fetchComments, reportComment, fetchImages } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { BananaIcon, BanIcon, Bot, BotIcon, CookingPot, Delete, DeleteIcon, FlagIcon, Share2Icon, UploadIcon, Vegan } from "lucide-react";
-
+import { Bot, CookingPot, FlagIcon, Share2Icon, UploadIcon } from "lucide-react";
+import  veganIcon from "../../public/icons/vegan.svg";
+import vegiIcon from "../../public/icons/vegi.svg";
+import veganOpIcon  from "../../public/icons/vegan-op.svg";
 
 export default function MealPopup({ meal, onClose, comments, setComments, images, setImages }) {
   // State variables for managing user input, meal details, and UI updates.
@@ -61,7 +63,6 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
       }
       fetchUserData();
       
-      
       checkUserOwnsComment(comments);
       checkUserOwnsImage(images);
 
@@ -71,7 +72,7 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
       const fullCount = comments.length  + (meal.rating_amt || 0);
       setRating(fullSum/fullCount);
       setRatingCount(fullCount);
-      console.log(meal);
+      //console.log(meal);
     }, [meal]);
 
     // update neccessary fields when image or comment is updated
@@ -296,10 +297,13 @@ async function handleUploadMealImage() {
         <div className={styles.popupDetails}>
           <div className={styles.popupTopbar}>
             <a href={meal.loc_link} title="Location" className={styles.popupLocation}>
-            {meal.dpartname}
-            {meal?.menuekennztext == "V+" ? <Vegan size={18} className={styles.veganIcon} /> : ""} 
-            {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
-            {meal?.veganOption ? <><Vegan size={18} className={styles.otherIcon} /></> : ""}
+              {meal.dpartname}
+              
+              {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
+              {meal?.isvegi ? <Image src={vegiIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+              {meal?.veganOption ? <Image src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+              {meal?.menuekennztext == "V+" ? <Image src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+
             </a>
             <p>{/* Put something nice here */}</p>
           </div>
