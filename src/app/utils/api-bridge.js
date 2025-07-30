@@ -176,8 +176,6 @@ async function parseMenu(menuData) {
 
     // Only return rptu mensa and robotic kitchen
     const locationFiltered = menuData.filter(item => item.ort_id === 310 || item.ort_id === 410);
-
-
     
     // Add all title fields
     const combinedKeys = locationFiltered.map(obj => {
@@ -195,21 +193,26 @@ async function parseMenu(menuData) {
         obj.atextz5);
 
         // Generate noncrypto hash for unique mealid
-        const hashId = murmur.v3(obj.atextohnezsz1+obj.atextohnezsz2+obj.atextohnezsz3+obj.atextohnezsz4+obj.atextohnezsz5).toString(16).substring(0, 8);
-        if (!hashIdList.includes(hashId)) {
-            hashIdList.push(hashId);
-        }
+    const hashId = murmur.v3(obj.atextohnezsz1+obj.atextohnezsz2+obj.atextohnezsz3+obj.atextohnezsz4+obj.atextohnezsz5).toString(16).substring(0, 8);
+    if (!hashIdList.includes(hashId)) {
+        hashIdList.push(hashId);
+    }
 
-      return {
+    // copy vegi or vegan option to seperate var
+    const altOption = (titleAdditiveAdder.match(/\(Plant-based Menü[^)]*|\(Vegetarisches Menü[^)]*|\(Vegetarisches Menü\[1]\)/)?.[0] || '').replace("(Veganes Menü[1]:","").replace("Plant-based Menü[1]:","").replace("Vegetarisches Menü[1]:","").trim().replace("(","");
+
+    // build new object
+    return {
         ...obj,
         titleCombined: titleAdder.replace("Veganes Menü[1]:"," oder ").replace("Plant-based Menü[1]:"," oder ").replace("Vegetarisches Menü[1]:"," oder ").trim(),
-        titleAdditivesCombined: titleAdditiveAdder.replace("(Veganes Menü[1]:"," oder ").replace("Plant-based Menü[1]:"," oder ").replace("Vegetarisches Menü[1]:"," oder ").trim(),
+        titleAdditivesCombined: titleAdditiveAdder.replace("(Veganes Menü[1]:","oder ").replace("Plant-based Menü[1]:","oder ").replace("Vegetarisches Menü[1]:","oder ").trim(),
         price: priceRelationsLookup[obj.artgebname],
         // Hotfix because api seems broken :o
         artikel_id: hashId,
         veganOption: titleAdditiveAdder?.includes('Veganes Menü[1]') || titleAdditiveAdder?.includes('Plant-based Menü[1]'),
         vegiOption: titleAdditiveAdder?.includes('Vegetarisches Menü[1]'),
-      };
+        altOption: altOption,
+        };
     });
 
 

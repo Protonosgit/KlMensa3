@@ -182,6 +182,16 @@
   .dietaryTag:hover {
     background-color: var(--primary-color);
   }
+
+  .contextBox {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.7rem;
+    margin: 0.7rem 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
   
   .commentsSection {
     padding-top: 1rem 1rem;

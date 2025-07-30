@@ -11,7 +11,7 @@ import { getCookie } from "@/app/utils/cookie-monster";
 import { publishComment,updateComment,deleteComment,fetchComments, reportComment, fetchImages } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { Bot, CookingPot, FlagIcon, Share2Icon, UploadIcon } from "lucide-react";
+import { Bot, CookingPot, FlagIcon, Info, Share2Icon, UploadIcon } from "lucide-react";
 import  veganIcon from "../../public/icons/vegan.svg";
 import vegiIcon from "../../public/icons/vegi.svg";
 import veganOpIcon  from "../../public/icons/vegan-op.svg";
@@ -263,6 +263,17 @@ async function handleUploadMealImage() {
     return <h2 className={styles.popupTitle} title={meal?.titleAdditivesCombined}>{settings?.intitle ? (meal.titleAdditivesCombined) : meal.titleCombined}</h2>;
   }
 
+  const ContextBox = () => {
+    if(!meal.altOption) return null;
+    return (
+      <div className={styles.contextBox}>
+        {/* {meal.veganOption && <Image src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} />}
+        {meal.vegiOption &&  <Image src={vegiIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} />} */}
+        <p>Alternative: {meal.altOption}</p>
+      </div>
+    );
+  };
+
 
   // Render the modal UI for meal details, comments, and actions.
   return (
@@ -308,7 +319,10 @@ async function handleUploadMealImage() {
             <p>{/* Put something nice here */}</p>
           </div>
           <MealTitle />
+          <ContextBox />
+
           {additives.length > 1 && <div><b>Additives:</b> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</div>}
+          
           <div className={styles.popupPriceRating}>
             <span title="Price" className={styles.popupPrice}>{meal?.price?.stu || meal?.price?.price}</span>
             <div className={styles.popupRating}>

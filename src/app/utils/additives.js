@@ -8,10 +8,14 @@ function extractAdditives(inputString) {
     return additives;
 }
 // Uses comma seperated string to extract codes (for filtering)
-  function extractAdditiveCodes(inputString) {
-    if(!inputString) return [];
-    const codes = inputString.split(',').map(item => item.trim().toLowerCase());
-    return codes;
-  }
+function extractAdditiveCodes(inputString) {
+  if(!inputString) return [];
+  const codes = inputString.split(',').map(item => item.trim().toLowerCase());
+  return codes;
+}
 
-export { extractAdditives,extractAdditiveCodes }
+function extractAlternativeVersion() {
+
+}
+
+export { extractAdditives,extractAdditiveCodes, extractAlternativeVersion }
