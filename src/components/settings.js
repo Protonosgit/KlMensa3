@@ -128,7 +128,6 @@ export default function SettingsModal({}) {
               <TabsContent value="general">
                { /* Render general settings */}
 
-
                         <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("dark", e)} checked={settings.dark} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>

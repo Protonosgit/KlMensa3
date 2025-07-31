@@ -11,8 +11,10 @@ import { getCookie } from "@/app/utils/cookie-monster";
 import { publishComment,updateComment,deleteComment,fetchComments, reportComment, fetchImages } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { BananaIcon, BanIcon, Bot, BotIcon, CookingPot, Delete, DeleteIcon, FlagIcon, Share2Icon, UploadIcon, Vegan } from "lucide-react";
-
+import { Bot, CookingPot, FlagIcon, Info, Share2Icon, UploadIcon } from "lucide-react";
+import  veganIcon from "../../public/icons/vegan.svg";
+import vegiOpIcon from "../../public/icons/vegi-op.svg";
+import veganOpIcon  from "../../public/icons/vegan-op.svg";
 
 export default function MealPopup({ meal, onClose, comments, setComments, images, setImages }) {
   // State variables for managing user input, meal details, and UI updates.
@@ -61,7 +63,6 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
       }
       fetchUserData();
       
-      
       checkUserOwnsComment(comments);
       checkUserOwnsImage(images);
 
@@ -71,7 +72,7 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
       const fullCount = comments.length  + (meal.rating_amt || 0);
       setRating(fullSum/fullCount);
       setRatingCount(fullCount);
-      console.log(meal);
+      //console.log(meal);
     }, [meal]);
 
     // update neccessary fields when image or comment is updated
@@ -262,6 +263,15 @@ async function handleUploadMealImage() {
     return <h2 className={styles.popupTitle} title={meal?.titleAdditivesCombined}>{settings?.intitle ? (meal.titleAdditivesCombined) : meal.titleCombined}</h2>;
   }
 
+  const ContextBox = () => {
+    if(!meal.altOption) return null;
+    return (
+      <div className={styles.contextBox}>
+        <p>Alternative: {meal.altOption} {meal.vegiOption && "(Vegi)"}{meal.veganOption && "(Vegan)"}</p>
+      </div>
+    );
+  };
+
 
   // Render the modal UI for meal details, comments, and actions.
   return (
@@ -296,15 +306,21 @@ async function handleUploadMealImage() {
         <div className={styles.popupDetails}>
           <div className={styles.popupTopbar}>
             <a href={meal.loc_link} title="Location" className={styles.popupLocation}>
-            {meal.dpartname}
-            {meal?.menuekennztext == "V+" ? <Vegan size={18} className={styles.veganIcon} /> : ""} 
-            {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
-            {meal?.veganOption ? <><Vegan size={18} className={styles.otherIcon} /></> : ""}
+              {meal.dpartname}
+              
+              {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
+              {meal?.vegiOption ? <Image src={vegiOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+              {meal?.veganOption ? <Image src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+              {meal?.menuekennztext == "V+" ? <Image src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+
             </a>
             <p>{/* Put something nice here */}</p>
           </div>
           <MealTitle />
+          <ContextBox />
+
           {additives.length > 1 && <div><b>Additives:</b> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</div>}
+          
           <div className={styles.popupPriceRating}>
             <span title="Price" className={styles.popupPrice}>{meal?.price?.stu || meal?.price?.price}</span>
             <div className={styles.popupRating}>

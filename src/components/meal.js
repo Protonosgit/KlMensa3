@@ -1,10 +1,13 @@
 "use client";
 import Image from "next/image";
-import { Star, Vegan, Megaphone, Bookmark, Bot, Moon, Columns4, Tally1, Tally2, Sun } from "lucide-react";
+import { Star, Bookmark, Bot } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getCookie } from "@/app/utils/cookie-monster";
+import  veganIcon from "../../public/icons/vegan.svg";
+import vegiOpIcon from "../../public/icons/vegi-op.svg";
+import veganOpIcon  from "../../public/icons/vegan-op.svg";
 
 export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
   // State variables
@@ -15,6 +18,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
   const [comments, setComments] = useState(mealComments || []);
   const [rating, setRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
+
 
   useEffect(() => {
     // Load settings and bookmarks from cookies
@@ -128,18 +132,15 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
         <div className={styles.mealInfo}>
           <div className={styles.mealContextLabels}>
             <p className={styles.mealLocation}>
-              {/* {meal?.dpartname == "Abendmensa" ? <Moon size={18} /> : ""}
-              {meal?.dpartname == "Grill" ? <Columns4 size={18} /> : ""}
-              {meal?.dpartname == "Essen 2" ? <Tally2 size={18} /> : ""}
-              {meal?.dpartname == "Essen 1" ? <Tally1 size={18} /> : ""}
-              {meal?.dpartname.includes("Mittagsmenü") ? <Sun size={18} /> : ""} */}
               {meal?.dpartname}
+
               {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
-              {meal?.veganOption ? <><Vegan size={18} className={styles.otherIcon} /></> : ""}
-              {meal?.menuekennztext == "V+" ? <Vegan size={18} className={styles.veganIcon} /> : ""} 
+              {meal?.vegiOption ? <Image title="Vegetarian option" src={vegiOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+              {meal?.veganOption ? <Image title="Vegan option" src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+              {meal?.menuekennztext == "V+" ? <Image title="Vegan" src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
             </p>
             <p className={styles.mealIcons}>
-
+              {/* maybe put icons here someday */}
             </p>
           </div>
           <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined + (". " + meal?.frei1 + meal?.frei2))}</h4>

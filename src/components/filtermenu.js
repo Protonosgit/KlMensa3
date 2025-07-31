@@ -14,7 +14,7 @@ const mealLocationClearname = [
   { name: "Ausgabe 2", codes: [2] },
   { name: "Wok", codes: [-10] },
   { name: "Grill", codes: [10] },
-  { name: "Atrium", codes: [16,17,18] },
+  { name: "Atrium", codes: [16,17,18,19] },
   { name: "Eintopf (Atrium)", codes: [13] },
   { name: "Abendmensa", codes: [4] },
 ];
