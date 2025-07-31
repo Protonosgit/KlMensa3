@@ -1,12 +1,12 @@
 "use client";
 import Image from "next/image";
-import { Star, Vegan, Megaphone, Bookmark, Bot, Moon, Columns4, Tally1, Tally2, Sun } from "lucide-react";
+import { Star, Bookmark, Bot } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getCookie } from "@/app/utils/cookie-monster";
 import  veganIcon from "../../public/icons/vegan.svg";
-import vegiIcon from "../../public/icons/vegi.svg";
+import vegiOpIcon from "../../public/icons/vegi-op.svg";
 import veganOpIcon  from "../../public/icons/vegan-op.svg";
 
 export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
@@ -135,7 +135,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
               {meal?.dpartname}
 
               {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
-              {meal?.isvegi ? <Image title="Vegetarian option" src={vegiIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+              {meal?.vegiOption ? <Image title="Vegetarian option" src={vegiOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
               {meal?.veganOption ? <Image title="Vegan option" src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
               {meal?.menuekennztext == "V+" ? <Image title="Vegan" src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
             </p>

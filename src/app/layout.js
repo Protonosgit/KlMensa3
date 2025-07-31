@@ -2,6 +2,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import AnnouncementModal from "@/components/announcements";
 import { cookies } from "next/headers";
+import Head from "next/head";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -16,7 +18,7 @@ const geistMono = localFont({
 
 export const metadata = {
   title: "KL-Mensa - Der Mensaplan der RPTU in Kaiserslautern / Landau",
-  description: "Kl Mensa 3 ermöglicht das einsehen des Speiseplans, sowie das abgeben von Bewertungen und Bildern zu Mahlzeiten",
+  description: "",
 };
 
 export default async function RootLayout({ children }) {
@@ -29,6 +31,19 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en" data-theme={settings?.dark ? "dark" : "light"}>
+      <Head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} key="desc" />
+        <meta property="og:title" content={metadata.title} />
+        <meta
+          property="og:description"
+          content={metadata.description}
+        />
+        <meta
+          property="og:image"
+          content="https://kl-mensa.vercel.app/logo.png"
+        />
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

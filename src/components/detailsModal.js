@@ -13,7 +13,7 @@ import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
 import { Bot, CookingPot, FlagIcon, Info, Share2Icon, UploadIcon } from "lucide-react";
 import  veganIcon from "../../public/icons/vegan.svg";
-import vegiIcon from "../../public/icons/vegi.svg";
+import vegiOpIcon from "../../public/icons/vegi-op.svg";
 import veganOpIcon  from "../../public/icons/vegan-op.svg";
 
 export default function MealPopup({ meal, onClose, comments, setComments, images, setImages }) {
@@ -267,9 +267,7 @@ async function handleUploadMealImage() {
     if(!meal.altOption) return null;
     return (
       <div className={styles.contextBox}>
-        {/* {meal.veganOption && <Image src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} />}
-        {meal.vegiOption &&  <Image src={vegiIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} />} */}
-        <p>Alternative: {meal.altOption}</p>
+        <p>Alternative: {meal.altOption} {meal.vegiOption && "(Vegi)"}{meal.veganOption && "(Vegan)"}</p>
       </div>
     );
   };
@@ -311,7 +309,7 @@ async function handleUploadMealImage() {
               {meal.dpartname}
               
               {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
-              {meal?.isvegi ? <Image src={vegiIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+              {meal?.vegiOption ? <Image src={vegiOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
               {meal?.veganOption ? <Image src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
               {meal?.menuekennztext == "V+" ? <Image src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
 

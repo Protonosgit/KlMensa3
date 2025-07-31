@@ -4,7 +4,7 @@ import FilterMenu from "@/components/filtermenu";
 import { Suspense } from "react";
 import SettingsModal from "@/components/settings";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
-import { InfoIcon, OctagonAlert } from "lucide-react";
+import { InfoIcon } from "lucide-react";
 import { fetchNews } from "./utils/internal-api";
 
 export default function Home() { 
@@ -26,15 +26,15 @@ export default function Home() {
         <div className={styles.headerWrapper}>
           <div className={styles.headerContent}>
             <div className={styles.headerTitleSection}>
-              <h1 className={styles.headerTitle}>KL Mensa</h1>
-              <h2 className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</h2>
+              <h1 className={styles.headerTitle}>Mensa KL</h1>
+              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</h2>
             </div>
           </div>
         </div>
       </header>
 
       <div className={styles.newsBox}>
-        <p className={styles.newsText}><InfoIcon />Developer version do not use real data!</p>
+        <p className={styles.newsText}><InfoIcon />Developer version expect bugs and issues!</p>
       </div>
 
       <main className={styles.main}>
