@@ -11,10 +11,18 @@ import { getCookie } from "@/app/utils/cookie-monster";
 import { publishComment,updateComment,deleteComment,fetchComments, reportComment, fetchImages } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { Bot, CookingPot, FlagIcon, Info, Share2Icon, UploadIcon } from "lucide-react";
+import { Bookmark, Bot, CookingPot, Droplets, EllipsisVertical, FlagIcon, Info, Share2Icon, UploadIcon } from "lucide-react";
 import  veganIcon from "../../public/icons/vegan.svg";
 import vegiOpIcon from "../../public/icons/vegi-op.svg";
 import veganOpIcon  from "../../public/icons/vegan-op.svg";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuCheckboxItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function MealPopup({ meal, onClose, comments, setComments, images, setImages }) {
   // State variables for managing user input, meal details, and UI updates.
@@ -29,6 +37,7 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
   const [ownsImage, setOwnsImage] = useState('');
   const [rating, setRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
 
   function checkUserOwnsComment(commentList) {
@@ -62,6 +71,15 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
         }
       }
       fetchUserData();
+
+      const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("bookmarks"))
+      ?.split("=")[1];
+      if (cookieValue) {
+        const bookmarks = JSON.parse(cookieValue);
+        setIsBookmarked(bookmarks.includes(meal.artikel_id));
+      }
       
       checkUserOwnsComment(comments);
       checkUserOwnsImage(images);
@@ -165,6 +183,40 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
     }
   }
 
+  // close modal on escape
+  useEffect(() => {
+    const handleEscapePress = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEscapePress);
+    return () => {
+      document.removeEventListener('keydown', handleEscapePress);
+    };
+  }, []);
+
+
+  // Handle bookmarking/unbookmarking the meal.
+  async function handleBookmark(e) {
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("bookmarks"))
+      ?.split("=")[1];
+    const bookmarks = cookieValue ? JSON.parse(cookieValue) : [];
+    const bookmarkIndex = bookmarks.indexOf(meal.artikel_id);
+
+    if (bookmarkIndex !== -1) {
+      bookmarks.splice(bookmarkIndex, 1);
+    } else {
+      bookmarks.push(meal.artikel_id);
+    }
+
+    document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
+    setIsBookmarked(!isBookmarked);
+    e.preventDefault();
+    console.log(meal);
+  }
 
   // Handle uploading a meal image.
 async function handleUploadMealImage() {
@@ -263,15 +315,6 @@ async function handleUploadMealImage() {
     return <h2 className={styles.popupTitle} title={meal?.titleAdditivesCombined}>{settings?.intitle ? (meal.titleAdditivesCombined) : meal.titleCombined}</h2>;
   }
 
-  const ContextBox = () => {
-    if(!meal.altOption) return null;
-    return (
-      <div className={styles.contextBox}>
-        <p>Alternative: {meal.altOption} {meal.vegiOption && "(Vegi)"}{meal.veganOption && "(Vegan)"}</p>
-      </div>
-    );
-  };
-
 
   // Render the modal UI for meal details, comments, and actions.
   return (
@@ -295,39 +338,60 @@ async function handleUploadMealImage() {
               alt="dish-image" className={styles.popupImage} 
               width={600} height={500} />
           )}
-          <div className={styles.overlayActionsBar}>
-            <button title="Upload image" onClick={handleUploadMealImage} className={styles.popupActionButton}>{ownsImage ? <CookingPot /> : <UploadIcon />}</button>
-            <button title="Report violation" onClick={() => handleReportRequest(null, images[0]?.image_name)} className={styles.popupActionButton}><FlagIcon /></button>
-            <button title="Copy link" onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal.artikel_id) && toast.success("Link copied to clipboard!")} className={styles.popupActionButton}><Share2Icon /></button>
-            <button onClick={onClose} className={styles.popupActionButton}>×</button>
-          </div>
-        </div>
-        {/* Render meal details, comments, and action buttons */}
-        <div className={styles.popupDetails}>
-          <div className={styles.popupTopbar}>
-            <a href={meal.loc_link} title="Location" className={styles.popupLocation}>
+
+          <div className={styles.overlayLocationBar}>
+              <a href={meal.loc_link} title="Location" className={styles.popupLocation}>
               {meal.dpartname}
               
               {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
               {meal?.vegiOption ? <Image src={vegiOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
               {meal?.veganOption ? <Image src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
               {meal?.menuekennztext == "V+" ? <Image src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
-
             </a>
-            <p>{/* Put something nice here */}</p>
           </div>
-          <MealTitle />
-          <ContextBox />
 
-          {additives.length > 1 && <div><b>Additives:</b> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</div>}
-          
+          <div className={styles.overlayActionsBar}>
+            <DropdownMenu>
+              <DropdownMenuTrigger className={styles.popupActionButton}><EllipsisVertical size={18} /></DropdownMenuTrigger>
+                <DropdownMenuContent className={styles.dropdownMenuContent}>
+                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={(e) => (handleBookmark(e))} ><Bookmark size={18} className={isBookmarked ? styles.bookmarkActive : styles.bookmark} />Bookmark</DropdownMenuItem>
+                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal.artikel_id) && toast.success("Link copied to clipboard!")}><Share2Icon size={18} />Share</DropdownMenuItem>
+                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => (handleUploadMealImage())}>{ownsImage ? <CookingPot size={18} /> : <UploadIcon size={18} />}Submit image</DropdownMenuItem>
+                  <DropdownMenuSeparator className={styles.dropdownMenuSeparator} />
+                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => (handleReportRequest(meal.id))}><FlagIcon size={18} />Report image</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            <button onClick={onClose} className={styles.popupActionButton}>×</button>
+          </div>
+        </div>
+
+        {/* Render meal details, comments, and action buttons */}
+        <div className={styles.popupDetails}>
+          <MealTitle />
+          {meal.altOption &&
+            <div className={styles.altLabel}>Alternative:
+              <p className={styles.altText}>
+                {meal.vegiOption && <><Image src={vegiOpIcon} alt="vegi" width={18} height={18} className={styles.otherIcon}/>{meal.altOption} (Vegi)</> }
+                {meal.veganOption && <><Image src={veganOpIcon} alt="vegan" width={18} height={18} className={styles.otherIcon} />{meal.altOption} (vegan)</>}</p>
+            </div>}
+
           <div className={styles.popupPriceRating}>
             <span title="Price" className={styles.popupPrice}>{meal?.price?.stu || meal?.price?.price}</span>
             <div className={styles.popupRating}>
               <StarRating mealRating={rating} disabled={true} />
-              <span className={styles.ratingCount}>{ratingCount}</span>
+              <span className={styles.ratingCount}>({ratingCount})</span>
             </div>
           </div>
+          <div className={styles.divider} />
+          <div className={styles.additivesSection}>
+            <div className={styles.additivesTitle}>
+              <p>Additives</p>
+              <p className={styles.additivesContext}>Includes vegan options</p>
+            </div>
+            {additives.length > 1 && <div> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</div>}
+          </div>
+        
+          <div className={styles.divider} />
 
           <div className={styles.commentsSection}>
             <h3 className={styles.commentsTitle}>Comments {comments.length}</h3>

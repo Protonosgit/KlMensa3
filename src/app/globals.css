@@ -6,7 +6,6 @@
 :root {
   --bg-color: hsl(0, 0%, 100%);
   --subtitle-color: hsl(0, 0%, 30%);
-  --text-color: hsl(0, 0%, 10%);
   --border-color: #e0e0e0;
   --skeleton-bg: #e2e8f0;
   --bg-infobox: #e9e9ea;
@@ -14,13 +13,20 @@
   --primary-color: #f6c32c;
   --vegan-color: #1ea750;
   --newsbox-bg: #ffb026;
-  --semiop-bg:rgba(255, 255, 255, 0.5)
+  --semiop-bg:rgba(255, 255, 255, 0.5);
+
+
+  --chip-bg: hsl(220, 13%, 94%);
+  --chiptext-color:hsl(220, 12%, 35%);
+  --infotext-color:hsl(220, 10%, 46%);
+  --text-color: hsl(220, 43%, 11%);
+  --contrast-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --contrast-border: none;
 }
 
 [data-theme="dark"] {
   --bg-color: #121212;
   --subtitle-color: #a8afb9;
-  --text-color: #ffffff;
   --border-color: #333333;
   --skeleton-bg: #1f2937;
   --bg-infobox: #333338;
@@ -28,7 +34,15 @@
   --primary-color: #f6c32c;
   --vegan-color: #22c55e;
   --newsbox-bg: #ed9600;
-  --semiop-bg:rgba(255, 255, 255, 0.5)
+  --semiop-bg:rgba(255, 255, 255, 0.5);
+
+
+  --chip-bg: hsl(0, 0%, 18%);
+  --chiptext-color:hsl(0, 0%, 86%);
+  --infotext-color:hsl(224, 5%, 60%);
+  --text-color: white;
+  --contrast-shadow: none;
+  --contrast-border:  1px solid rgba(255, 255, 255, 0.156);
 }
 
 body {

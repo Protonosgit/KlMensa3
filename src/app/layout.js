@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "KL-Mensa - Der Mensaplan der RPTU in Kaiserslautern / Landau",
-  description: "",
+  title: "Mensa-KL - Der Mensaplan der RPTU in Kaiserslautern / Landau",
+  description: "Mensa KL ermöglicht das einsehen des aktuellen Speiseplans der RPTU, sowie das abgeben von Bewertungen und Bildern zu Mahlzeiten",
 };
 
 export default async function RootLayout({ children }) {
@@ -34,6 +34,7 @@ export default async function RootLayout({ children }) {
       <Head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} key="desc" />
+         <meta name="keywords" content="Mensa, RPTU, Kaiserslautern, Technische, Universitaet, Mensaplan, Essen, Studenten, mensa kl, Tu, Uni" />
         <meta property="og:title" content={metadata.title} />
         <meta
           property="og:description"

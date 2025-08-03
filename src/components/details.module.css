@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 10;
     animation: fadein 0.3s ease-in-out;
     overflow: hidden;
 }
@@ -25,11 +25,11 @@
 
   .popupContent {
     background-color: var(--bg-color);
-    border-radius: 8px;
+    border-radius: 0.63rem;
     max-width: 700px;
     width: 90%;
     height: 90%;
-    max-height: 80vh;
+    max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
@@ -48,16 +48,43 @@
   
   .overlayActionsBar {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 15px;
     display: flex;
     gap: 0.5rem;
   }
+  .overlayLocationBar {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .popupLocation {
+    font-size: 0.9rem;
+    font-weight: 600;
+    background-color: var(--bg-infobox);
+    color: --subtitle-color;
+    padding: 0.4rem 0.6rem;
+    border-radius: 2rem;
+    border: var(--contrast-border);
+    display: flex;
+    flex-direction: row;
+    gap: 0.3rem;
+    align-items: center;
+    width: fit-content;
+    box-shadow: var(--contrast-shadow);
+  }
+  
+  .veganIcon {
+    color: var(--vegan-color);
+  }
   
   .popupActionButton {
-    color: black;
-    background-color: var(--semiop-bg);
-    border: none;
+    color: var(--text-color);
+    background-color: var(--bg-infobox);
+    border: var(--contrast-border);
     border-radius: 50%;
     width: 2.5rem;
     height: 2.5rem;
@@ -67,18 +94,48 @@
     justify-content: center;
     align-items: center;
     transition: background-color 0.3s;
+    box-shadow: var(--contrast-shadow);
   }
   .popupActionButton:hover {
     background-color: var(--primary-color);
   }
-  
+  .dropdownMenuContent {
+    z-index: 11;
+    background-color: var(--bg-color);
+    border-radius: 0.63rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .dropdownMenuSeparator {
+    border-bottom: 1px solid var(--border-color);
+  }
+  .dropdownMenuItem {
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 0.43rem;
+  }
+  .dropdownMenuItem:hover {
+    background-color: var(--bg-infobox);
+  }
+
+  .bookmark {
+    color: var(--text-color);
+  }
+
+  .bookmarkActive {
+    fill: red;
+    color: red;
+  }
   .popupDetails {
-    padding: 0.8rem 1rem;
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
   }
   
   .popupTitle {
     font-size: 1.5rem;
-    margin-top: 0.6rem;
+    font-weight: 700;
     color: var(--text-color);
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -91,38 +148,17 @@
     align-items: center;
   }
   
-  .popupLocation {
-    font-size: 0.85rem;
-    background-color: var(--bg-infobox);
-    color: --subtitle-color;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    border: none;
-    font-weight: 600;
-    display: flex;
-    flex-direction: row;
-    gap: 0.3rem;
-    align-items: center;
-    width: fit-content;
-  }
-  
-  .veganIcon {
-    color: var(--vegan-color);
-  }
-  
   .popupPriceRating {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0.8rem 0;
   }
   
   .popupPrice {
-    font-size: 1.3rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: var(--price-color);
   }
-
 
   .starRating {
     display: flex;
@@ -137,13 +173,13 @@
   }
   
   .star {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.3rem;
+    height: 1.3rem;
   }
   
   .starFilled {
-    color: var(--text-color);
-    fill: currentColor;
+    color: var(--primary-color);
+    fill: var(--primary-color);
   }
 
   .starHover {
@@ -152,7 +188,7 @@
   }
   
   .starEmpty {
-    color: var(--info-box-bg);
+    color: var(--border-color);
   }
   
   .ratingCount {
@@ -160,26 +196,64 @@
     font-size: 0.875rem;
     color: var(--subtitle-color);
   }
-  
-  .dietaryTag {
-    background-color: var(--text-color);
-    color: var(--bg-color);
-    margin-right: 0.4rem;
-    margin-top: 0.5rem;
-  }
-  .dietaryTag:hover {
-    background-color: var(--primary-color);
+
+  .divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 0.5rem 0;
   }
 
-  .contextBox {
+  .additivesSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .additivesTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .additivesContext {
     color: var(--subtitle-color);
+    font-weight: 500;
+    font-size: 0.85rem;
+  }
+  
+  .dietaryTag {
+    background-color: var(--chip-bg);
+    color: var(--chiptext-color);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 0.1rem 0.2rem;
+    padding: 0.4rem 0.6rem;
+    border: var(--contrast-border);
+  }
+  .dietaryTag:hover {
+    box-shadow: inset 0 0 0 1px var(--primary-color);
+    background-color: var(--chip-bg);
+  }
+
+  .altLabel {
+    color: var(--infotext-color);
+    font-weight: 600;
+    font-size: 0.9rem;
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
   }
+  .altText {
+    color: var(--vegan-color);
+    display: flex;
+    align-items: start;
+    justify-content: flex-start;
+    gap: 0.3rem;
+  }
   
   .commentsSection {
-    padding-top: 1rem 1rem;
     display: flex;
     flex-direction: column;
   }
@@ -195,7 +269,7 @@
   }
   .commentsTitle {
     font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    font-weight: 600;
     color: var(--text-color);
   }
   .commentText {
@@ -205,8 +279,6 @@
     hyphens: auto;
   }
   .ownComent {
-    margin-bottom: 1rem;
-    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 1rem;
     display: flex;
@@ -223,10 +295,10 @@
     width: 100%;
     padding: 0.5rem;
     border: 1px solid var(--border-color);
-    background-color: var(--bg-infobox);
+    background-color: transparent;
     border-radius: 4px;
-    max-height: 100px;
-    min-height: 40px;
+    max-height: 120px;
+    min-height: 60px;
   }
   .commentCounter {
     font-size: 0.8rem;
@@ -253,22 +325,22 @@
 
   /* Responsive Design */
   @media (max-width: 768px) {
-    .popupContent {
-      width: 95%;
-    }
     .popupTitle {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
     }
     .popupLocation {
       font-size: 0.9rem;
     }
     .popupPrice {
-      font-size: 1.2rem;
+      font-size: 1.6rem;
     }
     .popupContent {
       width: 100%;
       max-height: 100vh;
       height: 100%;
+  }
+  .popupDetails {
+    padding: 0.8rem 0.8rem;
   }
   
   }

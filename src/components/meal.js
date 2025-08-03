@@ -26,16 +26,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     if (settingsCookie) {
       setSettings(JSON.parse(settingsCookie));
     }
-
-    const cookieValue = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("bookmarks"))
-      ?.split("=")[1];
-    if (cookieValue) {
-      const bookmarks = JSON.parse(cookieValue);
-      setIsBookmarked(bookmarks.includes(meal.artikel_id));
-    }
-
+    
     // Calculate the average rating of the meal.
     const sumOfRatings = comments.reduce((acc, curr) => acc + curr.rating, 0);
     const fullSum = sumOfRatings + (meal.rating * meal.rating_amt || 0);
@@ -77,26 +68,6 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     );
   };
 
-  // Handle bookmarking/unbookmarking the meal.
-  async function handleBookmark(e) {
-    const cookieValue = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("bookmarks"))
-      ?.split("=")[1];
-    const bookmarks = cookieValue ? JSON.parse(cookieValue) : [];
-    const bookmarkIndex = bookmarks.indexOf(meal.artikel_id);
-
-    if (bookmarkIndex !== -1) {
-      bookmarks.splice(bookmarkIndex, 1);
-    } else {
-      bookmarks.push(meal.artikel_id);
-    }
-
-    document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
-    setIsBookmarked(!isBookmarked);
-    e.stopPropagation();
-    console.log(meal);
-  }
 
   // Render the meal card and popup.
   return (
@@ -106,10 +77,6 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
         className={styles.mealCard}
         onClick={() => setSelectedMeal(meal)}
       >
-        {/* Bookmark button */}
-        <div className={styles.bookmarkContainer} title="Bookmark" onClick={handleBookmark}>
-          <Bookmark size={14} className={styles.bookmark + (isBookmarked ? ' ' + styles.bookmarkActive : '')} />
-        </div>
 
         {/* Meal image */}
         {(images && images.length > 0) ? (
@@ -128,21 +95,18 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
             width={300} height={200} />
         )}
 
+        <p className={styles.mealLocation}>
+          {meal?.dpartname}
+
+          {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
+          {meal?.vegiOption ? <Image title="Vegetarian option" src={vegiOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+          {meal?.veganOption ? <Image title="Vegan option" src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+          {meal?.menuekennztext == "V+" ? <Image title="Vegan" src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+        </p>
+
         {/* Meal details */}
         <div className={styles.mealInfo}>
-          <div className={styles.mealContextLabels}>
-            <p className={styles.mealLocation}>
-              {meal?.dpartname}
-
-              {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
-              {meal?.vegiOption ? <Image title="Vegetarian option" src={vegiOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
-              {meal?.veganOption ? <Image title="Vegan option" src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
-              {meal?.menuekennztext == "V+" ? <Image title="Vegan" src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
-            </p>
-            <p className={styles.mealIcons}>
-              {/* maybe put icons here someday */}
-            </p>
-          </div>
+          <div className={styles.mealContextLabels}></div>
           <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined + (". " + meal?.frei1 + meal?.frei2))}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>{(meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
