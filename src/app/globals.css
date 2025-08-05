@@ -12,8 +12,8 @@
   --price-color: #2563eb;
   --primary-color: #f6c32c;
   --vegan-color: #1ea750;
-  --newsbox-bg: #ffb026;
-  --semiop-bg:rgba(255, 255, 255, 0.5);
+  --newsbox-accent: #ffc25a;
+  --newsbox-bg: #ffdda3;
 
 
   --chip-bg: hsl(220, 13%, 94%);
@@ -33,8 +33,8 @@
   --price-color: #3b82f6;
   --primary-color: #f6c32c;
   --vegan-color: #22c55e;
-  --newsbox-bg: #ed9600;
-  --semiop-bg:rgba(255, 255, 255, 0.5);
+  --newsbox-accent: #ffa200;
+  --newsbox-bg: #df8d00;
 
 
   --chip-bg: hsl(0, 0%, 18%);

@@ -60,6 +60,7 @@ export default function FilterMenu() {
 
 
   useEffect(() => {
+      
     // Load filter values from cookies and update state variables
     function getArrayFromCookie(name) {
       const cookieValue = document.cookie
@@ -157,7 +158,7 @@ export default function FilterMenu() {
   return (
     <Popover className={styles.filterMenu}>
       <PopoverTrigger title="Filter" className={styles.filterButton}>
-        <Filter />
+        <Filter className={styles.filterIcon} />
       </PopoverTrigger>
       <PopoverContent className={styles.filterContent}>
         <div className={styles.filterContainer}>

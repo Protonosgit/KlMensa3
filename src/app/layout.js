@@ -30,7 +30,7 @@ export default async function RootLayout({ children }) {
   }
 
   return (
-    <html lang="en" data-theme={settings?.dark ? "dark" : "light"}>
+    <html lang="de" data-theme={settings?.dark ? "dark" : "light"}>
       <Head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} key="desc" />

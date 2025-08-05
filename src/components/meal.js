@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Star, Bookmark, Bot } from "lucide-react";
+import { Star, Bot } from "lucide-react";
 import styles from "../app/page.module.css";
 import MealPopup from "./detailsModal";
 import { useEffect, useState } from "react";
@@ -89,7 +89,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
             width={300} height={200} />
         ) : (
           <Image
-            priority={false} loading={"lazy"}
+            priority
             src={meal.image ? "https://www.mensa-kl.de/mimg/" + meal?.image : "/plate_placeholder.png"}
             alt="dish-image" title={meal.atextohnezsz1} className={styles.mealImage}
             width={300} height={200} />
@@ -107,7 +107,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
         {/* Meal details */}
         <div className={styles.mealInfo}>
           <div className={styles.mealContextLabels}></div>
-          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined + (". " + meal?.frei1 + meal?.frei2))}</h4>
+          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined)}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>{(meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             {renderStarRating()}

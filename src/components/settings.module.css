@@ -23,17 +23,21 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: transparent;
-  border: 1px solid var(--border-color);
-  padding: 8px 12px;
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
   }
-
-  .settingsButton:hover {
-    background-color: var(--primary-color);
-  }
+.settingsButton:hover .filterIcon {
+  transform: rotate(30deg);
+  transition: transform 0.5s ease-in-out;
+}
+.settingsButton .filterIcon {
+  transform: rotate(0deg);
+  transition: transform 0.4s ease-in-out;
+}
 
   .popupOverlay {
     position: fixed;
@@ -129,11 +133,16 @@
   .popupInputContainer {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 0.5rem;
     width: 100%;
   }
-
+  .popupUserEmail {
+    font-size: 0.9rem;
+    color: var(--subtitle-color);
+    align-items: center;
+    display: flex;
+    gap: 0.2rem;
+  }
   .popupSelect {
     padding: 0.5rem;
     border: 1px solid var(--border-color);
@@ -143,42 +152,44 @@
     background-color: var(--bg-infobox);
   }
 
+  .popupLabel {
+    font-size: 0.9rem;
+    color: var(--subtitle-color);
+    align-items: center;
+    display: flex;
+    gap: 0.2rem;
+  }
+
   .popupInput {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--primary-foreground);
-    background-color: var(--bg-infobox);
+    background-color: transparent;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   }
   .popupButtonContainer {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     width: 100%;
+    margin-top: 1rem;
   }
 
 .popupButton {
-  margin-top: 1rem;
   margin-left: auto;
   padding: 0.5rem 1rem;
   font-size: 1rem;
   width: 100%;
   cursor: pointer;
   border-radius: 0.5rem;
-  border: 1px solid var(--border-color);
-  border-width: 2px;
-  transition: background-color 0.3s;
+  background-color: var(--text-color);
+  color: var(--bg-color);
 }
-
-  .popupButton:hover {
-    background-color: var(--bg-infobox);
-  }
-
-  .popupButton:active {
-    background-color: var(--primary-color);
-  }
 
   .seperator {
     width: 100%;
@@ -200,7 +211,8 @@
   .popupContent {
     border-radius: 8px;
     height: 60vh;
-    width: 25vw;
+    width: 20vw;
+    min-width: 550px;
     overflow-x: hidden;
     overflow-y: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
