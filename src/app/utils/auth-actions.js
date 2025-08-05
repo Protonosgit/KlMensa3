@@ -20,10 +20,13 @@ export async function login(useremail,userpassword) {
 export async function signup(useremail,userpassword) {
   if(userpassword.length < 6) return {error: "Password too short!"}
   if (!emailRegex.test(useremail)) return {error: "Invalid email format!"}
-  if(useremail.substring(useremail.length-8) !== "@rptu.de") return {error: "Only rptu.de emails allowed!"}
+  if(useremail.substring(useremail.length-8) !== "@rptu.de" && useremail.substring(useremail.length-12) !== "@edu.rptu.de") return {error: "Only rptu.de emails allowed!"}
+
+  const username = useremail.substring(0,useremail.indexOf("@"));
 
   const supabase = await createClient()
-  const { error,data } = await supabase.auth.signUp({email: useremail, password: userpassword})
+  const { error,data } = await supabase.auth.signUp({email: useremail, password: userpassword, options: {data: {username: username}}});
+
   if(error?.code === 'validation_failed') {
     return {error: "Email format not accepted"}
   } else if(error?.code === 'user_already_exists') {

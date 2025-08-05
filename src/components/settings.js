@@ -1,14 +1,14 @@
 "use client";
 import styles from "./settings.module.css";
 import { useEffect, useRef, useState } from "react";
-import { Settings, X } from "lucide-react";
+import { Cat, CatIcon, Settings, X } from "lucide-react";
 import { toast, Toaster } from 'react-hot-toast';
 import { login,logout, signup } from "@/app/utils/auth-actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
 import Switch from "react-switch";
 import { createClient } from "@/app/utils/supabase/client";
-
+import { Mail, Lock } from "lucide-react";
 
 export default function SettingsModal({}) {
   // State variables for managing modal visibility, settings, and user authentication.
@@ -111,7 +111,7 @@ export default function SettingsModal({}) {
     <>
       {/* Button to open the settings modal */}
       <button className={styles.settingsButton} title="Settings and Account" onClick={() => setModalVisible(true)}>
-        <Settings />
+        <Settings className={styles.filterIcon} />
       </button>
       {modalVisible && (
         <div className={styles.popupOverlay} onClick={() => setModalVisible(false)}>
@@ -179,24 +179,38 @@ export default function SettingsModal({}) {
                           </select>
                         </div>
 
+                        <div className={styles.popupOption}>
+                          <span style={{width: "100%", textAlign: "left"}}>Language (disabled): </span>
+                          <select className={styles.popupSelect} disabled value={settings.lang} onChange={(e) => handleSettingChange("lang", e.target.value)} >
+                          <option value="eng">English</option>
+                          <option value="ger">German</option>
+                          </select>
+                        </div>
+
                         </TabsContent>
 
                         <TabsContent value="identity">
                         {/* Render identity management options */}
                 <div className={styles.popupOption}>
                   {user ? (
-                    <button className={styles.popupButton} onClick={() => handleLogout()}>Logout</button>
+                    <div className={styles.popupUserContainer}>
+                      <p className={styles.popupUserEmail}>{user.email}{user.email.includes("zoe.") &&<CatIcon />}</p>
+                      <button className={styles.popupButton} onClick={() => handleLogout()}>Logout</button>
+                    </div>
                   ) : (
                     <div className={styles.popupUserContainer}>
                       {/* Login and signup inputs */}
                       <div className={styles.popupInputContainer}>
+                        <label className={styles.popupLabel}><Mail size={16} />Email</label>
                         <input type="email" placeholder="Email" value={usermail} onChange={(e) => setUsermail(e.target.value)} className={styles.popupInput} />
+                        <label className={styles.popupLabel}><Lock size={16} />Password</label>
                         <input type="password" placeholder="Password" value={userpass} onChange={(e) => setUserpass(e.target.value)} className={styles.popupInput} />
                       </div>
                       <div className={styles.popupButtonContainer}>
-                        <button className={styles.popupButton} onClick={() => handleLogin()}>Login</button>
+                        <button className={styles.popupButton} onClick={() => handleLogin()}>Login</button><p>or</p>
                         <button className={styles.popupButton} onClick={() => handleSignup()}>Signup</button>
                       </div>
+                        <p>Please contact an admin if you forgot your password!</p>
                     </div>
                   )}
                 </div>

@@ -184,7 +184,6 @@
   .mealTitle {
     font-size: 1rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
     flex-grow: 1;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -234,6 +233,7 @@
     padding: 0.5rem;
     display: flex;
     margin: 1rem 0;
+    border-left: 6px solid var(--newsbox-accent);
     background-color: var(--newsbox-bg);
     cursor: pointer;
   }
@@ -242,7 +242,7 @@
     flex-direction: row;
     gap: 0.5rem;
     font-size: 1rem;
-    color: var(--bg-color);
+    color: var(--text-color);
   }
   
   .footer {

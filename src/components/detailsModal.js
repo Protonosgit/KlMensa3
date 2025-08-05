@@ -11,7 +11,7 @@ import { getCookie } from "@/app/utils/cookie-monster";
 import { publishComment,updateComment,deleteComment,fetchComments, reportComment, fetchImages } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { Bookmark, Bot, CookingPot, Droplets, EllipsisVertical, FlagIcon, Info, Share2Icon, UploadIcon } from "lucide-react";
+import { Bookmark, Bot, CookingPot, EllipsisVertical, FlagIcon, InfoIcon, Share2Icon, UploadIcon } from "lucide-react";
 import  veganIcon from "../../public/icons/vegan.svg";
 import vegiOpIcon from "../../public/icons/vegi-op.svg";
 import veganOpIcon  from "../../public/icons/vegan-op.svg";
@@ -20,7 +20,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
@@ -60,8 +59,9 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
       setAdditives(extractAdditives(meal.zsnumnamen));
       const settingsCookie = getCookie('settings') || null;
       if(settingsCookie) {
-        setSettings(JSON.parse(settingsCookie));
+        //setSettings(JSON.parse(settingsCookie));
       }
+
       // fetch userdata
       async function fetchUserData() {
         const supabase = createClient();
@@ -343,10 +343,10 @@ async function handleUploadMealImage() {
               <a href={meal.loc_link} title="Location" className={styles.popupLocation}>
               {meal.dpartname}
               
-              {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
-              {meal?.vegiOption ? <Image src={vegiOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
-              {meal?.veganOption ? <Image src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
-              {meal?.menuekennztext == "V+" ? <Image src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+              {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
+              {meal?.vegiOption ? <Image src={vegiOpIcon} alt="vegan-icon" width={20} height={20} className={styles.otherIcon} /> : ""}
+              {meal?.veganOption ? <Image src={veganOpIcon} alt="vegan-icon" width={20} height={20} className={styles.otherIcon} /> : ""}
+              {meal?.menuekennztext == "V+" ? <Image src={veganIcon} alt="vegan-icon" width={20} height={20} className={styles.otherIcon} /> : ""}
             </a>
           </div>
 
@@ -382,6 +382,7 @@ async function handleUploadMealImage() {
               <span className={styles.ratingCount}>({ratingCount})</span>
             </div>
           </div>
+
           <div className={styles.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.additivesTitle}>
@@ -391,7 +392,15 @@ async function handleUploadMealImage() {
             {additives.length > 1 && <div> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</div>}
           </div>
         
-          <div className={styles.divider} />
+
+          {meal?.frei1 &&<>
+            <div className={styles.divider} />
+            <div className={styles.altLabel}>
+            <InfoIcon size={18} className={styles.otherIcon} />
+            <p>{meal.frei1+" "+meal.frei2}</p>
+            </div></>}
+
+         <div className={styles.divider} />
 
           <div className={styles.commentsSection}>
             <h3 className={styles.commentsTitle}>Comments {comments.length}</h3>
