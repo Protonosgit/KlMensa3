@@ -1,7 +1,7 @@
 import { extractAdditiveCodes } from "./additives";
 
 
-function applyClientFilters(locCookie, protCookie, adiCookie, meals) {
+function applyFilters(locCookie, protCookie, adiCookie, meals) {
   if(!locCookie || !protCookie || !adiCookie) return meals;
 
   // Filter the meals by location
@@ -25,4 +25,4 @@ function applyClientFilters(locCookie, protCookie, adiCookie, meals) {
 
 
 
-export { applyClientFilters };
+export { applyFilters };

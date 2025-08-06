@@ -23,7 +23,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export default function MealPopup({ meal, onClose, comments, setComments, images, setImages }) {
+export default function MealPopup({ meal, onClose, comments, images }) {
+  console.log(meal);
   // State variables for managing user input, meal details, and UI updates.
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState("");
@@ -32,7 +33,6 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
   const [settings, setSettings] = useState();
   const [commentId, setCommentId] = useState(null);
   const [actionPending, setActionPending] = useState(false);
-  const [datachanged, setDataChanged] = useState(0);
   const [ownsImage, setOwnsImage] = useState('');
   const [rating, setRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
@@ -93,41 +93,7 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
       //console.log(meal);
     }, [meal]);
 
-    // update neccessary fields when image or comment is updated
-    useEffect(() => {
-      if(datachanged === 0) return;
-      // check if user has posted a comment and populate form
-      async function fetchMealComments() {
-        const newComments = await fetchComments([meal?.artikel_id]);
-        if (newComments && newComments.length > 0) {
-          setComments(prevComments => {
-            // Remove any comment with the same id as in newComments
-            const newIds = newComments.map(c => c.id);
-            const filtered = prevComments.filter(c => !newIds.includes(c.id));
-            // Append newComments
-            return [...filtered, ...newComments];
-          });
-        } else {
-          setComments([]);
-        }
-        checkUserOwnsComment(newComments);
-        // check if user has uploaded an image and toggle button
-        const newImages = await fetchImages([meal?.artikel_id]);
-        if (newImages && newImages.length > 0) {
-          setImages(prevImages => {
-            // Remove any comment with the same id as in newComments
-            const newIds = newImages.map(c => c.id);
-            const filtered = prevImages.filter(c => !newIds.includes(c.id));
-            // Append newComments
-            return [...filtered, ...newImages];
-          });
-        } else {
-          setImages([]);
-        }
-        checkUserOwnsImage(newImages);
-      }
-      fetchMealComments();
-    }, [datachanged]);
+
     
 
 
@@ -143,7 +109,6 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
         toast.success("Comment updated!");
       }
       setActionPending(false);
-      setDataChanged(prev => prev+1);
       return;
     }
 
@@ -155,7 +120,6 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
       toast.success("Comment published!");
     }
     setActionPending(false);
-    setDataChanged(prev => prev+1);
   }
 
   // Handle deleting a comment.
@@ -171,7 +135,6 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
       setCommentId(null);
     }
     setActionPending(false);
-    setDataChanged(prev => prev+1);
   }
 
   // Handle reporting a comment or image.
@@ -215,7 +178,6 @@ export default function MealPopup({ meal, onClose, comments, setComments, images
     document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
     setIsBookmarked(!isBookmarked);
     e.preventDefault();
-    console.log(meal);
   }
 
   // Handle uploading a meal image.
@@ -233,7 +195,6 @@ async function handleUploadMealImage() {
     if (confirm("You already have an image for this meal. Do you want to delete it?")) {
       await supabase.storage.from("meal-images").remove([ownsImage]);
       toast.success("Image deleted!");
-      setDataChanged((prev) => prev + 1);
     }
     return;
   }
@@ -274,7 +235,7 @@ async function handleUploadMealImage() {
               toast.error( "Error while uploading, maybe you already posted an image!");
             } else {
               toast.success("Image uploaded successfully!");
-              setDataChanged((prev) => prev + 1);
+
             }
           }, "image/webp", 0.8); // 0.8 is quality/compression
       };
@@ -334,20 +295,20 @@ async function handleUploadMealImage() {
             <Image 
               priority={false} 
               loading={"lazy"} 
-              src={meal.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"}  title={meal.atextohnezsz1}
+              src={meal?.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"}  title={meal?.atextohnezsz1}
               alt="dish-image" className={styles.popupImage} 
               width={600} height={500} />
           )}
 
           <div className={styles.overlayLocationBar}>
-              <a href={meal.loc_link} title="Location" className={styles.popupLocation}>
+              <p title="Location" className={styles.popupLocation}>
               {meal.dpartname}
               
               {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
               {meal?.vegiOption ? <Image src={vegiOpIcon} alt="vegan-icon" width={20} height={20} className={styles.otherIcon} /> : ""}
               {meal?.veganOption ? <Image src={veganOpIcon} alt="vegan-icon" width={20} height={20} className={styles.otherIcon} /> : ""}
               {meal?.menuekennztext == "V+" ? <Image src={veganIcon} alt="vegan-icon" width={20} height={20} className={styles.otherIcon} /> : ""}
-            </a>
+            </p>
           </div>
 
           <div className={styles.overlayActionsBar}>

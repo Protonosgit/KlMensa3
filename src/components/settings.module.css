@@ -189,6 +189,11 @@
   border-radius: 0.5rem;
   background-color: var(--text-color);
   color: var(--bg-color);
+  transition: background-color 0.3s;
+}
+
+.popupButton:hover {
+  background-color: var(--subtitle-color);
 }
 
   .seperator {
