@@ -225,7 +225,7 @@
     color: var(--chiptext-color);
     font-size: 0.75rem;
     font-weight: 600;
-    margin: 0.1rem 0.2rem;
+    margin: 0.15rem 0.15rem;
     padding: 0.4rem 0.6rem;
     border: var(--contrast-border);
   }
@@ -339,5 +339,10 @@
   .popupDetails {
     padding: 0.8rem 0.8rem;
   }
-  
+  .overlayLocationBar {
+    position: fixed;
+  }
+  .overlayActionsBar {
+    position: fixed;
+  }
   }

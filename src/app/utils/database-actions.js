@@ -1,6 +1,7 @@
 "use server";
 import { createClient } from "./supabase/server";
 import { InferenceClient } from '@huggingface/inference';
+import { revalidatePath } from "next/cache";
 const huggingITF = new InferenceClient(process.env.HUGGING_FACE_TOKEN);
 
 // Fetch images associated with the given article IDs using a Supabase RPC function.
@@ -45,6 +46,7 @@ export async function publishComment(articleId,rating,comment) {
         updated_at: new Date().toISOString(),
     }).select('id');
     if(error) return {error: "Publishing comment failed", data: null}
+    revalidatePath('/');
     return {error: null, data: data}
 }
 
@@ -58,6 +60,7 @@ export async function updateComment(id,rating,comment) {
         updated_at: new Date().toISOString(),
     }).eq("id", id);
     if(error) return {error: "Updating comment failed", data: null}
+    revalidatePath('/');
     return {error: null, data: data}
 }
 
@@ -66,6 +69,7 @@ export async function deleteComment(id) {
     const supabase = await createClient(); 
     const { data, error } = await supabase.from("meal_comments").delete().eq("id", id);
     if(error) return {error: "Deleting comment failed", data: null}
+    revalidatePath('/');
     return {error: null, data: data}
 }
 
@@ -77,5 +81,6 @@ export async function reportComment(commentId, imageId) {
         image_id: imageId
     });
     if(error) return {error: "Reporting failed", data: null}
+    revalidatePath('/');
     return {error: null, data: data}
 }

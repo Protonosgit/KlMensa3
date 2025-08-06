@@ -202,15 +202,14 @@ export default function SettingsModal({}) {
                       {/* Login and signup inputs */}
                       <div className={styles.popupInputContainer}>
                         <label className={styles.popupLabel}><Mail size={16} />Email</label>
-                        <input type="email" placeholder="Email" value={usermail} onChange={(e) => setUsermail(e.target.value)} className={styles.popupInput} />
+                        <input type="email" placeholder="example@rptu.de" maxLength={60} value={usermail} onChange={(e) => setUsermail(e.target.value)} className={styles.popupInput} />
                         <label className={styles.popupLabel}><Lock size={16} />Password</label>
-                        <input type="password" placeholder="Password" value={userpass} onChange={(e) => setUserpass(e.target.value)} className={styles.popupInput} />
+                        <input type="password" placeholder="Password" maxLength={25} value={userpass} onChange={(e) => setUserpass(e.target.value)} className={styles.popupInput} />
                       </div>
                       <div className={styles.popupButtonContainer}>
                         <button className={styles.popupButton} onClick={() => handleLogin()}>Login</button><p>or</p>
                         <button className={styles.popupButton} onClick={() => handleSignup()}>Signup</button>
                       </div>
-                        <p>Please contact an admin if you forgot your password!</p>
                     </div>
                   )}
                 </div>

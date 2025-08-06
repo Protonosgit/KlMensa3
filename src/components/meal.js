@@ -10,9 +10,9 @@ import vegiOpIcon from "../../public/icons/vegi-op.svg";
 import veganOpIcon  from "../../public/icons/vegan-op.svg";
 
 export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
+
   // State variables
   const [selectedMeal, setSelectedMeal] = useState(null);
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [settings, setSettings] = useState();
   const [images, setImages] = useState(mealImages || []);
   const [comments, setComments] = useState(mealComments || []);
@@ -34,12 +34,6 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     setRating(fullSum / fullCount);
     setRatingCount(fullCount);
 
-    // DISABLED because it doesn't work and should be in a component not rendered more than once during load!!
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchArtId = urlParams.get('artid');
-    if (searchArtId && searchArtId === meal.artikel_id.toString() && !selectedMeal) {
-      // setSelectedMeal(meal);
-    }
   }, [meal]);
 
   useEffect(() => {
@@ -68,6 +62,28 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     );
   };
 
+  
+  const openModal = () => {
+    if(selectedMeal) return;
+    window.history.pushState(null, '', window.location.href+"?artid="+meal.artikel_id);
+    setSelectedMeal(meal);
+  };
+
+  // Detect back gesture on Android and maybe ios and close modal if open
+  useEffect(() => {
+    const handlePopState = () => {
+      if (selectedMeal) {
+        setSelectedMeal(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [selectedMeal]);
+
 
   // Render the meal card and popup.
   return (
@@ -75,7 +91,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
       <div
         key={mealIndex}
         className={styles.mealCard}
-        onClick={() => setSelectedMeal(meal)}
+        onClick={() => openModal()}
       >
 
         {/* Meal image */}
@@ -114,10 +130,9 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
           </div>
         </div>
       </div>
-
       {/* Meal popup */}
       {selectedMeal && (
-        <MealPopup meal={selectedMeal} comments={comments} setComments={setComments} images={images} setImages={setImages} onClose={() => setSelectedMeal(null)} />
+        <MealPopup meal={meal} comments={mealComments} images={mealImages} onClose={() => setSelectedMeal(null)} />
       )}
     </>
   );
