@@ -25,14 +25,15 @@
     "heic2any": "^0.0.4",
     "lucide-react": "^0.451.0",
     "murmurhash": "^2.0.1",
-    "next": "^15.3.5",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "next": "^15.4.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "react-hot-toast": "^2.4.1",
     "react-switch": "^7.1.0",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
-    "xml2js": "^0.6.2"
+    "xml2js": "^0.6.2",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "postcss": "^8",

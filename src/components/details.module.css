@@ -139,6 +139,17 @@
     hyphens: auto;
   }
 
+  .popupTitleBullets {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-color);
+    list-style-type: disc;
+    padding-left: 1.1rem;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
   .popupTopbar {
     display: flex;
     justify-content: space-between;
