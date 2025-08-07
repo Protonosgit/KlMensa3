@@ -42,3 +42,7 @@ export async function logout() {
     const { error } = await supabase.auth.signOut();
     return error
 }
+
+export async function revalidatePage() {
+  revalidatePath('/');
+}

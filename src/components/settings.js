@@ -15,13 +15,12 @@ export default function SettingsModal({}) {
   const [modalVisible, setModalVisible] = useState(false);
     const [settings, setSettings] = useState({
     dark: false,
-    by2lay: false,
     intitle: false,
     shortitle: false,
     nolimit: false,
     threebar: false,
     pricecat: "stu",
-    gridStructure: 0,
+    layout: "list",
     language: 'en',
   });
   const [user, setUser] = useState();
@@ -66,7 +65,7 @@ export default function SettingsModal({}) {
     if (key === "dark") {
       document.documentElement.setAttribute('data-theme', value ? "dark" : "light");
     }
-    if (key === "by2lay" || key === "nolimit" || key === "shortitle" || key === "pricecat") {
+    if (key === "by2lay" || key === "nolimit" || key === "shortitle" || key === "pricecat" || key === "layout") {
       window.location.reload();
     }
   };
@@ -160,13 +159,6 @@ export default function SettingsModal({}) {
                           <p className={styles.popupOptionDescription}>Only show a shortened version of the meal title</p>
                         </label>
                         </div>
-                        <div className={styles.popupOption}>
-                          <Switch onChange={(e) => handleSettingChange("by2lay", e)} checked={settings.by2lay} onColor="#fbbf24"  />
-                        <label className={styles.popupOptionLabel}>
-                          <span>New mobile layout</span>
-                          <p className={styles.popupOptionDescription}>Show two instead of one meal in the same row</p>
-                        </label>
-                        </div>
 
                         <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("nolimit", e)} checked={settings.nolimit} onColor="#fbbf24"  />
@@ -178,6 +170,14 @@ export default function SettingsModal({}) {
 
                         <div className={styles.seperator}></div>
 
+                        <div className={styles.popupOption}>
+                          <span style={{width: "100%", textAlign: "left"}}>Mobile layout: </span>
+                          <select className={styles.popupSelect} value={settings.layout} onChange={(e) => handleSettingChange("layout", e.target.value)} >
+                          <option value="list">List</option>
+                          <option value="grid">Grid</option>
+                          <option value="widelist">Legacy list</option>
+                          </select>
+                        </div>
 
                         <div className={styles.popupOption}>
                           <span style={{width: "100%", textAlign: "left"}}>Price category: </span>

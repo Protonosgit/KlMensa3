@@ -66,8 +66,7 @@ export default async function Schedule() {
             </div>
             <div
               className={`${styles.mealGrid} ${
-                settings?.by2lay ? styles.mealGridMobileNew : ""
-              }`}
+                settings?.layout === "grid" && styles.mealGridMobileNew}`}
             >
               {applyFilters(
                 locationFilter,

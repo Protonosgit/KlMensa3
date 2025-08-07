@@ -7,7 +7,8 @@ import {
 import styles from "./filter.module.css";
 import { Filter, CookingPot } from "lucide-react";
 import { useEffect, useState } from "react";
-
+import { revalidatePage } from "@/app/utils/auth-actions";
+import { set } from "date-fns";
 // Define clear names and codes for meal locations, additives, and proteins.
 const mealLocationClearname = [
   { name: "Ausgabe 1", codes: [1] },
@@ -57,10 +58,10 @@ export default function FilterMenu() {
   const [mealProteins, setMealProteins] = useState([]);
   const [mealAdditives, setMealAdditives] = useState([]);
   const [filterActive, setFilterActive] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
-
-  useEffect(() => {
-      
+  function loadFilters() {
+    setFilterActive(false);
     // Load filter values from cookies and update state variables
     function getArrayFromCookie(name) {
       const cookieValue = document.cookie
@@ -70,7 +71,6 @@ export default function FilterMenu() {
       
       return cookieValue ? JSON.parse(cookieValue) : null;
     }
-
     // Load location filter from cookies.
     if(getArrayFromCookie("location") !== null) {
       setMealLocations(getArrayFromCookie("location"));
@@ -86,6 +86,12 @@ export default function FilterMenu() {
       setMealProteins(getArrayFromCookie("protein"))
       setFilterActive(true);
     }
+    setRefreshing(false);
+  }
+
+
+  useEffect(() => {
+    loadFilters();
   }, []);
 
 
@@ -130,6 +136,7 @@ export default function FilterMenu() {
 
   // Store selected filters in cookies and reload the page.
   function storeFilter() {
+    setRefreshing(true);
     // store cookies with filters
     const locArray = JSON.stringify(mealLocations);
     document.cookie = `location=${locArray}; path=/`;
@@ -140,18 +147,20 @@ export default function FilterMenu() {
     const addArray = JSON.stringify(mealAdditives);
     document.cookie = `additive=${addArray}; path=/`;
 
-
-    window.location.reload();
+    loadFilters();
+    revalidatePage();
   }
 
   // Reset all filters by clearing cookies and reload the page.
   function resetFilter() {
+    setRefreshing(true);
     // delete all cookies
     document.cookie = "location=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     document.cookie = "protein=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     document.cookie = "additive=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 
-    window.location.reload();
+    loadFilters();
+    revalidatePage();
   }
 
   // Render the filter menu UI.
@@ -230,8 +239,8 @@ export default function FilterMenu() {
         </div>
         {/* Render action buttons */}
         <div className={styles.buttonBar}>
-          <button title="Apply filter" onClick={storeFilter} className={styles.applyButton}>Apply</button>
-          <button title="Reset filter" onClick={resetFilter} className={styles.resetButton} style={{display: filterActive ? "block" : "none"}}><CookingPot size={20} /></button>
+          <button title="Apply filter" onClick={storeFilter} disabled={refreshing} className={styles.applyButton}>{refreshing ? <Spinner /> : "Apply"}</button>
+          <button title="Reset filter" onClick={resetFilter} disabled={refreshing} className={styles.resetButton} style={{display: filterActive ? "block" : "none"}}><CookingPot size={20} /></button>
         </div>
         <p>We use cookies to store your preferences.</p>
       </PopoverContent>

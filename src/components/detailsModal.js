@@ -25,7 +25,7 @@ import {
 import { useModalStore } from '@/app/utils/contextStore';
 
 export default function MealPopup({ mealsFull, commentsFull, imagesFull }) {
-  const { isOpen, meal, comments, images, closeModal } = useModalStore();
+  const { isOpen, meal, comments, images,openModal, closeModal } = useModalStore();
   // State variables for managing user input, meal details, and UI updates.
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState("");
@@ -123,6 +123,23 @@ export default function MealPopup({ mealsFull, commentsFull, imagesFull }) {
       setRatingCount(fullCount);
 
     }, [meal, comments, images, mealsFull, commentsFull, imagesFull]);
+
+    useEffect(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const mealId = urlParams.get('artid');
+      if(mealId) {
+        const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m.artikel_id === mealId);
+        const foundcomments = commentsFull?.filter(m => m.article_id === mealId);
+        const foundimages = imagesFull?.filter(m => m.article_id === mealId);
+        if(!foundmeal || !foundcomments || !foundimages) {
+          alert('Meal has expired!');
+          window.location.replace('/');
+          return;
+        }
+        openModal(foundmeal, foundcomments, foundimages);
+      }
+    }, [])
+    
 
 
 

@@ -343,6 +343,7 @@
       font-size: 1.6rem;
     }
     .popupContent {
+      border-radius: 0;
       width: 100%;
       max-height: 100vh;
       height: 100%;
