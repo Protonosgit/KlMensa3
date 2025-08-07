@@ -306,4 +306,19 @@
       .headerButtonSection {
         justify-content: flex-end;
       }
+
+      .mealCardListV {
+        display: flex;
+        flex-direction: row;
+      }
+      .mealTitleListV {
+        font-size: 0.8rem;
+        width: 55vw;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+      }
+      .mealImageListV {
+        border-radius: 0.5rem 0 0 0.5rem;
+      }
     }

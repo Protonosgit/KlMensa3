@@ -73,7 +73,7 @@ export default function Meal({ meal, mealIndex, images, comments }) {
     <>
       <div
         key={mealIndex}
-        className={styles.mealCard}
+        className={`${settings?.layout === "widelist" && styles.mealCardListV} ${styles.mealCard}`}
         onClick={() => requestOpenModal()}
       >
 
@@ -84,13 +84,14 @@ export default function Meal({ meal, mealIndex, images, comments }) {
             blurDataURL="/plate_placeholder.png"
             priority={false} loading={"lazy"}
             src={"https://gbxuqreqhbkcxrwfeeig.supabase.co" + images[0]?.image_url} alt="dish-image" title={meal.atextohnezsz1}
-            className={styles.mealImage}
+            className={`${settings?.layout === "widelist" && styles.mealImageListV} ${styles.mealImage}`}
             width={300} height={200} />
         ) : (
           <Image
             priority
             src={meal.image ? "https://www.mensa-kl.de/mimg/" + meal?.image : "/plate_placeholder.png"}
-            alt="dish-image" title={meal.atextohnezsz1} className={styles.mealImage}
+            alt="dish-image" title={meal.atextohnezsz1} 
+          className={`${settings?.layout === "widelist" && styles.mealImageListV} ${styles.mealImage}`}
             width={300} height={200} />
         )}
 
@@ -106,7 +107,7 @@ export default function Meal({ meal, mealIndex, images, comments }) {
         {/* Meal details */}
         <div className={styles.mealInfo}>
           <div className={styles.mealContextLabels}></div>
-          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined)}</h4>
+          <h4 className={`${settings?.layout === "widelist" && styles.mealTitleListV} ${styles.mealTitle}`}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined)}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>{meal.price && (meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             {renderStarRating()}
