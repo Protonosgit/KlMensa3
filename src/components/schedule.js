@@ -99,8 +99,8 @@ export default async function Schedule() {
                     key={mealIndex}
                     meal={meal}
                     mealIndex={mealIndex}
-                    mealComments={filteredComments()}
-                    mealImages={filteredImages()}
+                    comments={filteredComments()}
+                    images={filteredImages()}
                   />
                 );
               })}
@@ -108,6 +108,7 @@ export default async function Schedule() {
           </div>
         );
       })}
+      <MealPopup mealsFull={menuData?.splitMenu} commentsFull={comments} imagesFull={images} />
     </>
   );
 }

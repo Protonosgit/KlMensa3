@@ -13,8 +13,12 @@ export default function Home() {
   // Skeleton loading animation
   const SkeletonLoading = () => (
       <div className={styles.skeletonGrid}>
-        {[...Array(20)].map((_, i) => (
-          <div className={styles.skeleton} key={i} />
+        {[...Array(18)].map((_, i) => (
+          <div key={i}>
+            <div className={styles.skeleton} style={{width: "100%", height: "12rem"}}  />
+            <div className={styles.skeleton} style={{width: "100%", height: "1rem"}}/>
+            <div className={styles.skeleton} style={{width: "30%", height: "1rem"}}/>
+          </div>
         ))}
       </div>
   )
@@ -43,7 +47,7 @@ export default function Home() {
           <FilterMenu/>
         </div>
         <Suspense fallback={<SkeletonLoading />}>
-        <Schedule/>
+          <Schedule/>
         </Suspense>
       </main>
       <footer className={styles.footer}>

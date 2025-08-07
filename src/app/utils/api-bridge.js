@@ -1,6 +1,6 @@
 "use server"
-const  priceRelationsLookup = {
-    // artgebname : price
+
+const priceRelationsLookup = {
     "Port.": { "stu": "3,50 €", "bed": "5,30 €", "gas": "6,25 €" }, 
     "Port.I": { "stu": "4,10 €", "bed": "6,10 €", "gas": "7,05 €" },
     "Port.II": { "stu": "3,80 €", "bed": "5,80 €", "gas": "6,90 €" },
@@ -43,7 +43,6 @@ const  priceRelationsLookup = {
     "Eintopf I": { "stu": "1,20 €", "bed": "1,80 €", "gas": "2,10 €" },
     "Eintopf II": { "stu": "1,70 €", "bed": "2,60 €", "gas": "3,10 €" },
     "Tagessuppe": { "stu": "0,70 €", "bed": "1,00 €", "gas": "1,20 €" },
-  
     "Essen feelgood (VK)": { "stu": "3,95 €", "bed": "5,70 €", "gas": "6,65 €" },
     "Essen feelgood": { "stu": "3,50 €", "bed": "5,05 €", "gas": "6,00 €" },
     // Cafeteria Mittagsmenü
@@ -83,10 +82,10 @@ const  priceRelationsLookup = {
     "Warmer Snack / Imbiss (33)": { "price": "5,90 €" },
     "Warmer Snack / Imbiss (34)": { "price": "6,00 €" },
 };
+
 let cachedMenuData = null;
 let cachedMenuIds = null;
 let lastMenuCachedAt = null;
-
 
 function isToday(timestamp) {
   const inputDate = new Date(timestamp);

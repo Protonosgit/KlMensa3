@@ -2,20 +2,19 @@
 import Image from "next/image";
 import { Star, Bot } from "lucide-react";
 import styles from "../app/page.module.css";
-import MealPopup from "./detailsModal";
 import { useEffect, useState } from "react";
 import { getCookie } from "@/app/utils/cookie-monster";
 import  veganIcon from "../../public/icons/vegan.svg";
 import vegiOpIcon from "../../public/icons/vegi-op.svg";
 import veganOpIcon  from "../../public/icons/vegan-op.svg";
+import { useModalStore } from "@/app/utils/contextStore";
 
-export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
+
+export default function Meal({ meal, mealIndex, images, comments }) {
 
   // State variables
-  const [selectedMeal, setSelectedMeal] = useState(null);
+  const { openModal, isOpen } = useModalStore();
   const [settings, setSettings] = useState();
-  const [images, setImages] = useState(mealImages || []);
-  const [comments, setComments] = useState(mealComments || []);
   const [rating, setRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
 
@@ -38,12 +37,12 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
 
   useEffect(() => {
     // Disable page scrolling when the meal popup is open.
-    if (selectedMeal) {
+    if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-  }, [selectedMeal]);
+  }, [isOpen]);
 
   // Render star rating for the meal (non-interactive).
   const renderStarRating = () => {
@@ -62,28 +61,12 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
     );
   };
 
-  
-  const openModal = () => {
-    if(selectedMeal) return;
+  // Open the meal popup and set url param for back gesture detection
+  const requestOpenModal = () => {
+    if(isOpen) return;
     window.history.pushState(null, '', window.location.href+"?artid="+meal.artikel_id);
-    setSelectedMeal(meal);
+    openModal(meal, comments, images);
   };
-
-  // Detect back gesture on Android and maybe ios and close modal if open
-  useEffect(() => {
-    const handlePopState = () => {
-      if (selectedMeal) {
-        setSelectedMeal(null);
-      }
-    };
-
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [selectedMeal]);
-
 
   // Render the meal card and popup.
   return (
@@ -91,7 +74,7 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
       <div
         key={mealIndex}
         className={styles.mealCard}
-        onClick={() => openModal()}
+        onClick={() => requestOpenModal()}
       >
 
         {/* Meal image */}
@@ -125,15 +108,12 @@ export default function Meal({ meal, mealIndex, mealComments, mealImages }) {
           <div className={styles.mealContextLabels}></div>
           <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined)}</h4>
           <div className={styles.mealFooter}>
-            <span className={styles.mealPrice}>{(meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
+            <span className={styles.mealPrice}>{meal.price && (meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             {renderStarRating()}
           </div>
         </div>
       </div>
-      {/* Meal popup */}
-      {selectedMeal && (
-        <MealPopup meal={meal} comments={mealComments} images={mealImages} onClose={() => setSelectedMeal(null)} />
-      )}
+    
     </>
   );
 }

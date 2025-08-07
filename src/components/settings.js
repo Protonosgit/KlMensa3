@@ -19,6 +19,7 @@ export default function SettingsModal({}) {
     intitle: false,
     shortitle: false,
     nolimit: false,
+    threebar: false,
     pricecat: "stu",
     gridStructure: 0,
     language: 'en',
@@ -139,8 +140,16 @@ export default function SettingsModal({}) {
                         <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("intitle", e)} checked={settings.intitle} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
-                          <span>Show additive title</span>
-                          <p className={styles.popupOptionDescription}>Display additives in the title of the popup</p>
+                          <span>Additives in title</span>
+                          <p className={styles.popupOptionDescription}>Display additives in the title (popup)</p>
+                        </label>
+                        </div>
+
+                        <div className={styles.popupOption}>
+                          <Switch onChange={(e) => handleSettingChange("threebar", e)} checked={settings.threebar} onColor="#fbbf24"  />
+                        <label className={styles.popupOptionLabel}>
+                          <span>Bulletpoints</span>
+                          <p className={styles.popupOptionDescription}>Display the meal title in a bullet point format (popup)</p>
                         </label>
                         </div>
 

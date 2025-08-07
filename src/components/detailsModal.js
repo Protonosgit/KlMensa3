@@ -8,7 +8,7 @@ import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie } from "@/app/utils/cookie-monster";
-import { publishComment,updateComment,deleteComment,fetchComments, reportComment, fetchImages } from "@/app/utils/database-actions";
+import { publishComment,updateComment,deleteComment,reportComment } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
 import { Bookmark, Bot, CookingPot, EllipsisVertical, FlagIcon, InfoIcon, Share2Icon, UploadIcon } from "lucide-react";
@@ -22,9 +22,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useModalStore } from '@/app/utils/contextStore';
 
-export default function MealPopup({ meal, onClose, comments, images }) {
-  console.log(meal);
+export default function MealPopup({ mealsFull, commentsFull, imagesFull }) {
+  const { isOpen, meal, comments, images, closeModal } = useModalStore();
   // State variables for managing user input, meal details, and UI updates.
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState("");
@@ -39,9 +40,38 @@ export default function MealPopup({ meal, onClose, comments, images }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
 
+  const requestCloseModal = () => {
+    closeModal();
+    window.history.back();
+  }
+
+  // Detect back gesture on Android, Windows and maybe ios and close modal if open
+  useEffect(() => {
+    const handlePopState = () => {
+      if (isOpen) {
+        closeModal();
+      }
+    };
+
+    const handleEscapePress = (event) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscapePress);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      document.removeEventListener('keydown', handleEscapePress);
+    };
+  }, [isOpen]);
+
+
   function checkUserOwnsComment(commentList) {
     const ownComment = commentList?.filter((c) => c.user_id !== null);
-    if (ownComment.length > 0) {
+    if (ownComment?.length > 0) {
       setStars(ownComment[0]?.rating);
       setComment(ownComment[0]?.comment_text);
       setCommentId(ownComment[0]?.id);
@@ -49,17 +79,18 @@ export default function MealPopup({ meal, onClose, comments, images }) {
   }
   function checkUserOwnsImage(imageList) {
     const ownImage = imageList?.filter((c) => c.owner_id !== null);
-    if (ownImage.length > 0) {
+    if (ownImage?.length > 0) {
       setOwnsImage(ownImage[0]?.image_name);
     }
   }
   //settings and userdata
     useEffect(() => {
       // retrieve cookies for settings
-      setAdditives(extractAdditives(meal.zsnumnamen));
+      setAdditives(extractAdditives(meal?.zsnumnamen));
+
       const settingsCookie = getCookie('settings') || null;
       if(settingsCookie) {
-        //setSettings(JSON.parse(settingsCookie));
+        setSettings(JSON.parse(settingsCookie));
       }
 
       // fetch userdata
@@ -78,23 +109,21 @@ export default function MealPopup({ meal, onClose, comments, images }) {
       ?.split("=")[1];
       if (cookieValue) {
         const bookmarks = JSON.parse(cookieValue);
-        setIsBookmarked(bookmarks.includes(meal.artikel_id));
+        setIsBookmarked(bookmarks.includes(meal?.artikel_id));
       }
       
       checkUserOwnsComment(comments);
       checkUserOwnsImage(images);
 
       // Calculate Rating from supabase and legacy api
-      const sumOfRatings = comments.reduce((acc, curr) => acc + curr.rating, 0);
-      const fullSum = sumOfRatings + (meal.rating*meal.rating_amt || 0);
-      const fullCount = comments.length  + (meal.rating_amt || 0);
+      const sumOfRatings = comments?.reduce((acc, curr) => acc + curr.rating, 0);
+      const fullSum = sumOfRatings + (meal?.rating*meal?.rating_amt || 0);
+      const fullCount = comments?.length  + (meal?.rating_amt || 0);
       setRating(fullSum/fullCount);
       setRatingCount(fullCount);
-      //console.log(meal);
-    }, [meal]);
 
+    }, [meal, comments, images, mealsFull, commentsFull, imagesFull]);
 
-    
 
 
   // Handle publishing or updating a comment.
@@ -146,19 +175,6 @@ export default function MealPopup({ meal, onClose, comments, images }) {
     }
   }
 
-  // close modal on escape
-  useEffect(() => {
-    const handleEscapePress = (event) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-    document.addEventListener('keydown', handleEscapePress);
-    return () => {
-      document.removeEventListener('keydown', handleEscapePress);
-    };
-  }, []);
-
 
   // Handle bookmarking/unbookmarking the meal.
   async function handleBookmark(e) {
@@ -187,7 +203,7 @@ async function handleUploadMealImage() {
     return;
   }
 
-  const artikelId = meal.artikel_id.replace(/\./g, "");
+  const artikelId = meal?.artikel_id.replace(/\./g, "");
   const supabase = createClient();
 
   // Check if user already has an image uploaded
@@ -273,13 +289,23 @@ async function handleUploadMealImage() {
 
   // Render the meal title based on settings.
   const MealTitle = () => {
-    return <h2 className={styles.popupTitle} title={meal?.titleAdditivesCombined}>{settings?.intitle ? (meal.titleAdditivesCombined) : meal.titleCombined}</h2>;
+    if(settings?.threebar) return (
+      <ul className={styles.popupTitleBullets} >
+        {meal?.atextohnezsz1 && <li>{settings?.intitle ? meal?.atextz1	 : meal?.atextohnezsz1}</li>}
+        {meal?.atextohnezsz2 && <li>{settings?.intitle ? meal?.atextz2	 : meal?.atextohnezsz2}</li>}
+        {meal?.atextohnezsz3 && <li>{settings?.intitle ? meal?.atextz3	 : meal?.atextohnezsz3}</li>}
+        {meal?.atextohnezsz4 && <li>{settings?.intitle ? meal?.atextz4	 : meal?.atextohnezsz4}</li>}
+        {meal?.atextohnezsz5 && <li>{settings?.intitle ? meal?.atextz5	 : meal?.atextohnezsz5}</li>}
+      </ul>);
+
+    return <h2 className={styles.popupTitle} title={meal?.titleAdditivesCombined}>{settings?.intitle ? (meal?.titleAdditivesCombined) : meal?.titleCombined}</h2>;
   }
 
+  if(!meal || !isOpen) return null;
 
   // Render the modal UI for meal details, comments, and actions.
   return (
-    <div style={{ display: meal ? "flex" : "none" }} title="" className={styles.popupOverlay} onClick={onClose}>
+    <div title="" className={styles.popupOverlay} onClick={requestCloseModal}>
       <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.popupImageContainer}>
           {/* Render meal image from any source or placeholder */}
@@ -288,7 +314,7 @@ async function handleUploadMealImage() {
               placeholder="blur"
               blurDataURL="/plate_placeholder.png"
               priority={false} loading={"lazy"}
-              src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" title={meal.atextohnezsz1}
+              src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" title={meal?.atextohnezsz1}
               className={styles.popupImage}
               width={600} height={500} />
           ) : (
@@ -322,7 +348,7 @@ async function handleUploadMealImage() {
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => (handleReportRequest(meal.id))}><FlagIcon size={18} />Report image</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            <button onClick={onClose} className={styles.popupActionButton}>×</button>
+            <button onClick={requestCloseModal} className={styles.popupActionButton}>×</button>
           </div>
         </div>
 
@@ -350,7 +376,7 @@ async function handleUploadMealImage() {
               <p>Additives</p>
               <p className={styles.additivesContext}>Includes vegan options</p>
             </div>
-            {additives.length > 1 && <div> {additives.map((additive) => <Badge title={additive.name} className={styles.dietaryTag} key={additive.code}>{additive.name}</Badge>)}</div>}
+            {additives?.length > 1 && <div> {additives?.map((additive) => <Badge title={additive?.name} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div>}
           </div>
         
 
@@ -364,7 +390,7 @@ async function handleUploadMealImage() {
          <div className={styles.divider} />
 
           <div className={styles.commentsSection}>
-            <h3 className={styles.commentsTitle}>Comments {comments.length}</h3>
+            <h3 className={styles.commentsTitle}>Comments {comments?.length}</h3>
             <div className={styles.ownComent} style={{display: user? "flex" : "none"}}>
               <StarRating mealRating={stars} starsSet={setStars} />
               <textarea
@@ -375,14 +401,14 @@ async function handleUploadMealImage() {
                 onChange={(e) => setComment(e.target.value)}
                 maxLength={120}
               ></textarea>
-              <p className={styles.commentCounter}>{comment.length}/120</p>
+              <p className={styles.commentCounter}>{comment?.length}/120</p>
               <div className={styles.commentButtons}>
                 <button className={styles.commentButton} disabled={actionPending} title="Publish" style={{opacity: actionPending? 0.5 : 1, width: "100%"}} onClick={handlePublishRating}>Publish</button>
                 <button className={styles.commentButton} disabled={actionPending} title="Delete" style={{opacity: actionPending? 0.5 : 1, display: commentId? "flex" : "none"}} onClick={handleDeleteRating}><CookingPot /></button>
               </div>
             </div>
 
-            {comments.map((comment, index) => (
+            {comments?.map((comment, index) => (
               <div key={index} className={styles.foreignComment}>
                 <div className={styles.commentInfo}>
                    <StarRating mealRating={comment.rating} disabled={true} />
