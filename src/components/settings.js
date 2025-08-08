@@ -9,6 +9,7 @@ import { getCookie, setCookie } from "@/app/utils/cookie-monster";
 import Switch from "react-switch";
 import { createClient } from "@/app/utils/supabase/client";
 import { Mail, Lock } from "lucide-react";
+import { revalidatePage } from "@/app/utils/auth-actions";
 
 export default function SettingsModal({}) {
   // State variables for managing modal visibility, settings, and user authentication.
@@ -22,6 +23,7 @@ export default function SettingsModal({}) {
     pricecat: "stu",
     layout: "list",
     language: 'en',
+    theme: 'default'
   });
   const [user, setUser] = useState();
   const [usermail, setUsermail] = useState("");
@@ -66,11 +68,10 @@ export default function SettingsModal({}) {
       document.documentElement.setAttribute('data-theme', value ? "dark" : "light");
     }
     if (key === "by2lay" || key === "nolimit" || key === "shortitle" || key === "pricecat" || key === "layout") {
-      window.location.reload();
+      //window.location.reload();
+      revalidatePage();
     }
   };
-
-
 
   // Handle user login.
   async function handleLogin() {
@@ -105,7 +106,6 @@ export default function SettingsModal({}) {
     }
   }
 
-
   // Render the settings modal UI.
   return (
     <>
@@ -127,7 +127,6 @@ export default function SettingsModal({}) {
               </TabsList>
               <TabsContent value="general">
                { /* Render general settings */}
-
                         <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("dark", e)} checked={settings.dark} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
@@ -175,7 +174,7 @@ export default function SettingsModal({}) {
                           <select className={styles.popupSelect} value={settings.layout} onChange={(e) => handleSettingChange("layout", e.target.value)} >
                           <option value="list">List</option>
                           <option value="grid">Grid</option>
-                          <option value="widelist">Legacy list</option>
+                          <option value="widelist">List (legacy)</option>
                           </select>
                         </div>
 
@@ -203,7 +202,10 @@ export default function SettingsModal({}) {
                 <div className={styles.popupOption}>
                   {user ? (
                     <div className={styles.popupUserContainer}>
-                      <p className={styles.popupUserEmail}>{user.email}{user.email.includes("zoe.") &&<CatIcon />}</p>
+                      <p>{user.email}{user.email.includes("zoe.") &&<CatIcon />}</p>
+                      
+                      <div className={styles.userInfoText}> <p>Ratings:</p> <p>{0}</p></div>
+                      <div className={styles.userInfoText}> <p>Images:</p> <p>{0}</p></div>
                       <button className={styles.popupButton} onClick={() => handleLogout()}>Logout</button>
                     </div>
                   ) : (

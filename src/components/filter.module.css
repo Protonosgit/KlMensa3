@@ -43,8 +43,14 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+.filterList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.1rem;
+}
 .filterItem {
   margin-bottom: 0.3rem;
+  margin-right: 0.2rem;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -128,6 +134,9 @@
   }
   .seperator {
     display: none;
+  }
+  .filterList {
+    display: block;
   }
 }
 
