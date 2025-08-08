@@ -32,7 +32,6 @@ export default function Meal({ meal, mealIndex, images, comments }) {
     const fullCount = comments.length + (meal.rating_amt || 0);
     setRating(fullSum / fullCount);
     setRatingCount(fullCount);
-
   }, [meal]);
 
   useEffect(() => {

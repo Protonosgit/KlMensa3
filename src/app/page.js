@@ -51,15 +51,15 @@ export default function Home() {
         </Suspense>
       </main>
       <footer className={styles.footer}>
-        <div className={styles.container}>
-          <p>2025 mensa-kl v3</p> <a href="https://www.studierendenwerk-kaiserslautern.de/" className={styles.footerLink}>Studierendenwerk</a>
+          <p>2025 mensa-kl v3 prototype<br/>
+          <a href="https://www.studierendenwerk-kaiserslautern" className={styles.footerLink}>Studierendenwerk</a>
           <a href="https://rptu.de" className={styles.footerLink}>RPTU</a>
           <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
           <a href="https://www.mensa-kl.de/" className={styles.footerLink}>Images from <b>mensa-kl.de</b></a>
           <a href="https://github.com/Protonosgit/KlMensa3/issues" className={styles.footerLink}>Report issue</a>
           <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Source</a>
-          <a href="/api/menudata" className={styles.footerLink}>Api</a>
-        </div>
+          <a href="https://gibtesheutepommes.de/" className={styles.footerLink}>Gibt-es-heute-Pommes</a>
+          <a href="/api/menudata" className={styles.footerLink}>Api</a></p>
       </footer>
       <ScrollToTopButton />
     </div>

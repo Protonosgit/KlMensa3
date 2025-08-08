@@ -242,7 +242,6 @@ export default function FilterMenu() {
           <button title="Apply filter" onClick={storeFilter} disabled={refreshing} className={styles.applyButton}>{refreshing ? <Spinner /> : "Apply"}</button>
           <button title="Reset filter" onClick={resetFilter} disabled={refreshing} className={styles.resetButton} style={{display: filterActive ? "block" : "none"}}><CookingPot size={20} /></button>
         </div>
-        <p>We use cookies to store your preferences.</p>
       </PopoverContent>
     </Popover>
   );

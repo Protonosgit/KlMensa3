@@ -49,7 +49,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 13;
+    overflow-y: scroll;
     animation: fadein 0.3s ease-in-out;
   }
   @keyframes fadein {
@@ -67,7 +68,8 @@
     width: 100%;
     height: 100%;
     padding: 0.5rem;
-    padding-bottom: 10rem;
+    padding-bottom: 6rem;
+    overflow-y: auto;
   }
   .popupCloseButton {
     position: absolute;
@@ -125,6 +127,7 @@
 
   .popupUserContainer {
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -137,12 +140,14 @@
     gap: 0.5rem;
     width: 100%;
   }
-  .popupUserEmail {
-    font-size: 0.9rem;
+  .userInfoText {
+    font-size: 1rem;
     color: var(--subtitle-color);
     align-items: center;
     display: flex;
     gap: 0.2rem;
+    justify-content: space-between;
+    width: 100%;
   }
   .popupSelect {
     padding: 0.5rem;

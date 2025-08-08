@@ -35,16 +35,20 @@ export default async function Schedule() {
   }
 
   // Get menu, images and comments from supabase and legacy api
+  // Slow more caching required!
+  // 200-600ms
   const menuData = await fetchMenu();
   let menu = menuData?.splitMenu;
   const hashIds = menuData?.hashIdList;
   const comments = await fetchComments(hashIds);
   const images = await fetchImages(hashIds);
 
+
   // Show unlimeted menu dates
   if (!settings?.nolimit) {
     menu = menu?.slice(0, 8);
   }
+
 
   // Check if menu data is available
   if (!menu || !menu?.length) {
@@ -54,6 +58,7 @@ export default async function Schedule() {
       </div>
     );
   }
+
 
   return (
     <>
@@ -83,7 +88,6 @@ export default async function Schedule() {
                   }
                   return [];
                 };
-
                 // Filter images to match the current meal
                 const filteredImages = () => {
                   if (images && images.length > 0) {
@@ -93,6 +97,7 @@ export default async function Schedule() {
                   }
                   return [];
                 };
+
                 return (
                   <Meal
                     key={mealIndex}
