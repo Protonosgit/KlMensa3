@@ -128,7 +128,7 @@ export default function SettingsModal({}) {
               <TabsContent value="general">
                { /* Render general settings */}
                         <div className={styles.popupOption}>
-                          <Switch onChange={(e) => handleSettingChange("dark", e)} checked={settings.dark} onColor="#fbbf24"  />
+                          <Switch onChange={(e) => handleSettingChange("dark", e)} checked={settings.dark} className={styles.popupOptionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
                           <span>Dark mode</span>
                           <p className={styles.popupOptionDescription}>Turn of the lights</p>
@@ -136,7 +136,7 @@ export default function SettingsModal({}) {
                         </div>
 
                         <div className={styles.popupOption}>
-                          <Switch onChange={(e) => handleSettingChange("intitle", e)} checked={settings.intitle} onColor="#fbbf24"  />
+                          <Switch onChange={(e) => handleSettingChange("intitle", e)} checked={settings.intitle} className={styles.popupOptionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
                           <span>Additives in title</span>
                           <p className={styles.popupOptionDescription}>Display additives in the title (popup)</p>
@@ -144,7 +144,7 @@ export default function SettingsModal({}) {
                         </div>
 
                         <div className={styles.popupOption}>
-                          <Switch onChange={(e) => handleSettingChange("threebar", e)} checked={settings.threebar} onColor="#fbbf24"  />
+                          <Switch onChange={(e) => handleSettingChange("threebar", e)} checked={settings.threebar} className={styles.popupOptionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
                           <span>Bulletpoints</span>
                           <p className={styles.popupOptionDescription}>Display the meal title in a bullet point format (popup)</p>
@@ -152,7 +152,7 @@ export default function SettingsModal({}) {
                         </div>
 
                         <div className={styles.popupOption}>
-                          <Switch onChange={(e) => handleSettingChange("shortitle", e)} checked={settings.shortitle} onColor="#fbbf24"  />
+                          <Switch onChange={(e) => handleSettingChange("shortitle", e)} checked={settings.shortitle} className={styles.popupOptionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
                           <span>Short title</span>
                           <p className={styles.popupOptionDescription}>Only show a shortened version of the meal title</p>
@@ -160,7 +160,7 @@ export default function SettingsModal({}) {
                         </div>
 
                         <div className={styles.popupOption}>
-                          <Switch onChange={(e) => handleSettingChange("nolimit", e)} checked={settings.nolimit} onColor="#fbbf24"  />
+                          <Switch onChange={(e) => handleSettingChange("nolimit", e)} checked={settings.nolimit} className={styles.popupOptionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
                           <span>Remove limiter</span>
                           <p className={styles.popupOptionDescription}>Remove the limit to display more than 8 days in advance</p>
@@ -173,8 +173,8 @@ export default function SettingsModal({}) {
                           <span style={{width: "100%", textAlign: "left"}}>Mobile layout: </span>
                           <select className={styles.popupSelect} value={settings.layout} onChange={(e) => handleSettingChange("layout", e.target.value)} >
                           <option value="list">List</option>
+                          <option value="biglist">Big list</option>
                           <option value="grid">Grid</option>
-                          <option value="widelist">List (legacy)</option>
                           </select>
                         </div>
 

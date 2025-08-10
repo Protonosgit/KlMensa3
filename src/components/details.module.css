@@ -331,8 +331,16 @@
     scale: 1.01;
   }
 
+  .popupImage:active + .overlayLocationBar {
+    opacity: 0.3;
+  }
+
   /* Responsive Design */
   @media (max-width: 768px) {
+    .popupImage {
+    height: 300px;
+    border-radius: 0;
+    }
     .popupTitle {
       font-size: 1.2rem;
     }
@@ -357,5 +365,9 @@
   }
   .overlayActionsBar {
     position: fixed;
+  }
+  .popupLocation {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
   }
   }

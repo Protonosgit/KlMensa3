@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Star, Bot } from "lucide-react";
-import styles from "../app/page.module.css";
+import styles from "./mealcard.module.css";
 import { useEffect, useState } from "react";
 import { getCookie } from "@/app/utils/cookie-monster";
 import  veganIcon from "../../public/icons/vegan.svg";
@@ -10,21 +10,16 @@ import veganOpIcon  from "../../public/icons/vegan-op.svg";
 import { useModalStore } from "@/app/utils/contextStore";
 
 
-export default function Meal({ meal, mealIndex, images, comments }) {
+export default function Meal({ meal, mealIndex, images, comments, settingsCookie }) {
 
   // State variables
   const { openModal, isOpen } = useModalStore();
-  const [settings, setSettings] = useState();
   const [rating, setRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
 
 
   useEffect(() => {
-    // Load settings and bookmarks from cookies
-    const settingsCookie = getCookie('settings') || null;
-    if (settingsCookie) {
-      setSettings(JSON.parse(settingsCookie));
-    }
+    // Load  bookmarks from cookies
     
     // Calculate the average rating of the meal.
     const sumOfRatings = comments.reduce((acc, curr) => acc + curr.rating, 0);
@@ -72,8 +67,8 @@ export default function Meal({ meal, mealIndex, images, comments }) {
     <>
       <div
         key={mealIndex}
-        className={`${settings?.layout === "widelist" && styles.mealCardListV} ${styles.mealCard}`}
-        onClick={() => requestOpenModal()}
+        className={`${(settingsCookie?.layout === "biglist" || settingsCookie?.layout === "grid") && styles.mealCardListV} ${styles.mealCard}`}
+        onClick={() => requestOpenModal()} 
       >
 
         {/* Meal image */}
@@ -83,18 +78,18 @@ export default function Meal({ meal, mealIndex, images, comments }) {
             blurDataURL="/plate_placeholder.png"
             priority={false} loading={"lazy"}
             src={"https://gbxuqreqhbkcxrwfeeig.supabase.co" + images[0]?.image_url} alt="dish-image" title={meal.atextohnezsz1}
-            className={`${settings?.layout === "widelist" && styles.mealImageListV} ${styles.mealImage}`}
-            width={300} height={200} />
+            className={`${settingsCookie?.layout === "biglist" && styles.mealImageListV} ${styles.mealImage}`}
+            width={1600} height={900} />
         ) : (
           <Image
             priority
             src={meal.image ? "https://www.mensa-kl.de/mimg/" + meal?.image : "/plate_placeholder.png"}
             alt="dish-image" title={meal.atextohnezsz1} 
-          className={`${settings?.layout === "widelist" && styles.mealImageListV} ${styles.mealImage}`}
-            width={300} height={200} />
+            className={`${settingsCookie?.layout === "biglist" && styles.mealImageListV} ${styles.mealImage}`}
+            width={1600} height={900} />
         )}
 
-        <p className={styles.mealLocation}>
+        <p className={`${settingsCookie?.layout === "biglist" && styles.mealLocationListV} ${styles.mealLocation}`}>
           {meal?.dpartname}
 
           {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
@@ -106,9 +101,9 @@ export default function Meal({ meal, mealIndex, images, comments }) {
         {/* Meal details */}
         <div className={styles.mealInfo}>
           <div className={styles.mealContextLabels}></div>
-          <h4 className={`${settings?.layout === "widelist" && styles.mealTitleListV} ${styles.mealTitle}`}>{(settings?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined)}</h4>
+          <h4 className={`${(settingsCookie?.layout === "biglist" || settingsCookie?.layout === "grid") && styles.mealTitleListV} ${styles.mealTitle}`}>{(settingsCookie?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined)}</h4>
           <div className={styles.mealFooter}>
-            <span className={styles.mealPrice}>{meal.price && (meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
+            <span className={styles.mealPrice}>{meal.price && (meal?.price[settingsCookie?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             {renderStarRating()}
           </div>
         </div>
