@@ -5,10 +5,15 @@ import { Suspense } from "react";
 import SettingsModal from "@/components/settings";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { InfoIcon } from "lucide-react";
-import { fetchNews } from "./utils/internal-api";
+import { cookies } from 'next/headers';
 
-export default function Home() { 
-  fetchNews();  
+export default async function Home() { 
+  const cookieStore = await cookies();
+  let settings = null;
+  const settingsCookie = cookieStore.get("settings") || null;
+  if (settingsCookie?.value) {
+    settings = JSON.parse(settingsCookie.value);
+  }
 
   // Skeleton loading animation
   const SkeletonLoading = () => (
@@ -31,7 +36,7 @@ export default function Home() {
           <div className={styles.headerContent}>
             <div className={styles.headerTitleSection}>
               <h1 className={styles.headerTitle}>Mensa KL</h1>
-              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau</h2>
+              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen Universität in Kaiserslautern</h2>
             </div>
           </div>
         </div>
@@ -47,7 +52,7 @@ export default function Home() {
           <FilterMenu/>
         </div>
         <Suspense fallback={<SkeletonLoading />}>
-          <Schedule/>
+          <Schedule settingsCookie={settings}/>
         </Suspense>
       </main>
       <footer className={styles.footer}>
@@ -58,7 +63,7 @@ export default function Home() {
           <a href="https://www.mensa-kl.de/" className={styles.footerLink}>Images from <b>mensa-kl.de</b></a>
           <a href="https://github.com/Protonosgit/KlMensa3/issues" className={styles.footerLink}>Report issue</a>
           <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Source</a>
-          <a href="https://gibtesheutepommes.de/" className={styles.footerLink}>Gibt-es-heute-Pommes</a>
+          {/* <a href="https://gibtesheutepommes.de/" className={styles.footerLink}>Gibt-es-heute-Pommes</a> */}
           <a href="/api/menudata" className={styles.footerLink}>Api</a></p>
       </footer>
       <ScrollToTopButton />

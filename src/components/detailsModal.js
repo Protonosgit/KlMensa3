@@ -333,14 +333,14 @@ async function handleUploadMealImage() {
               priority={false} loading={"lazy"}
               src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" title={meal?.atextohnezsz1}
               className={styles.popupImage}
-              width={600} height={500} />
+              width={1600} height={900} />
           ) : (
             <Image 
               priority={false} 
               loading={"lazy"} 
               src={meal?.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"}  title={meal?.atextohnezsz1}
               alt="dish-image" className={styles.popupImage} 
-              width={600} height={500} />
+              width={1600} height={900} />
           )}
 
           <div className={styles.overlayLocationBar}>

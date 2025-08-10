@@ -8,14 +8,12 @@ import { applyFilters } from '@/app/utils/filter.js';
 import MealPopup from './detailsModal';
 
 
-export default async function Schedule() {
+export default async function Schedule({settingsCookie}) {
   const cookieStore = await cookies();
 
   let locationFilter, proteinFilter, additiveFilter;
-  let settings;
 
   //Read cookies
-  const settingsCookie = cookieStore.get("settings") || null;
   const locationFilterCookie = cookieStore.get("location") || null;
   const proteinFilterCookie = cookieStore.get("protein") || null;
   const additiveFilterCookie = cookieStore.get("additive") || null;
@@ -30,9 +28,6 @@ export default async function Schedule() {
   if (additiveFilterCookie?.value) {
     additiveFilter = JSON.parse(additiveFilterCookie.value);
   }
-  if (settingsCookie?.value) {
-    settings = JSON.parse(settingsCookie.value);
-  }
 
   // Get menu, images and comments from supabase and legacy api
   // Slow more caching required!
@@ -45,7 +40,7 @@ export default async function Schedule() {
 
 
   // Show unlimeted menu dates
-  if (!settings?.nolimit) {
+  if (!settingsCookie?.nolimit) {
     menu = menu?.slice(0, 8);
   }
 
@@ -71,7 +66,7 @@ export default async function Schedule() {
             </div>
             <div
               className={`${styles.mealGrid} ${
-                settings?.layout === "grid" && styles.mealGridMobileNew}`}
+                settingsCookie?.layout === "grid" && styles.mealGridMobileNew}`}
             >
               {applyFilters(
                 locationFilter,
@@ -105,6 +100,7 @@ export default async function Schedule() {
                     mealIndex={mealIndex}
                     comments={filteredComments()}
                     images={filteredImages()}
+                    settingsCookie={settingsCookie}
                   />
                 );
               })}
