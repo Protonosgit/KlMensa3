@@ -100,6 +100,9 @@ function isToday(timestamp) {
 
 // Retreive the mensa menu
 async function fetchMenu() {
+    // await new Promise((resolve) => setTimeout(() => resolve(null), 5000)); DEBUG purpose
+
+
     // Invalidate cache if no last cachedate exists, length of data is 0 or last cached date is older than 8 hours or the schedule is from yesterday
     if(lastMenuCachedAt && cachedMenuData?.length > 0 && Date.now() - lastMenuCachedAt < 8 * 60 * 60 * 1000 && isToday(lastMenuCachedAt)) {
         return { splitMenu: cachedMenuData, hashIdList: cachedMenuIds };
@@ -127,7 +130,6 @@ async function fetchMenu() {
         // parse response
         const menuSchedule = await parseMenu(await response.json());
 
-        // return new Promise((resolve) => setTimeout(() => resolve(menuSchedule), 3000)); for debugging!
         return menuSchedule;
     } catch (error) {
         console.error('Network error or server not responding:', error.message);

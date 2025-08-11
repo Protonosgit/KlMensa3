@@ -127,11 +127,9 @@
         display: flex;
         flex-direction: row;
         max-width: 100%;
+        overflow: hidden;
         }
-      .mealInfo {
-        padding: 0.6rem;
-      }
-      .mealTitle {
+    .mealTitle {
         width: 52vw;
         font-size: 0.8rem;
         overflow: hidden;
@@ -142,15 +140,16 @@
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
       }
-      .headerSubtitle {
-        font-size: 14px;
-      }
-      .mealImage {
+    .mealImage {
         height: 8rem;
+        width: 40vw;
         border-radius: 0.5rem 0 0 0.5rem;
       }
+      .mealInfo {
+        padding: 0.6rem;
+      }
       .mealLocation {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         padding: 0.15rem 0.35rem;
         top: 0.2rem;
         left: 0.2rem;
@@ -169,21 +168,36 @@
       .mealPrice {
         font-size: 1rem;
       }
-      .mealCardListV {
+
+       /* Biglist styles */
+      .mealCard[data-layout="biglist"] {
         display: flex;
         flex-direction: column;
       }
-      .mealTitleListV {
+      .mealCard[data-layout="biglist"] .mealTitle {
         min-width: 0;
         width: 100%;
       }
-      .mealImageListV {
+      .mealCard[data-layout="biglist"] .mealImage {
         width: 100%;
         height: 12rem;
         border-radius: 0.5rem 0.5rem 0 0;
       }
-      .mealLocationListV {
+      .mealCard[data-layout="biglist"] .mealLocation {
         font-size: 0.8rem;
         padding: 0.3rem 0.5rem;
+      }
+
+       /* Grid styles */
+      .mealCard[data-layout="grid"] {
+        display: flex;
+        flex-direction: column;
+      }
+      .mealCard[data-layout="grid"] .mealTitle {
+       width: 100%;
+      }
+      .mealCard[data-layout="grid"] .mealImage {
+        width: 100%;
+        border-radius: 0.5rem 0.5rem 0 0;
       }
     }

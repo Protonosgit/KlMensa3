@@ -160,7 +160,9 @@
       .headerButtonSection {
         justify-content: flex-end;
       }
-        
+      .dayHeader {
+      margin: 0.7rem 0;
+      }
     .footer {
       font-size: 0.9rem;
       padding: 0.4rem 0;
