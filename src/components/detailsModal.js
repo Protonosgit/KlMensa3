@@ -393,7 +393,7 @@ async function handleUploadMealImage() {
               <p>Additives</p>
               <p className={styles.additivesContext}>Includes vegan options</p>
             </div>
-            {additives?.length > 1 && <div> {additives?.map((additive) => <Badge title={additive?.name} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div>}
+            {additives?.length > 1 ? <div> {additives?.map((additive) => <Badge title={additive?.name} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
           </div>
         
 
