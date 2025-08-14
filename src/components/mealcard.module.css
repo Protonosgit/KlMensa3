@@ -6,8 +6,8 @@
     border-radius: 0.63rem;
     transition: transform 0.3s ease;
     cursor: pointer;
-    border: var(--contrast-border);
-    box-shadow: var(--contrast-shadow);
+    border: var(--darkmode-border);
+    box-shadow: var(--lightmode-shadow);
   }
   
   .mealCard:hover {
@@ -23,17 +23,6 @@
   .mealImage:hover + .mealLocation {
     opacity: 0.6;
   }
-
-  .bookmarkContainer {
-    position: absolute;
-    top: 0.4rem;
-    left: 0.4rem;
-    padding: 0.6rem;
-    display: flex;
-    border-radius: 0.2rem;
-    cursor: pointer;
-    background-color: var(--semiop-bg);
-  }
   
   .mealInfo {
     padding: 1rem;
@@ -45,10 +34,10 @@
   
 .mealLocation {
   font-size: 12px;
-  background-color: var(--bg-infobox);
+  background-color: var(--lightbox-bg);
   color: --subtitle-color;
-  border: var(--contrast-border);
-  box-shadow: var(--contrast-shadow);
+  border: var(--darkmode-border);
+  box-shadow: var(--lightmode-shadow);
   padding: 0.3rem 0.5rem;
   position: absolute;
   top: 0.4rem;
@@ -76,7 +65,7 @@
   gap: 0.3rem;
 }
 .veganIcon {
-  color: var(--vegan-color);
+  color: var(--tertiary-color);
 }
   
   .mealTitle {
@@ -92,13 +81,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid --border-color;
   }
   
   .mealPrice {
     font-size: 1.1rem;
     font-weight: bold;
-    color: var(--price-color);
+    color: var(--secondary-color);
   }
   
   .starRating {
@@ -114,12 +102,12 @@
     fill: currentColor;
   }
   .starEmpty {
-    color: var(--border-color);
+    color: var(--darkbox-bg);
   }
   .ratingCount {
     margin-left: 0.25rem;
     font-size: 0.875rem;
-    color: var(--subtitle-color);
+    color: var(--subtitle-text);
   }
 
     @media (max-width: 768px) {
@@ -142,7 +130,6 @@
       }
     .mealImage {
         height: 8rem;
-        width: 40vw;
         border-radius: 0.5rem 0 0 0.5rem;
       }
       .mealInfo {

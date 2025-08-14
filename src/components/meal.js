@@ -18,9 +18,7 @@ export default function Meal({ meal, mealIndex, images, comments, settingsCookie
   const [ratingCount, setRatingCount] = useState(0);
 
 
-  useEffect(() => {
-    // Load  bookmarks from cookies
-    
+  useEffect(() => {    
     // Calculate the average rating of the meal.
     const sumOfRatings = comments.reduce((acc, curr) => acc + curr.rating, 0);
     const fullSum = sumOfRatings + (meal.rating * meal.rating_amt || 0);

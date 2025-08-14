@@ -43,7 +43,8 @@ export default async function Home() {
       </header>
 
       <div className={styles.newsBox}>
-        <p className={styles.newsText}><InfoIcon />Developer version expect bugs and issues!</p>
+        <p className={styles.newsTitle}><InfoIcon size={20} />Attention</p>
+        <p className={styles.newsText}>Developer version expect bugs and issues!</p>
       </div>
 
       <main className={styles.main}>

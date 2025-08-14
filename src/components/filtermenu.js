@@ -5,15 +5,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import styles from "./filter.module.css";
-import { Filter, CookingPot } from "lucide-react";
+import { Filter, CookingPot, LocateIcon, MapPin, Beef, FlaskConical, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { revalidatePage } from "@/app/utils/auth-actions";
 import { set } from "date-fns";
+
 // Define clear names and codes for meal locations, additives, and proteins.
 const mealLocationClearname = [
   { name: "Ausgabe 1", codes: [1] },
   { name: "Ausgabe 2", codes: [2] },
-  { name: "Wok", codes: [-10] },
+  // { name: "Wok", codes: [-10] },
   { name: "Grill", codes: [10] },
   { name: "Atrium", codes: [16,17,18,19] },
   { name: "Eintopf (Atrium)", codes: [13] },
@@ -59,6 +60,9 @@ export default function FilterMenu() {
   const [mealAdditives, setMealAdditives] = useState([]);
   const [filterActive, setFilterActive] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [allLocationsToggled, setAllLocToggled] = useState(true);
+  const [allAdditiveToggled, setAllAdditiveToggled] = useState(true);
+  const [allProteinToggled, setAllProteinToggled] = useState(true);
 
   function loadFilters() {
     setFilterActive(false);
@@ -72,23 +76,25 @@ export default function FilterMenu() {
       return cookieValue ? JSON.parse(cookieValue) : null;
     }
     // Load location filter from cookies.
-    if(getArrayFromCookie("location") !== null) {
+    if(getArrayFromCookie("location") !== null && getArrayFromCookie("location")?.length > 0) {
       setMealLocations(getArrayFromCookie("location"));
       setFilterActive(true);
+      setAllLocToggled(false);
     }
     // Load additive filter from cookies.
-    if(getArrayFromCookie("additive") !== null) {
+    if(getArrayFromCookie("additive") !== null && getArrayFromCookie("additive")?.length > 0) {
       setMealAdditives(getArrayFromCookie("additive"));
       setFilterActive(true);
+      setAllAdditiveToggled(false);
     }
     // Load protein filter from cookies.
-    if(getArrayFromCookie("protein") !== null) {
+    if(getArrayFromCookie("protein") !== null && getArrayFromCookie("protein")?.length > 0) {
       setMealProteins(getArrayFromCookie("protein"))
       setFilterActive(true);
+      setAllProteinToggled(false);
     }
     setRefreshing(false);
   }
-
 
   useEffect(() => {
     loadFilters();
@@ -98,11 +104,11 @@ export default function FilterMenu() {
   // Update location filter based on user selection.
   function updateLocFilter(index) {
     const currentIndex = mealLocations.findIndex((item) =>
-      mealLocationClearname[index].codes.some((code) => item === code)
+      mealLocationClearname[index]?.codes.some((code) => item === code)
     );
     setMealLocations((prev) => {
       if (currentIndex === -1) {
-        return prev.concat(mealLocationClearname[index].codes);
+        return prev.concat(mealLocationClearname[index]?.codes);
       } else {
         return prev.filter((item) => !mealLocationClearname[index].codes.includes(item));
       }
@@ -163,6 +169,19 @@ export default function FilterMenu() {
     revalidatePage();
   }
 
+  const handleSelectAllClicked = (currentStatus, targetVariable, templateVariable, multiple = false) => {
+    if(currentStatus) {
+      targetVariable([]);
+    } else {
+      if(multiple) {
+        targetVariable((templateVariable.map((item) => item.codes)).flat());
+      } else {
+        targetVariable(templateVariable.map((item) => item.code));
+      }
+    }
+  }
+
+
   // Render the filter menu UI.
   return (
     <Popover className={styles.filterMenu}>
@@ -173,7 +192,10 @@ export default function FilterMenu() {
         <div className={styles.filterContainer}>
           {/* Render location filter section */}
           <div className={styles.filterSection}>
-            <p className={styles.filterTitle}>Location:</p>
+            <div className={styles.filterHeadder}>
+              <p className={styles.filterTitle}><MapPin size={20} />Location:</p>
+              <p className={styles.filterSubtitle}>Select all <input defaultChecked={allLocationsToggled} onChange={(e) => handleSelectAllClicked(e.target.checked, setMealLocations, mealLocationClearname, true)} type="checkbox" className={styles.filterCheckbox} /></p>
+            </div>
             <ul className={styles.filterList}>
               {mealLocationClearname.map((location, index) => (
                 <li key={index} className={styles.filterItem}>
@@ -195,9 +217,13 @@ export default function FilterMenu() {
             </ul>
             <div className={styles.seperator}/>
           </div>
+
           {/* Render protein filter section */}
           <div className={styles.filterSection}>
-            <p className={styles.filterTitle}>Protein:</p>
+            <div className={styles.filterHeadder}>
+              <p className={styles.filterTitle}><Beef size={20} />Protein:</p>
+              <p className={styles.filterSubtitle}>Select all <input defaultChecked={allProteinToggled} onChange={(e) => handleSelectAllClicked(e.target.checked, setMealProteins, mealProteinClearname)} type="checkbox" className={styles.filterCheckbox} /></p>
+            </div>
             <ul className={styles.filterList}>
               {mealProteinClearname.map((protein, index) => (
                 <li key={index} className={styles.filterItem}>
@@ -216,9 +242,13 @@ export default function FilterMenu() {
             </ul>
             <div className={styles.seperator}/>
           </div>
+
           {/* Render additive filter section */}
           <div className={styles.filterSection}>
-            <p className={styles.filterTitle}>Additives:</p>
+            <div className={styles.filterHeadder}>
+              <p className={styles.filterTitle}><FlaskConical size={20} />Additives:</p>
+              <p className={styles.filterSubtitle}>Select all <input defaultChecked={allAdditiveToggled} onChange={(e) => handleSelectAllClicked(e.target.checked, setMealAdditives, mealAdditiveClearname)} type="checkbox" className={styles.filterCheckbox} /></p>
+            </div>
             <ul className={styles.filterList}>
               {mealAdditiveClearname.map((additive, index) => (
                 <li key={index} className={styles.filterItem}>
@@ -240,7 +270,7 @@ export default function FilterMenu() {
         {/* Render action buttons */}
         <div className={styles.buttonBar}>
           <button title="Apply filter" onClick={storeFilter} disabled={refreshing} className={styles.applyButton}>{refreshing ? <Spinner /> : "Apply"}</button>
-          <button title="Reset filter" onClick={resetFilter} disabled={refreshing} className={styles.resetButton} style={{display: filterActive ? "block" : "none"}}><CookingPot size={20} /></button>
+          <button title="Reset filter" onClick={resetFilter} disabled={refreshing} className={styles.resetButton} style={{display: filterActive ? "block" : "none"}}><Trash2 size={20} /></button>
         </div>
       </PopoverContent>
     </Popover>

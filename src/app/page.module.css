@@ -5,8 +5,7 @@
   }
   /* Header Styles */
 .headerContainer {
-  background-color: --bg-color;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 2px solid var(--seperator-color);
   top: 0;
   z-index: 10;
 }
@@ -42,7 +41,7 @@
 
 .headerSubtitle {
   font-size: 1.25rem;
-  color: var(--subtitle-color);
+  color: var(--subtitle-text);
   margin-top: 4px;
 }
 .main {
@@ -57,7 +56,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid var(--subtitle-color);
+  border-bottom: 2px solid var(--subtitle-text);
   margin: 1.3rem 0;
 }
 
@@ -100,20 +99,26 @@
 
   .newsBox {
     border-radius: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     display: flex;
+    flex-direction: column;
     margin: 1rem 0;
-    border-left: 6px solid var(--newsbox-accent);
-    background-color: var(--newsbox-bg);
+    background-color: rgba(255, 68, 0, 0.677);
+    color: var(--main-text);
     cursor: pointer;
   }
-  .newsText {
+  .newsTitle {
+    color: var(--main-text);
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
     font-size: 1rem;
-    color: var(--text-color);
+    font-weight: 600;
+  }
+  .newsText {
+    color: var(--main-text);
+    font-size: 0.9rem;
   }
   
   .footer {
@@ -122,10 +127,9 @@
     justify-content: center;
     align-items: center;
     border-radius: 0.5rem 0.5rem 0 0;
-    background-color: var(--bg-color);
     padding: 1rem 0;
     text-align: center;
-    color: var(--subtitle-color);
+    color: var(--subtitle-text);
   }
   
   .footerLink {

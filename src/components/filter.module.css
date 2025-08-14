@@ -3,8 +3,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: var(--text-color);
-  color: var(--bg-color);
+  background-color: var(--main-text);
+  color: var(--main-bg);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
@@ -26,11 +26,20 @@
   font-size: 1rem;
   cursor: pointer;
   border-radius: 0.5rem;
-  background-color: var(--bg-color);
+  background-color: var(--main-bg);
 }
 .filterTitle {
   font-size: 1rem;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.filterSubtitle {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 .filterContainer {
   display: flex;
@@ -58,6 +67,12 @@
 .filterLabel {
   margin-left: 0.5rem;
 }
+.filterHeadder {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+}
 .buttonBar {
   display: flex;
   flex-direction: row;
@@ -83,33 +98,30 @@
 .filterCheckbox:checked::after {
   content: '✓';
   position: absolute;
-  color: var(--primary-foreground);
+  color: var(--main-bg);
   font-size: 14px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.filterCheckbox:focus {
-  outline: 2px solid rgba(251, 191, 36, 0.5);
-  outline-offset: 2px;
-}
 
 .applyButton {
   background-color: var(--primary-color);
-  color: var(--bg-color);
+  color: var(--main-bg);
   border: none;
   margin: 1rem 0;
   flex: 1;
   padding: 0.5rem 1rem;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   border-radius: 0.5rem;
 }
 
 .resetButton {
   background-color: transparent;
-  color: var(--primary-foreground);
+  color: var(--main-text);
   border: 2px solid var(--primary-color);
   margin: 1rem 0;
   padding: 0.5rem 1rem;
@@ -124,7 +136,7 @@
 .seperator {
   height: 1px;
   width: 100%;
-  background-color: var(--border-color);
+  background-color: var(--seperator-color);
   margin-bottom: 1rem;
 }
 
@@ -138,6 +150,9 @@
   .filterList {
     display: block;
   }
+  .filterSubtitle {
+    display: none;
+}
 }
 
   

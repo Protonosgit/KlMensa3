@@ -372,12 +372,6 @@ async function handleUploadMealImage() {
         {/* Render meal details, comments, and action buttons */}
         <div className={styles.popupDetails}>
           <MealTitle />
-          {meal.altOption &&
-            <div className={styles.altLabel}>Alternative:
-              <p className={styles.altText}>
-                {meal.vegiOption && <><Image src={vegiOpIcon} alt="vegi" width={18} height={18} className={styles.otherIcon}/>{meal.altOption} (Vegi)</> }
-                {meal.veganOption && <><Image src={veganOpIcon} alt="vegan" width={18} height={18} className={styles.otherIcon} />{meal.altOption} (vegan)</>}</p>
-            </div>}
 
           <div className={styles.popupPriceRating}>
             <span title="Price" className={styles.popupPrice}>{meal?.price?.stu || meal?.price?.price}</span>
@@ -386,6 +380,24 @@ async function handleUploadMealImage() {
               <span className={styles.ratingCount}>({ratingCount})</span>
             </div>
           </div>
+
+          <div className={styles.divider} style={{display: meal?.altOption || meal?.frei1 ? "block" : "none"}} />
+
+          {meal.altOption &&     
+          <div className={styles.altBox}>
+                {meal.vegiOption && <Image src={vegiOpIcon} alt="vegi" width={25} height={25} className={styles.otherIcon}/> }
+                {meal.veganOption && <Image src={veganOpIcon} alt="vegan" width={25} height={25} className={styles.otherIcon} />}
+            <div>
+              <p className={styles.altTitle}>{meal?.veganOption ? "Vegan" : "Vegi"} Alternative</p>
+              <p className={styles.altDescription}>{meal?.altOption}</p>
+            </div>
+          </div>}
+            {meal?.frei1 &&<>
+            <p className={styles.additivesTitle}>Information</p>
+            <div className={styles.infoText}>
+            <InfoIcon size={18} className={styles.otherIcon} />
+            <p>{meal.frei1+" "+meal.frei2}</p>
+            </div></>}
 
           <div className={styles.divider} />
           <div className={styles.additivesSection}>
@@ -397,12 +409,7 @@ async function handleUploadMealImage() {
           </div>
         
 
-          {meal?.frei1 &&<>
-            <div className={styles.divider} />
-            <div className={styles.altLabel}>
-            <InfoIcon size={18} className={styles.otherIcon} />
-            <p>{meal.frei1+" "+meal.frei2}</p>
-            </div></>}
+
 
          <div className={styles.divider} />
 
