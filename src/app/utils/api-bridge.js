@@ -202,6 +202,30 @@ async function parseMenu(menuData) {
     // copy vegi or vegan option to seperate var
     const altOption = (titleAdditiveAdder.match(/\(Plant-based Menü[^)]*|\(Vegetarisches Menü[^)]*|\(Vegetarisches Menü\[1]\)/)?.[0] || '').replace("(Veganes Menü[1]:","").replace("Plant-based Menü[1]:","").replace("Vegetarisches Menü[1]:","").trim().replace("(","");
 
+
+	// 	"artname1": "Essen II Drehkreuz/Ampel",
+	// 	"artgebname": "Port.II",
+	// 	"hinweise": "",
+	// 	"frei1": "",
+	// 	"frei2": "",
+	// 	"frei3": "",
+	// 	"atextz1": "Burrito Tortilla gefüllt mit Kidneybohnen, weiße Bohnen, Paprika, Karotten, Mais und Zucchini (1,2,Gl,Sf)",
+	// 	"atextz2": ", geriebenem Käse (La)",
+	// 	"atextz3": "(Plant-based Menü[1]:, geriebenem veganem Käse)",
+	// 	"atextz4": ", Sour Cream-Dip (1,9,Gl,Ei,La,Sf)",
+	// 	"atextz5": "(Plant-based Menü[1]:, veganer Sour Cream-Dip) (Gl,Nu,Sf)",
+	// 	"atextohnezsz1": "Burrito Tortilla gefüllt mit Kidneybohnen, weiße Bohnen, Paprika, Karotten, Mais und Zucchini",
+	// 	"atextohnezsz2": ", geriebenem Käse",
+	// 	"atextohnezsz3": "",
+	// 	"atextohnezsz4": ", Sour Cream-Dip",
+	// 	"atextohnezsz5": "",
+	// 	"zsnummern": "1, 2, 9, Gl, Nu, Ei, La, Sf",
+	// 	"zsnumnamen": "1=Farbstoff, 2=Konservierungsstoff, 9=Süßungsmittel, Gl=Glutenhaltiges Getreide, Nu=Schalenfrüchte (Nüsse), Ei=Eier und Eierzeugnisse, La=Laktose, Sf=Senf",
+	// 	"zsnamen": "Farbstoff, Konservierungsstoff, Süßungsmittel, Glutenhaltiges Getreide, Schalenfrüchte (Nüsse), Eier und Eierzeugnisse, Laktose, Senf",
+	// 	"menuekennztext": "",
+
+
+
     // build new object
     return {
         ...obj,
@@ -231,8 +255,13 @@ async function parseMenu(menuData) {
       acc[key].push(item);
       return acc;
     }, {});
+    // Sort mealgroupes by date
+    const sortedGroupedByDate = Object.fromEntries(
+        Object.entries(groupedByDate).sort(([a], [b]) => new Date(a) - new Date(b))
+    );
+    
 
-    const splitMenu = Object.entries(groupedByDate).map(([date, items]) => {
+    const splitMenu = Object.entries(sortedGroupedByDate).map(([date, items]) => {
         // Sort meals by dpartname works fine but disabled for now
         const predefinedOrder = ["Essen 1", "Essen 2", "Grill", "Wok", "Eintopf 1", "Eintopf 2", "Mittagsmenü 1", "Mittagsmenü 2", "Mittagsmenü 3","Mittagsmenü 4", "Abendmensa"];
         const sortedMeals = items.slice().sort((a, b) => {

@@ -1,8 +1,8 @@
 .scrollToTopButton {
   position: fixed;
   bottom: 5rem;
-  background-color: var(--bg-infobox);
-  color: var(--primary-foreground);
+  background-color: var(--darkbox-bg);
+  color: var(--main-text);
   border: none;
   border-radius: 6px;
   height: 2rem;
@@ -23,8 +23,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: var(--text-color);
-  color: var(--bg-color);
+  background-color: var(--main-text);
+  color: var(--main-bg);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
@@ -63,7 +63,7 @@
 }
   
   .popupContent {
-    background-color: var(--bg-color);
+    background-color: var(--main-bg);
     border-radius: 0;
     width: 100%;
     height: 100%;
@@ -75,7 +75,7 @@
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    color: var(--text-color);
+    color: var(--main-text);
     border: none;
     font-size: 2.5rem;
     cursor: pointer;
@@ -98,7 +98,7 @@
   }
   .popupTabsTrigger {
     flex: 1;
-    border-bottom: var(--border-color) solid 2px;
+    border-bottom: var(--seperator-color) solid 2px;
   }
   .popupTabsTrigger[data-state="active"] {
     border-bottom: var(--primary-color) solid 3px;
@@ -121,7 +121,7 @@
 
   .popupOptionDescription {
     font-size: 0.9rem;
-    color: var(--subtitle-color);
+    color: var(--subtitle-text);
   }
 
   .popupUserContainer {
@@ -141,7 +141,7 @@
   }
   .userInfoText {
     font-size: 1rem;
-    color: var(--subtitle-color);
+    color: var(--subtitle-text);
     align-items: center;
     display: flex;
     gap: 0.2rem;
@@ -151,16 +151,16 @@
   .popupSelect {
     width: 40%;
     padding: 0.5rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--darkbox-border);
     border-radius: 0.5rem;
     font-size: 1rem;
-    color: var(--primary-foreground);
-    background-color: var(--bg-infobox);
+    color: var(--main-text);
+    background-color: var(--darkbox-bg);
   }
 
   .popupLabel {
     font-size: 0.9rem;
-    color: var(--subtitle-color);
+    color: var(--subtitle-text);
     align-items: center;
     display: flex;
     gap: 0.2rem;
@@ -169,10 +169,10 @@
   .popupInput {
     width: 100%;
     padding: 0.5rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--darkbox-border);
     border-radius: 0.5rem;
     font-size: 0.9rem;
-    color: var(--primary-foreground);
+    color: var(--main-text);
     background-color: transparent;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   }
@@ -193,19 +193,19 @@
   width: 100%;
   cursor: pointer;
   border-radius: 0.5rem;
-  background-color: var(--text-color);
-  color: var(--bg-color);
+  background-color: var(--main-text);
+  color: var(--main-bg);
   transition: background-color 0.3s;
 }
 
 .popupButton:hover {
-  background-color: var(--subtitle-color);
+  background-color: var(--subtitle-text);
 }
 
   .seperator {
     width: 100%;
     height: 1px;
-    background-color: var(--border-color);
+    background-color: var(--seperator-color);
     margin: 1rem 0;
   }
 
