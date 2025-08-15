@@ -62,7 +62,6 @@ export default function Meal({ meal, mealIndex, images, comments, settingsCookie
 
   // Render the meal card and popup.
   return (
-    <>
       <div
         key={mealIndex}
         data-layout={settingsCookie?.layout}
@@ -108,6 +107,5 @@ export default function Meal({ meal, mealIndex, images, comments, settingsCookie
         </div>
       </div>
     
-    </>
   );
 }

@@ -195,7 +195,7 @@
   }
   
   .starEmpty {
-    color: var(--darkbox-bg);
+    color: var(--blankstar-color);
   }
   
   .ratingCount {
@@ -215,7 +215,7 @@
     flex-direction: column;
     gap: 0.5rem;
   }
-  .additivesTitle {
+  .sectionTitle {
     font-size: 1rem;
     font-weight: 600;
     color: var(--main-text);

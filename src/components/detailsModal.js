@@ -361,7 +361,7 @@ async function handleUploadMealImage() {
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={(e) => (handleBookmark(e))} ><Bookmark size={18} className={isBookmarked ? styles.bookmarkActive : styles.bookmark} />Bookmark</DropdownMenuItem>
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal.artikel_id) && toast.success("Link copied to clipboard!")}><Share2Icon size={18} />Share</DropdownMenuItem>
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => (handleUploadMealImage())}>{ownsImage ? <CookingPot size={18} /> : <UploadIcon size={18} />}Submit image</DropdownMenuItem>
-                  <DropdownMenuSeparator className={styles.dropdownMenuSeparator} />
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => (handleReportRequest(meal.id))}><FlagIcon size={18} />Report image</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -393,7 +393,7 @@ async function handleUploadMealImage() {
             </div>
           </div>}
             {meal?.frei1 &&<>
-            <p className={styles.additivesTitle}>Information</p>
+            <p className={styles.sectionTitle}>Information</p>
             <div className={styles.infoText}>
             <InfoIcon size={18} className={styles.otherIcon} />
             <p>{meal.frei1+" "+meal.frei2}</p>
@@ -401,7 +401,7 @@ async function handleUploadMealImage() {
 
           <div className={styles.divider} />
           <div className={styles.additivesSection}>
-            <div className={styles.additivesTitle}>
+            <div className={styles.sectionTitle}>
               <p>Additives</p>
               <p className={styles.additivesContext}>Includes vegan options</p>
             </div>
