@@ -19,6 +19,7 @@
   --lightmode-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
   --darkmode-border: none;
   --skeleton-bg: #e2e8f0;
+  --blankstar-color: #c3c5c8;
 }
 
 [data-theme="dark"] {
@@ -37,6 +38,7 @@
   --lightmode-shadow: none;
   --darkmode-border: 1px solid rgba(255, 255, 255, 0.156);
   --skeleton-bg: #1f2937;
+  --blankstar-color: #464646;
 }
 
 body {

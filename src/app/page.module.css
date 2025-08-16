@@ -172,3 +172,25 @@
       padding: 0.4rem 0;
     }
     }
+
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .container {
+        padding: 0 1rem;
+      }
+      .mealGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.7rem;
+      }
+      .mealGridMobileNew {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+      }
+      .skeletonGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+      .headerButtonSection {
+        justify-content: flex-end;
+      }
+    }
