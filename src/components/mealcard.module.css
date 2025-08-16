@@ -110,7 +110,7 @@
     color: var(--subtitle-text);
   }
 
-    @media (max-width: 768px) {
+  @media (max-width: 768px) {
     .mealCard {
         display: flex;
         flex-direction: row;

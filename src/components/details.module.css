@@ -363,6 +363,7 @@
     .popupContent {
       border-radius: 0;
       width: 100%;
+      max-width: none;
       max-height: 100vh;
       height: 100%;
       padding-bottom: 6rem;
@@ -379,5 +380,30 @@
   .popupLocation {
     padding: 0.4rem 0.8rem;
     font-size: 0.85rem;
+  }
+  .altTitle {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .altDescription {
+    color: var(--subtitle-text);
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .popupImage {
+    height: 300px;
+    
+    border-radius: 0;
+    }
+    .popupContent {
+      border-radius: 0;
+      width: 100vw;
+      max-width: none;
+      max-height: 100vh;
+      height: 100%;
+      padding-bottom: 6rem;
   }
   }
