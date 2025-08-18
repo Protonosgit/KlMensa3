@@ -11,11 +11,11 @@
   --tertiary-color: #1a9b4a;
   --bookmark-bg: red;
   --subtitle-text: oklch(37.3% 0.034 259.733);
-  --lightbox-bg: oklch(94.184% 0.00262 230.366);
-  --darkbox-bg: oklch(96.7% 0.003 264.542);
+  --lightbox-bg: oklch(96.7% 0.003 264.542);
+  --darkbox-bg: oklch(94.184% 0.00262 230.366);
   --seperator-color: oklch(92.8% 0.006 264.531);
-  --lightbox-border: oklch(88.817% 0.00304 264.767);
-  --darkbox-border: oklch(92.8% 0.006 264.531);
+  --lightbox-border: oklch(90.326% 0.00596 264.652);
+  --darkbox-border: oklch(83.6% 0.00439 271.364);
   --lightmode-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
   --darkmode-border: none;
   --skeleton-bg: #e2e8f0;

@@ -158,39 +158,39 @@
       }
 
        /* Biglist styles */
-      .mealCard[data-layout="biglist"] {
+      [data-layout="biglist"] .mealCard {
         display: flex;
         flex-direction: column;
       }
-      .mealCard[data-layout="biglist"] .mealInfo {
+      [data-layout="biglist"] .mealInfo {
         width: 100%;
       }
-      .mealCard[data-layout="biglist"] .mealTitle {
+      [data-layout="biglist"] .mealTitle {
         min-width: 0;
         width: 100%;
       }
-      .mealCard[data-layout="biglist"] .mealImage {
+      [data-layout="biglist"] .mealImage {
         width: 100%;
         height: 12rem;
         border-radius: 0.5rem 0.5rem 0 0;
       }
-      .mealCard[data-layout="biglist"] .mealLocation {
+      [data-layout="biglist"] .mealLocation {
         font-size: 0.8rem;
         padding: 0.3rem 0.5rem;
       }
 
        /* Grid styles */
-      .mealCard[data-layout="grid"] {
+      [data-layout="grid"] .mealCard {
         display: flex;
         flex-direction: column;
       }
-      .mealCard[data-layout="grid"] .mealInfo {
+      [data-layout="grid"] .mealInfo {
         width: 100%;
       }
-      .mealCard[data-layout="grid"] .mealTitle {
+      [data-layout="grid"] .mealTitle {
        width: 100%;
       }
-      .mealCard[data-layout="grid"] .mealImage {
+      [data-layout="grid"] .mealImage {
         width: 100%;
         border-radius: 0.5rem 0.5rem 0 0;
       }

@@ -67,7 +67,10 @@ export default function SettingsModal({}) {
     if (key === "dark") {
       document.documentElement.setAttribute('data-theme', value ? "dark" : "light");
     }
-    if (key === "by2lay" || key === "nolimit" || key === "shortitle" || key === "pricecat" || key === "layout") {
+    if (key === "layout") {
+      document.documentElement.setAttribute('data-layout', value);
+    }
+    if (key === "by2lay" || key === "nolimit" || key === "shortitle" || key === "pricecat") {
       //window.location.reload();
       revalidatePage();
     }
@@ -202,7 +205,7 @@ export default function SettingsModal({}) {
                 <div className={styles.popupOption}>
                   {user ? (
                     <div className={styles.popupUserContainer}>
-                      <p>{user.email}{user.email.includes("zoe.") &&<CatIcon />}</p>
+                      <p>{user.email}</p>
                       
                       <div className={styles.userInfoText}> <p>Ratings:</p> <p>{0}</p></div>
                       <div className={styles.userInfoText}> <p>Images:</p> <p>{0}</p></div>
