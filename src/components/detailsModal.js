@@ -414,18 +414,9 @@ async function handleUploadMealImage() {
          <div className={styles.divider} />
 
           <div className={styles.commentsSection}>
-            <h3 className={styles.commentsTitle}>Comments {comments?.length}</h3>
+            <h3 className={styles.commentsTitle}>Ratings {comments?.length}</h3>
             <div className={styles.ownComent} style={{display: user? "flex" : "none"}}>
               <StarRating mealRating={stars} starsSet={setStars} />
-              <textarea
-                type="text"
-                placeholder="Comment (optional)"
-                className={styles.commentInput}
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                maxLength={120}
-              ></textarea>
-              <p className={styles.commentCounter}>{comment?.length}/120</p>
               <div className={styles.commentButtons}>
                 <button className={styles.commentButton} disabled={actionPending} title="Publish" style={{opacity: actionPending? 0.5 : 1, width: "100%"}} onClick={handlePublishRating}>Publish</button>
                 <button className={styles.commentButton} disabled={actionPending} title="Delete" style={{opacity: actionPending? 0.5 : 1, display: commentId? "flex" : "none"}} onClick={handleDeleteRating}><CookingPot /></button>
