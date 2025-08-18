@@ -16,13 +16,15 @@ export default async function Home() {
   }
 
   // Skeleton loading animation
-  const SkeletonLoading = () => (
+    const SkeletonLoading = () => (
       <div className={styles.skeletonGrid}>
         {[...Array(18)].map((_, i) => (
-          <div key={i}>
-            <div className={styles.skeleton} style={{width: "100%", height: "12rem"}}  />
-            <div className={styles.skeleton} style={{width: "100%", height: "1rem"}}/>
-            <div className={styles.skeleton} style={{width: "30%", height: "1rem"}}/>
+          <div key={i} className={styles.skeletonContainer}>
+            <div className={`${styles.skeleton} ${styles.skeletonBox}`}/>
+            <div>
+              <div className={`${styles.skeleton} ${styles.skeletonLine}`} style={{width: "100%"}}/>
+              <div className={`${styles.skeleton} ${styles.skeletonLine}`}/>
+            </div>
           </div>
         ))}
       </div>

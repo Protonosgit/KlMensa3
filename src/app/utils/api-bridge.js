@@ -100,7 +100,7 @@ function isToday(timestamp) {
 
 // Retreive the mensa menu
 async function fetchMenu() {
-    // await new Promise((resolve) => setTimeout(() => resolve(null), 5000)); DEBUG purpose
+     await new Promise((resolve) => setTimeout(() => resolve(null), 5000));
 
 
     // Invalidate cache if no last cachedate exists, length of data is 0 or last cached date is older than 8 hours or the schedule is from yesterday

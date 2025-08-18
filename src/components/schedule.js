@@ -65,9 +65,7 @@ export default async function Schedule({settingsCookie}) {
               <h3 className={styles.dayTitle}>{format(day.date, "dd.MM")}</h3>
             </div>
             <div
-              className={`${styles.mealGrid} ${
-                settingsCookie?.layout === "grid" && styles.mealGridMobileNew}`}
-            >
+              className={styles.mealList}>
               {applyFilters(
                 locationFilter,
                 proteinFilter,
