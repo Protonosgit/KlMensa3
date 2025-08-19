@@ -185,13 +185,19 @@ async function parseMenu(menuData) {
         obj.atextohnezsz2 + (obj.atextohnezsz3?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz3 + (obj.atextohnezsz4?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz4 + (obj.atextohnezsz5?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz5);
+        obj.atextohnezsz5 + (obj.atextohnezsz6?.startsWith(',') ? '' : ' ') +
+        obj.atextohnezsz6 + (obj.atextohnezsz7?.startsWith(',') ? '' : ' ') +
+        obj.atextohnezsz7 + (obj.atextohnezsz8?.startsWith(',') ? '' : ' ') +
+        obj.atextohnezsz8);
     const titleAdditiveAdder = (
         obj.atextz1 + (obj.atextz2?.startsWith(',') ? '' : ' ') +
         obj.atextz2 + (obj.atextz3?.startsWith(',') ? '' : ' ') +
         obj.atextz3 + (obj.atextz4?.startsWith(',') ? '' : ' ') +
         obj.atextz4 + (obj.atextz5?.startsWith(',') ? '' : ' ') +
-        obj.atextz5);
+        obj.atextz5 + (obj.atextz6?.startsWith(',') ? '' : ' ') +
+        obj.atextz6 + (obj.atextz7?.startsWith(',') ? '' : ' ') +
+        obj.atextz7 + (obj.atextz8?.startsWith(',') ? '' : ' ') +
+        obj.atextz8);
 
         // Generate noncrypto hash for unique mealid
     const hashId = murmur.v3(obj.atextohnezsz1+obj.atextohnezsz2+obj.atextohnezsz3+obj.atextohnezsz4+obj.atextohnezsz5).toString(16).substring(0, 8);
