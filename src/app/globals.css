@@ -9,13 +9,15 @@
   --primary-color: #ffc518;
   --secondary-color: #1f5ada;
   --tertiary-color: #1a9b4a;
+  --greenbox-bg: oklch(96.427% 0.0555 154.822);
+  --greentext-color: oklch(44.8% 0.119 151.328);
   --bookmark-bg: red;
   --subtitle-text: oklch(37.3% 0.034 259.733);
   --lightbox-bg: oklch(96.7% 0.003 264.542);
-  --darkbox-bg: oklch(94.184% 0.00262 230.366);
+  --darkbox-bg: oklch(94.611% 0.00011 271.152);
   --seperator-color: oklch(92.8% 0.006 264.531);
   --lightbox-border: oklch(90.326% 0.00596 264.652);
-  --darkbox-border: oklch(83.6% 0.00439 271.364);
+  --darkbox-border: oklch(86.696% 0.00435 271.365);
   --lightmode-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
   --darkmode-border: none;
   --skeleton-bg: #e2e8f0;
@@ -28,6 +30,8 @@
   --primary-color: #ffc518;
   --secondary-color: oklch(66.019% 0.1841 254.638);
   --tertiary-color: #22c55e;
+  --greenbox-bg: oklch(88.192% 0.10575 153.764);
+  --greentext-color: oklch(44.8% 0.119 151.328);
   --bookmark-bg: rgb(201, 0, 0);
   --subtitle-text: oklch(87.2% 0.01 258.338);
   --lightbox-bg: oklch(30.835% 0.0061 258.434);
