@@ -24,19 +24,15 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useModalStore } from '@/app/utils/contextStore';
 
-export default function MealPopup({ mealsFull, commentsFull, imagesFull }) {
-  const { isOpen, meal, comments, images,openModal, closeModal } = useModalStore();
+export default function MealPopup({ mealsFull }) {
+  const { isOpen, meal,openModal, closeModal } = useModalStore();
   // State variables for managing user input, meal details, and UI updates.
   const [stars, setStars] = useState(0);
-  const [comment, setComment] = useState("");
   const [additives, setAdditives] = useState([]);
   const [user, setUser] = useState();
   const [settings, setSettings] = useState();
-  const [commentId, setCommentId] = useState(null);
   const [actionPending, setActionPending] = useState(false);
   const [ownsImage, setOwnsImage] = useState('');
-  const [rating, setRating] = useState(0);
-  const [ratingCount, setRatingCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
 
@@ -69,20 +65,6 @@ export default function MealPopup({ mealsFull, commentsFull, imagesFull }) {
   }, [isOpen]);
 
 
-  function checkUserOwnsComment(commentList) {
-    const ownComment = commentList?.filter((c) => c.user_id !== null);
-    if (ownComment?.length > 0) {
-      setStars(ownComment[0]?.rating);
-      setComment(ownComment[0]?.comment_text);
-      setCommentId(ownComment[0]?.id);
-    }
-  }
-  function checkUserOwnsImage(imageList) {
-    const ownImage = imageList?.filter((c) => c.owner_id !== null);
-    if (ownImage?.length > 0) {
-      setOwnsImage(ownImage[0]?.image_name);
-    }
-  }
   //settings and userdata
     useEffect(() => {
       // retrieve cookies for settings
@@ -112,31 +94,20 @@ export default function MealPopup({ mealsFull, commentsFull, imagesFull }) {
         setIsBookmarked(bookmarks.includes(meal?.artikel_id));
       }
       
-      checkUserOwnsComment(comments);
-      checkUserOwnsImage(images);
 
-      // Calculate Rating from supabase and legacy api
-      const sumOfRatings = comments?.reduce((acc, curr) => acc + curr.rating, 0);
-      const fullSum = sumOfRatings + (meal?.rating*meal?.rating_amt || 0);
-      const fullCount = comments?.length  + (meal?.rating_amt || 0);
-      setRating(fullSum/fullCount);
-      setRatingCount(fullCount);
-
-    }, [meal, comments, images, mealsFull, commentsFull, imagesFull]);
+    }, [meal, mealsFull]);
 
     useEffect(() => {
       const urlParams = new URLSearchParams(window.location.search);
       const mealId = urlParams.get('artid');
       if(mealId) {
         const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m.artikel_id === mealId);
-        const foundcomments = commentsFull?.filter(m => m.article_id === mealId);
-        const foundimages = imagesFull?.filter(m => m.article_id === mealId);
-        if(!foundmeal || !foundcomments || !foundimages) {
+        if(!foundmeal) {
           alert('Meal has expired!');
           window.location.replace('/');
           return;
         }
-        openModal(foundmeal, foundcomments, foundimages);
+        openModal(foundmeal);
       }
     }, [])
     
@@ -147,39 +118,12 @@ export default function MealPopup({ mealsFull, commentsFull, imagesFull }) {
   async function handlePublishRating() {
     if(stars<1) {toast.error("Please rate the meal!"); return;}
     setActionPending(true);
-    if(commentId) {
-      const response = await updateComment(commentId, stars, comment);
-      if(response?.error) {
-        toast.error(response?.error);
-      } else {
-        toast.success("Comment updated!");
-      }
-      setActionPending(false);
-      return;
-    }
-
-    const response = await publishComment(meal?.artikel_id, stars, comment);
-    if(response?.error) {
-      toast.error(response?.error);
-    } else {
-      setCommentId(response?.data[0]?.id);
-      toast.success("Comment published!");
-    }
     setActionPending(false);
   }
 
   // Handle deleting a comment.
   async function handleDeleteRating() {
     setActionPending(true);
-    const response = await deleteComment(commentId);
-    if(response?.error) {
-      toast.error(response?.error);
-    } else {
-      toast.success("Comment deleted!");
-      setStars(0);
-      setComment("");
-      setCommentId(null);
-    }
     setActionPending(false);
   }
 
@@ -231,6 +175,8 @@ async function handleUploadMealImage() {
     }
     return;
   }
+  alert("Temporary disabled due to a server conflict!");
+  return;
 
   // Set up file request
   const fileInput = document.createElement("input");
@@ -313,6 +259,9 @@ async function handleUploadMealImage() {
         {meal?.atextohnezsz3 && <li>{settings?.intitle ? meal?.atextz3	 : meal?.atextohnezsz3}</li>}
         {meal?.atextohnezsz4 && <li>{settings?.intitle ? meal?.atextz4	 : meal?.atextohnezsz4}</li>}
         {meal?.atextohnezsz5 && <li>{settings?.intitle ? meal?.atextz5	 : meal?.atextohnezsz5}</li>}
+        {meal?.atextohnezsz6 && <li>{settings?.intitle ? meal?.atextz6	 : meal?.atextohnezsz6}</li>}
+        {meal?.atextohnezsz7 && <li>{settings?.intitle ? meal?.atextz7	 : meal?.atextohnezsz7}</li>}
+        {meal?.atextohnezsz8 && <li>{settings?.intitle ? meal?.atextz8	 : meal?.atextohnezsz8}</li>}
       </ul>);
 
     return <h2 className={styles.popupTitle} title={meal?.titleAdditivesCombined}>{settings?.intitle ? (meal?.titleAdditivesCombined) : meal?.titleCombined}</h2>;
@@ -326,22 +275,12 @@ async function handleUploadMealImage() {
       <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.popupImageContainer}>
           {/* Render meal image from any source or placeholder */}
-          {(images && images.length > 0) ? (
-            <Image 
-              placeholder="blur"
-              blurDataURL="/plate_placeholder.png"
-              priority={false} loading={"lazy"}
-              src={"https://gbxuqreqhbkcxrwfeeig.supabase.co"+images[0]?.image_url} alt="dish-image" title={meal?.atextohnezsz1}
-              className={styles.popupImage}
-              width={1600} height={900} />
-          ) : (
             <Image 
               priority={false} 
               loading={"lazy"} 
-              src={meal?.image? "https://www.mensa-kl.de/mimg/"+meal?.image : "/plate_placeholder.png"}  title={meal?.atextohnezsz1}
+              src={meal?.image? meal?.imageUrl : "/plate_placeholder.png"}  title={meal?.atextohnezsz1}
               alt="dish-image" className={styles.popupImage} 
               width={1600} height={900} />
-          )}
 
           <div className={styles.overlayLocationBar}>
               <p title="Location" className={styles.popupLocation}>
@@ -376,22 +315,22 @@ async function handleUploadMealImage() {
           <div className={styles.popupPriceRating}>
             <span title="Price" className={styles.popupPrice}>{meal?.price?.stu || meal?.price?.price}</span>
             <div className={styles.popupRating}>
-              <StarRating mealRating={rating} disabled={true} />
-              <span className={styles.ratingCount}>({ratingCount})</span>
+              <StarRating mealRating={meal?.rating} disabled={true} />
+              <span className={styles.ratingCount}>({meal?.rating_amt})</span>
             </div>
           </div>
 
-          <div className={styles.divider} style={{display: meal?.altOption || meal?.frei1 ? "block" : "none"}} />
 
           {meal.altOption &&     
           <div className={styles.altBox}>
                 {meal.vegiOption && <Image src={vegiOpIcon} alt="vegi" width={25} height={25} className={styles.otherIcon}/> }
                 {meal.veganOption && <Image src={veganOpIcon} alt="vegan" width={25} height={25} className={styles.otherIcon} />}
             <div>
-              <p className={styles.altTitle}>{meal?.veganOption ? "Vegan" : "Vegi"} Alternative</p>
+              <p className={styles.altTitle}>{meal?.veganOption ? "Vegan" : "Veggie"} Alternative</p>
               <p className={styles.altDescription}>{meal?.altOption}</p>
             </div>
           </div>}
+          <div className={styles.divider} style={{display: meal?.frei1 ? "block" : "none"}} />
             {meal?.frei1 &&<>
             <p className={styles.sectionTitle}>Information</p>
             <div className={styles.infoText}>
@@ -403,37 +342,16 @@ async function handleUploadMealImage() {
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
               <p>Additives</p>
-              <p className={styles.additivesContext}>Includes vegan options</p>
+              <p className={styles.additivesContext}>Includes all variants</p>
             </div>
             {additives?.length > 1 ? <div> {additives?.map((additive) => <Badge title={additive?.name} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
           </div>
         
 
-
-
          <div className={styles.divider} />
+         <h3 className={styles.commentsTitle}>Ratings</h3>
+         <p className={styles.infoText}>Temporarily unavailable</p>
 
-          <div className={styles.commentsSection}>
-            <h3 className={styles.commentsTitle}>Ratings {comments?.length}</h3>
-            <div className={styles.ownComent} style={{display: user? "flex" : "none"}}>
-              <StarRating mealRating={stars} starsSet={setStars} />
-              <div className={styles.commentButtons}>
-                <button className={styles.commentButton} disabled={actionPending} title="Publish" style={{opacity: actionPending? 0.5 : 1, width: "100%"}} onClick={handlePublishRating}>Publish</button>
-                <button className={styles.commentButton} disabled={actionPending} title="Delete" style={{opacity: actionPending? 0.5 : 1, display: commentId? "flex" : "none"}} onClick={handleDeleteRating}><CookingPot /></button>
-              </div>
-            </div>
-
-            {comments?.map((comment, index) => (
-              <div key={index} className={styles.foreignComment}>
-                <div className={styles.commentInfo}>
-                   <StarRating mealRating={comment.rating} disabled={true} />
-                  <span className={styles.commentDate}>{new Date(comment.created_at).toLocaleString("de-DE", { year: "numeric", month: "2-digit", day: "2-digit"})}</span>
-                  <FlagIcon onClick={() => handleReportRequest(comment?.id)} size={16} fill="var(--text-color)" />
-                </div>
-                <p className={styles.commentText}>{comment.comment_text}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>

@@ -10,22 +10,11 @@ import veganOpIcon  from "../../public/icons/vegan-op.svg";
 import { useModalStore } from "@/app/utils/contextStore";
 
 
-export default function Meal({ meal, mealIndex, images, comments, settingsCookie }) {
+export default function Meal({ meal, mealIndex, settingsCookie }) {
 
   // State variables
   const { openModal, isOpen } = useModalStore();
-  const [rating, setRating] = useState(0);
-  const [ratingCount, setRatingCount] = useState(0);
 
-
-  useEffect(() => {    
-    // Calculate the average rating of the meal.
-    const sumOfRatings = comments.reduce((acc, curr) => acc + curr.rating, 0);
-    const fullSum = sumOfRatings + (meal.rating * meal.rating_amt || 0);
-    const fullCount = comments.length + (meal.rating_amt || 0);
-    setRating(fullSum / fullCount);
-    setRatingCount(fullCount);
-  }, [meal]);
 
   useEffect(() => {
     // Disable page scrolling when the meal popup is open.
@@ -35,6 +24,7 @@ export default function Meal({ meal, mealIndex, images, comments, settingsCookie
       document.body.style.overflow = '';
     }
   }, [isOpen]);
+  
 
   // Render star rating for the meal (non-interactive).
   const renderStarRating = () => {
@@ -44,11 +34,11 @@ export default function Meal({ meal, mealIndex, images, comments, settingsCookie
           <Star
             key={i}
             className={`${styles.star} ${
-              i < Math.floor(rating) ? styles.starFilled : styles.starEmpty
+              i < Math.floor(meal?.rating) ? styles.starFilled : styles.starEmpty
             }`}
           />
         ))}
-        <span className={styles.ratingCount}>{ratingCount}</span>
+        <span className={styles.ratingCount}>{meal?.rating_amt}</span>
       </div>
     );
   };
@@ -57,7 +47,7 @@ export default function Meal({ meal, mealIndex, images, comments, settingsCookie
   const requestOpenModal = () => {
     if(isOpen) return;
     window.history.pushState(null, '', window.location.href+"?artid="+meal.artikel_id);
-    openModal(meal, comments, images);
+    openModal(meal);
   };
 
   // Render the meal card and popup.
@@ -68,24 +58,13 @@ export default function Meal({ meal, mealIndex, images, comments, settingsCookie
         className={styles.mealCard}
         onClick={() => requestOpenModal()} 
       >
-
         {/* Meal image */}
-        {(images && images.length > 0) ? (
-          <Image
-            placeholder="blur"
-            blurDataURL="/plate_placeholder.png"
-            priority={false} loading={"lazy"}
-            src={"https://gbxuqreqhbkcxrwfeeig.supabase.co" + images[0]?.image_url} alt="dish-image" title={meal.atextohnezsz1}
-            className={styles.mealImage}
-            width={1600} height={900} />
-        ) : (
           <Image
             priority
-            src={meal.image ? "https://www.mensa-kl.de/mimg/" + meal?.image : "/plate_placeholder.png"}
+            src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
             alt="dish-image" title={meal.atextohnezsz1} 
             className={styles.mealImage}
             width={1600} height={900} />
-        )}
 
         <p className={styles.mealLocation}>
           {meal?.dpartname}

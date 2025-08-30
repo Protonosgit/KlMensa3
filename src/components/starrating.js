@@ -3,7 +3,7 @@ import styles from "./details.module.css";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function StarRating({ mealRating, disabled, starsSet }) {
+export default function StarRating({ mealRating=0, disabled, starsSet }) {
     const [hover, setHover] = useState(null);
     const [rating, setRating] = useState(0);
 

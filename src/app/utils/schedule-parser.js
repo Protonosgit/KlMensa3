@@ -308,8 +308,10 @@ async function matchMenuToUdat(schedule) {
                 const udatTitle = udatEntry?.title.replace(/&quot;/g, '"').toLowerCase().replace(/[^a-z]/g, '');
 
                 if (udatTitle.includes(titleCollector)) {
+                    entry.legacyId = udatEntry.m_id
                     if(udatEntry.image){
                         entry.image = udatEntry.image;
+                        entry.imageUrl = udatEntry.image_url_webp
                     }
                     if(udatEntry.rating){
                         entry.rating = udatEntry.rating;

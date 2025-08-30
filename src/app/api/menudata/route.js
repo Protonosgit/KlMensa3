@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import {  fetchMenu } from '@/app/utils/api-bridge';
+import {  fetchMenu } from '@/app/utils/schedule-parser';
 
 export async function GET(req, res) {
 

@@ -1,8 +1,7 @@
 import { cookies } from 'next/headers';
-import {  fetchMenu } from '@/app/utils/api-bridge';
+import {  fetchMenu } from '@/app/utils/schedule-parser';
 import styles from "../app/page.module.css";
 import { format } from 'date-fns';
-import { fetchComments,fetchImages } from '@/app/utils/database-actions';
 import Meal from './meal';
 import { applyFilters } from '@/app/utils/filter.js';
 import MealPopup from './detailsModal';
@@ -35,8 +34,6 @@ export default async function Schedule({settingsCookie}) {
   const menuData = await fetchMenu();
   let menu = menuData?.splitMenu;
   const hashIds = menuData?.hashIdList;
-  const comments = await fetchComments(hashIds);
-  const images = await fetchImages(hashIds);
 
 
   // Show unlimeted menu dates
@@ -72,32 +69,12 @@ export default async function Schedule({settingsCookie}) {
                 additiveFilter,
                 day?.meals
               ).map((meal, mealIndex) => {
-                // Filter comments to match the current meal
-                const filteredComments = () => {
-                  if (comments && comments.length > 0) {
-                    return comments.filter(
-                      (comment) => comment?.article_id === meal?.artikel_id
-                    );
-                  }
-                  return [];
-                };
-                // Filter images to match the current meal
-                const filteredImages = () => {
-                  if (images && images.length > 0) {
-                    return images.filter(
-                      (image) => image?.article_id === meal?.artikel_id
-                    );
-                  }
-                  return [];
-                };
 
                 return (
                   <Meal
                     key={mealIndex}
                     meal={meal}
                     mealIndex={mealIndex}
-                    comments={filteredComments()}
-                    images={filteredImages()}
                     settingsCookie={settingsCookie}
                   />
                 );
@@ -106,7 +83,7 @@ export default async function Schedule({settingsCookie}) {
           </div>
         );
       })}
-      <MealPopup mealsFull={menuData?.splitMenu} commentsFull={comments} imagesFull={images} />
+      <MealPopup mealsFull={menuData?.splitMenu} />
     </>
   );
 }
