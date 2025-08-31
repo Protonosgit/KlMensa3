@@ -58,14 +58,14 @@
   gap: 0.3rem;
   justify-content: space-between;
 }
-.mealIcons {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.3rem;
-}
-.veganIcon {
+.greenIcon {
+  width: 1.2rem;
+  height: 1.2rem;
   color: var(--tertiary-color);
+}
+.otherIcon {
+  width: 1.2rem;
+  height: 1.2rem
 }
   
   .mealTitle {
@@ -116,6 +116,7 @@
         flex-direction: row;
         max-width: 100%;
         overflow: hidden;
+        height: 8rem;
         }
       .mealInfo {
         width: 60%;
@@ -133,7 +134,7 @@
       }
     .mealImage {
         width: 40%;
-        height: 8rem;
+        height: 100%;
         border-radius: 0.5rem 0 0 0.5rem;
       }
       .mealLocation {
@@ -142,15 +143,12 @@
         top: 0.2rem;
         left: 0.2rem;
       }
-      .otherIcon {
-        width: 1rem;
-        height: 1rem
-      }
       .star {
         width: 1rem;
         height: 1rem;
       }
       .ratingCount {
+        min-width: 0.8rem;
         font-size: 0.75rem;
       }
       .mealPrice {
@@ -161,6 +159,7 @@
       [data-layout="biglist"] .mealCard {
         display: flex;
         flex-direction: column;
+        height: auto;
       }
       [data-layout="biglist"] .mealInfo {
         width: 100%;
@@ -183,6 +182,7 @@
       [data-layout="grid"] .mealCard {
         display: flex;
         flex-direction: column;
+        height: auto;
       }
       [data-layout="grid"] .mealInfo {
         width: 100%;

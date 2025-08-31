@@ -11,10 +11,10 @@ import { getCookie } from "@/app/utils/cookie-monster";
 import { publishComment,updateComment,deleteComment,reportComment } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { Bookmark, Bot, CookingPot, EllipsisVertical, FlagIcon, InfoIcon, Share2Icon, UploadIcon } from "lucide-react";
-import  veganIcon from "../../public/icons/vegan.svg";
-import vegiOpIcon from "../../public/icons/vegi-op.svg";
-import veganOpIcon  from "../../public/icons/vegan-op.svg";
+import { Bookmark, Bot, CookingPot, EllipsisVertical, FlagIcon, InfoIcon, Scale, Share2Icon, UploadIcon } from "lucide-react";
+import  VeganIcon from "../../public/icons/VeganIcon.svg";
+import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
+import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -287,9 +287,10 @@ async function handleUploadMealImage() {
               {meal.dpartname}
               
               {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
-              {meal?.vegiOption ? <Image src={vegiOpIcon} alt="vegan-icon" width={20} height={20} className={styles.otherIcon} /> : ""}
-              {meal?.veganOption ? <Image src={veganOpIcon} alt="vegan-icon" width={20} height={20} className={styles.otherIcon} /> : ""}
-              {meal?.menuekennztext == "V+" ? <Image src={veganIcon} alt="vegan-icon" width={20} height={20} className={styles.otherIcon} /> : ""}
+              {meal?.vegiOption ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
+              {meal?.veganOption ? <VeganOpIcon className={styles.greenIcon} /> : ""}
+              {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}
+              
             </p>
           </div>
 
@@ -306,6 +307,7 @@ async function handleUploadMealImage() {
               </DropdownMenu>
             <button onClick={requestCloseModal} className={styles.popupActionButton}>×</button>
           </div>
+          
         </div>
 
         {/* Render meal details, comments, and action buttons */}
@@ -316,15 +318,15 @@ async function handleUploadMealImage() {
             <span title="Price" className={styles.popupPrice}>{meal?.price?.stu || meal?.price?.price}</span>
             <div className={styles.popupRating}>
               <StarRating mealRating={meal?.rating} disabled={true} />
-              <span className={styles.ratingCount}>({meal?.rating_amt})</span>
+              <span className={styles.ratingCount} >({meal?.rating_amt || "0"})</span>
             </div>
           </div>
 
 
           {meal.altOption &&     
           <div className={styles.altBox}>
-                {meal.vegiOption && <Image src={vegiOpIcon} alt="vegi" width={25} height={25} className={styles.otherIcon}/> }
-                {meal.veganOption && <Image src={veganOpIcon} alt="vegan" width={25} height={25} className={styles.otherIcon} />}
+                {meal.vegiOption && <VeggieOpIcon className={styles.altIcon} />  }
+                {meal.veganOption && <VeganOpIcon className={styles.altIcon} /> }
             <div>
               <p className={styles.altTitle}>{meal?.veganOption ? "Vegan" : "Veggie"} Alternative</p>
               <p className={styles.altDescription}>{meal?.altOption}</p>

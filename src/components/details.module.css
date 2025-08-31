@@ -79,8 +79,14 @@
     box-shadow: var(--lightmode-shadow);
   }
   
-  .veganIcon {
+  .greenIcon {
+    width: 1.4rem;
+    height: 1.4rem;
     color: var(--tertiary-color);
+  }
+  .otherIcon {
+    width: 1.4rem;
+    height: 1.4rem
   }
   
   .popupActionButton {
@@ -248,6 +254,7 @@
     border-radius: 8px;
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 1rem;
     padding: 0.8rem;
     margin: 0.7rem 0;
@@ -262,6 +269,11 @@
     color: var(--greentext-color);
     font-weight: 500;
     font-size: 1rem;
+  }
+  .altIcon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--greentext-color);
   }
   .infoText {
     display: flex;
@@ -346,6 +358,9 @@
   .popupImage:active + .overlayLocationBar {
     opacity: 0.3;
   }
+  .popupImage:active ~ .overlayActionsBar {
+    opacity: 0.3;
+  }
 
   /* Responsive Design */
   @media (max-width: 768px) {
@@ -388,7 +403,6 @@
     font-weight: 600;
   }
   .altDescription {
-    color: var(--subtitle-text);
     font-weight: 500;
     font-size: 0.9rem;
   }

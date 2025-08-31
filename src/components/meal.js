@@ -4,9 +4,9 @@ import { Star, Bot } from "lucide-react";
 import styles from "./mealcard.module.css";
 import { useEffect, useState } from "react";
 import { getCookie } from "@/app/utils/cookie-monster";
-import  veganIcon from "../../public/icons/vegan.svg";
-import vegiOpIcon from "../../public/icons/vegi-op.svg";
-import veganOpIcon  from "../../public/icons/vegan-op.svg";
+import  VeganIcon from "../../public/icons/VeganIcon.svg";
+import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
+import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
 import { useModalStore } from "@/app/utils/contextStore";
 
 
@@ -28,6 +28,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
 
   // Render star rating for the meal (non-interactive).
   const renderStarRating = () => {
+    if(!meal?.rating) return;
     return (
       <div className={styles.starRating}>
         {[...Array(5)].map((_, i) => (
@@ -69,10 +70,10 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
         <p className={styles.mealLocation}>
           {meal?.dpartname}
 
-          {meal?.dpname == "Robotic Kitchen" ? <Bot size={18} className={styles.otherIcon} /> : ""}
-          {meal?.vegiOption ? <Image title="Vegetarian option" src={vegiOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
-          {meal?.veganOption ? <Image title="Vegan option" src={veganOpIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
-          {meal?.menuekennztext == "V+" ? <Image title="Vegan" src={veganIcon} alt="vegan-icon" width={18} height={18} className={styles.otherIcon} /> : ""}
+          {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
+          {meal?.vegiOption ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
+          {meal?.veganOption ? <VeganOpIcon className={styles.greenIcon} /> : ""}
+          {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}
         </p>
 
         {/* Meal details */}
