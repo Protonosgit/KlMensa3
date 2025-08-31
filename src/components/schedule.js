@@ -46,7 +46,7 @@ export default async function Schedule({settingsCookie}) {
   if (!menu || !menu?.length) {
     return (
       <div className={styles.emptyList}>
-        <p>Server did not return a valid menu!</p>
+        <p>Api did not return a valid menu on time!</p>
       </div>
     );
   }
