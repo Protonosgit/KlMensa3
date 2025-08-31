@@ -11,3 +11,6 @@
 Are always wellcome so feel free to help out!
 Just clone the repo (`git clone https://github.com/Protonosgit/KlMensa3`) and run `npm install`.
 
+## Blocklist
+- AI-bots
+- Suspicious countries (see blocking page)

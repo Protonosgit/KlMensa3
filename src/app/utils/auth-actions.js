@@ -37,11 +37,20 @@ export async function signup(useremail,userpassword) {
   return data
 }
 
+export async function retrieveUserAccountData() {
+    const supabase = await createClient();
+    const { data, error } = await supabase.from("profiles").select("*").limit(1);
+
+    return data[0];
+}
+
 export async function logout() {
     const supabase = await createClient();
     const { error } = await supabase.auth.signOut();
     return error
 }
+
+
 
 export async function revalidatePage() {
   revalidatePath('/');

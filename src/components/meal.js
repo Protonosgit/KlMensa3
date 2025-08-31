@@ -28,7 +28,6 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
 
   // Render star rating for the meal (non-interactive).
   const renderStarRating = () => {
-    if(!meal?.rating) return;
     return (
       <div className={styles.starRating}>
         {[...Array(5)].map((_, i) => (
@@ -39,7 +38,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
             }`}
           />
         ))}
-        <span className={styles.ratingCount}>{meal?.rating_amt}</span>
+        <span className={styles.ratingCount}>{meal?.rating_amt || 0}</span>
       </div>
     );
   };
