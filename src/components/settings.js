@@ -1,19 +1,19 @@
 "use client";
 import styles from "./settings.module.css";
 import { useEffect, useRef, useState } from "react";
-import { Cat, CatIcon, Settings, X } from "lucide-react";
+import { Mail, Lock, CatIcon, Settings, X } from "lucide-react";
 import { toast, Toaster } from 'react-hot-toast';
 import { login,logout, signup } from "@/app/utils/auth-actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
 import Switch from "react-switch";
 import { createClient } from "@/app/utils/supabase/client";
-import { Mail, Lock } from "lucide-react";
-import { revalidatePage } from "@/app/utils/auth-actions";
+import { revalidatePage, retrieveUserAccountData } from "@/app/utils/auth-actions";
 
 export default function SettingsModal({}) {
   // State variables for managing modal visibility, settings, and user authentication.
   const [modalVisible, setModalVisible] = useState(false);
+  const [userAccountData, setUserAccountData] = useState({});
     const [settings, setSettings] = useState({
     dark: false,
     intitle: false,
@@ -42,6 +42,10 @@ export default function SettingsModal({}) {
       const { data, error } = await supabase.auth.getUser();
       if (data?.user) {
         setUser(data?.user);
+      }
+      const retrievedUdat = await retrieveUserAccountData();
+      if (retrievedUdat?.id) {
+        setUserAccountData(retrievedUdat);
       }
     }
     fetchUserData();
@@ -206,7 +210,7 @@ export default function SettingsModal({}) {
                   {user ? (
                     <div className={styles.popupUserContainer}>
                       <p>{user.email}</p>
-                      
+                      {userAccountData?.metadata?.theme && <CatIcon />}
                       <div className={styles.userInfoText}> <p>Ratings:</p> <p>{0}</p></div>
                       <div className={styles.userInfoText}> <p>Images:</p> <p>{0}</p></div>
                       <button className={styles.popupButton} onClick={() => handleLogout()}>Logout</button>
