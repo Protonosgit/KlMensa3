@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./details.module.css";
 import { extractAdditives } from "@/app/utils/additives";
@@ -27,7 +26,7 @@ import { useModalStore } from '@/app/utils/contextStore';
 export default function MealPopup({ mealsFull }) {
   const { isOpen, meal,openModal, closeModal } = useModalStore();
   // State variables for managing user input, meal details, and UI updates.
-  const [stars, setStars] = useState(0);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [additives, setAdditives] = useState([]);
   const [user, setUser] = useState();
   const [settings, setSettings] = useState();
@@ -67,6 +66,7 @@ export default function MealPopup({ mealsFull }) {
 
   //settings and userdata
     useEffect(() => {
+      let tooltipTimer;
       // retrieve cookies for settings
       setAdditives(extractAdditives(meal?.zsnumnamen));
 
@@ -81,6 +81,14 @@ export default function MealPopup({ mealsFull }) {
         const { data, error } = await supabase.auth.getUser();
         if(data?.user) {
           setUser(data?.user);
+
+          // Show tooltip if there are too few ratins
+          if(meal?.rating_amt < 3 || !meal?.rating_amt) {
+          setShowTooltip(true);
+          tooltipTimer = setTimeout(() => {
+            setShowTooltip(false);
+          }, 3000);
+          }
         }
       }
       fetchUserData();
@@ -93,7 +101,13 @@ export default function MealPopup({ mealsFull }) {
         const bookmarks = JSON.parse(cookieValue);
         setIsBookmarked(bookmarks.includes(meal?.artikel_id));
       }
-      
+
+      return () => {
+        if (tooltipTimer) {
+          clearTimeout(tooltipTimer);
+          setShowTooltip(false);
+        }
+      };
 
     }, [meal, mealsFull]);
 
@@ -115,9 +129,10 @@ export default function MealPopup({ mealsFull }) {
 
 
   // Handle publishing or updating a comment.
-  async function handlePublishRating() {
-    if(stars<1) {toast.error("Please rate the meal!"); return;}
+  async function handleSetRating(rating) {
     setActionPending(true);
+    toast.success("Rating failed successfully!");
+    setShowTooltip(false);
     setActionPending(false);
   }
 
@@ -317,8 +332,16 @@ async function handleUploadMealImage() {
           <div className={styles.popupPriceRating}>
             <span title="Price" className={styles.popupPrice}>{meal?.price?.stu || meal?.price?.price}</span>
             <div className={styles.popupRating}>
-              <StarRating mealRating={meal?.rating} disabled={true} />
-              <span className={styles.ratingCount} >({meal?.rating_amt || "0"})</span>
+              <div
+                className={styles.tooltipWrapper}
+                role="button"
+                tabIndex={0}
+                aria-label="Rate this meal"
+              >
+                <StarRating predefined={meal?.rating} starsSet={handleSetRating} />
+                <span className={`${styles.tooltipBubble} ${showTooltip ? styles.triggerTooltip : ""}`} role="tooltip">Rate this meal</span>
+              </div>
+               <span className={styles.ratingCount} >({meal?.rating_amt || "0"})</span>
             </div>
           </div>
 
@@ -349,10 +372,6 @@ async function handleUploadMealImage() {
             {additives?.length > 1 ? <div> {additives?.map((additive) => <Badge title={additive?.name} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
           </div>
         
-
-         <div className={styles.divider} />
-         <h3 className={styles.commentsTitle}>Ratings</h3>
-         <p className={styles.infoText}>Temporarily unavailable</p>
 
         </div>
       </div>

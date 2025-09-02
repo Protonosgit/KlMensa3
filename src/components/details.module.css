@@ -185,24 +185,77 @@
     align-items: center;
   }
   
-  .star {
-    width: 1.3rem;
-    height: 1.3rem;
-  }
-  
-  .starFilled {
-    color: var(--primary-color);
-    fill: var(--primary-color);
-  }
+.star-rating {
+  display: flex;
+  gap: 5px;
+}
 
-  .starHover {
-    color: var(--primary-color);
-    fill: currentColor;
-  }
-  
-  .starEmpty {
-    color: var(--blankstar-color);
-  }
+.star {
+  color: var(--blankstar-color);
+  cursor: pointer;
+  transition: color 0.4s;
+}
+
+.star-rating.disabled .star {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.star.predefined {
+  color: var(--primary-color);
+  fill: var(--primary-color);
+}
+
+.star.active {
+  color: var(--main-text);
+  fill: var(--main-text);
+}
+.star:active {
+  scale: 1.2;
+}
+
+/* ...existing code... */
+.tooltipWrapper {
+  position: relative;
+  display: inline-block;
+  cursor: default;
+  outline: none;
+}
+
+.tooltipBubble {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 8px);
+  margin-bottom: 8px;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 300ms ease, transform 250ms ease;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.tooltipBubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(0,0,0,0.85) transparent transparent transparent;
+}
+
+.triggerTooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
   
   .ratingCount {
     margin-left: 0.25rem;
@@ -274,7 +327,7 @@
     width: 2rem;
     height: 2rem;
     color: var(--greentext-color);
-    animation: scaleBounce 0.7s ease-out;
+    animation: scaleBounce 0.75s ease-out;
   }
 
   @keyframes scaleBounce {
@@ -378,7 +431,7 @@
   /* Responsive Design */
   @media (max-width: 768px) {
     .popupImage {
-    height: 300px;
+    height: 280px;
     border-radius: 0;
     }
     .popupTitle {
