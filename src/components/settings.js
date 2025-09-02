@@ -177,7 +177,7 @@ export default function SettingsModal({}) {
                         <div className={styles.seperator}></div>
 
                         <div className={`${styles.popupOption} ${styles.mobileLayoutOption}`} >
-                          <span style={{width: "100%", textAlign: "left"}}>Mobile layout: </span>
+                          <span style={{width: "100%", textAlign: "left"}}>Layout: </span>
                           <select className={styles.popupSelect} value={settings.layout} onChange={(e) => handleSettingChange("layout", e.target.value)} >
                           <option value="list">List</option>
                           <option value="biglist">Big list</option>

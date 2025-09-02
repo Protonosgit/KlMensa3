@@ -1,45 +1,43 @@
 "use client";
+import { useState } from "react";
 import styles from "./details.module.css";
 import { Star } from "lucide-react";
-import { useEffect, useState } from "react";
 
-export default function StarRating({ mealRating=0, disabled, starsSet }) {
-    const [hover, setHover] = useState(null);
-    const [rating, setRating] = useState(0);
+export default function StarRating({ disabled = false, starsSet, predefined = 0 }) {
+  const [hovered, setHovered] = useState(null);
+  const [selected, setSelected] = useState(null); // null = no user interaction yet
 
-    useEffect(() => {
-      setRating(mealRating);
-    }, [mealRating]);
+  const handleClick = (index) => {
+    if (disabled) return;
+    setSelected(index);
+    if (starsSet) starsSet(index);
+  };
 
-    const handleMouseIn = (i) => {
-      if (disabled) return;
-      setHover(i + 1);
-    };
+  const getClass = (index) => {
+    if (hovered !== null) {
+      // On hover → black
+      return index <= hovered ? `${styles.star} ${styles.active}` : styles.star;
+    }
 
-    const handleMouseOut = () => {
-      if (disabled) return;
-      setHover(0);
-    };
+    if (selected !== null) {
+      // After user selects → always black
+      return index <= selected ? `${styles.star} ${styles.active}` : styles.star;
+    }
 
-    const handleRating = (rating) => {
-      if (disabled) return;
-      setRating(rating);
-      starsSet(rating);
-    };
+    // Before interaction → predefined stars yellow
+    return index <= predefined ? `${styles.star} ${styles.predefined}` : styles.star;
+  };
 
   return (
-    <div className={styles.starRating} onMouseEnter={disabled ? undefined : () => setHover(1)} onMouseLeave={disabled ? undefined : () => setHover(0)}>
-    {[...Array(5)].map((_, i) => (
-      <Star
-        key={i}
-        className={`${styles.star} ${ i < rating ? styles.starFilled : (i < hover ? styles.starHover : styles.starEmpty) } ${i < hover && !disabled ? styles.starHover : ""}`}
-        style={disabled ? undefined : {height: "1.7rem", width: "1.7rem"}}
-        onMouseEnter={disabled ? undefined : () => handleMouseIn(i)}
-        onMouseLeave={disabled ? undefined : () => handleMouseOut()}
-        onClick={disabled ? undefined : () => handleRating(i + 1)}
-      />
-    ))}
-
-  </div>
-  )
+    <div className={`${styles.starRating} ${disabled ? styles.disabled : ""}`}>
+      {[1, 2, 3, 4, 5].map((index) => (
+        <Star
+          key={index}
+          className={getClass(index)}
+          onMouseEnter={() => !disabled && setHovered(index)}
+          onMouseLeave={() => !disabled && setHovered(null)}
+          onClick={() => handleClick(index)}/>
+      ))}
+    </div>
+  );
 }

@@ -8,7 +8,7 @@ import styles from "./filter.module.css";
 import { Filter, CookingPot, LocateIcon, MapPin, Beef, FlaskConical, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { revalidatePage } from "@/app/utils/auth-actions";
-import { set } from "date-fns";
+import { useFilterStore } from "@/app/utils/contextStore";
 
 // Define clear names and codes for meal locations, additives, and proteins.
 const mealLocationClearname = [
@@ -65,6 +65,7 @@ export default function FilterMenu() {
   const [allProteinToggled, setAllProteinToggled] = useState(true);
 
   function loadFilters() {
+    setRefreshing(true);
     setFilterActive(false);
     // Load filter values from cookies and update state variables
     function getArrayFromCookie(name) {
