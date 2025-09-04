@@ -188,6 +188,7 @@
 .star-rating {
   display: flex;
   gap: 5px;
+  z-index: 1;
 }
 
 .star {
@@ -208,13 +209,12 @@
 
 .star.active {
   color: var(--main-text);
-  fill: var(--main-text);
 }
 .star:active {
-  scale: 1.2;
+  transform: scale(1.2);
 }
 
-/* ...existing code... */
+
 .tooltipWrapper {
   position: relative;
   display: inline-block;
@@ -228,8 +228,8 @@
   left: 50%;
   transform: translate(-50%, 8px);
   margin-bottom: 8px;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
+  background: var(--main-text);
+  color: var(--main-bg);
   padding: 6px 8px;
   border-radius: 6px;
   font-size: 12px;
@@ -237,7 +237,8 @@
   opacity: 0;
   transition: opacity 300ms ease, transform 250ms ease;
   pointer-events: none;
-  z-index: 50;
+  z-index: 10;
+  box-shadow: 5px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .tooltipBubble::after {
@@ -248,7 +249,7 @@
   transform: translateX(-50%);
   border-width: 6px;
   border-style: solid;
-  border-color: rgba(0,0,0,0.85) transparent transparent transparent;
+  border-color: var(--main-text) transparent transparent transparent;
 }
 
 .triggerTooltip {

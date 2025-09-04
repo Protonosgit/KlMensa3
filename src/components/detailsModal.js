@@ -6,11 +6,11 @@ import styles from "./details.module.css";
 import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
-import { getCookie } from "@/app/utils/cookie-monster";
+import { getCookie, setCookie } from "@/app/utils/cookie-monster";
 import { publishComment,updateComment,deleteComment,reportComment } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { Bookmark, Bot, CookingPot, EllipsisVertical, FlagIcon, InfoIcon, Scale, Share2Icon, UploadIcon } from "lucide-react";
+import { Bookmark, Bot, CookingPot, EllipsisVertical, FlagIcon, InfoIcon, LeafIcon, Scale, Share2Icon, StarOff, UploadIcon } from "lucide-react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useModalStore } from '@/app/utils/contextStore';
+import UploadBox from "./uploadBox";
 
 export default function MealPopup({ mealsFull }) {
   const { isOpen, meal,openModal, closeModal } = useModalStore();
@@ -83,11 +84,12 @@ export default function MealPopup({ mealsFull }) {
           setUser(data?.user);
 
           // Show tooltip if there are too few ratins
-          if(meal?.rating_amt < 3 || !meal?.rating_amt) {
+          if(getCookie('rateHintShown') !== 'true') {
           setShowTooltip(true);
           tooltipTimer = setTimeout(() => {
             setShowTooltip(false);
-          }, 3000);
+            setCookie('rateHintShown', 'true', 20);
+          }, 6000);
           }
         }
       }
@@ -139,15 +141,15 @@ export default function MealPopup({ mealsFull }) {
   // Handle deleting a comment.
   async function handleDeleteRating() {
     setActionPending(true);
+    toast.success("Rating deleted successfully!");
     setActionPending(false);
   }
 
   // Handle reporting a comment or image.
-  async function handleReportRequest(commentId, imageId) {
+  async function handleRequestImageTakedown() {
     // will be handled in seperate form on different page in the future!!
-    if(confirm("Report the content for being: offensive, spam, irrelevant or harmfull in any way?")) {
-      toast.success("Report sent!");
-      reportComment(commentId, imageId);
+    if(confirm("Request image removal from the site?")) {
+      toast.error("Under construction!");
     }
   }
 
@@ -315,9 +317,10 @@ async function handleUploadMealImage() {
                 <DropdownMenuContent className={styles.dropdownMenuContent}>
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={(e) => (handleBookmark(e))} ><Bookmark size={18} className={isBookmarked ? styles.bookmarkActive : styles.bookmark} />Bookmark</DropdownMenuItem>
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal.artikel_id) && toast.success("Link copied to clipboard!")}><Share2Icon size={18} />Share</DropdownMenuItem>
-                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => (handleUploadMealImage())}>{ownsImage ? <CookingPot size={18} /> : <UploadIcon size={18} />}Submit image</DropdownMenuItem>
+  
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => (handleReportRequest(meal.id))}><FlagIcon size={18} />Report image</DropdownMenuItem>
+                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => handleRequestImageTakedown()} ><FlagIcon size={18} />Remove image</DropdownMenuItem>
+                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={handleDeleteRating} ><StarOff size={18} />Remove Rating</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             <button onClick={requestCloseModal} className={styles.popupActionButton}>×</button>
@@ -339,7 +342,7 @@ async function handleUploadMealImage() {
                 aria-label="Rate this meal"
               >
                 <StarRating predefined={meal?.rating} starsSet={handleSetRating} />
-                <span className={`${styles.tooltipBubble} ${showTooltip ? styles.triggerTooltip : ""}`} role="tooltip">Rate this meal</span>
+                <span className={`${styles.tooltipBubble} ${showTooltip ? styles.triggerTooltip : ""}`} role="tooltip">Click to rate this meal!</span>
               </div>
                <span className={styles.ratingCount} >({meal?.rating_amt || "0"})</span>
             </div>
@@ -372,6 +375,15 @@ async function handleUploadMealImage() {
             {additives?.length > 1 ? <div> {additives?.map((additive) => <Badge title={additive?.name} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
           </div>
         
+          <div className={styles.divider} />
+          <div className={styles.additivesSection}>
+            <div className={styles.sectionTitle}>
+              <p>Upload image</p>
+              <p className={styles.additivesContext}></p>
+            </div>
+            <UploadBox />
+          </div>
+
 
         </div>
       </div>
