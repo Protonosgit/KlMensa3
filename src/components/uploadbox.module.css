@@ -51,10 +51,6 @@
   transition: background 0.3s;
 }
 
-.submitBtn:hover:not(:disabled) {
-  background: var(--secondary-color);
-}
-
 .submitBtn:disabled {
     display: none;
 }

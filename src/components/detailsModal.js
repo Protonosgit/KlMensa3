@@ -381,7 +381,7 @@ async function handleUploadMealImage() {
               <p>Upload image</p>
               <p className={styles.additivesContext}></p>
             </div>
-            <UploadBox />
+            <UploadBox mealId={meal.legacyId}/>
           </div>
 
 
