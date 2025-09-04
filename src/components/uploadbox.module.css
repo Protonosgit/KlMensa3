@@ -28,6 +28,10 @@
 .preview {
   margin-top: 15px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .preview img {

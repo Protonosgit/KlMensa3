@@ -8,10 +8,12 @@ export default function UploadBox({ mealId }) {
   const [file, setFile] = useState(null);
   const MAX_SIZE = 15 * 1024 * 1024; // 15MB
 
-  const handleFile = (file) => {
+  const handleFile = async (file) => {
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
+    // allow images or heic/heif by extension (some HEIC uploads may not report a proper mime type)
+    const isHeic = file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif");
+    if (!file.type.startsWith("image/") && !isHeic) {
       alert("Only image files are allowed.");
       return;
     }
@@ -21,12 +23,42 @@ export default function UploadBox({ mealId }) {
       return;
     }
 
-    setFile(file);
-    setFileInfo({
-      name: file.name,
-      size: (file.size / 1024 / 1024).toFixed(2) + " MB",
-      preview: URL.createObjectURL(file),
-    });
+    if (isHeic) {
+      toast.loading("Processing...");
+      try {
+        const heic2any = (await import("heic2any")).default;
+        const heicblob = await heic2any({
+          blob: file,
+          toType: "image/jpeg",
+          quality: 0.9,
+        });
+
+        const convertedFile = new File(
+          [heicblob],
+          file.name.replace(/\.(heic|heif)$/i, ".jpg"),
+          { type: "image/jpeg" }
+        );
+        toast.dismiss();
+        setFile(convertedFile);
+        setFileInfo({
+          name: convertedFile.name,
+          size: (convertedFile.size / 1024 / 1024).toFixed(2) + " MB",
+          preview: URL.createObjectURL(convertedFile),
+        });
+      } catch (error) {
+        toast.dismiss();
+        toast.error("Failed convert image.");
+        console.error("HEIC conversion error:", error);
+        return;
+      }
+    } else {
+      setFile(file);
+      setFileInfo({
+        name: file.name,
+        size: (file.size / 1024 / 1024).toFixed(2) + " MB",
+        preview: URL.createObjectURL(file),
+      });
+    }
   };
 
   const handleChange = (e) => {
@@ -43,7 +75,7 @@ export default function UploadBox({ mealId }) {
     if (!mealId || !file) {
       return;
     }
-
+    toast.loading("Uploading...");
     const formData = new FormData();
     formData.append("upload_file", file);
     formData.append("context", `.${mealId}`);
@@ -55,15 +87,19 @@ export default function UploadBox({ mealId }) {
       });
 
       if (res.ok) {
-        toast.success("Upload successful!");
+        toast.dismiss();
+        toast.success("Image submitted!");
         console.log(res);
+        setFile(null);
+        setFileInfo(null);
       } else {
-        toast.error("Upload failed with status " + res.status);
+        toast.error("Image was rejected");
       }
     } catch (err) {
       console.error(err);
-      toast.error("An error occurred while uploading.");
+      toast.error("Upload failed");
     }
+    toast.dismiss();
   };
 
   return (
@@ -84,7 +120,7 @@ export default function UploadBox({ mealId }) {
         <input
           id="fileInput"
           type="file"
-          accept="image/*"
+          accept="image/png, image/jpeg, image/webp, image/heic, image/heif"
           onChange={handleChange}
           style={{ display: "none" }}
         />
@@ -93,7 +129,7 @@ export default function UploadBox({ mealId }) {
           <div className={styles.preview}>
             <img src={fileInfo.preview} alt="Preview" />
             <p>
-              {fileInfo.name} ({fileInfo.size})
+              {fileInfo.name} ({fileInfo.size} / {MAX_SIZE / 1024 / 1024} MB)
             </p>
           </div>
         )}

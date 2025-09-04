@@ -7,10 +7,9 @@ import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
-import { publishComment,updateComment,deleteComment,reportComment } from "@/app/utils/database-actions";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { Bookmark, Bot, CookingPot, EllipsisVertical, FlagIcon, InfoIcon, LeafIcon, Scale, Share2Icon, StarOff, UploadIcon } from "lucide-react";
+import { Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Share2Icon, StarOff } from "lucide-react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
@@ -129,11 +128,10 @@ export default function MealPopup({ mealsFull }) {
     
 
 
-
   // Handle publishing or updating a comment.
-  async function handleSetRating(rating) {
+  async function handleSetRating() {
     setActionPending(true);
-    toast.success("Rating failed successfully!");
+    toast.error("Under construction!");
     setShowTooltip(false);
     setActionPending(false);
   }
@@ -141,7 +139,7 @@ export default function MealPopup({ mealsFull }) {
   // Handle deleting a comment.
   async function handleDeleteRating() {
     setActionPending(true);
-    toast.success("Rating deleted successfully!");
+    toast.error("Under construction!");
     setActionPending(false);
   }
 
@@ -174,98 +172,6 @@ export default function MealPopup({ mealsFull }) {
     e.preventDefault();
   }
 
-  // Handle uploading a meal image.
-async function handleUploadMealImage() {
-  if (!user) {
-    toast.error("You must be logged in to upload an image");
-    return;
-  }
-
-  const artikelId = meal?.artikel_id.replace(/\./g, "");
-  const supabase = createClient();
-
-  // Check if user already has an image uploaded
-  if (ownsImage) {
-    if (confirm("You already have an image for this meal. Do you want to delete it?")) {
-      await supabase.storage.from("meal-images").remove([ownsImage]);
-      toast.success("Image deleted!");
-    }
-    return;
-  }
-  alert("Temporary disabled due to a server conflict!");
-  return;
-
-  // Set up file request
-  const fileInput = document.createElement("input");
-  fileInput.type = "file";
-  fileInput.accept = "image/png, image/jpeg, image/webp, image/heic, image/heif";
-
-  // When file is selected
-  fileInput.onchange = async () => {
-    toast.loading("Processing image...");
-    const file = fileInput.files[0];
-
-    // Convert image to webp and compress to 80%
-    const img = document.createElement("img");
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      img.src = e.target.result;
-      img.onload = async () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        // Compress and convert to webp then upload to supabase bucket
-        canvas.toBlob(
-          async (blob) => {
-            toast.loading("Uploading image...");
-            // upload to supabase with article_id
-            const { data, error } = await supabase.storage
-              .from("meal-images")
-              .upload(artikelId + "_" + Date.now() + ".webp", blob, {
-                contentType: "image/webp",
-              });
-            toast.dismiss();
-            if (error) {
-              toast.error( "Error while uploading, maybe you already posted an image!");
-            } else {
-              toast.success("Image uploaded successfully!");
-
-            }
-          }, "image/webp", 0.8); // 0.8 is quality/compression
-      };
-      img.onerror = (err) => {
-        toast.dismiss();
-        toast.error("Failed to process image.");
-      };
-    };
-    reader.onerror = (err) => {
-      toast.error("Failed to read image file.");
-    };
-    
-
-    // Check if file image is heic and convert
-    if (file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif")) {
-      try {
-        const heic2any = (await import("heic2any")).default;
-        const heicblob = await heic2any({
-          blob: file,
-          toType: 'image/jpeg',
-          quality: 0.7
-        });
-        reader.readAsDataURL(heicblob);
-      } catch (error) {
-        toast.dismiss();
-        toast.error("Failed convert image.");
-      }
-    } else {
-      reader.readAsDataURL(file);
-    }
-  };
-  // Trigger file input
-  fileInput.click();
-}
 
   // Render the meal title based on settings.
   const MealTitle = () => {

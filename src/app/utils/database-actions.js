@@ -1,8 +1,6 @@
 "use server";
 import { createClient } from "./supabase/server";
-import { InferenceClient } from '@huggingface/inference';
 import { revalidatePath } from "next/cache";
-const huggingITF = new InferenceClient(process.env.HUGGING_FACE_TOKEN);
 
 
 export async function sendRating(mealId, stars) {
