@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./uploadbox.module.css";
+import toast from "react-hot-toast";
 
 export default function UploadBox({ mealId }) {
   const [fileInfo, setFileInfo] = useState(null);
@@ -39,12 +40,7 @@ export default function UploadBox({ mealId }) {
   };
 
   const handleSubmit = async () => {
-    if (!file) {
-      alert("Please select a valid image before submitting.");
-      return;
-    }
-    if (!mealId) {
-      alert("Meal ID is missing.");
+    if (!mealId || !file) {
       return;
     }
 
@@ -59,13 +55,14 @@ export default function UploadBox({ mealId }) {
       });
 
       if (res.ok) {
-        alert("Upload successful!");
+        toast.success("Upload successful!");
+        console.log(res);
       } else {
-        alert("Upload failed with status " + res.status);
+        toast.error("Upload failed with status " + res.status);
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred while uploading.");
+      toast.error("An error occurred while uploading.");
     }
   };
 
