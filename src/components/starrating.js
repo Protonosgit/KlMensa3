@@ -14,18 +14,19 @@ export default function StarRating({ disabled = false, starsSet, predefined = 0 
   };
 
   const getClass = (index) => {
+    const baseClass = index <= predefined ? `${styles.star} ${styles.predefined}` : styles.star;
+
     if (hovered !== null) {
       // On hover → black
-      return index <= hovered ? `${styles.star} ${styles.active}` : styles.star;
+      return index <= hovered ? `${baseClass} ${styles.active}` : baseClass;
     }
 
     if (selected !== null) {
       // After user selects → always black
-      return index <= selected ? `${styles.star} ${styles.active}` : styles.star;
+      return index <= selected ? `${baseClass} ${styles.active}` : baseClass;
     }
 
-    // Before interaction → predefined stars yellow
-    return index <= predefined ? `${styles.star} ${styles.predefined}` : styles.star;
+    return baseClass;
   };
 
   return (
