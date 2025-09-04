@@ -49,7 +49,7 @@ export default function UploadBox({ mealId }) {
     formData.append("context", `.${mealId}`);
 
     try {
-      const res = await fetch("https://mensa-kl.de/ajax/iphone_upload.php", {
+      const res = await fetch("https://www.mensa-kl.de/ajax/iphone_upload.php", {
         method: "POST",
         body: formData,
       });
