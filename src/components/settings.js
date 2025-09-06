@@ -16,7 +16,6 @@ export default function SettingsModal({}) {
   const [userAccountData, setUserAccountData] = useState({});
     const [settings, setSettings] = useState({
     dark: false,
-    intitle: false,
     shortitle: false,
     nolimit: false,
     threebar: false,
@@ -139,14 +138,6 @@ export default function SettingsModal({}) {
                         <label className={styles.popupOptionLabel}>
                           <span>Dark mode</span>
                           <p className={styles.popupOptionDescription}>Turn of the lights</p>
-                        </label>
-                        </div>
-
-                        <div className={styles.popupOption}>
-                          <Switch onChange={(e) => handleSettingChange("intitle", e)} checked={settings.intitle}  className={styles.optionSwitch} onColor="#fbbf24"  />
-                        <label className={styles.popupOptionLabel}>
-                          <span>Additives in title</span>
-                          <p className={styles.popupOptionDescription}>Display additives in the title (popup)</p>
                         </label>
                         </div>
 

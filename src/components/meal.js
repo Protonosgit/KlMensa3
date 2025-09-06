@@ -2,8 +2,7 @@
 import Image from "next/image";
 import { Star, Bot } from "lucide-react";
 import styles from "./mealcard.module.css";
-import { useEffect, useState } from "react";
-import { getCookie } from "@/app/utils/cookie-monster";
+import { useEffect } from "react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
@@ -62,7 +61,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
           <Image
             priority
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
-            alt="dish-image" title={meal.atextohnezsz1} 
+            alt="dish-image" title={meal.mergedTitle[0]} 
             className={styles.mealImage}
             width={1600} height={900} />
 
@@ -78,7 +77,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
         {/* Meal details */}
         <div className={styles.mealInfo}>
           <div className={styles.mealContextLabels}></div>
-          <h4 className={styles.mealTitle}>{(settingsCookie?.shortitle ? meal?.atextohnezsz1 : meal?.titleCombined)}</h4>
+          <h4 className={styles.mealTitle}>{(settingsCookie?.shortitle ? meal?.mergedTitle[0] : meal?.mergedTitle.flat())}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>{meal.price && (meal?.price[settingsCookie?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             {renderStarRating()}

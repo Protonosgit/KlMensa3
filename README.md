@@ -1,5 +1,5 @@
 # KL Mensa 3
-![Vercel](https://vercelbadge.vercel.app/api/[Protonosgit]/[KlMensa3])
+![Vercel](https://vercelbadge.vercel.app/api/Protonosgit/KlMensa3)
 
 ## Built with:
 - NextJS 15

@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import styles from "./filter.module.css";
-import { Filter, CookingPot, LocateIcon, MapPin, Beef, FlaskConical, Trash2 } from "lucide-react";
+import { Filter,  MapPin, Beef, FlaskConical, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { revalidatePage } from "@/app/utils/auth-actions";
 import { useFilterStore } from "@/app/utils/contextStore";
@@ -165,6 +165,10 @@ export default function FilterMenu() {
     document.cookie = "location=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     document.cookie = "protein=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     document.cookie = "additive=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+
+    setMealLocations([]);
+    setMealProteins([]);
+    setMealAdditives([]);
 
     loadFilters();
     revalidatePage();

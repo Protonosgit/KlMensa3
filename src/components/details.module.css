@@ -55,6 +55,7 @@
     right: 15px;
     display: flex;
     gap: 0.5rem;
+    z-index: 10;
   }
   .overlayLocationBar {
     position: absolute;
@@ -62,6 +63,7 @@
     left: 15px;
     display: flex;
     gap: 0.5rem;
+    z-index: 10;
   }
 
   .popupLocation {
@@ -143,6 +145,12 @@
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
+    transition: text-decoration 0.4s;
+  }
+
+  .highlighted {
+    text-decoration: underline;
+    text-decoration-color: var(--primary-color);
   }
 
   .popupTitleBullets {
@@ -188,7 +196,6 @@
 .star-rating {
   display: flex;
   gap: 5px;
-  z-index: 1;
 }
 
 .star {
@@ -213,7 +220,6 @@
 .star:active {
   transform: scale(1.2);
 }
-
 
 .tooltipWrapper {
   position: relative;

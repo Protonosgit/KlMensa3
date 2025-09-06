@@ -28,9 +28,7 @@ export default async function Schedule({settingsCookie}) {
     additiveFilter = JSON.parse(additiveFilterCookie.value);
   }
 
-  // Get menu, images and comments from supabase and legacy api
-  // Slow more caching required!
-  // 200-600ms
+
   const menuData = await fetchMenu();
   let menu = menuData?.splitMenu;
   const hashIds = menuData?.hashIdList;
