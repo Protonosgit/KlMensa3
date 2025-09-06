@@ -14,8 +14,27 @@ function extractAdditiveCodes(inputString) {
   return codes;
 }
 
-function extractAlternativeVersion() {
+function additiveFromString(additiveTitleArray) {
+  // Accept either an array of strings or a single string
+  if (!Array.isArray(additiveTitleArray)) {
+    additiveTitleArray = additiveTitleArray ? [additiveTitleArray] : [];
+  }
 
+  const regex = /\(([^)]+)\)/g;
+  return additiveTitleArray.map(part => {
+    if (!part) return [];
+    const matches = [...part.matchAll(regex)];
+    const additives = [];
+    for (const match of matches) {
+      const additiveString = match[1];
+      const additiveCodes = additiveString
+        .split(',')
+        .map(code => code.trim().toLowerCase())
+        .filter(token => /^[0-9a-z]+$/.test(token));
+      additives.push(...additiveCodes);
+    }
+    return additives;
+  });
 }
 
-export { extractAdditives,extractAdditiveCodes, extractAlternativeVersion }
+export { extractAdditives,extractAdditiveCodes, additiveFromString }

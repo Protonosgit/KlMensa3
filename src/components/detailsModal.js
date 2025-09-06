@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useModalStore } from '@/app/utils/contextStore';
 import UploadBox from "./uploadBox";
+import { sendRating, deleteRating } from "@/app/utils/database-actions";
 
 export default function MealPopup({ mealsFull }) {
   const { isOpen, meal,openModal, closeModal } = useModalStore();
@@ -30,10 +31,8 @@ export default function MealPopup({ mealsFull }) {
   const [additives, setAdditives] = useState([]);
   const [user, setUser] = useState();
   const [settings, setSettings] = useState();
-  const [actionPending, setActionPending] = useState(false);
-  const [ownsImage, setOwnsImage] = useState('');
   const [isBookmarked, setIsBookmarked] = useState(false);
-
+  const [selectedAdditive, setSelectedAdditive] = useState("");
 
   const requestCloseModal = () => {
     closeModal();
@@ -61,12 +60,15 @@ export default function MealPopup({ mealsFull }) {
       window.removeEventListener('popstate', handlePopState);
       document.removeEventListener('keydown', handleEscapePress);
     };
+
   }, [isOpen]);
 
 
   //settings and userdata
     useEffect(() => {
+      setSelectedAdditive("");
       let tooltipTimer;
+        
       // retrieve cookies for settings
       setAdditives(extractAdditives(meal?.zsnumnamen));
 
@@ -129,18 +131,15 @@ export default function MealPopup({ mealsFull }) {
 
 
   // Handle publishing or updating a comment.
-  async function handleSetRating() {
-    setActionPending(true);
+  async function handleSubmitRating(rating) {
     toast.error("Under construction!");
-    setShowTooltip(false);
-    setActionPending(false);
+    sendRating(meal.legacyId, rating);
   }
 
   // Handle deleting a comment.
   async function handleDeleteRating() {
-    setActionPending(true);
     toast.error("Under construction!");
-    setActionPending(false);
+    deleteRating(meal.legacyId);
   }
 
   // Handle reporting a comment or image.
@@ -150,7 +149,6 @@ export default function MealPopup({ mealsFull }) {
       toast.error("Under construction!");
     }
   }
-
 
   // Handle bookmarking/unbookmarking the meal.
   async function handleBookmark(e) {
@@ -175,19 +173,16 @@ export default function MealPopup({ mealsFull }) {
 
   // Render the meal title based on settings.
   const MealTitle = () => {
+    console.log(meal);
     if(settings?.threebar) return (
       <ul className={styles.popupTitleBullets} >
-        {meal?.atextohnezsz1 && <li>{settings?.intitle ? meal?.atextz1	 : meal?.atextohnezsz1}</li>}
-        {meal?.atextohnezsz2 && <li>{settings?.intitle ? meal?.atextz2	 : meal?.atextohnezsz2}</li>}
-        {meal?.atextohnezsz3 && <li>{settings?.intitle ? meal?.atextz3	 : meal?.atextohnezsz3}</li>}
-        {meal?.atextohnezsz4 && <li>{settings?.intitle ? meal?.atextz4	 : meal?.atextohnezsz4}</li>}
-        {meal?.atextohnezsz5 && <li>{settings?.intitle ? meal?.atextz5	 : meal?.atextohnezsz5}</li>}
-        {meal?.atextohnezsz6 && <li>{settings?.intitle ? meal?.atextz6	 : meal?.atextohnezsz6}</li>}
-        {meal?.atextohnezsz7 && <li>{settings?.intitle ? meal?.atextz7	 : meal?.atextohnezsz7}</li>}
-        {meal?.atextohnezsz8 && <li>{settings?.intitle ? meal?.atextz8	 : meal?.atextohnezsz8}</li>}
+        {meal?.mergedATitle?.map((title, index) => <li key={index}>{title.trim().replace(", ", '')}</li>)}
       </ul>);
 
-    return <h2 className={styles.popupTitle} title={meal?.titleAdditivesCombined}>{settings?.intitle ? (meal?.titleAdditivesCombined) : meal?.titleCombined}</h2>;
+    return (
+      <h2 className={styles.popupTitle} >
+        {meal?.mergedTitle?.map((title, index) =>   <span className={meal?.additivePointer[index]?.includes(selectedAdditive) ? styles.highlighted : undefined} key={index}>{title}</span>)}
+      </h2>);
   }
 
   if(!meal || !isOpen) return null;
@@ -226,7 +221,7 @@ export default function MealPopup({ mealsFull }) {
   
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => handleRequestImageTakedown()} ><FlagIcon size={18} />Remove image</DropdownMenuItem>
-                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={handleDeleteRating} ><StarOff size={18} />Remove Rating</DropdownMenuItem>
+                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={handleDeleteRating} ><StarOff size={18} />Delete rating</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             <button onClick={requestCloseModal} className={styles.popupActionButton}>×</button>
@@ -247,7 +242,7 @@ export default function MealPopup({ mealsFull }) {
                 tabIndex={0}
                 aria-label="Rate this meal"
               >
-                <StarRating predefined={meal?.rating} starsSet={handleSetRating} />
+                <StarRating predefined={meal?.rating} starsSet={handleSubmitRating} />
                 <span className={`${styles.tooltipBubble} ${showTooltip ? styles.triggerTooltip : ""}`} role="tooltip">Click to rate this meal!</span>
               </div>
                <span className={styles.ratingCount} >({meal?.rating_amt || "0"})</span>
@@ -278,13 +273,13 @@ export default function MealPopup({ mealsFull }) {
               <p>Additives</p>
               <p className={styles.additivesContext}>Includes all variants</p>
             </div>
-            {additives?.length > 1 ? <div> {additives?.map((additive) => <Badge title={additive?.name} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
+            {additives?.length > 1 ? <div> {additives?.map((additive) => <Badge title={additive?.name} onClick={() => setSelectedAdditive(additive?.code)} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
           </div>
         
           <div className={styles.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
-              <p>Upload image</p>
+              <p>Submit image</p>
               <p className={styles.additivesContext}></p>
             </div>
             <UploadBox mealId={meal.legacyId}/>

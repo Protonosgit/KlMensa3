@@ -1,5 +1,5 @@
 "use server"
-
+import { additiveFromString } from './additives';
 const priceRelationsLookup = {
     "Port.": { "stu": "3,50 €", "bed": "5,30 €", "gas": "6,25 €" }, 
     "Port.I": { "stu": "4,10 €", "bed": "6,10 €", "gas": "7,05 €" },
@@ -103,8 +103,8 @@ async function fetchMenu() {
      //await new Promise((resolve) => setTimeout(() => resolve(null), 5000));
 
 
-    // Invalidate cache if no last cachedate exists, length of data is 0 or last cached date is older than 8 hours or the schedule is from yesterday
-    if(lastMenuCachedAt && cachedMenuData?.length > 0 && Date.now() - lastMenuCachedAt < 8 * 60 * 60 * 1000 && isToday(lastMenuCachedAt)) {
+    // Invalidate cache if no last cachedate exists, length of data is 0 or last cached date is older than 3 hours or the schedule is from yesterday
+    if(lastMenuCachedAt && cachedMenuData?.length > 0 && Date.now() - lastMenuCachedAt < 3 * 60 * 60 * 1000 && isToday(lastMenuCachedAt)) {
         return { splitMenu: cachedMenuData, hashIdList: cachedMenuIds };
     }
     try {
@@ -178,9 +178,33 @@ async function parseMenu(menuData) {
     // Only return rptu mensa and robotic kitchen
     const locationFiltered = menuData.filter(item => item.ort_id === 310 || item.ort_id === 410);
     
-    // Add all title fields
+    // Iterate over each meal
     const combinedKeys = locationFiltered.map(obj => {
-        const titleAdder = (
+
+    // Merge title together
+    const mergedTitle = [
+        obj.atextohnezsz1,
+        obj.atextohnezsz2 ? (obj.atextohnezsz2.startsWith(',') ? '' : ' ') + obj.atextohnezsz2 : '',
+        obj.atextohnezsz3 ? (obj.atextohnezsz3.startsWith(',') ? '' : ' ') + obj.atextohnezsz3 : '',
+        obj.atextohnezsz4 ? (obj.atextohnezsz4.startsWith(',') ? '' : ' ') + obj.atextohnezsz4 : '',
+        obj.atextohnezsz5 ? (obj.atextohnezsz5.startsWith(',') ? '' : ' ') + obj.atextohnezsz5 : '',
+        obj.atextohnezsz6 ? (obj.atextohnezsz6.startsWith(',') ? '' : ' ') + obj.atextohnezsz6 : '',
+        obj.atextohnezsz7 ? (obj.atextohnezsz7.startsWith(',') ? '' : ' ') + obj.atextohnezsz7 : '',
+        obj.atextohnezsz8 ? (obj.atextohnezsz8.startsWith(',') ? '' : ' ') + obj.atextohnezsz8 : ''
+    ].filter(Boolean);
+    
+    const mergedATitle = [
+        obj.atextz1,
+        obj.atextz2 ? (obj.atextz2.startsWith(',') ? '' : ' ') + obj.atextz2 : '',
+        obj.atextz3 ? (obj.atextz3.startsWith(',') ? '' : ' ') + obj.atextz3 : '',
+        obj.atextz4 ? (obj.atextz4.startsWith(',') ? '' : ' ') + obj.atextz4 : '',
+        obj.atextz5 ? (obj.atextz5.startsWith(',') ? '' : ' ') + obj.atextz5 : '',
+        obj.atextz6 ? (obj.atextz6.startsWith(',') ? '' : ' ') + obj.atextz6 : '',
+        obj.atextz7 ? (obj.atextz7.startsWith(',') ? '' : ' ') + obj.atextz7 : '',
+        obj.atextz8 ? (obj.atextz8.startsWith(',') ? '' : ' ') + obj.atextz8 : ''
+    ].filter(Boolean);
+
+    const titleAdder = (
         obj.atextohnezsz1 + (obj.atextohnezsz2?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz2 + (obj.atextohnezsz3?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz3 + (obj.atextohnezsz4?.startsWith(',') ? '' : ' ') +
@@ -189,6 +213,8 @@ async function parseMenu(menuData) {
         obj.atextohnezsz6 + (obj.atextohnezsz7?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz7 + (obj.atextohnezsz8?.startsWith(',') ? '' : ' ') +
         obj.atextohnezsz8);
+        
+
     const titleAdditiveAdder = (
         obj.atextz1 + (obj.atextz2?.startsWith(',') ? '' : ' ') +
         obj.atextz2 + (obj.atextz3?.startsWith(',') ? '' : ' ') +
@@ -199,50 +225,40 @@ async function parseMenu(menuData) {
         obj.atextz7 + (obj.atextz8?.startsWith(',') ? '' : ' ') +
         obj.atextz8);
 
-        // Generate noncrypto hash for unique mealid
+        // Generate noncryptographic hash for unique mealid
     const hashId = murmur.v3(obj.atextohnezsz1+obj.atextohnezsz2+obj.atextohnezsz3+obj.atextohnezsz4+obj.atextohnezsz5).toString(16).substring(0, 8);
     if (!hashIdList.includes(hashId)) {
         hashIdList.push(hashId);
     }
 
     // copy vegi or vegan option to seperate var
-    const altOption = (titleAdditiveAdder.match(/\(Plant-based Menü[^)]*|\(Vegetarisches Menü[^)]*|\(Vegetarisches Menü\[1]\)/)?.[0] || '').replace("(Veganes Menü[1]:","").replace("Plant-based Menü[1]:","").replace("Vegetarisches Menü[1]:","").trim().replace("(","");
+    const altOption = ((titleAdditiveAdder.match(/\(Plant-based Menü[^)]*|\(Vegetarisches Menü[^)]*|\(Vegetarisches Menü\[1]\)/)?.[0] || '').replace("(Veganes Menü[1]:","").replace("Plant-based Menü[1]:","").replace("Vegetarisches Menü[1]:","")).trim().replace("(","");
 
-
-	// 	"artname1": "Essen II Drehkreuz/Ampel",
-	// 	"artgebname": "Port.II",
-	// 	"hinweise": "",
-	// 	"frei1": "",
-	// 	"frei2": "",
-	// 	"frei3": "",
-	// 	"atextz1": "Burrito Tortilla gefüllt mit Kidneybohnen, weiße Bohnen, Paprika, Karotten, Mais und Zucchini (1,2,Gl,Sf)",
-	// 	"atextz2": ", geriebenem Käse (La)",
-	// 	"atextz3": "(Plant-based Menü[1]:, geriebenem veganem Käse)",
-	// 	"atextz4": ", Sour Cream-Dip (1,9,Gl,Ei,La,Sf)",
-	// 	"atextz5": "(Plant-based Menü[1]:, veganer Sour Cream-Dip) (Gl,Nu,Sf)",
-	// 	"atextohnezsz1": "Burrito Tortilla gefüllt mit Kidneybohnen, weiße Bohnen, Paprika, Karotten, Mais und Zucchini",
-	// 	"atextohnezsz2": ", geriebenem Käse",
-	// 	"atextohnezsz3": "",
-	// 	"atextohnezsz4": ", Sour Cream-Dip",
-	// 	"atextohnezsz5": "",
-	// 	"zsnummern": "1, 2, 9, Gl, Nu, Ei, La, Sf",
-	// 	"zsnumnamen": "1=Farbstoff, 2=Konservierungsstoff, 9=Süßungsmittel, Gl=Glutenhaltiges Getreide, Nu=Schalenfrüchte (Nüsse), Ei=Eier und Eierzeugnisse, La=Laktose, Sf=Senf",
-	// 	"zsnamen": "Farbstoff, Konservierungsstoff, Süßungsmittel, Glutenhaltiges Getreide, Schalenfrüchte (Nüsse), Eier und Eierzeugnisse, Laktose, Senf",
-	// 	"menuekennztext": "",
-
+    // Create String to match studiApi with mensakl api
+    const simScoreUdatFinder = (obj?.atextohnezsz1+obj?.atextohnezsz2).toLowerCase().replace(/[^a-z]/g, '')
 
 
     // build new object
     return {
-        ...obj,
-        titleCombined: titleAdder.replace("Veganes Menü[1]:"," oder ").replace("Plant-based Menü[1]:"," oder ").replace("Vegetarisches Menü[1]:"," oder ").trim(),
-        titleAdditivesCombined: titleAdditiveAdder.replace("(Veganes Menü[1]:","oder ").replace("Plant-based Menü[1]:","oder ").replace("Vegetarisches Menü[1]:","oder ").trim(),
+        proddatum: obj?.proddatum,
         price: priceRelationsLookup[obj.artgebname],
-        // Hotfix because api seems broken :o
         artikel_id: hashId,
+        mergedTitle,
+        mergedATitle,
+        altOption: altOption,
         veganOption: titleAdditiveAdder?.includes('Veganes Menü[1]') || titleAdditiveAdder?.includes('Plant-based Menü[1]'),
         vegiOption: titleAdditiveAdder?.includes('Vegetarisches Menü[1]'),
-        altOption: altOption,
+        additivePointer: mergedATitle.filter(item => !item.includes('Plant-based Menü[1]') && !item.includes('Veganes Menü[1]') && !item.includes('Vegetarisches Menü[1]')).map(item => additiveFromString([item])[0]),
+        menuekennztext: obj?.menuekennztext,
+        dpartname: obj?.dpartname,
+        dpname: obj?.dpname,
+        zsnumnamen: obj?.zsnumnamen,
+        zsnummern: obj?.zsnummern,
+        dispoart_id: obj?.dispoart_id,
+        frei1: obj?.frei1,
+        frei2: obj?.frei2,
+        frei3: obj?.frei3,
+        simScore: simScoreUdatFinder
         };
     });
 
@@ -269,7 +285,7 @@ async function parseMenu(menuData) {
 
     const splitMenu = Object.entries(sortedGroupedByDate).map(([date, items]) => {
         // Sort meals by dpartname works fine but disabled for now
-        const predefinedOrder = ["Essen 1", "Essen 2", "Grill", "Wok", "Eintopf 1", "Eintopf 2", "Mittagsmenü 1", "Mittagsmenü 2", "Mittagsmenü 3","Mittagsmenü 4", "Abendmensa"];
+        const predefinedOrder = ["Essen 1", "Essen 2", "Grill", "Wok", "Eintopf 1", "Eintopf 2", "Mittagsmenü 1", "Mittagsmenü 2", "Mittagsmenü 3","Mittagsmenü 4", "Mittagsmenü 5", "Abendmensa"];
         const sortedMeals = items.slice().sort((a, b) => {
             const aIndex = predefinedOrder.indexOf(a.dpartname);
             const bIndex = predefinedOrder.indexOf(b.dpartname);
@@ -302,12 +318,10 @@ async function matchMenuToUdat(schedule) {
         }
 
         for (const entry of rebuildmatchedMenu) {
-            const titleCollector = (entry.atextohnezsz1+entry.atextohnezsz2).toLowerCase().replace(/[^a-z]/g, '');
-
             for (const udatEntry of userdat) {
                 const udatTitle = udatEntry?.title.replace(/&quot;/g, '"').toLowerCase().replace(/[^a-z]/g, '');
 
-                if (udatTitle.includes(titleCollector)) {
+                if (udatTitle.includes(entry?.simScore)) {
                     entry.legacyId = udatEntry.m_id
                     if(udatEntry.image){
                         entry.image = udatEntry.image;
