@@ -16,7 +16,7 @@ export default function Loading() {
       </header>
 
       <main className={styles.main}>
-        <h1>Loading Schedule</h1>
+        <h1>loading...</h1>
 
       </main>
     </div>

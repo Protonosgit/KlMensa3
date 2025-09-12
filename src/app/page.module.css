@@ -49,6 +49,7 @@
   padding: 0rem 0;
 }
 .dayContainer {
+  filter: var(--eyedef-filter);
   padding: 0rem 0;
   margin-bottom: 4rem;
 }

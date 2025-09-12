@@ -22,7 +22,8 @@ export default function SettingsModal({}) {
     pricecat: "stu",
     layout: "list",
     language: 'en',
-    theme: 'default'
+    theme: 'default',
+    eyedef: 'default',
   });
   const [user, setUser] = useState();
   const [usermail, setUsermail] = useState("");
@@ -36,18 +37,7 @@ export default function SettingsModal({}) {
       setSettings(parsed);
     }
     // Fetch user data from Supabase.
-    async function fetchUserData() {
-      const supabase = createClient();
-      const { data, error } = await supabase.auth.getUser();
-      if (data?.user) {
-        setUser(data?.user);
-      }
-      const retrievedUdat = await retrieveUserAccountData();
-      if (retrievedUdat?.id) {
-        setUserAccountData(retrievedUdat);
-      }
-    }
-    fetchUserData();
+ 
   }, []);
 
   useEffect(() => {
@@ -72,6 +62,9 @@ export default function SettingsModal({}) {
     }
     if (key === "layout") {
       document.documentElement.setAttribute('data-layout', value);
+    }
+    if(key === "eyedef") {
+      document.documentElement.setAttribute('data-eyedef', value);
     }
     if (key === "by2lay" || key === "nolimit" || key === "shortitle" || key === "pricecat") {
       //window.location.reload();
@@ -190,6 +183,18 @@ export default function SettingsModal({}) {
                           <select className={styles.popupSelect} disabled value={settings.lang} onChange={(e) => handleSettingChange("lang", e.target.value)} >
                           <option value="eng">English</option>
                           <option value="ger">German</option>
+                          </select>
+                        </div>
+
+                        <div className={styles.popupOption}>
+                          <span style={{width: "100%", textAlign: "left"}}>Eye deficiency: </span>
+                          <select className={styles.popupSelect} value={settings.eyedef} onChange={(e) => handleSettingChange("eyedef", e.target.value)} >
+                          <option value="">Normal vision</option>
+                          <option value="dtm">Deuteranomaly</option>
+                          <option value="ptm">Protanomaly</option>
+                          <option value="dtp">Deuteranopia</option>
+                          <option value="ptp">Protanopia</option>
+                          <option value="tri">Tritanopia</option>
                           </select>
                         </div>
 
