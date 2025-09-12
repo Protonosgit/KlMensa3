@@ -108,7 +108,7 @@ async function fetchMenu() {
 
     // Invalidate cache if no last cachedate exists, length of data is 0 or last cached date is older than 3 hours or the schedule is from yesterday
     if(lastMenuCachedAt && cachedMenuData?.length > 0 && Date.now() - lastMenuCachedAt < 3 * 60 * 60 * 1000 && isToday(lastMenuCachedAt)) {
-        return { splitMenu: cachedMenuData, hashIdList: cachedMenuIds };
+        return cachedMenuData;
     }
     try {
         // download latest uncached version of the mensa menu (canteens=1 does nothing?)
@@ -289,7 +289,7 @@ async function parseMenu(menuData) {
     );
     
 
-    const splitMenu = Object.entries(sortedGroupedByDate).map(([date, items]) => {
+    const parsedMenu = Object.entries(sortedGroupedByDate).map(([date, items]) => {
         // Sort meals by dpartname works fine but disabled for now
         const predefinedOrder = ["Essen 1", "Essen 2", "Grill", "Wok", "Eintopf 1", "Eintopf 2", "Mittagsmenü 1", "Mittagsmenü 2", "Mittagsmenü 3","Mittagsmenü 4", "Mittagsmenü 5", "Abendmensa"];
         const sortedMeals = items.slice().sort((a, b) => {
@@ -306,11 +306,11 @@ async function parseMenu(menuData) {
     });
 
     // Cache
-    cachedMenuData = splitMenu;
+    cachedMenuData = parsedMenu;
     cachedMenuIds = hashIdList;
     lastMenuCachedAt = new Date();
 
-    return {splitMenu, hashIdList}; 
+    return parsedMenu; 
 }
 // Add mensa-kl data to studierendenwerk api data
 async function matchMenuToUdat(schedule) {
