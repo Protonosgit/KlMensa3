@@ -3,7 +3,7 @@ import { createClient } from "./supabase/server";
 import { revalidatePath } from "next/cache";
 
 
-export async function sendRating(legacyId, stars) {
+export async function putRating(legacyId, stars) {
   return { error: "Not implemented", data: null };
   const request =await fetch(
     `https://www.mensa-kl.de/ajax/rate.php?m_id=${legacyId}&rating=${stars}`,{

@@ -2,11 +2,12 @@
 import { useState } from "react";
 import styles from "./uploadbox.module.css";
 import toast from "react-hot-toast";
+import { Upload } from "lucide-react";
 
 export default function UploadBox({ mealId }) {
   const [fileInfo, setFileInfo] = useState(null);
   const [file, setFile] = useState(null);
-  const MAX_SIZE = 15 * 1024 * 1024; // 15MB
+  const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
   const handleFile = async (file) => {
     if (!file) return;
@@ -19,7 +20,7 @@ export default function UploadBox({ mealId }) {
     }
 
     if (file.size > MAX_SIZE) {
-      alert("File size must be less than 15MB.");
+      alert("Maximum file size is 10MB");
       return;
     }
 
@@ -45,6 +46,7 @@ export default function UploadBox({ mealId }) {
           size: (convertedFile.size / 1024 / 1024).toFixed(2) + " MB",
           preview: URL.createObjectURL(convertedFile),
         });
+        URL.revokeObjectURL(file.preview);
       } catch (error) {
         toast.dismiss();
         toast.error("Failed convert image.");
@@ -58,6 +60,7 @@ export default function UploadBox({ mealId }) {
         size: (file.size / 1024 / 1024).toFixed(2) + " MB",
         preview: URL.createObjectURL(file),
       });
+      if (fileInfo?.preview) URL.revokeObjectURL(fileInfo.preview);
     }
   };
 
@@ -114,9 +117,13 @@ export default function UploadBox({ mealId }) {
         onDragLeave={(e) => e.currentTarget.classList.remove(styles.dragover)}
         onDrop={handleDrop}
       >
-        <p>
-          Drag an image her or tap to upload
-        </p>
+        {!file && (
+          <>
+            <Upload />
+            <p>Click to upload an image of your meal</p>
+          </>
+        )}
+
         <input
           id="fileInput"
           type="file"

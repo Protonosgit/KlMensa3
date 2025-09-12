@@ -60,7 +60,7 @@ export default async function Home() {
       </main>
       <footer className={styles.footer}>
           <p>2025 mensa-kl v3 prototype<br/>
-          <a href="https://www.studierendenwerk-kaiserslautern" className={styles.footerLink}>Studierendenwerk</a>
+          <a href="https://www.studierendenwerk-kaiserslautern.de/de/" className={styles.footerLink}>Studierendenwerk</a>
           <a href="https://rptu.de" className={styles.footerLink}>RPTU</a>
           <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
           <a href="https://www.mensa-kl.de/" className={styles.footerLink}>Images from <b>mensa-kl.de</b></a>

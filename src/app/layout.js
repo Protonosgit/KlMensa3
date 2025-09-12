@@ -1,6 +1,5 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import AnnouncementModal from "@/components/announcements";
 import { cookies } from "next/headers";
 import Head from "next/head";
 
@@ -30,7 +29,7 @@ export default async function RootLayout({ children }) {
   }
 
   return (
-    <html lang="de" data-theme={settings?.dark ? "dark" : "light"} data-layout={settings?.layout}>
+    <html lang="de" data-theme={settings?.dark ? "dark" : "light"} data-layout={settings?.layout} data-eyedef={settings?.eyedef}>
       <Head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} key="desc" />
@@ -49,7 +48,6 @@ export default async function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <AnnouncementModal />
       </body>
     </html>
   );

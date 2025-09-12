@@ -70,6 +70,7 @@
     padding: 0.5rem;
     padding-bottom: 6rem;
     overflow-y: auto;
+    filter: var(--eyedef-filter);
   }
   .popupCloseButton {
     position: absolute;

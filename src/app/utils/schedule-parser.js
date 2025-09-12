@@ -83,6 +83,9 @@ const priceRelationsLookup = {
     "Warmer Snack / Imbiss (34)": { "price": "6,00 €" },
 };
 
+// Cache server response
+//
+// Note: Use redis or something similar to cache the data, THIS IS NOT PRODUCTION READY and will perform badly
 let cachedMenuData = null;
 let cachedMenuIds = null;
 let lastMenuCachedAt = null;
@@ -171,6 +174,9 @@ async function fetchMealUserData() {
 
 
 const murmur = require('murmurhash');
+//
+// WARNING: Use worker tasks in the future (or other async method) This blocks main thread!!
+//
 // Sort, truncate and add fields neccessary for the frontend to the raw mensa schedule
 async function parseMenu(menuData) {
     const hashIdList = [];

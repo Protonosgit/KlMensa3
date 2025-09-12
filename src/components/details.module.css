@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: center;
     z-index: 10;
-    animation: fadein 0.3s ease-in-out;
+    animation: fadein 0.2s ease-in-out;
     overflow: hidden;
 }
 
@@ -31,6 +31,7 @@
     height: 90%;
     max-height: 90vh;
     overflow-y: auto;
+    filter: var(--eyedef-filter);
   }
   
 .popupImageContainer {
@@ -145,12 +146,22 @@
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
-    transition: text-decoration 0.4s;
   }
 
   .highlighted {
     text-decoration: underline;
     text-decoration-color: var(--primary-color);
+    text-decoration-thickness: 4px;
+    animation: underline 0.3s ease-in-out alternate 2;
+  }
+
+  @keyframes underline {
+    from {
+      text-decoration-thickness: 4px;
+    }
+    to {
+      text-decoration-thickness: 6px;
+    }
   }
 
   .popupTitleBullets {
@@ -216,9 +227,22 @@
 
 .star.active {
   color: var(--main-text);
+  animation: highlight 0.4s ease-in-out;
 }
-.star:active {
-  transform: scale(1.2);
+
+@keyframes highlight {
+  0% {
+    color: var(--blankstar-color);
+    scale: 1;
+  }
+  50% {
+    color: var(--main-text);
+    scale: 1.2;
+  }
+  100% {
+    color: var(--main-text);
+    scale: 1;
+  }
 }
 
 .tooltipWrapper {

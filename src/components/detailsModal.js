@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useModalStore } from '@/app/utils/contextStore';
 import UploadBox from "./uploadBox";
-import { sendRating, deleteRating } from "@/app/utils/database-actions";
+import { putRating, deleteRating } from "@/app/utils/database-actions";
 
 export default function MealPopup({ mealsFull }) {
   const { isOpen, meal,openModal, closeModal } = useModalStore();
@@ -132,12 +132,14 @@ export default function MealPopup({ mealsFull }) {
 
   // Handle publishing or updating a comment.
   async function handleSubmitRating(rating) {
+    // use put request to api here
     toast.error("Under construction!");
-    sendRating(meal.legacyId, rating);
+    putRating(meal.legacyId, rating);
   }
 
   // Handle deleting a comment.
   async function handleDeleteRating() {
+    // use delete request to api heres
     toast.error("Under construction!");
     deleteRating(meal.legacyId);
   }
@@ -173,7 +175,6 @@ export default function MealPopup({ mealsFull }) {
 
   // Render the meal title based on settings.
   const MealTitle = () => {
-    console.log(meal);
     if(settings?.threebar) return (
       <ul className={styles.popupTitleBullets} >
         {meal?.mergedATitle?.map((title, index) => <li key={index}>{title.trim().replace(", ", '')}</li>)}
