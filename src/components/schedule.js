@@ -28,15 +28,12 @@ export default async function Schedule({settingsCookie}) {
     additiveFilter = JSON.parse(additiveFilterCookie.value);
   }
 
+  let menu;
+  const menudata = await fetchMenu();
 
-  const menuData = await fetchMenu();
-  let menu = menuData?.splitMenu;
-  const hashIds = menuData?.hashIdList;
-
-
-  // Show unlimeted menu dates
+  // Cut down on shown meals
   if (!settingsCookie?.nolimit) {
-    menu = menu?.slice(0, 8);
+    menu = menudata?.slice(0, 8);
   }
 
 
@@ -81,7 +78,7 @@ export default async function Schedule({settingsCookie}) {
           </div>
         );
       })}
-      <MealPopup mealsFull={menuData?.splitMenu} />
+      <MealPopup mealsFull={menu} />
     </>
   );
 }

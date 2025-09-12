@@ -187,7 +187,7 @@ export default function SettingsModal({}) {
                         </div>
 
                         <div className={styles.popupOption}>
-                          <span style={{width: "100%", textAlign: "left"}}>Eye deficiency: </span>
+                          <span style={{width: "100%", textAlign: "left"}}>Vision assistance: </span>
                           <select className={styles.popupSelect} value={settings.eyedef} onChange={(e) => handleSettingChange("eyedef", e.target.value)} >
                           <option value="">Normal vision</option>
                           <option value="dtm">Deuteranomaly</option>

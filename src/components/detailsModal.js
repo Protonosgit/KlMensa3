@@ -33,6 +33,8 @@ export default function MealPopup({ mealsFull }) {
   const [settings, setSettings] = useState();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedAdditive, setSelectedAdditive] = useState("");
+  const ownedRatings = React.useRef([]);
+  const [submittedRating, setSubmittedRating] = useState(0);
 
   const requestCloseModal = () => {
     closeModal();
@@ -66,15 +68,55 @@ export default function MealPopup({ mealsFull }) {
 
   //settings and userdata
     useEffect(() => {
+      // Run on meal change
       setSelectedAdditive("");
       let tooltipTimer;
         
       // retrieve cookies for settings
       setAdditives(extractAdditives(meal?.zsnumnamen));
 
+      // retrieve cookies for settings
       const settingsCookie = getCookie('settings') || null;
       if(settingsCookie) {
         setSettings(JSON.parse(settingsCookie));
+      }
+
+      // retrieve cookies for bookmarks
+      const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("bookmarks"))
+      ?.split("=")[1];
+      if (cookieValue) {
+        const bookmarks = JSON.parse(cookieValue);
+        setIsBookmarked(bookmarks.includes(meal?.artikel_id));
+      }
+
+      // search for user owned rating
+      if(user) {
+        setSubmittedRating(ownedRatings.current.find(r => r.lId === meal?.legacyId)?.rating || 0);
+      }
+
+      return () => {
+        if (tooltipTimer) {
+          clearTimeout(tooltipTimer);
+          setShowTooltip(false);
+        }
+      };
+
+    }, [meal, mealsFull]);
+
+    useEffect(() => {
+      // Run once onload
+      const urlParams = new URLSearchParams(window.location.search);
+      const mealId = urlParams.get('artid');
+      if(mealId) {
+        const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m.artikel_id === mealId);
+        if(!foundmeal) {
+          alert('Meal has expired!');
+          window.location.replace('/');
+          return;
+        }
+        openModal(foundmeal);
       }
 
       // fetch userdata
@@ -93,39 +135,13 @@ export default function MealPopup({ mealsFull }) {
           }, 6000);
           }
         }
+
+        // query database for all userowned ratings
+
+        // ownedRatings.current = [{lId: 57076, rating: 4}, {lId: 57134, rating: 3}, {lId: 57093, rating: 2}];
+
       }
       fetchUserData();
-
-      const cookieValue = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("bookmarks"))
-      ?.split("=")[1];
-      if (cookieValue) {
-        const bookmarks = JSON.parse(cookieValue);
-        setIsBookmarked(bookmarks.includes(meal?.artikel_id));
-      }
-
-      return () => {
-        if (tooltipTimer) {
-          clearTimeout(tooltipTimer);
-          setShowTooltip(false);
-        }
-      };
-
-    }, [meal, mealsFull]);
-
-    useEffect(() => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const mealId = urlParams.get('artid');
-      if(mealId) {
-        const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m.artikel_id === mealId);
-        if(!foundmeal) {
-          alert('Meal has expired!');
-          window.location.replace('/');
-          return;
-        }
-        openModal(foundmeal);
-      }
     }, [])
     
 
@@ -243,7 +259,7 @@ export default function MealPopup({ mealsFull }) {
                 tabIndex={0}
                 aria-label="Rate this meal"
               >
-                <StarRating predefined={meal?.rating} starsSet={handleSubmitRating} />
+                <StarRating commonRating={meal?.rating} submittedRating={submittedRating} setSubmittedRating={setSubmittedRating} starsSet={handleSubmitRating} />
                 <span className={`${styles.tooltipBubble} ${showTooltip ? styles.triggerTooltip : ""}`} role="tooltip">Click to rate this meal!</span>
               </div>
                <span className={styles.ratingCount} >({meal?.rating_amt || "0"})</span>
@@ -285,7 +301,6 @@ export default function MealPopup({ mealsFull }) {
             </div>
             <UploadBox mealId={meal.legacyId}/>
           </div>
-
 
         </div>
       </div>
