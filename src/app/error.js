@@ -11,8 +11,8 @@ export default function Error({ error, reset }) {
     <div className="container">
       <h1>Server Error</h1>
       <p>A critical error has occurred which the service could not recover from.</p>
-      <p>Contact your administrator or reset the page.</p>
       <button onClick={() => reset()}>Retry</button>
+      <a  href='https://github.com/Protonosgit/KlMensa3/issues/new?template=bug_report.md'><button >Report Issue</button></a>
 
       <style jsx>{`
         .container {
@@ -21,6 +21,7 @@ export default function Error({ error, reset }) {
           align-items: center;
           justify-content: center;
           height: 100vh;
+          width: 100vw;
           text-align: center;
           font-family: system-ui, sans-serif;
         }
@@ -32,6 +33,7 @@ export default function Error({ error, reset }) {
           margin: 1rem 0;
         }
         button {
+        margin-top: 1rem;
           padding: 0.5rem 1rem;
           background-color: #0070f3;
           color: white;

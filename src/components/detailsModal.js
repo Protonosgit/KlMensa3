@@ -157,6 +157,7 @@ export default function MealPopup({ mealsFull }) {
   async function handleDeleteRating() {
     // use delete request to api heres
     toast.error("Under construction!");
+    setSubmittedRating(0);
     deleteRating(meal.legacyId);
   }
 
@@ -193,7 +194,7 @@ export default function MealPopup({ mealsFull }) {
   const MealTitle = () => {
     if(settings?.threebar) return (
       <ul className={styles.popupTitleBullets} >
-        {meal?.mergedATitle?.map((title, index) => <li key={index}>{title.trim().replace(", ", '')}</li>)}
+        {meal?.mergedATitle?.map((title, index) => <li key={index} className={meal?.additivePointer[index]?.includes(selectedAdditive) ? styles.highlighted : undefined}>{title.trim().replace(", ", '')}</li>)}
       </ul>);
 
     return (
@@ -238,7 +239,7 @@ export default function MealPopup({ mealsFull }) {
   
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => handleRequestImageTakedown()} ><FlagIcon size={18} />Remove image</DropdownMenuItem>
-                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={handleDeleteRating} ><StarOff size={18} />Delete rating</DropdownMenuItem>
+                  <DropdownMenuItem className={styles.dropdownMenuItem} style={{display: submittedRating ? "flex" : "none"}} onClick={handleDeleteRating} ><StarOff size={18} />Delete rating</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             <button onClick={requestCloseModal} className={styles.popupActionButton}>×</button>
@@ -259,7 +260,7 @@ export default function MealPopup({ mealsFull }) {
                 tabIndex={0}
                 aria-label="Rate this meal"
               >
-                <StarRating commonRating={meal?.rating} submittedRating={submittedRating} setSubmittedRating={setSubmittedRating} starsSet={handleSubmitRating} />
+                <StarRating disabled={!user} commonRating={meal?.rating} submittedRating={submittedRating} setSubmittedRating={setSubmittedRating} starsSet={handleSubmitRating} />
                 <span className={`${styles.tooltipBubble} ${showTooltip ? styles.triggerTooltip : ""}`} role="tooltip">Click to rate this meal!</span>
               </div>
                <span className={styles.ratingCount} >({meal?.rating_amt || "0"})</span>
