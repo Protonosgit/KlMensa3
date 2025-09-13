@@ -46,7 +46,7 @@
 }
 
 [data-eyedef="dtm"] {
-  --eyedef-filter: contrast(120%) saturate(120%);
+  --eyedef-filter: contrast(130%) saturate(120%);
 }
 [data-eyedef="ptm"] {
   --eyedef-filter: brightness(110%) contrast(120%) saturate(120%);
@@ -55,10 +55,10 @@
   --eyedef-filter: saturate(140%) contrast(120%);
 }
 [data-eyedef="ptb"] {
-  --eyedef-filter: brightness(120%) contrast(110%) saturate(130%);
+  --eyedef-filter: brightness(140%) contrast(120%) saturate(130%);
 }
 [data-eyedef="tri"] {
-  --eyedef-filter: hue-rotate(20deg) contrast(120%) saturate(130%);
+  --eyedef-filter: hue-rotate(20deg) contrast(130%) saturate(130%);
 }
 
 body {

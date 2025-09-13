@@ -4,8 +4,7 @@ import {  fetchMenu } from '@/app/utils/schedule-parser';
 export async function GET(req, res) {
 
   try {
-    const rawParseData = await fetchMenu();
-      const menu = rawParseData?.splitMenu;
+    const menu = await fetchMenu();
 
       if(!menu || !menu?.length) {
         return NextResponse.json({ message: 'Error fetching data' })

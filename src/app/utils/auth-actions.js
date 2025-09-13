@@ -10,7 +10,7 @@ export async function login(useremail,userpassword) {
   const supabase = await createClient();
   const { error, data } = await supabase.auth.signInWithPassword({email: useremail, password: userpassword});
   if(error?.code === 'user_banned') {
-    return {error: "Account deactivated by a moderator"}
+    return {error: "Account deactivated by a moderator ⛔"}
   } else if (error) {
     return {error: "Login failed! Check your credentials"}
   }

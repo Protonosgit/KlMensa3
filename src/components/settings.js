@@ -37,7 +37,18 @@ export default function SettingsModal({}) {
       setSettings(parsed);
     }
     // Fetch user data from Supabase.
- 
+     async function fetchUserData() {
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.getUser();
+      if (data?.user) {
+        setUser(data?.user);
+      }
+      const retrievedUdat = await retrieveUserAccountData();
+      if (retrievedUdat?.id) {
+        setUserAccountData(retrievedUdat);
+      }
+    }
+    fetchUserData();
   }, []);
 
   useEffect(() => {
@@ -77,7 +88,10 @@ export default function SettingsModal({}) {
     const response = await login(usermail,userpass);
     if(!response?.error) {
       setUser(response?.user);
-      toast.success('Login successful');
+      toast.success('Login successful! \n Reloading...');
+      setTimeout(() => {
+      window.location.reload();
+      }, 1000);
     } else {
       toast.error(response?.error);
     }
@@ -88,7 +102,10 @@ export default function SettingsModal({}) {
     const response = await signup(usermail,userpass);
     if(!response?.error) {
       setUser(response?.user);
-      toast.success('Signup successful');
+      toast.success('Signup successful! \n Reloading...');
+      setTimeout(() => {
+      window.location.reload();
+      }, 1000);
     } else {
       toast.error(response?.error);
     }
@@ -160,15 +177,6 @@ export default function SettingsModal({}) {
 
                         <div className={styles.seperator}></div>
 
-                        <div className={`${styles.popupOption} ${styles.mobileLayoutOption}`} >
-                          <span style={{width: "100%", textAlign: "left"}}>Layout: </span>
-                          <select className={styles.popupSelect} value={settings.layout} onChange={(e) => handleSettingChange("layout", e.target.value)} >
-                          <option value="list">List</option>
-                          <option value="biglist">Big list</option>
-                          <option value="grid">Grid</option>
-                          </select>
-                        </div>
-
                         <div className={styles.popupOption}>
                           <span style={{width: "100%", textAlign: "left"}}>Price category: </span>
                           <select className={styles.popupSelect} value={settings.pricecat} onChange={(e) => handleSettingChange("pricecat", e.target.value)} >
@@ -178,11 +186,12 @@ export default function SettingsModal({}) {
                           </select>
                         </div>
 
-                        <div className={styles.popupOption}>
-                          <span style={{width: "100%", textAlign: "left"}}>Language (disabled): </span>
-                          <select className={styles.popupSelect} disabled value={settings.lang} onChange={(e) => handleSettingChange("lang", e.target.value)} >
-                          <option value="eng">English</option>
-                          <option value="ger">German</option>
+                        <div className={`${styles.popupOption} ${styles.mobileLayoutOption}`} >
+                          <span style={{width: "100%", textAlign: "left"}}>Layout: </span>
+                          <select className={styles.popupSelect} value={settings.layout} onChange={(e) => handleSettingChange("layout", e.target.value)} >
+                          <option value="list">List</option>
+                          <option value="biglist">Big list</option>
+                          <option value="grid">Grid</option>
                           </select>
                         </div>
 
@@ -195,6 +204,14 @@ export default function SettingsModal({}) {
                           <option value="dtp">Deuteranopia</option>
                           <option value="ptp">Protanopia</option>
                           <option value="tri">Tritanopia</option>
+                          </select>
+                        </div>
+
+                        <div className={styles.popupOption}>
+                          <span style={{width: "100%", textAlign: "left"}}>Language (disabled): </span>
+                          <select className={styles.popupSelect} disabled value={settings.lang} onChange={(e) => handleSettingChange("lang", e.target.value)} >
+                          <option value="eng">English</option>
+                          <option value="ger">German</option>
                           </select>
                         </div>
 
