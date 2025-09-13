@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+This breaks everytime i open the page...
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -18,13 +18,9 @@ Steps to reproduce the behavior:
 4. See error
 
 
-**Desktop (please complete the following information):**
- - OS: [e.g. Windows]
+**Device (please complete the following information):**
+ - Device: [e.g. Windows, Iphone 12 ...]
  - Browser [e.g. chrome, safari]
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - Browser [e.g. stock browser, safari]
-
 **Additional context**
-Add any other context about the problem here.
+(optional)
