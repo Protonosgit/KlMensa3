@@ -335,6 +335,7 @@
   }
 
   .altBox {
+    position: relative;
     border-radius: 8px;
     display: flex;
     flex-direction: row;
@@ -343,6 +344,7 @@
     padding: 0.8rem;
     margin: 0.7rem 0;
     background-color: var(--greenbox-bg);
+    cursor: pointer;
   }
   .altTitle {
     color: var(--greentext-color);
@@ -359,6 +361,15 @@
     height: 2rem;
     color: var(--greentext-color);
     animation: scaleBounce 0.75s ease-out;
+  }
+  .swapIcon {
+    color: var(--greentext-color);
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+  .altBox:active .swapIcon {
+    color: var(--primary-color);
   }
 
   @keyframes scaleBounce {

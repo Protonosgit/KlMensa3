@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
 import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
-import { Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Share2Icon, StarOff } from "lucide-react";
+import { ArrowDownUp, Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Share2Icon, StarOff } from "lucide-react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
@@ -269,13 +269,14 @@ export default function MealPopup({ mealsFull }) {
 
 
           {meal.altOption &&     
-          <div className={styles.altBox}>
+          <div className={styles.altBox} onClick={() => {toast.error("Under construction")}}>
                 {meal.vegiOption && <VeggieOpIcon className={styles.altIcon} />  }
                 {meal.veganOption && <VeganOpIcon className={styles.altIcon} /> }
             <div>
               <p className={styles.altTitle}>{meal?.veganOption ? "Vegan" : "Veggie"} Alternative</p>
               <p className={styles.altDescription}>{meal?.altOption}</p>
             </div>
+            <ArrowDownUp size={20} className={styles.swapIcon} />
           </div>}
           <div className={styles.divider} style={{display: meal?.frei1 ? "block" : "none"}} />
             {meal?.frei1 &&<>

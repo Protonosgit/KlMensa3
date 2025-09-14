@@ -79,9 +79,11 @@ export default function UploadBox({ mealId }) {
       return;
     }
     toast.loading("Uploading...");
+
     const formData = new FormData();
     formData.append("upload_file", file);
     formData.append("context", `.${mealId}`);
+    formData.append("uploadboxV", '1');
 
     try {
       const res = await fetch("https://www.mensa-kl.de/ajax/iphone_upload.php", {

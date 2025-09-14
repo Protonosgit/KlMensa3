@@ -249,6 +249,8 @@ async function parseMenu(menuData) {
         proddatum: obj?.proddatum,
         price: priceRelationsLookup[obj.artgebname],
         artikel_id: hashId,
+        dispo_id: obj?.dispo_id,
+        simScore: simScoreUdatFinder,
         mergedTitle,
         mergedATitle,
         altOption: altOption,
@@ -263,8 +265,7 @@ async function parseMenu(menuData) {
         dispoart_id: obj?.dispoart_id,
         frei1: obj?.frei1,
         frei2: obj?.frei2,
-        frei3: obj?.frei3,
-        simScore: simScoreUdatFinder
+        frei3: obj?.frei3
         };
     });
 
