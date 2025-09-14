@@ -45,20 +45,29 @@
   --blankstar-color: #464646;
 }
 
-[data-eyedef="dtm"] {
-  --eyedef-filter: contrast(130%) saturate(120%);
+/* Red-Green Mild (deuteranomaly, protanomaly): Boost saturation and contrast for milder red-green confusion */
+[data-eyedef="dpm"] {
+  --eyedef-filter: contrast(140%) saturate(140%) brightness(110%);
 }
-[data-eyedef="ptm"] {
-  --eyedef-filter: brightness(110%) contrast(120%) saturate(120%);
+/* Red-Green Severe (deuteranopia, protanopia): Stronger contrast and luminance for dichromats */
+[data-eyedef="dpp"] {
+  --eyedef-filter: contrast(160%) saturate(120%) brightness(120%);
 }
-[data-eyedef="dtp"] {
-  --eyedef-filter: saturate(140%) contrast(120%);
+/* Low Vision (cataracts, AMD, glaucoma, diabetic retinopathy): High contrast, reduced saturation for clarity */
+[data-eyedef="cad"] {
+  --eyedef-filter: contrast(180%) saturate(80%) brightness(90%);
 }
-[data-eyedef="ptb"] {
-  --eyedef-filter: brightness(140%) contrast(120%) saturate(130%);
+/* Visual Stress (photophobia, Irlen syndrome): Low brightness, blue tint for glare reduction and text stability */
+[data-eyedef="pho"] {
+  --eyedef-filter: brightness(70%) contrast(130%) sepia(30%) hue-rotate(200deg);
 }
+/* Tritanopia: Hue shift for blue-yellow confusion, with high contrast */
 [data-eyedef="tri"] {
-  --eyedef-filter: hue-rotate(20deg) contrast(130%) saturate(130%);
+  --eyedef-filter: hue-rotate(180deg) contrast(150%) saturate(130%);
+}
+/* Grayscale: Remove color information for monochrome vision */
+[data-eyedef="gry"] {
+  --eyedef-filter: grayscale(100%);
 }
 
 body {
@@ -66,4 +75,5 @@ body {
   background-color: var(--main-bg);
   color: var(--main-text);
   font-family: Arial, Helvetica, sans-serif;
+  zoom: 1.0;
 }

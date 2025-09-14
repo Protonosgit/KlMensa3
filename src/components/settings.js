@@ -23,7 +23,7 @@ export default function SettingsModal({}) {
     layout: "list",
     language: 'en',
     theme: 'default',
-    eyedef: 'default',
+    eyedef: 'default'
   });
   const [user, setUser] = useState();
   const [usermail, setUsermail] = useState("");
@@ -196,19 +196,20 @@ export default function SettingsModal({}) {
                         </div>
 
                         <div className={styles.popupOption}>
-                          <span style={{width: "100%", textAlign: "left"}}>Vision assistance: </span>
+                          <span style={{width: "100%", textAlign: "left"}}>🅱️ Vision assistance: </span>
                           <select className={styles.popupSelect} value={settings.eyedef} onChange={(e) => handleSettingChange("eyedef", e.target.value)} >
                           <option value="">Normal vision</option>
-                          <option value="dtm">Deuteranomaly</option>
-                          <option value="ptm">Protanomaly</option>
-                          <option value="dtp">Deuteranopia</option>
-                          <option value="ptp">Protanopia</option>
+                          <option value="dpm">Deuteranomaly/Protanomaly</option>
+                          <option value="dpp">Deuteranopia/Protanopia</option>
+                          <option value="cad">Cataracts/AMD</option>
+                          <option value="pho">Photophobia</option>
                           <option value="tri">Tritanopia</option>
+                          <option value="gry">Grayscale</option>                 
                           </select>
                         </div>
 
                         <div className={styles.popupOption}>
-                          <span style={{width: "100%", textAlign: "left"}}>Language (disabled): </span>
+                          <span style={{width: "100%", textAlign: "left"}}>🅱️ Language (disabled): </span>
                           <select className={styles.popupSelect} disabled value={settings.lang} onChange={(e) => handleSettingChange("lang", e.target.value)} >
                           <option value="eng">English</option>
                           <option value="ger">German</option>
