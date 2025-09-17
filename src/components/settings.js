@@ -23,7 +23,8 @@ export default function SettingsModal({}) {
     layout: "list",
     language: 'en',
     theme: 'default',
-    eyedef: 'default'
+    eyedef: 'default',
+    autoalt: false
   });
   const [user, setUser] = useState();
   const [usermail, setUsermail] = useState("");

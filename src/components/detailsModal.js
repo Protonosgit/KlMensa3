@@ -35,6 +35,7 @@ export default function MealPopup({ mealsFull }) {
   const [selectedAdditive, setSelectedAdditive] = useState("");
   const ownedRatings = React.useRef([]);
   const [submittedRating, setSubmittedRating] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState(0);
 
   const requestCloseModal = () => {
     closeModal();
@@ -80,6 +81,9 @@ export default function MealPopup({ mealsFull }) {
       if(settingsCookie) {
         setSettings(JSON.parse(settingsCookie));
       }
+
+      // auto switching to alternative
+      setSelectedVariant(0);
 
       // retrieve cookies for bookmarks
       const cookieValue = document.cookie
@@ -269,14 +273,14 @@ export default function MealPopup({ mealsFull }) {
 
 
           {meal.altOption &&     
-          <div className={styles.altBox} onClick={() => {toast.error("Under construction")}}>
+          <div className={styles.altBox} onClick={() => {setSelectedVariant(selectedVariant === 0 ? 1 : 0)}}>
                 {meal.vegiOption && <VeggieOpIcon className={styles.altIcon} />  }
                 {meal.veganOption && <VeganOpIcon className={styles.altIcon} /> }
             <div>
               <p className={styles.altTitle}>{meal?.veganOption ? "Vegan" : "Veggie"} Alternative</p>
               <p className={styles.altDescription}>{meal?.altOption}</p>
             </div>
-            <ArrowDownUp size={20} className={styles.swapIcon} />
+            <ArrowDownUp size={20} className={`${styles.swapIcon} ${selectedVariant === 1 ? styles.activeColor : ""}`}/>
           </div>}
           <div className={styles.divider} style={{display: meal?.frei1 ? "block" : "none"}} />
             {meal?.frei1 &&<>

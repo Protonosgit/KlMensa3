@@ -6,7 +6,7 @@
 :root {
   --main-bg : hsl(0, 0%, 100%);
   --main-text: hsl(220, 43%, 11%);
-  --primary-color: #ffc518;
+  --primary-color: #f3bd1d;
   --secondary-color: #1f5ada;
   --tertiary-color: #2ab85e;
   --greenbox-bg: oklch(96.427% 0.0555 154.822);
@@ -27,7 +27,7 @@
 [data-theme="dark"] {
   --main-bg : #121212;
   --main-text: white;
-  --primary-color: #ffc518;
+  --primary-color: #f3bd1d;
   --secondary-color: oklch(66.019% 0.1841 254.638);
   --tertiary-color: #22c55e;
   --greenbox-bg: oklch(88.192% 0.10575 153.764);

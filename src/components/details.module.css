@@ -357,8 +357,8 @@
     font-size: 1rem;
   }
   .altIcon {
-    width: 2rem;
-    height: 2rem;
+    width: 28px;
+    height: 28px;
     color: var(--greentext-color);
     animation: scaleBounce 0.75s ease-out;
   }
@@ -368,7 +368,8 @@
     top: 0.5rem;
     right: 0.5rem;
   }
-  .altBox:active .swapIcon {
+
+  .activeColor {
     color: var(--primary-color);
   }
 

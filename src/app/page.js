@@ -45,8 +45,8 @@ export default async function Home() {
       </header>
 
       <div className={styles.newsBox}>
-        <p className={styles.newsTitle}><InfoIcon size={20} />Attention</p>
-        <p className={styles.newsText}>Developer version expect bugs and issues!</p>
+        <p className={styles.newsTitle}><InfoIcon size={20} />Shutdown notice</p>
+        <p className={styles.newsText}>This domain will cease to exist on November 1st !</p>
       </div>
 
       <main className={styles.main}>
@@ -59,15 +59,18 @@ export default async function Home() {
         </Suspense>
       </main>
       <footer className={styles.footer}>
-          <p>2025 mensa-kl v3 prototype<br/>
+        <div className={styles.linkGrid}>
           <a href="https://www.studierendenwerk-kaiserslautern.de/de/" className={styles.footerLink}>Studierendenwerk</a>
           <a href="https://rptu.de" className={styles.footerLink}>RPTU</a>
           <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
-          <a href="https://www.mensa-kl.de/" className={styles.footerLink}>Images from <b>mensa-kl.de</b></a>
+          <a href="https://www.mensa-kl.de/" className={styles.footerLink}>Images/Ratings</a>
           <a href="https://github.com/Protonosgit/KlMensa3/issues" className={styles.footerLink}>Report issue</a>
           <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Source</a>
-          {/* <a href="https://gibtesheutepommes.de/" className={styles.footerLink}>Gibt-es-heute-Pommes</a> */}
-          <a href="/api/menudata" className={styles.footerLink}>Api</a></p>
+          <a href="https://gibtesheutepommes.de/" className={styles.footerLink}>GehP</a>
+          <a href="/api/menudata" className={styles.footerLink}>Api</a>
+          <a href="/about" className={styles.footerLink}>About</a>
+        </div>
+          <p>2025 mensa-kl v3 prototype<br/></p>
       </footer>
       <ScrollToTopButton />
     </div>

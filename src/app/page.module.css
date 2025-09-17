@@ -136,17 +136,19 @@
   
   .footer {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     border-radius: 0.5rem 0.5rem 0 0;
-    padding: 1rem 0;
     text-align: center;
     color: var(--subtitle-text);
   }
+
+  .linkGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 2fr);
+  }
   
   .footerLink {
-    margin: 10px;
+    margin-bottom: 0.7rem;
   }
   
   .footerLink:hover {
@@ -198,6 +200,9 @@
     .footer {
       font-size: 0.9rem;
     }
+    .linkGrid {
+      grid-template-columns: repeat(2, 2fr);
+    }
     }
 
     
@@ -220,5 +225,8 @@
       }
       .headerButtonSection {
         justify-content: flex-end;
+      }
+      .linkGrid {
+        grid-template-columns: repeat(3, 2fr);
       }
     }
