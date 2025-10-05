@@ -68,7 +68,6 @@ export default async function Home() {
           <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Source</a>
           <a href="https://gibtesheutepommes.de/" className={styles.footerLink}>GehP</a>
           <a href="/api/menudata" className={styles.footerLink}>Api</a>
-          <a href="/about" className={styles.footerLink}>About</a>
         </div>
           <p>2025 mensa-kl v3 prototype<br/></p>
       </footer>
