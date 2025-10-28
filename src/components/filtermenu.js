@@ -14,7 +14,7 @@ import { useFilterStore } from "@/app/utils/contextStore";
 const mealLocationClearname = [
   { name: "Ausgabe 1", codes: [1] },
   { name: "Ausgabe 2", codes: [2] },
-  // { name: "Wok", codes: [-10] },
+  { name: "Salatbuffet", codes: [6] },
   { name: "Grill", codes: [10] },
   { name: "Atrium", codes: [16,17,18,19] },
   { name: "Eintopf (Atrium)", codes: [13] },
