@@ -45,8 +45,8 @@ export default async function Home() {
       </header>
 
       <div className={styles.newsBox}>
-        <p className={styles.newsTitle}><InfoIcon size={20} />Shutdown notice</p>
-        <p className={styles.newsText}>This domain will cease to exist on November 1st !</p>
+        <p className={styles.newsTitle}><InfoIcon size={20} />Account deletion</p>
+        <p className={styles.newsText}>Login is disabled and Beta accounts are deleted soon!</p>
       </div>
 
       <main className={styles.main}>
