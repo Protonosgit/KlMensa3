@@ -7,7 +7,6 @@ import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
-import { createClient } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
 import { ArrowDownUp, Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Share2Icon, StarOff } from "lucide-react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
@@ -125,10 +124,8 @@ export default function MealPopup({ mealsFull }) {
 
       // fetch userdata
       async function fetchUserData() {
-        const supabase = createClient();
-        const { data, error } = await supabase.auth.getUser();
-        if(data?.user) {
-          setUser(data?.user);
+        if(false) {
+          setUser(null);
 
           // Show tooltip if there are too few ratins
           if(getCookie('rateHintShown') !== 'true') {

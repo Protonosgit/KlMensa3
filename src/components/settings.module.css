@@ -178,20 +178,13 @@
     background-color: transparent;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   }
-  .popupButtonContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    margin-top: 1rem;
-  }
 
 .popupButton {
-  margin-left: auto;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
   width: 100%;
   cursor: pointer;
   border-radius: 0.5rem;

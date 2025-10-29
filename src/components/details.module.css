@@ -357,10 +357,11 @@
     font-size: 1rem;
   }
   .altIcon {
-    width: 28px;
-    height: 28px;
     color: var(--greentext-color);
     animation: scaleBounce 0.75s ease-out;
+    width: 2rem;
+    height: 2rem;
+    display: inline-block;
   }
   .swapIcon {
     color: var(--greentext-color);

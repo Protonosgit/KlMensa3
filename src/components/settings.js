@@ -1,13 +1,12 @@
 "use client";
 import styles from "./settings.module.css";
 import { useEffect, useRef, useState } from "react";
-import { Mail, Lock, CatIcon, Settings, X } from "lucide-react";
+import { CatIcon, Settings, X } from "lucide-react";
 import { toast, Toaster } from 'react-hot-toast';
-import { login,logout, signup } from "@/app/utils/auth-actions";
+import { login,logout } from "@/app/utils/auth-actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
 import Switch from "react-switch";
-import { createClient } from "@/app/utils/supabase/client";
 import { revalidatePage, retrieveUserAccountData } from "@/app/utils/auth-actions";
 
 export default function SettingsModal({}) {
@@ -27,8 +26,6 @@ export default function SettingsModal({}) {
     autoalt: false
   });
   const [user, setUser] = useState();
-  const [usermail, setUsermail] = useState("");
-  const [userpass, setUserpass] = useState("");
 
   useEffect(() => {
     // Fetch settings from cookies and initialize state.
@@ -39,14 +36,8 @@ export default function SettingsModal({}) {
     }
     // Fetch user data from Supabase.
      async function fetchUserData() {
-      const supabase = createClient();
-      const { data, error } = await supabase.auth.getUser();
-      if (data?.user) {
-        setUser(data?.user);
-      }
-      const retrievedUdat = await retrieveUserAccountData();
-      if (retrievedUdat?.id) {
-        setUserAccountData(retrievedUdat);
+      if (false) {
+        setUser(null);
       }
     }
     fetchUserData();
@@ -86,30 +77,7 @@ export default function SettingsModal({}) {
 
   // Handle user login.
   async function handleLogin() {
-    const response = await login(usermail,userpass);
-    if(!response?.error) {
-      setUser(response?.user);
-      toast.success('Login successful! \n Reloading...');
-      setTimeout(() => {
-      window.location.reload();
-      }, 1000);
-    } else {
-      toast.error(response?.error);
-    }
-  }
-
-  // Handle user signup.
-  async function handleSignup() {
-    const response = await signup(usermail,userpass);
-    if(!response?.error) {
-      setUser(response?.user);
-      toast.success('Signup successful! \n Reloading...');
-      setTimeout(() => {
-      window.location.reload();
-      }, 1000);
-    } else {
-      toast.error(response?.error);
-    }
+    toast.error("Under construction!");
   }
 
   // Handle user logout.
@@ -140,7 +108,7 @@ export default function SettingsModal({}) {
               <TabsList className={styles.popupTabsList}>
                 {/* Tabs for general settings and identity management */}
                 <TabsTrigger className={styles.popupTabsTrigger} value="general">General</TabsTrigger>
-                <TabsTrigger className={styles.popupTabsTrigger} value="identity">Identity</TabsTrigger>
+                <TabsTrigger className={styles.popupTabsTrigger} value="identity">Profile</TabsTrigger>
               </TabsList>
               <TabsContent value="general">
                { /* Render general settings */}
@@ -172,7 +140,7 @@ export default function SettingsModal({}) {
                           <Switch onChange={(e) => handleSettingChange("nolimit", e)} checked={settings.nolimit} className={styles.optionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
                           <span>Remove limiter</span>
-                          <p className={styles.popupOptionDescription}>Remove the limit to display more than 8 days in advance</p>
+                          <p className={styles.popupOptionDescription}>Remove the limit to display more than 8 days in advance (slow)</p>
                         </label>
                         </div>
 
@@ -229,20 +197,11 @@ export default function SettingsModal({}) {
                       <div className={styles.userInfoText}> <p>Ratings:</p> <p>{0}</p></div>
                       <div className={styles.userInfoText}> <p>Images:</p> <p>{0}</p></div>
                       <button className={styles.popupButton} onClick={() => handleLogout()}>Logout</button>
+                      
                     </div>
                   ) : (
                     <div className={styles.popupUserContainer}>
-                      {/* Login and signup inputs */}
-                      <div className={styles.popupInputContainer}>
-                        <label className={styles.popupLabel}><Mail size={16} />Email</label>
-                        <input type="email" placeholder="example@rptu.de" maxLength={60} value={usermail} onChange={(e) => setUsermail(e.target.value)} className={styles.popupInput} />
-                        <label className={styles.popupLabel}><Lock size={16} />Password</label>
-                        <input type="password" placeholder="Password" maxLength={25} value={userpass} onChange={(e) => setUserpass(e.target.value)} className={styles.popupInput} />
-                      </div>
-                      <div className={styles.popupButtonContainer}>
-                        <button className={styles.popupButton} onClick={() => handleLogin()}>Login</button><p>or</p>
-                        <button className={styles.popupButton} onClick={() => handleSignup()}>Signup</button>
-                      </div>
+                      <button className={styles.popupButton} onClick={() => handleLogin()}>Login with MKL<img src="/mkl_icon.webp" /></button>
                     </div>
                   )}
                 </div>

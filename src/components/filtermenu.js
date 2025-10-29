@@ -15,7 +15,7 @@ const mealLocationClearname = [
   { name: "Ausgabe 1", codes: [1] },
   { name: "Ausgabe 2", codes: [2] },
   { name: "Salatbuffet", codes: [6] },
-  { name: "Grill", codes: [10] },
+  // { name: "Grill", codes: [10] },
   { name: "Atrium", codes: [16,17,18,19] },
   { name: "Eintopf (Atrium)", codes: [13] },
   { name: "Abendmensa", codes: [4] },
@@ -41,7 +41,7 @@ const mealAdditiveClearname = [
 ];
 
 const mealProteinClearname = [
-  { name: "Poultry/Chicken", code: "g" },
+  { name: "Chicken", code: "g" },
   { name: "Beef", code: "r" },
   { name: "Lamb", code: "l" },
   { name: "Pork", code: "s" },

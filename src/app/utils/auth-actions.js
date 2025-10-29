@@ -1,53 +1,16 @@
 'use server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { createClient } from './supabase/server'
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export async function login(useremail,userpassword) {
-  if(userpassword.length < 6 || useremail.length < 8) return {error: "Email or password invalid!"}
-  
-  const supabase = await createClient();
-  const { error, data } = await supabase.auth.signInWithPassword({email: useremail, password: userpassword});
-  if(error?.code === 'user_banned') {
-    return {error: "Account deactivated by a moderator ⛔"}
-  } else if (error) {
-    return {error: "Login failed! Check your credentials"}
-  }
-  return data
-}
-
-export async function signup(useremail,userpassword) {
-  if(userpassword.length < 6) return {error: "Password too short!"}
-  if (!emailRegex.test(useremail)) return {error: "Invalid email format!"}
-  if(useremail.substring(useremail.length-8) !== "@rptu.de" && useremail.substring(useremail.length-12) !== "@edu.rptu.de") return {error: "Only rptu.de emails allowed!"}
-
-  const username = useremail.substring(0,useremail.indexOf("@"));
-
-  const supabase = await createClient()
-  const { error,data } = await supabase.auth.signUp({email: useremail, password: userpassword, options: {data: {username: username}}});
-
-  if(error?.code === 'validation_failed') {
-    return {error: "Email format not accepted"}
-  } else if(error?.code === 'user_already_exists') {
-    return {error: "Email already in use"}
-  } else if(error) {
-    return {error: "Signup failed"}
-  }
-  return data
-}
 
 export async function retrieveUserAccountData() {
-    const supabase = await createClient();
-    const { data, error } = await supabase.from("profiles").select("*").limit(1);
 
-    return data[0];
 }
 
 export async function logout() {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.signOut();
-    return error
+  const res = await fetch('https://www.mensa-kl.de/external_auth/logout', { method: 'POST' });
+  if(!res.ok) return true;
+  return false;
 }
 
 
