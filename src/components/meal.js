@@ -60,6 +60,8 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
         {/* Meal image */}
           <Image
             priority
+            fetchPriority="high"
+            onError={(e) => {}}
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
             alt="dish-image" title={meal.mergedTitle[0]} 
             className={styles.mealImage}

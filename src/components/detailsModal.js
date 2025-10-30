@@ -50,8 +50,9 @@ export default function MealPopup({ mealsFull }) {
     };
 
     const handleEscapePress = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && isOpen) {
         closeModal();
+        window.history.back();
       }
     };
 

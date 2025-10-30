@@ -1,10 +1,12 @@
 'use server'
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-
+import { neon } from '@neondatabase/serverless';
 
 export async function retrieveUserAccountData() {
-
+    const sql = neon(`${process.env.DATABASE_URL}`);
+    const email = 'dummy@example.com';
+    const res = await sql.query('SELECT * from users WHERE email = $1', [email]);
+    console.log(res);
 }
 
 export async function logout() {
