@@ -41,6 +41,17 @@ export default function SettingsModal({}) {
       }
     }
     fetchUserData();
+
+    // Check if user just logged in
+    const urlParams = new URLSearchParams(window.location.search);
+    const autstat = urlParams.get('authstatus');
+    if(autstat === '0') {
+      toast.success('Login was successfull!');
+      window.history.pushState({}, '', window.location.pathname);
+    } else if(autstat === '1') {
+      toast.error('Login failed!');
+      window.history.pushState({}, '', window.location.pathname);
+    }
   }, []);
 
   useEffect(() => {
@@ -74,11 +85,6 @@ export default function SettingsModal({}) {
       revalidatePage();
     }
   };
-
-  // Handle user login.
-  async function handleLogin() {
-    toast.error("Under construction!");
-  }
 
   // Handle user logout.
   async function handleLogout() {
@@ -200,9 +206,9 @@ export default function SettingsModal({}) {
                       
                     </div>
                   ) : (
-                    <div className={styles.popupUserContainer}>
+                    <a href="/api/auth/login" className={styles.popupUserContainer}>
                       <button className={styles.popupButton} onClick={() => handleLogin()}>Login with MKL<img src="/mkl_icon.webp" /></button>
-                    </div>
+                    </a>
                   )}
                 </div>
               </TabsContent>
