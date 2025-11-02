@@ -44,7 +44,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <div className={styles.newsBox}>
+      <div className={styles.newsBox} style={{display: "none"}}>
         <p className={styles.newsTitle}><InfoIcon size={20} />Account deletion</p>
         <p className={styles.newsText}>Login is disabled and Beta accounts are deleted soon!</p>
       </div>
