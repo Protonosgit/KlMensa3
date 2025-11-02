@@ -292,7 +292,7 @@ async function parseMenu(menuData) {
 
     const parsedMenu = Object.entries(sortedGroupedByDate).map(([date, items]) => {
         // Sort meals by dpartname works fine but disabled for now
-        const predefinedOrder = ["Essen 1", "Essen 2", "Grill", "Wok", "Eintopf 1", "Eintopf 2", "Mittagsmenü 1", "Mittagsmenü 2", "Mittagsmenü 3","Mittagsmenü 4", "Mittagsmenü 5", "Abendmensa"];
+        const predefinedOrder = ["Essen 1", "Essen 2", "Grill", "Wok", "Salatbüfett", "Eintopf 1", "Eintopf 2", "Mittagsmenü 1", "Mittagsmenü 2", "Mittagsmenü 3","Mittagsmenü 4", "Mittagsmenü 5", "Abendmensa"];
         const sortedMeals = items.slice().sort((a, b) => {
             const aIndex = predefinedOrder.indexOf(a.dpartname);
             const bIndex = predefinedOrder.indexOf(b.dpartname);

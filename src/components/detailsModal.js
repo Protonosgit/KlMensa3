@@ -8,7 +8,7 @@ import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
 import toast from "react-hot-toast";
-import { ArrowDownUp, Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Share2Icon, StarOff } from "lucide-react";
+import { ArrowDownUp, Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Scale,  Share2Icon, StarOff } from "lucide-react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
@@ -125,6 +125,7 @@ export default function MealPopup({ mealsFull }) {
 
       // fetch userdata
       async function fetchUserData() {
+
         if(false) {
           setUser(null);
 
@@ -165,10 +166,19 @@ export default function MealPopup({ mealsFull }) {
 
   // Handle reporting a comment or image.
   async function handleRequestImageTakedown() {
-    // will be handled in seperate form on different page in the future!!
-    if(confirm("Request image removal from the site?")) {
-      toast.error("Under construction!");
-    }
+    return;
+          if ('Translator' in self) {
+            const translator = await Translator.create({
+              sourceLanguage: "en",
+              targetLanguage: "ja"
+            });
+          const detector = await LanguageDetector.create({ expectedInputLanguages: ["en", "ja"] });
+
+          const results = await detector.detect("Hello jamaican");
+          for (const result of results) {
+            console.log(result.detectedLanguage, result.confidence);
+          }
+        }
   }
 
   // Handle bookmarking/unbookmarking the meal.
@@ -225,6 +235,7 @@ export default function MealPopup({ mealsFull }) {
               {meal.dpartname}
               
               {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
+              {meal?.dpartname == "Salatbüfett" ? <Scale size={20} className={styles.otherIcon} /> : ""}
               {meal?.vegiOption ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
               {meal?.veganOption ? <VeganOpIcon className={styles.greenIcon} /> : ""}
               {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}

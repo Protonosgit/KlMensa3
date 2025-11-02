@@ -128,27 +128,33 @@
 
   .popupUserContainer {
     display: flex;
-    flex: 1;
     flex-direction: column;
+    width: 100vw;
+    gap: 1rem;
+  }
+  .activitySection {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    border-radius: 0.5rem;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .activityBlob {
+    display: flex;
+    flex: 1;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-  }
-  .popupInputContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
-  }
-  .userInfoText {
-    font-size: 1rem;
-    color: var(--subtitle-text);
-    align-items: center;
-    display: flex;
+    padding: 0.8rem;
     gap: 0.2rem;
-    justify-content: space-between;
-    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid var(--darkbox-border);
+    box-shadow: var(--lightmode-shadow);
+  }
+  .userAccounttext {
+    display: flex;
+    flex-direction: row;
+    gap: 0.2rem;
   }
   .popupSelect {
     width: 55%;

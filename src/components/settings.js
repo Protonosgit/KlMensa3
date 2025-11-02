@@ -1,7 +1,7 @@
 "use client";
 import styles from "./settings.module.css";
 import { useEffect, useRef, useState } from "react";
-import { CatIcon, Settings, X } from "lucide-react";
+import { CatIcon, Image, ImageIcon, MailIcon, Settings, StarIcon, X } from "lucide-react";
 import { toast, Toaster } from 'react-hot-toast';
 import { login,logout } from "@/app/utils/auth-actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -23,7 +23,10 @@ export default function SettingsModal({}) {
     language: 'en',
     theme: 'default',
     eyedef: 'default',
-    autoalt: false
+    autoalt: false,
+    notitime: '8',
+    booknoti: false,
+    schedulenoti: false,
   });
   const [user, setUser] = useState();
 
@@ -114,6 +117,7 @@ export default function SettingsModal({}) {
               <TabsList className={styles.popupTabsList}>
                 {/* Tabs for general settings and identity management */}
                 <TabsTrigger className={styles.popupTabsTrigger} value="general">General</TabsTrigger>
+                {/* <TabsTrigger className={styles.popupTabsTrigger} value="notifications">Notifications</TabsTrigger> */}
                 <TabsTrigger className={styles.popupTabsTrigger} value="identity">Profile</TabsTrigger>
               </TabsList>
               <TabsContent value="general">
@@ -192,16 +196,49 @@ export default function SettingsModal({}) {
                         </div>
 
                         </TabsContent>
+                        <TabsContent value="notifications">
 
+                        <div className={styles.popupOption}>
+                          <Switch onChange={(e) => handleSettingChange("schedulenoti", e)} checked={settings.schedulenoti} className={styles.optionSwitch} onColor="#fbbf24"  />
+                        <label className={styles.popupOptionLabel}>
+                          <span>Push notifications</span>
+                          <p className={styles.popupOptionDescription}>Receive todays meals in a push notification</p>
+                        </label>
+                        </div>
+
+                        <div className={styles.popupOption}>
+                          <Switch onChange={(e) => handleSettingChange("booknoti", e)} checked={settings.booknoti} className={styles.optionSwitch} onColor="#fbbf24"  />
+                        <label className={styles.popupOptionLabel}>
+                          <span>Bookmark notifications</span>
+                          <p className={styles.popupOptionDescription}>Receive a notification when a bookmark is on the menu</p>
+                        </label>
+                        </div>
+
+                        <div className={styles.seperator}></div>
+
+                        <div className={styles.popupOption}>
+                          <span style={{width: "100%", textAlign: "left"}}>Time: </span>
+                          <select className={styles.popupSelect} value={settings.notitime} onChange={(e) => handleSettingChange("notitime", e.target.value)} >
+                          <option value="8">8am</option>
+                          <option value="9">9am</option>
+                          <option value="10">10am</option>
+                          <option value="11">11am</option>
+                          </select>
+                        </div>
+
+                        </TabsContent>
                         <TabsContent value="identity">
                         {/* Render identity management options */}
                 <div className={styles.popupOption}>
-                  {user ? (
+                  {false ? (
                     <div className={styles.popupUserContainer}>
-                      <p>{user.email}</p>
+                      <p className={styles.userAccounttext}><MailIcon /><b>{"dummymail@dummyuser1233333.com"}</b></p>
                       {userAccountData?.metadata?.theme && <CatIcon />}
-                      <div className={styles.userInfoText}> <p>Ratings:</p> <p>{0}</p></div>
-                      <div className={styles.userInfoText}> <p>Images:</p> <p>{0}</p></div>
+                      <div className={styles.activitySection} > 
+                        <div className={styles.activityBlob}> <StarIcon /> <p>Ratings: </p> <b> {0}</b></div>
+                        <div className={styles.activityBlob}> <ImageIcon /> <p>Images: </p> <b> {0}</b></div>
+                      </div>
+
                       <button className={styles.popupButton} onClick={() => handleLogout()}>Logout</button>
                       
                     </div>
