@@ -1,7 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { cookies } from "next/headers";
-import Head from "next/head";
 
 
 const geistSans = localFont({
@@ -18,6 +17,12 @@ const geistMono = localFont({
 export const metadata = {
   title: "Mensa-KL - Der Mensaplan der RPTU in Kaiserslautern / Landau",
   description: "Mensa KL ermöglicht das einsehen des aktuellen Speiseplans der RPTU, sowie das abgeben von Bewertungen und Bildern zu Mahlzeiten",
+  keywords: ["Mensa","RPTU","Kaiserslautern","Speiseplan","Uni"],
+  openGraph: {
+    title: "Mensa-KL",
+    description: "Mensa KL ermöglicht das einsehen des aktuellen Speiseplans der RPTU, sowie das abgeben von Bewertungen und Bildern zu Mahlzeiten",
+    images: ["https://kl-mensa.vercel.app/logo.png"],
+  },
 };
 
 export default async function RootLayout({ children }) {
@@ -30,24 +35,7 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="de" data-theme={settings?.dark ? "dark" : "light"} data-layout={settings?.layout} data-eyedef={settings?.eyedef}>
-      <Head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} key="desc" />
-         <meta name="keywords" content="Mensa, RPTU, Kaiserslautern, Technische, Universitaet, Mensaplan, Essen, Studenten, mensa kl, Tu, Uni" />
-        <meta property="og:title" content={metadata.title} />
-        <meta
-          property="og:description"
-          content={metadata.description}
-        />
-        <meta
-          property="og:image"
-          content="https://kl-mensa.vercel.app/logo.png"
-        />
-      </Head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>

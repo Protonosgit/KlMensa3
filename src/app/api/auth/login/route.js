@@ -6,6 +6,6 @@ export async function GET() {
     application_id: "klmensa_v3ext_user",
   });
 
-  const loginUrl = `https://www.mensa-kl.de/external_auth/authenticate?${params.toString()}`;
+  const loginUrl = `${process.env.LEGACY_API_URL}/external_auth/authenticate.php?${params.toString()}`;
   return NextResponse.redirect(loginUrl);
 }

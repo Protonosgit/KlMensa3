@@ -13,6 +13,8 @@ export default function SettingsModal({}) {
   // State variables for managing modal visibility, settings, and user authentication.
   const [modalVisible, setModalVisible] = useState(false);
   const [userAccountData, setUserAccountData] = useState({});
+
+
     const [settings, setSettings] = useState({
     dark: false,
     shortitle: false,
@@ -44,6 +46,17 @@ export default function SettingsModal({}) {
       }
     }
     fetchUserData();
+
+    // async function checkSubscription() {
+    //   if (Notification.permission === "granted") {
+    //     const registration = await navigator.serviceWorker.ready;
+    //     const subscription = await registration.pushManager.getSubscription();
+    //     setIsSubscribed(!!subscription);
+    //   } else {
+    //     setIsSubscribed(false);
+    //   }
+    // }
+    // checkSubscription();
 
     // Check if user just logged in
     const urlParams = new URLSearchParams(window.location.search);
@@ -141,7 +154,7 @@ export default function SettingsModal({}) {
                         <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("shortitle", e)} checked={settings.shortitle} className={styles.optionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
-                          <span>Short title</span>
+                          <span>Short titles</span>
                           <p className={styles.popupOptionDescription}>Only show a shortened version of the meal title</p>
                         </label>
                         </div>
@@ -149,7 +162,7 @@ export default function SettingsModal({}) {
                         <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("nolimit", e)} checked={settings.nolimit} className={styles.optionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
-                          <span>Remove limiter</span>
+                          <span>Disable limiter</span>
                           <p className={styles.popupOptionDescription}>Remove the limit to display more than 8 days in advance (slow)</p>
                         </label>
                         </div>
@@ -188,10 +201,10 @@ export default function SettingsModal({}) {
                         </div>
 
                         <div className={styles.popupOption}>
-                          <span style={{width: "100%", textAlign: "left"}}>🅱️ Language (disabled): </span>
-                          <select className={styles.popupSelect} disabled value={settings.lang} onChange={(e) => handleSettingChange("lang", e.target.value)} >
+                          <span style={{width: "100%", textAlign: "left"}}>🅱️ Language: </span>
+                          <select className={styles.popupSelect} value={settings.lang} onChange={(e) => handleSettingChange("lang", e.target.value)} >
                           <option value="eng">English</option>
-                          <option value="ger">German</option>
+                          {/* <option value="ger">German</option> */}
                           </select>
                         </div>
 
