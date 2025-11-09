@@ -41,7 +41,7 @@ const mealAdditiveClearname = [
 ];
 
 const mealProteinClearname = [
-  { name: "Chicken", code: "g" },
+  { name: "Poultry", code: "g" },
   { name: "Beef", code: "r" },
   { name: "Lamb", code: "l" },
   { name: "Pork", code: "s" },

@@ -228,7 +228,7 @@ export default function MealPopup({ mealsFull }) {
             <Image 
               priority={false} 
               loading={"lazy"} 
-              src={meal?.image? meal?.imageUrl : "/plate_placeholder.png"}  title={meal?.atextohnezsz1}
+              src={selectedVariant == 0 ? (meal?.image? meal?.imageUrl : "/plate_placeholder.png") : (meal?.altImage? meal?.altImageUrl : "/plate_placeholder.png")}  title={meal?.atextohnezsz1}
               alt="dish-image" className={styles.popupImage} 
               width={1600} height={900} />
 
@@ -276,14 +276,15 @@ export default function MealPopup({ mealsFull }) {
                 tabIndex={0}
                 aria-label="Rate this meal"
               >
-                <StarRating disabled={!user} commonRating={meal?.rating} submittedRating={submittedRating} setSubmittedRating={setSubmittedRating} starsSet={handleSubmitRating} />
+                <StarRating disabled={!user} commonRating={selectedVariant == 0 ? meal?.rating : meal?.altRating} submittedRating={submittedRating} setSubmittedRating={setSubmittedRating} starsSet={handleSubmitRating} />
                 <span className={`${styles.tooltipBubble} ${showTooltip ? styles.triggerTooltip : ""}`} role="tooltip">Click to rate this meal!</span>
               </div>
-               <span className={styles.ratingCount} >({meal?.rating_amt || "0"})</span>
+               <span className={styles.ratingCount} >({(selectedVariant == 0 ? meal?.rating_amt : meal?.altRating_amt) || "0"})</span>
             </div>
           </div>
 
 
+          {/* Alternative options */}
           {meal.altOption &&     
           <div className={styles.altBox} onClick={() => {setSelectedVariant(selectedVariant === 0 ? 1 : 0)}}>
                 {meal.vegiOption && <VeggieOpIcon className={styles.altIcon} />  }
@@ -294,6 +295,8 @@ export default function MealPopup({ mealsFull }) {
             </div>
             <ArrowDownUp size={20} className={`${styles.swapIcon} ${selectedVariant === 1 ? styles.activeColor : ""}`}/>
           </div>}
+
+          {/* Additional information */}
           <div className={styles.divider} style={{display: meal?.frei1 ? "block" : "none"}} />
             {meal?.frei1 &&<>
             <p className={styles.sectionTitle}>Information</p>
@@ -302,6 +305,7 @@ export default function MealPopup({ mealsFull }) {
             <p>{meal.frei1+" "+meal.frei2}</p>
             </div></>}
 
+            {/* Additive chips */}
           <div className={styles.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
@@ -310,7 +314,8 @@ export default function MealPopup({ mealsFull }) {
             </div>
             {additives?.length > 1 ? <div> {additives?.map((additive) => <Badge title={additive?.name} onClick={() => setSelectedAdditive(additive?.code)} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
           </div>
-        
+
+        {/* Nutrition */}
           {/* <div className={styles.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
@@ -319,6 +324,7 @@ export default function MealPopup({ mealsFull }) {
             </div>
           </div> */}
 
+            {/* Image upload section */}
           <div className={styles.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
