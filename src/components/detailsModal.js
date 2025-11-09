@@ -8,7 +8,7 @@ import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
 import toast from "react-hot-toast";
-import { ArrowDownUp, Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Scale,  Share2Icon, StarOff } from "lucide-react";
+import { ArrowDownUp, Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Scale,  Share2Icon, SoupIcon, StarOff } from "lucide-react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
@@ -106,7 +106,6 @@ export default function MealPopup({ mealsFull }) {
           setShowTooltip(false);
         }
       };
-
     }, [meal, mealsFull]);
 
     useEffect(() => {
@@ -114,7 +113,7 @@ export default function MealPopup({ mealsFull }) {
       const urlParams = new URLSearchParams(window.location.search);
       const mealId = urlParams.get('artid');
       if(mealId) {
-        const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m.artikel_id === mealId);
+        const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m?.artikel_id === mealId);
         if(!foundmeal) {
           alert('Meal has expired!');
           window.location.replace('/');
@@ -188,12 +187,12 @@ export default function MealPopup({ mealsFull }) {
       .find((row) => row.startsWith("bookmarks"))
       ?.split("=")[1];
     const bookmarks = cookieValue ? JSON.parse(cookieValue) : [];
-    const bookmarkIndex = bookmarks.indexOf(meal.artikel_id);
+    const bookmarkIndex = bookmarks.indexOf(meal?.artikel_id);
 
     if (bookmarkIndex !== -1) {
       bookmarks.splice(bookmarkIndex, 1);
     } else {
-      bookmarks.push(meal.artikel_id);
+      bookmarks.push(meal?.artikel_id);
     }
 
     document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
@@ -202,8 +201,10 @@ export default function MealPopup({ mealsFull }) {
   }
 
 
+
   // Render the meal title based on settings.
   const MealTitle = () => {
+
     if(settings?.threebar) return (
       <ul className={styles.popupTitleBullets} >
         {meal?.mergedATitle?.map((title, index) => <li key={index} className={meal?.additivePointer[index]?.includes(selectedAdditive) ? styles.highlighted : undefined}>{title.trim().replace(", ", '')}</li>)}
@@ -211,11 +212,12 @@ export default function MealPopup({ mealsFull }) {
 
     return (
       <h2 className={styles.popupTitle} >
-        {meal?.mergedTitle?.map((title, index) =>   <span className={meal?.additivePointer[index]?.includes(selectedAdditive) ? styles.highlighted : undefined} key={index}>{title}</span>)}
+        {meal?.mergedTitle?.map((title, index) =>  <span className={meal?.additivePointer[index]?.includes(selectedAdditive) ? styles.highlighted : undefined} key={index}>{title}</span>)}
       </h2>);
   }
 
   if(!meal || !isOpen) return null;
+
 
   // Render the modal UI for meal details, comments, and actions.
   return (
@@ -236,6 +238,7 @@ export default function MealPopup({ mealsFull }) {
               
               {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
               {meal?.dpartname == "Salatbüfett" ? <Scale size={20} className={styles.otherIcon} /> : ""}
+              {meal?.dpartname == "Eintopf 1" || meal?.dpartname == "Eintopf 2" ? <SoupIcon size={20} className={styles.otherIcon} /> : ""}
               {meal?.vegiOption ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
               {meal?.veganOption ? <VeganOpIcon className={styles.greenIcon} /> : ""}
               {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}
@@ -248,7 +251,7 @@ export default function MealPopup({ mealsFull }) {
               <DropdownMenuTrigger className={styles.popupActionButton}><EllipsisVertical size={18} /></DropdownMenuTrigger>
                 <DropdownMenuContent className={styles.dropdownMenuContent}>
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={(e) => (handleBookmark(e))} ><Bookmark size={18} className={isBookmarked ? styles.bookmarkActive : styles.bookmark} />Bookmark</DropdownMenuItem>
-                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal.artikel_id) && toast.success("Link copied to clipboard!")}><Share2Icon size={18} />Share</DropdownMenuItem>
+                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal?.artikel_id) && toast.success("Link copied to clipboard!")}><Share2Icon size={18} />Share</DropdownMenuItem>
   
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => handleRequestImageTakedown()} ><FlagIcon size={18} />Remove image</DropdownMenuItem>
@@ -308,6 +311,14 @@ export default function MealPopup({ mealsFull }) {
             {additives?.length > 1 ? <div> {additives?.map((additive) => <Badge title={additive?.name} onClick={() => setSelectedAdditive(additive?.code)} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
           </div>
         
+          {/* <div className={styles.divider} />
+          <div className={styles.additivesSection}>
+            <div className={styles.sectionTitle}>
+              <p>Nutrition</p>
+              <p className={styles.additivesContext}>Estimated based on title</p>
+            </div>
+          </div> */}
+
           <div className={styles.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>

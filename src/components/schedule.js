@@ -4,7 +4,8 @@ import styles from "../app/page.module.css";
 import { format } from 'date-fns';
 import Meal from './meal';
 import { applyFilters } from '@/app/utils/filter.js';
-import MealPopup from './detailsModal';
+import dynamic from "next/dynamic";
+const DynamicMealPopup = dynamic(() => import("./detailsModal"), { ssr: true });
 
 
 export default async function Schedule({settingsCookie}) {
@@ -28,13 +29,9 @@ export default async function Schedule({settingsCookie}) {
     additiveFilter = JSON.parse(additiveFilterCookie.value);
   }
 
-  let menu;
-  const menudata = await fetchMenu();
-
-  // Cut down on shown meals
-  if (!settingsCookie?.nolimit) {
-    menu = menudata?.slice(0, 8);
-  }
+  let menuData = await fetchMenu();
+  const maxMealCount = settingsCookie?.nolimit ? undefined : 8;
+  const menu = menuData?.slice(0, maxMealCount);
 
 
   // Check if menu data is available
@@ -45,7 +42,6 @@ export default async function Schedule({settingsCookie}) {
       </div>
     );
   }
-
 
   return (
     <>
@@ -78,7 +74,7 @@ export default async function Schedule({settingsCookie}) {
           </div>
         );
       })}
-      <MealPopup mealsFull={menu} />
+      <DynamicMealPopup mealsFull={menu} />
     </>
   );
 }

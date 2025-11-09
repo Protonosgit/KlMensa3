@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Star, Bot, Scale } from "lucide-react";
+import { Star, Bot, Scale, SoupIcon } from "lucide-react";
 import styles from "./mealcard.module.css";
 import { useEffect } from "react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
@@ -72,6 +72,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
 
           {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
           {meal?.dpartname == "Salatbüfett" ? <Scale size={20} className={styles.otherIcon} /> : ""}
+          {meal?.dpartname == "Eintopf 1" || meal?.dpartname == "Eintopf 2" ? <SoupIcon size={20} className={styles.otherIcon} /> : ""}
           {meal?.vegiOption ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
           {meal?.veganOption ? <VeganOpIcon className={styles.greenIcon} /> : ""}
           {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}

@@ -1,19 +1,27 @@
 import styles from "./page.module.css";
 import Schedule from '@/components/schedule';
-import FilterMenu from "@/components/filtermenu";
+import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import SettingsModal from "@/components/settings";
-import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { InfoIcon } from "lucide-react";
 import { cookies } from 'next/headers';
 
-export default async function Home() { 
+
+const DynamicSettingsModal = dynamic(() => import("@/components/settings"), { ssr: true });
+const DynamicFilterMenu = dynamic(() => import("@/components/filtermenu"), { ssr: true });
+const DynamicScrollToTopButton = dynamic(() => import("@/components/ScrollToTopButton"), { ssr: true });
+
+
+async function retrieveCookies() {
   const cookieStore = await cookies();
-  let settings = null;
   const settingsCookie = cookieStore.get("settings") || null;
   if (settingsCookie?.value) {
-    settings = JSON.parse(settingsCookie.value);
+    return JSON.parse(settingsCookie.value);
   }
+  return null;
+}
+
+export default async function Home() {
+  const settings = await retrieveCookies(); // <-- resolve here
 
   // Skeleton loading animation
     const SkeletonLoading = () => (
@@ -51,8 +59,8 @@ export default async function Home() {
 
       <main className={styles.main}>
         <div className={styles.headerButtonSection}>
-          <SettingsModal />
-          <FilterMenu/>
+          <DynamicSettingsModal />
+          <DynamicFilterMenu/>
         </div>
         <Suspense fallback={<SkeletonLoading />}>
           <Schedule settingsCookie={settings}/>
@@ -63,7 +71,7 @@ export default async function Home() {
           <a href="https://www.studierendenwerk-kaiserslautern.de/de/" className={styles.footerLink}>Studierendenwerk</a>
           <a href="https://rptu.de" className={styles.footerLink}>RPTU</a>
           <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
-          <a href="https://www.mensa-kl.de/" className={styles.footerLink}>Images/Ratings</a>
+          <a href="https://www.mensa-kl.de/#upload" className={styles.footerLink}>Images/Ratings</a>
           <a href="https://github.com/Protonosgit/KlMensa3/issues" className={styles.footerLink}>Report issue</a>
           <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Source</a>
           <a href="https://gibtesheutepommes.de/" className={styles.footerLink}>GehP</a>
@@ -71,7 +79,7 @@ export default async function Home() {
         </div>
           <p>2025 mensa-kl v3 prototype<br/></p>
       </footer>
-      <ScrollToTopButton />
+      <DynamicScrollToTopButton />
     </div>
   )
 }

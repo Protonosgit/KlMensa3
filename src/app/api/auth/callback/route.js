@@ -11,7 +11,7 @@ export async function GET(request) {
   }
 
   // // Exchange one-time-code for token secret
-  const tokenRes = await fetch(`https://www.mensa-kl.de/external_auth/codeswap`, {
+  const tokenRes = await fetch(`${process.env.LEGACY_API_URL}/external_auth/codeswap.php`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
