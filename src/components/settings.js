@@ -146,7 +146,7 @@ export default function SettingsModal({}) {
                         <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("threebar", e)} checked={settings.threebar} className={styles.optionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
-                          <span>Bulletpoints</span>
+                          <span>Bulletpoints with Codes</span>
                           <p className={styles.popupOptionDescription}>Display the meal title in a bullet point format (popup)</p>
                         </label>
                         </div>

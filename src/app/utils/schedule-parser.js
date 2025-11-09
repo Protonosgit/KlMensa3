@@ -321,14 +321,19 @@ async function matchMenuToUdat(schedule) {
         const userdat = await fetchMealUserData();
         if (!userdat || !Array.isArray(userdat) || userdat.length === 0) {
             console.error('Failed to parse menu schedule');
-        return rebuildmatchedMenu;
+            return rebuildmatchedMenu;
         }
 
         for (const entry of rebuildmatchedMenu) {
             for (const udatEntry of userdat) {
+                //prepare simplified title
                 const udatTitle = udatEntry?.title.replace(/&quot;/g, '"').toLowerCase().replace(/[^a-z]/g, '');
 
                 if (udatTitle.includes(entry?.simScore)) {
+                    // Find veggie alternatives
+                    const udatEntryAlt = userdat.find(altEntry => altEntry.loc === udatEntry.loc && altEntry.date === udatEntry.date && altEntry.m_id !== udatEntry.m_id);
+
+                    // Add Images and ratings from main course
                     entry.legacyId = udatEntry.m_id
                     if(udatEntry.image){
                         entry.image = udatEntry.image;
@@ -339,6 +344,18 @@ async function matchMenuToUdat(schedule) {
                     }
                     if(udatEntry.rating_amt){
                         entry.rating_amt = udatEntry.rating_amt;
+                    }
+                    // Add Images and ratings from alternative course
+                    entry.altLegacyId = udatEntryAlt?.m_id
+                    if(udatEntryAlt?.image){
+                        entry.altImage = udatEntryAlt.image;
+                        entry.altImageUrl = udatEntryAlt.image_url_webp
+                    }
+                    if(udatEntryAlt?.rating){
+                        entry.altRating = udatEntryAlt.rating;
+                    }
+                    if(udatEntryAlt?.rating_amt){
+                        entry.altRating_amt = udatEntryAlt.rating_amt;
                     }
                 }
             }
