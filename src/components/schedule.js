@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import {  fetchMenu } from '@/app/utils/schedule-parser';
+import { fetchMenu } from '@/app/utils/schedule-parser';
 import styles from "../app/page.module.css";
 import { format } from 'date-fns';
 import Meal from './meal';

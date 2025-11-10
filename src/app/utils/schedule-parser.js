@@ -209,16 +209,6 @@ async function parseMenu(menuData) {
         obj.atextz7 ? (obj.atextz7.startsWith(',') ? '' : ' ') + obj.atextz7 : '',
         obj.atextz8 ? (obj.atextz8.startsWith(',') ? '' : ' ') + obj.atextz8 : ''
     ].filter(Boolean);
-
-    const titleAdder = (
-        obj.atextohnezsz1 + (obj.atextohnezsz2?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz2 + (obj.atextohnezsz3?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz3 + (obj.atextohnezsz4?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz4 + (obj.atextohnezsz5?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz5 + (obj.atextohnezsz6?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz6 + (obj.atextohnezsz7?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz7 + (obj.atextohnezsz8?.startsWith(',') ? '' : ' ') +
-        obj.atextohnezsz8);
         
 
     const titleAdditiveAdder = (
@@ -367,4 +357,4 @@ async function matchMenuToUdat(schedule) {
 }
 
 
-export { fetchMenu, fetchMealUserData }
+export { fetchMenu }
