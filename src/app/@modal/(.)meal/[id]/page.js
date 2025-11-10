@@ -67,6 +67,7 @@ export default function MealPopup({ params }) {
     useEffect(() => {
 
       async function loadSelectedMenuItem() {
+        console.time('loadSelectedMenuItem');
         const mid = (await params)?.id;
         const mealsData = await fetchMenu();
         const meals = mealsData.reduce((acc, cur) => {
@@ -84,6 +85,7 @@ export default function MealPopup({ params }) {
 
       // load data
       loadSelectedMenuItem();
+      console.timeEnd('loadSelectedMenuItem');
 
       // Run on meal change
       setSelectedAdditive("");
