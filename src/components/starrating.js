@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import styles from "./details.module.css";
+import styles from "../styles/details.module.css";
 import { Star } from "lucide-react";
 
 export default function StarRating({ disabled = false, starsSet, commonRating = 0, submittedRating, setSubmittedRating }) {

@@ -1,29 +1,14 @@
-"use client";
 import Image from "next/image";
 import { Star, Bot, Scale, SoupIcon } from "lucide-react";
 import styles from "./mealcard.module.css";
-import { useEffect } from "react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
-import { useModalStore } from "@/app/utils/contextStore";
-
+import Link from "next/link";
 
 export default function Meal({ meal, mealIndex, settingsCookie }) {
 
-  // State variables
-  const { openModal, isOpen } = useModalStore();
 
-
-  useEffect(() => {
-    // Disable page scrolling when the meal popup is open.
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [isOpen]);
-  
 
   // Render star rating for the meal (non-interactive).
   const renderStarRating = () => {
@@ -42,26 +27,21 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
     );
   };
 
-  // Open the meal popup and set url param for back gesture detection
-  const requestOpenModal = () => {
-    if(isOpen) return;
-    window.history.pushState(null, '', window.location.href+"?artid="+meal.artikel_id);
-    openModal(meal);
-  };
 
   // Render the meal card and popup.
   return (
-      <div
+      <Link
         key={mealIndex}
         data-layout={settingsCookie?.layout}
         className={styles.mealCard}
-        onClick={() => requestOpenModal()} 
+        prefetch
+        href={`/meal/${meal?.artikel_id}`}
+        scroll={false}
       >
         {/* Meal image */}
           <Image
             priority
             fetchPriority="high"
-            onError={(e) => {}}
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
             alt="dish-image" title={meal.mergedTitle[0]} 
             className={styles.mealImage}
@@ -87,7 +67,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
             {renderStarRating()}
           </div>
         </div>
-      </div>
+      </Link>
     
   );
 }

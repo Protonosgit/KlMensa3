@@ -25,7 +25,7 @@ export const metadata = {
   },
 };
 
-export default async function RootLayout({ children }) {
+export default async function RootLayout({ children, modal }) {
   let settings;
   const cookieStore = await cookies();
   const settingsCookie = cookieStore.get('settings') || null;
@@ -36,6 +36,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="de" data-theme={settings?.dark ? "dark" : "light"} data-layout={settings?.layout} data-eyedef={settings?.eyedef}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {modal}
         {children}
       </body>
     </html>

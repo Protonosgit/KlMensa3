@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { InfoIcon } from "lucide-react";
 import { cookies } from 'next/headers';
-
+import Link from "next/link";
 
 const DynamicSettingsModal = dynamic(() => import("@/components/settings"), { ssr: true });
 const DynamicFilterMenu = dynamic(() => import("@/components/filtermenu"), { ssr: true });

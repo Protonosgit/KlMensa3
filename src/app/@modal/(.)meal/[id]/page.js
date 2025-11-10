@@ -1,17 +1,17 @@
+// src/app/@modal/(.)item/[id]/page.tsx
 "use client";
-
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "./details.module.css";
 import { extractAdditives } from "@/app/utils/additives";
-import StarRating from "./starrating";
+import StarRating from "@/components/starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie, setCookie } from "@/app/utils/cookie-monster";
+import { fetchMenu } from '@/app/utils/schedule-parser';
 import toast from "react-hot-toast";
 import { ArrowDownUp, Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Scale,  Share2Icon, SoupIcon, StarOff } from "lucide-react";
-import  VeganIcon from "../../public/icons/VeganIcon.svg";
-import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
-import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
+import  VeganIcon from   "../../../../../public/icons/VeganIcon.svg";
+import VeggieOpIcon from "../../../../../public/icons/VeggieOpIcon.svg";
+import VeganOpIcon  from "../../../../../public/icons/VeganOpIcon.svg";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,39 +19,36 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useModalStore } from '@/app/utils/contextStore';
-import UploadBox from "./uploadBox";
+import UploadBox from "@/components/uploadBox";
 import { putRating, deleteRating } from "@/app/utils/database-actions";
+import { useRouter, useParams } from "next/navigation";
+import styles from "@/styles/details.module.css";
 
-export default function MealPopup({ mealsFull }) {
-  const { isOpen, meal,openModal, closeModal } = useModalStore();
+
+export default function MealPopup({ params }) {
   // State variables for managing user input, meal details, and UI updates.
+  const [meal, setMeal] = useState({});
   const [showTooltip, setShowTooltip] = useState(false);
   const [additives, setAdditives] = useState([]);
   const [user, setUser] = useState();
   const [settings, setSettings] = useState();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedAdditive, setSelectedAdditive] = useState("");
-  const ownedRatings = React.useRef([]);
   const [submittedRating, setSubmittedRating] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(0);
 
   const requestCloseModal = () => {
-    closeModal();
     window.history.back();
   }
 
   // Detect back gesture on Android, Windows and maybe ios and close modal if open
   useEffect(() => {
     const handlePopState = () => {
-      if (isOpen) {
-        closeModal();
-      }
+        window.history.back();
     };
 
     const handleEscapePress = (event) => {
-      if (event.key === 'Escape' && isOpen) {
-        closeModal();
+      if (event.key === 'Escape') {
         window.history.back();
       }
     };
@@ -64,17 +61,37 @@ export default function MealPopup({ mealsFull }) {
       document.removeEventListener('keydown', handleEscapePress);
     };
 
-  }, [isOpen]);
+  }, []);
 
 
   //settings and userdata
     useEffect(() => {
+
+      async function loadSelectedMenuItem() {
+        const mid = (await params)?.id;
+        console.log(mid);
+        const mealsData = await fetchMenu();
+        const meals = mealsData.reduce((acc, cur) => {
+          return [...acc, ...cur.meals];
+        }, []);
+        const menu = meals.find((item) => item.artikel_id === mid);
+        if (menu) {
+          setMeal(menu);
+          setAdditives(extractAdditives(menu?.zsnumnamen));
+        } else {
+          alert('Meal has expired!');
+          window.location.replace('/');
+        }
+      }
+
+      // load data
+      loadSelectedMenuItem();
+
       // Run on meal change
       setSelectedAdditive("");
       let tooltipTimer;
-        
-      // retrieve cookies for settings
-      setAdditives(extractAdditives(meal?.zsnumnamen));
+      
+      
 
       // retrieve cookies for settings
       const settingsCookie = getCookie('settings') || null;
@@ -95,10 +112,6 @@ export default function MealPopup({ mealsFull }) {
         setIsBookmarked(bookmarks.includes(meal?.artikel_id));
       }
 
-      // search for user owned rating
-      if(user) {
-        setSubmittedRating(ownedRatings.current.find(r => r.lId === meal?.legacyId)?.rating || 0);
-      }
 
       return () => {
         if (tooltipTimer) {
@@ -106,7 +119,7 @@ export default function MealPopup({ mealsFull }) {
           setShowTooltip(false);
         }
       };
-    }, [meal, mealsFull]);
+    }, []);
 
     useEffect(() => {
       // Run once onload
@@ -137,10 +150,6 @@ export default function MealPopup({ mealsFull }) {
           }, 6000);
           }
         }
-
-        // query database for all userowned ratings
-
-        // ownedRatings.current = [{lId: 57076, rating: 4}, {lId: 57134, rating: 3}, {lId: 57093, rating: 2}];
 
       }
       fetchUserData();
@@ -215,9 +224,6 @@ export default function MealPopup({ mealsFull }) {
         {meal?.mergedTitle?.map((title, index) =>  <span className={meal?.additivePointer[index]?.includes(selectedAdditive) ? styles.highlighted : undefined} key={index}>{title}</span>)}
       </h2>);
   }
-
-  if(!meal || !isOpen) return null;
-
 
   // Render the modal UI for meal details, comments, and actions.
   return (

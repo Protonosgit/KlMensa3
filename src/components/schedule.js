@@ -4,8 +4,6 @@ import styles from "../app/page.module.css";
 import { format } from 'date-fns';
 import Meal from './meal';
 import { applyFilters } from '@/app/utils/filter.js';
-import dynamic from "next/dynamic";
-const DynamicMealPopup = dynamic(() => import("./detailsModal"), { ssr: true });
 
 
 export default async function Schedule({settingsCookie}) {
@@ -74,7 +72,6 @@ export default async function Schedule({settingsCookie}) {
           </div>
         );
       })}
-      <DynamicMealPopup mealsFull={menu} />
     </>
   );
 }
