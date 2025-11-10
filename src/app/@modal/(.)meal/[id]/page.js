@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import UploadBox from "@/components/uploadBox";
 import { putRating, deleteRating } from "@/app/utils/database-actions";
-import { useRouter, useParams } from "next/navigation";
 import styles from "@/styles/details.module.css";
 
 
@@ -69,7 +68,6 @@ export default function MealPopup({ params }) {
 
       async function loadSelectedMenuItem() {
         const mid = (await params)?.id;
-        console.log(mid);
         const mealsData = await fetchMenu();
         const meals = mealsData.reduce((acc, cur) => {
           return [...acc, ...cur.meals];
@@ -79,7 +77,7 @@ export default function MealPopup({ params }) {
           setMeal(menu);
           setAdditives(extractAdditives(menu?.zsnumnamen));
         } else {
-          alert('Meal has expired!');
+          alert('Item has expired!');
           window.location.replace('/');
         }
       }
@@ -122,19 +120,6 @@ export default function MealPopup({ params }) {
     }, []);
 
     useEffect(() => {
-      // Run once onload
-      const urlParams = new URLSearchParams(window.location.search);
-      const mealId = urlParams.get('artid');
-      if(mealId) {
-        const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m?.artikel_id === mealId);
-        if(!foundmeal) {
-          alert('Meal has expired!');
-          window.location.replace('/');
-          return;
-        }
-        openModal(foundmeal);
-      }
-
       // fetch userdata
       async function fetchUserData() {
 

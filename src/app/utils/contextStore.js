@@ -1,4 +1,3 @@
-// store/modalStore.ts
 import { create } from 'zustand';
 
 
