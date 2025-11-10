@@ -21,19 +21,24 @@ const mealLocationClearname = [
   { name: "Abendmensa", codes: [4] },
 ];
 
+// Missing:  weichtiere, bio, lupine, geschwärzt, gewachst, phenylalanine
 const mealAdditiveClearname = [
   { name: "Lactose", code: "la" },
   { name: "Gluten", code: "gl" },
+  { name: "Gelatin", code: "gt" },
   { name: "Coloring agent", code: "1" },
   { name: "Preservative", code: "2" },
   { name: "Antioxidant", code: "3" },
+  { name: "Flavor enhancer", code: "4" },
   { name: "Sulphured", code: "5" },
+  // { name: "unknown", code: "6" },
+  // { name: "unknown", code: "7" },
   { name: "Phosphate", code: "8" },
   { name: "Sweetener", code: "9" },
   { name: "Eggs", code: "ei" },
   { name: "Soy", code: "so" },
   { name: "Residual alcohol", code: "a" },
-  { name: "Tree nuts", code: "nu" },
+  { name: "Nuts", code: "nu" },
   { name: "Sulfur dioxide", code: "sw" },
   { name: "Sesame", code: "se" },
   { name: "Mustard", code: "sf" },
