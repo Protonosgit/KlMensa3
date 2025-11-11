@@ -61,7 +61,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
             alt="dish-image" title={meal.mergedTitle[0]} 
             className={styles.mealImage}
-            width={1600} height={900} />
+            width={640} height={310} />
 
         <p className={styles.mealLocation}>
           {meal?.dpartname}
