@@ -12,6 +12,8 @@
 are always wellcome so feel free to help out!
 Just clone the repo (`git clone https://github.com/Protonosgit/KlMensa3`) and run `npm install`.
 
+Be informed that the dev enviroment behaves much different than the release version. The final hosted version is also different in a way for some reason!
+
 ## Data apis
 - mensa-kl.de
 - studierendenwerk-kaiserslautern.de

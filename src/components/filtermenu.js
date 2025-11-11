@@ -8,7 +8,6 @@ import styles from "./filter.module.css";
 import { Filter,  MapPin, Beef, FlaskConical, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { revalidatePage } from "@/app/utils/auth-actions";
-import { useFilterStore } from "@/app/utils/contextStore";
 
 // Define clear names and codes for meal locations, additives, and proteins.
 const mealLocationClearname = [
@@ -72,33 +71,58 @@ export default function FilterMenu() {
   function loadFilters() {
     setRefreshing(true);
     setFilterActive(false);
-    // Load filter values from cookies and update state variables
-    function getArrayFromCookie(name) {
-      const cookieValue = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(name))
-        ?.split('=')[1];
-      
-      return cookieValue ? JSON.parse(cookieValue) : null;
+
+    // parse cookies once and safely JSON.parse values
+    function parseCookies() {
+      const map = {};
+      if (!document?.cookie) return map;
+      document.cookie.split('; ').forEach(pair => {
+        const idx = pair.indexOf('=');
+        if (idx === -1) return;
+        const name = pair.slice(0, idx);
+        const val = pair.slice(idx + 1);
+        map[name] = val;
+      });
+      return map;
     }
-    // Load location filter from cookies.
-    if(getArrayFromCookie("location") !== null && getArrayFromCookie("location")?.length > 0) {
-      setMealLocations(getArrayFromCookie("location"));
+    function getArrayFromCookieMap(map, name) {
+      const raw = map[name];
+      if (!raw) return null;
+      try {
+        const parsed = JSON.parse(decodeURIComponent(raw));
+        return Array.isArray(parsed) ? parsed : null;
+      } catch (e) {
+        console.warn("Failed parsing cookie", name, e);
+        return null;
+      }
+    }
+
+    const cookieMap = parseCookies();
+
+    const locFromCookie = getArrayFromCookieMap(cookieMap, "location");
+    if (locFromCookie && locFromCookie.length > 0) {
+      setMealLocations(locFromCookie);
       setFilterActive(true);
-      setAllLocToggled(false);
+    } else {
+      setMealLocations([]);
     }
-    // Load additive filter from cookies.
-    if(getArrayFromCookie("additive") !== null && getArrayFromCookie("additive")?.length > 0) {
-      setMealAdditives(getArrayFromCookie("additive"));
+
+    const addFromCookie = getArrayFromCookieMap(cookieMap, "additive");
+    if (addFromCookie && addFromCookie.length > 0) {
+      setMealAdditives(addFromCookie);
       setFilterActive(true);
-      setAllAdditiveToggled(false);
+    } else {
+      setMealAdditives([]);
     }
-    // Load protein filter from cookies.
-    if(getArrayFromCookie("protein") !== null && getArrayFromCookie("protein")?.length > 0) {
-      setMealProteins(getArrayFromCookie("protein"))
+
+    const protFromCookie = getArrayFromCookieMap(cookieMap, "protein");
+    if (protFromCookie && protFromCookie.length > 0) {
+      setMealProteins(protFromCookie);
       setFilterActive(true);
-      setAllProteinToggled(false);
+    } else {
+      setMealProteins([]);
     }
+
     setRefreshing(false);
   }
 
@@ -109,64 +133,57 @@ export default function FilterMenu() {
 
   // Update location filter based on user selection.
   function updateLocFilter(index) {
-    const currentIndex = mealLocations.findIndex((item) =>
-      mealLocationClearname[index]?.codes.some((code) => item === code)
-    );
-    setMealLocations((prev) => {
-      if (currentIndex === -1) {
-        return prev.concat(mealLocationClearname[index]?.codes);
+    const codes = mealLocationClearname[index]?.codes || [];
+    setMealLocations(prev => {
+      const hasAny = codes.some(c => prev.includes(c));
+      if (hasAny) {
+        return prev.filter(item => !codes.includes(item));
       } else {
-        return prev.filter((item) => !mealLocationClearname[index].codes.includes(item));
+        return [...prev, ...codes];
       }
     });
   }
 
   // Update protein filter based on user selection.
   function updateProtFilter(index) {
-    const currentIndex = mealProteins.indexOf(mealProteinClearname[index]?.code);
-    setMealProteins((prev) => {
-      if (currentIndex === -1) {
-        return [...prev, mealProteinClearname[index]?.code];
-      } else {
-        return prev.filter((item) => item !== mealProteinClearname[index]?.code);
-      }
+    const code = mealProteinClearname[index]?.code;
+    if (!code) return;
+    setMealProteins(prev => {
+      return prev.includes(code) ? prev.filter(p => p !== code) : [...prev, code];
     });
   }
 
   // Update additive filter based on user selection.
   function updateAddFilter(index) {
-    const currentIndex = mealAdditives.indexOf(mealAdditiveClearname[index]?.code);
-    setMealAdditives((prev) => {
-      if (currentIndex === -1) {
-        return [...prev, mealAdditiveClearname[index]?.code];
-      } else {
-        return prev.filter((item) => item !== mealAdditiveClearname[index]?.code);
-      }
+    const code = mealAdditiveClearname[index]?.code;
+    if (!code) return;
+    setMealAdditives(prev => {
+      return prev.includes(code) ? prev.filter(a => a !== code) : [...prev, code];
     });
   }
 
 
   // Store selected filters in cookies and reload the page.
-  function storeFilter() {
+  async function storeFilter() {
     setRefreshing(true);
-    // store cookies with filters
-    const locArray = JSON.stringify(mealLocations);
+    const locArray = encodeURIComponent(JSON.stringify(mealLocations));
     document.cookie = `location=${locArray}; path=/`;
-
-    const protArray = JSON.stringify(mealProteins);
+    const protArray = encodeURIComponent(JSON.stringify(mealProteins));
     document.cookie = `protein=${protArray}; path=/`;
-
-    const addArray = JSON.stringify(mealAdditives);
+    const addArray = encodeURIComponent(JSON.stringify(mealAdditives));
     document.cookie = `additive=${addArray}; path=/`;
 
+    // reload local state and then revalidate
     loadFilters();
-    revalidatePage();
+    try {
+      await revalidatePage();
+    } finally {
+      setRefreshing(false);
+    }
   }
 
-  // Reset all filters by clearing cookies and reload the page.
-  function resetFilter() {
+  async function resetFilter() {
     setRefreshing(true);
-    // delete all cookies
     document.cookie = "location=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     document.cookie = "protein=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     document.cookie = "additive=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
@@ -176,18 +193,22 @@ export default function FilterMenu() {
     setMealAdditives([]);
 
     loadFilters();
-    revalidatePage();
+    try {
+      await revalidatePage();
+    } finally {
+      setRefreshing(false);
+    }
   }
 
-  const handleSelectAllClicked = (currentStatus, targetVariable, templateVariable, multiple = false) => {
-    if(currentStatus) {
-      targetVariable([]);
-    } else {
-      if(multiple) {
-        targetVariable((templateVariable.map((item) => item.codes)).flat());
+  const handleSelectAllClicked = (checked, setter, template, multiple = false) => {
+    if (checked) {
+      if (multiple) {
+        setter(template.map(item => item.codes).flat());
       } else {
-        targetVariable(templateVariable.map((item) => item.code));
+        setter(template.map(item => item.code));
       }
+    } else {
+      setter([]);
     }
   }
 
@@ -204,26 +225,32 @@ export default function FilterMenu() {
           <div className={styles.filterSection}>
             <div className={styles.filterHeadder}>
               <p className={styles.filterTitle}><MapPin size={20} />Location:</p>
-              <p className={styles.filterSubtitle}>Select all <input defaultChecked={allLocationsToggled} onChange={(e) => handleSelectAllClicked(e.target.checked, setMealLocations, mealLocationClearname, true)} type="checkbox" className={styles.filterCheckbox} /></p>
+              <p className={styles.filterSubtitle}>Select all <input
+                checked={!mealLocationClearname.map(l=>l.codes).flat().every(c => mealLocations.includes(c))}
+                onChange={(e) => handleSelectAllClicked(!e.target.checked, setMealLocations, mealLocationClearname, true)}
+                type="checkbox" className={styles.filterCheckbox} /></p>
             </div>
             <ul className={styles.filterList}>
-              {mealLocationClearname.map((location, index) => (
+              {mealLocationClearname.map((location, index) => {
+                const id = `loc-${index}`;
+                const checked = location.codes.some(c => mealLocations.includes(c));
+                return (
                 <li key={index} className={styles.filterItem}>
                   <input
                     type="checkbox"
-                    checked={!mealLocations.includes(location.codes[0])}
-                    id={index}
-                    onChange={(e) => updateLocFilter(index)}
+                    checked={!checked}
+                    id={id}
+                    onChange={() => updateLocFilter(index)}
                     className={styles.filterCheckbox}
                   />
                   <label
-                    htmlFor={location.name}
+                    htmlFor={id}
                     className={styles.filterLabel}
                   >
                     {location.name}
                   </label>
                 </li>
-              ))}
+              )})}
             </ul>
             <div className={styles.seperator}/>
           </div>
@@ -232,23 +259,29 @@ export default function FilterMenu() {
           <div className={styles.filterSection}>
             <div className={styles.filterHeadder}>
               <p className={styles.filterTitle}><Beef size={20} />Protein:</p>
-              <p className={styles.filterSubtitle}>Select all <input defaultChecked={allProteinToggled} onChange={(e) => handleSelectAllClicked(e.target.checked, setMealProteins, mealProteinClearname)} type="checkbox" className={styles.filterCheckbox} /></p>
+              <p className={styles.filterSubtitle}>Select all <input
+                checked={!mealProteinClearname.map(p=>p.code).every(c => mealProteins.includes(c))}
+                onChange={(e) => handleSelectAllClicked(!e.target.checked, setMealProteins, mealProteinClearname)}
+                type="checkbox" className={styles.filterCheckbox} /></p>
             </div>
             <ul className={styles.filterList}>
-              {mealProteinClearname.map((protein, index) => (
+              {mealProteinClearname.map((protein, index) => {
+                const id = `prot-${index}`;
+                const checked = mealProteins.includes(protein.code);
+                return (
                 <li key={index} className={styles.filterItem}>
                   <input
                     type="checkbox"
-                    id={index}
-                    onChange={(e) => updateProtFilter(index, e.target.checked)}
-                    checked={!mealProteins.includes(protein.code)}
+                    id={id}
+                    onChange={() => updateProtFilter(index)}
+                    checked={!checked}
                     className={styles.filterCheckbox}
                   />
-                  <label htmlFor={protein.name} className={styles.filterLabel}>
+                  <label htmlFor={id} className={styles.filterLabel}>
                     {protein.name}
                   </label>
                 </li>
-              ))}
+              )})}
             </ul>
             <div className={styles.seperator}/>
           </div>
@@ -257,23 +290,29 @@ export default function FilterMenu() {
           <div className={styles.filterSection}>
             <div className={styles.filterHeadder}>
               <p className={styles.filterTitle}><FlaskConical size={20} />Additives:</p>
-              <p className={styles.filterSubtitle}>Select all <input defaultChecked={allAdditiveToggled} onChange={(e) => handleSelectAllClicked(e.target.checked, setMealAdditives, mealAdditiveClearname)} type="checkbox" className={styles.filterCheckbox} /></p>
+              <p className={styles.filterSubtitle}>Select all <input
+                checked={!mealAdditiveClearname.map(a=>a.code).every(c => mealAdditives.includes(c))}
+                onChange={(e) => handleSelectAllClicked(!e.target.checked, setMealAdditives, mealAdditiveClearname)}
+                type="checkbox" className={styles.filterCheckbox} /></p>
             </div>
             <ul className={styles.filterList}>
-              {mealAdditiveClearname.map((additive, index) => (
+              {mealAdditiveClearname.map((additive, index) => {
+                const id = `add-${index}`;
+                const checked = mealAdditives.includes(additive.code);
+                return (
                 <li key={index} className={styles.filterItem}>
                   <input
                     type="checkbox"
-                    id={index}
-                    onChange={(e) => updateAddFilter(index, e.target.checked)}
-                    checked={!mealAdditives.includes(additive.code)}
+                    id={id}
+                    onChange={() => updateAddFilter(index)}
+                    checked={!checked}
                     className={styles.filterCheckbox}
                   />
-                  <label htmlFor={additive.name} className={styles.filterLabel}>
+                  <label htmlFor={id} className={styles.filterLabel}>
                     {additive.name}
                   </label>
                 </li>
-              ))}
+              )})}
             </ul>
           </div>
         </div>

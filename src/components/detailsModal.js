@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./details.module.css";
 import { extractAdditives } from "@/app/utils/additives";
@@ -20,14 +21,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useModalStore } from '@/app/utils/contextStore';
-import UploadBox from "./uploadBox";
-import { putRating, deleteRating } from "@/app/utils/database-actions";
+// lazy-load upload box to avoid loading heavy code unless modal is open
+const UploadBox = dynamic(() => import("./uploadBox"), { ssr: false, loading: () => null });
 
 export default function MealPopup({ mealsFull }) {
   const { isOpen, meal,openModal, closeModal } = useModalStore();
-  // State variables for managing user input, meal details, and UI updates.
   const [showTooltip, setShowTooltip] = useState(false);
-  const [additives, setAdditives] = useState([]);
   const [user, setUser] = useState();
   const [settings, setSettings] = useState();
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -35,6 +34,8 @@ export default function MealPopup({ mealsFull }) {
   const ownedRatings = React.useRef([]);
   const [submittedRating, setSubmittedRating] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(0);
+  const tooltipTimer = useRef(null);
+  const mounted = useRef(true);
 
   const requestCloseModal = () => {
     closeModal();
@@ -68,53 +69,48 @@ export default function MealPopup({ mealsFull }) {
 
 
   //settings and userdata
-    useEffect(() => {
-      // Run on meal change
-      setSelectedAdditive("");
-      let tooltipTimer;
-        
-      // retrieve cookies for settings
-      setAdditives(extractAdditives(meal?.zsnumnamen));
+    const computedAdditives = useMemo(() => extractAdditives(meal?.zsnumnamen), [meal?.zsnumnamen]);
 
-      // retrieve cookies for settings
+    useEffect(() => {
+      setSelectedAdditive("");
       const settingsCookie = getCookie('settings') || null;
-      if(settingsCookie) {
-        setSettings(JSON.parse(settingsCookie));
+      if (settingsCookie) {
+        try {
+          const parsed = JSON.parse(settingsCookie);
+          if (JSON.stringify(parsed) !== JSON.stringify(settings)) setSettings(parsed);
+        } catch (e) {  }
       }
 
-      // auto switching to alternative
       setSelectedVariant(0);
 
-      // retrieve cookies for bookmarks
-      const cookieValue = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("bookmarks"))
-      ?.split("=")[1];
-      if (cookieValue) {
-        const bookmarks = JSON.parse(cookieValue);
-        setIsBookmarked(bookmarks.includes(meal?.artikel_id));
+      const bookmarksCookie = getCookie("bookmarks");
+      if (bookmarksCookie) {
+        try {
+          const bookmarks = JSON.parse(bookmarksCookie);
+          setIsBookmarked(bookmarks.includes(meal?.artikel_id));
+        } catch(e) {
       }
+    }
 
-      // search for user owned rating
-      if(user) {
+      if (user) {
         setSubmittedRating(ownedRatings.current.find(r => r.lId === meal?.legacyId)?.rating || 0);
       }
 
       return () => {
-        if (tooltipTimer) {
-          clearTimeout(tooltipTimer);
+        if (tooltipTimer.current) {
+          clearTimeout(tooltipTimer.current);
+          tooltipTimer.current = null;
           setShowTooltip(false);
         }
       };
-    }, [meal, mealsFull]);
+    }, [meal, mealsFull, computedAdditives, user]);
 
     useEffect(() => {
-      // Run once onload
       const urlParams = new URLSearchParams(window.location.search);
       const mealId = urlParams.get('artid');
-      if(mealId) {
+      if (mealId) {
         const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m?.artikel_id === mealId);
-        if(!foundmeal) {
+        if (!foundmeal) {
           alert('Meal has expired!');
           window.location.replace('/');
           return;
@@ -122,83 +118,62 @@ export default function MealPopup({ mealsFull }) {
         openModal(foundmeal);
       }
 
-      // fetch userdata
       async function fetchUserData() {
-
-        if(false) {
-          setUser(null);
-
-          // Show tooltip if there are too few ratins
-          if(getCookie('rateHintShown') !== 'true') {
-          setShowTooltip(true);
-          tooltipTimer = setTimeout(() => {
-            setShowTooltip(false);
-            setCookie('rateHintShown', 'true', 20);
-          }, 6000);
-          }
-        }
-
-        // query database for all userowned ratings
-
-        // ownedRatings.current = [{lId: 57076, rating: 4}, {lId: 57134, rating: 3}, {lId: 57093, rating: 2}];
-
       }
       fetchUserData();
-    }, [])
+
+      return () => { mounted.current = false; }
+    }, []);
     
 
 
-  // Handle publishing or updating a comment.
-  async function handleSubmitRating(rating) {
-    // use put request to api here
-    toast.error("Under construction!");
-    putRating(meal.legacyId, rating);
-  }
+  // Handle publish / update comment
+  const handleSubmitRating = useCallback(async (rating) => {
+    if (!meal?.legacyId) return;
+    const previous = submittedRating;
+    setSubmittedRating(rating);
+    try {
+      // if your putRating supports AbortController, pass one; otherwise await and handle errors
+      await putRating(meal.legacyId, rating);
+      toast.success("Rating saved");
+    } catch (err) {
+      setSubmittedRating(previous);
+      toast.error("Failed to save rating");
+      console.error(err);
+    }
+  }, [meal?.legacyId, submittedRating]);
 
-  // Handle deleting a comment.
-  async function handleDeleteRating() {
-    // use delete request to api heres
-    toast.error("Under construction!");
+  // Handle delete comment
+  const handleDeleteRating = useCallback(async () => {
+    if (!meal?.legacyId) return;
+    const previous = submittedRating;
     setSubmittedRating(0);
-    deleteRating(meal.legacyId);
-  }
+    try {
+      await deleteRating(meal.legacyId);
+      toast.success("Rating deleted");
+    } catch (err) {
+      setSubmittedRating(previous);
+      toast.error("Failed to delete rating");
+      console.error(err);
+    }
+  }, [meal?.legacyId, submittedRating]);
 
   // Handle reporting a comment or image.
   async function handleRequestImageTakedown() {
-    return;
-          if ('Translator' in self) {
-            const translator = await Translator.create({
-              sourceLanguage: "en",
-              targetLanguage: "ja"
-            });
-          const detector = await LanguageDetector.create({ expectedInputLanguages: ["en", "ja"] });
-
-          const results = await detector.detect("Hello jamaican");
-          for (const result of results) {
-            console.log(result.detectedLanguage, result.confidence);
-          }
-        }
+    toast.error("Under construction!");
   }
 
-  // Handle bookmarking/unbookmarking the meal.
-  async function handleBookmark(e) {
-    const cookieValue = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("bookmarks"))
-      ?.split("=")[1];
-    const bookmarks = cookieValue ? JSON.parse(cookieValue) : [];
-    const bookmarkIndex = bookmarks.indexOf(meal?.artikel_id);
-
-    if (bookmarkIndex !== -1) {
-      bookmarks.splice(bookmarkIndex, 1);
-    } else {
-      bookmarks.push(meal?.artikel_id);
-    }
-
-    document.cookie = `bookmarks=${JSON.stringify(bookmarks)}; path=/`;
-    setIsBookmarked(!isBookmarked);
-    e.preventDefault();
-  }
+  // Handle bookmark
+  const handleBookmark = useCallback((e) => {
+    e?.preventDefault();
+    const cookieValue = getCookie("bookmarks");
+    let bookmarks = [];
+    try { bookmarks = cookieValue ? JSON.parse(cookieValue) : []; } catch(e) { bookmarks = []; }
+    const idx = bookmarks.indexOf(meal?.artikel_id);
+    if (idx !== -1) bookmarks.splice(idx, 1); else bookmarks.push(meal?.artikel_id);
+    setCookie("bookmarks", JSON.stringify(bookmarks));
+    setIsBookmarked(prev => !prev);
+  }, [meal?.artikel_id, setCookie]);
 
 
 
@@ -219,7 +194,6 @@ export default function MealPopup({ mealsFull }) {
   if(!meal || !isOpen) return null;
 
 
-  // Render the modal UI for meal details, comments, and actions.
   return (
     <div title="" className={styles.popupOverlay} onClick={requestCloseModal}>
       <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
@@ -251,7 +225,7 @@ export default function MealPopup({ mealsFull }) {
               <DropdownMenuTrigger className={styles.popupActionButton}><EllipsisVertical size={18} /></DropdownMenuTrigger>
                 <DropdownMenuContent className={styles.dropdownMenuContent}>
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={(e) => (handleBookmark(e))} ><Bookmark size={18} className={isBookmarked ? styles.bookmarkActive : styles.bookmark} />Bookmark</DropdownMenuItem>
-                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => navigator.clipboard.writeText("kl-mensa.vercel.app?artid="+meal?.artikel_id) && toast.success("Link copied to clipboard!")}><Share2Icon size={18} />Share</DropdownMenuItem>
+                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}?artid=`+meal?.artikel_id) && toast.success("Link copied to clipboard!")}><Share2Icon size={18} />Share</DropdownMenuItem>
   
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => handleRequestImageTakedown()} ><FlagIcon size={18} />Remove image</DropdownMenuItem>
@@ -263,7 +237,7 @@ export default function MealPopup({ mealsFull }) {
           
         </div>
 
-        {/* Render meal details, comments, and action buttons */}
+        {/* Render meal details, comments and action buttons */}
         <div className={styles.popupDetails}>
           <MealTitle />
 
@@ -312,7 +286,7 @@ export default function MealPopup({ mealsFull }) {
               <p>Additives</p>
               <p className={styles.additivesContext}>Includes all variants</p>
             </div>
-            {additives?.length > 1 ? <div> {additives?.map((additive) => <Badge title={additive?.name} onClick={() => setSelectedAdditive(additive?.code)} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
+            {computedAdditives?.length > 1 ? <div> {computedAdditives?.map((additive) => <Badge title={additive?.name} onClick={() => setSelectedAdditive(additive?.code)} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
           </div>
 
         {/* Nutrition */}
@@ -331,7 +305,7 @@ export default function MealPopup({ mealsFull }) {
               <p>Submit image</p>
               <p className={styles.additivesContext}></p>
             </div>
-            <UploadBox mealId={meal.legacyId}/>
+            {isOpen && <UploadBox mealId={meal?.legacyId} />}
           </div>
 
         </div>

@@ -118,6 +118,7 @@ export default function UploadBox({ mealId }) {
         }}
         onDragLeave={(e) => e.currentTarget.classList.remove(styles.dragover)}
         onDrop={handleDrop}
+        title="Drag an image here or click to upload"
       >
         {!file && (
           <>

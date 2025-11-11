@@ -8,15 +8,13 @@ import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
 import { useModalStore } from "@/app/utils/contextStore";
 
-
 export default function Meal({ meal, mealIndex, settingsCookie }) {
 
-  // State variables
   const { openModal, isOpen } = useModalStore();
 
 
   useEffect(() => {
-    // Disable page scrolling when the meal popup is open.
+    // Disable page scrolling when the meal popup is open
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -25,7 +23,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
   }, [isOpen]);
   
 
-  // Render star rating for the meal (non-interactive).
+  //  star rating meal (non-interactive)
   const renderStarRating = () => {
     return (
       <div className={styles.starRating}>
@@ -49,7 +47,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
     openModal(meal);
   };
 
-  // Render the meal card and popup.
+  // Render the meal card and popup
   return (
       <div
         key={mealIndex}
@@ -57,11 +55,9 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
         className={styles.mealCard}
         onClick={() => requestOpenModal()} 
       >
-        {/* Meal image */}
           <Image
             priority
             fetchPriority="high"
-            onError={(e) => {}}
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
             alt="dish-image" title={meal.mergedTitle[0]} 
             className={styles.mealImage}

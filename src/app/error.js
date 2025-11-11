@@ -11,6 +11,7 @@ export default function Error({ error, reset }) {
     <div className="container">
       <h1>Server Error</h1>
       <p>A critical error has occurred which the service could not recover from.</p>
+      <p>If you see this I f***ed up 🦞</p>
       <button onClick={() => reset()}>Retry</button>
       <a  href='https://github.com/Protonosgit/KlMensa3/issues/new?template=bug_report.md'><button >Report Issue</button></a>
 
