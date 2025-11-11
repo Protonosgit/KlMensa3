@@ -77,7 +77,7 @@ export default async function Home() {
           <a href="https://gibtesheutepommes.de/" className={styles.footerLink}>GehP</a>
           <a href="/api/menudata" className={styles.footerLink}>Api</a>
         </div>
-          <p>2025 mensa-kl v3 prototype<br/></p>
+          <p>2025 mensa-kl v3 prototype 🐡Powered by Fachschaft Biologie<br/></p>
       </footer>
       <DynamicScrollToTopButton />
     </div>

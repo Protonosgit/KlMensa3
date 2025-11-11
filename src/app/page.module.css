@@ -35,7 +35,7 @@
 }
 
 .headerTitle {
-  font-size: 25px;
+  font-size: 2rem;
   font-weight: 700;
 }
 
@@ -168,6 +168,9 @@
       [data-layout="grid"] .mealList {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.5rem;
+      }
+      .headerTitle {
+        font-size: 1.8rem;
       }
       .headerSubtitle {
         font-size: 14px;

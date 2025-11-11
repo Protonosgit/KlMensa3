@@ -278,9 +278,18 @@ async function parseMenu(menuData) {
     const sortedGroupedByDate = Object.fromEntries(
         Object.entries(groupedByDate).sort(([a], [b]) => new Date(a) - new Date(b))
     );
+
+    // Check if cutoff time has been reached and the slice todays date
+    const today = new Date().toISOString().split('T')[0];
+    const firstKey = Object.keys(sortedGroupedByDate)[0];
+    const currentTime = new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds();
+    const cutoffTime = 19 * 60 * 60 + 30 * 60;
+    const cutGroupedByDate = (firstKey === today) && (currentTime > cutoffTime)
+        ? Object.fromEntries(Object.entries(sortedGroupedByDate).slice(1))
+        : sortedGroupedByDate;
     
 
-    const parsedMenu = Object.entries(sortedGroupedByDate).map(([date, items]) => {
+    const parsedMenu = Object.entries(cutGroupedByDate).map(([date, items]) => {
         // Sort meals by dpartname works fine but disabled for now
         const predefinedOrder = ["Essen 1", "Essen 2", "Grill", "Wok", "Salatbüfett", "Eintopf 1", "Eintopf 2", "Mittagsmenü 1", "Mittagsmenü 2", "Mittagsmenü 3","Mittagsmenü 4", "Mittagsmenü 5", "Abendmensa"];
         const sortedMeals = items.slice().sort((a, b) => {
