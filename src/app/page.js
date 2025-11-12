@@ -72,9 +72,9 @@ export default async function Home() {
           <a href="https://rptu.de" className={styles.footerLink}>RPTU</a>
           <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
           <a href="https://www.mensa-kl.de/#upload" className={styles.footerLink}>Images/Ratings</a>
+          <a href="/about" className={styles.footerLink}>About</a>
           <a href="https://github.com/Protonosgit/KlMensa3/issues" className={styles.footerLink}>Report issue</a>
           <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Source</a>
-          <a href="https://gibtesheutepommes.de/" className={styles.footerLink}>GehP</a>
           <a href="/api/menudata" className={styles.footerLink}>Api</a>
         </div>
           <p>2025 mensa-kl v3 prototype 🐡Powered by Fachschaft Biologie<br/></p>

@@ -19,4 +19,5 @@ function getCookie(name) {
     return null;
 }
 
-export { setCookie, getCookie }
+
+export { setCookie, getCookie, writeLocalStorage, readLocalStorage };

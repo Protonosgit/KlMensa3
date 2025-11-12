@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Star, Bot, Scale, SoupIcon } from "lucide-react";
+import { Star, Bot, Scale, SoupIcon, SaladIcon } from "lucide-react";
 import styles from "./mealcard.module.css";
 import { useEffect } from "react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
@@ -59,6 +59,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
             priority
             fetchPriority="high"
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
+            onError={(e) => e.target.src = "/plate_placeholder.png"}
             alt="dish-image" title={meal.mergedTitle[0]} 
             className={styles.mealImage}
             width={640} height={310} />
@@ -67,7 +68,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
           {meal?.dpartname}
 
           {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
-          {meal?.dpartname == "Salatbüfett" ? <Scale size={20} className={styles.otherIcon} /> : ""}
+          {meal?.dpartname == "Salatbüfett" ? <SaladIcon size={20} className={styles.otherIcon} /> : ""}
           {meal?.dpartname == "Eintopf 1" || meal?.dpartname == "Eintopf 2" ? <SoupIcon size={20} className={styles.otherIcon} /> : ""}
           {meal?.vegiOption ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
           {meal?.veganOption ? <VeganOpIcon className={styles.greenIcon} /> : ""}
