@@ -1,11 +1,11 @@
 "use client";
 import styles from "./settings.module.css";
 import { useEffect, useRef, useState } from "react";
-import { CatIcon, Image, ImageIcon, MailIcon, Settings, StarIcon, X } from "lucide-react";
+import { CatIcon, ImageIcon, MailIcon, Settings, StarIcon, X } from "lucide-react";
 import { toast, Toaster } from 'react-hot-toast';
 import { login,logout } from "@/app/utils/auth-actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getCookie, setCookie } from "@/app/utils/cookie-monster";
+import { getCookie, setCookie } from "@/app/utils/client-system";
 import Switch from "react-switch";
 import { revalidatePage, retrieveUserAccountData } from "@/app/utils/auth-actions";
 
@@ -238,6 +238,10 @@ export default function SettingsModal({}) {
                           <option value="11">11am</option>
                           </select>
                         </div>
+
+                        <div className={styles.seperator}></div>
+
+                        <p>Bookmarks</p>
 
                         </TabsContent>
                         <TabsContent value="identity">

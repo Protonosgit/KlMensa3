@@ -7,9 +7,9 @@ import styles from "./details.module.css";
 import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
-import { getCookie, setCookie } from "@/app/utils/cookie-monster";
+import { getCookie, setCookie } from "@/app/utils/client-system";
 import toast from "react-hot-toast";
-import { ArrowDownUp, Bookmark, Bot, EllipsisVertical, FlagIcon, InfoIcon,  Scale,  Share2Icon, SoupIcon, StarOff } from "lucide-react";
+import { ArrowDownUp, Bookmark, Bot, Clock10Icon, EllipsisVertical, FlagIcon, InfoIcon,  Leaf,  SaladIcon,  Scale,  Share2Icon, SoupIcon, StarOff, TimerIcon } from "lucide-react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
@@ -201,7 +201,10 @@ export default function MealPopup({ mealsFull }) {
           {/* Render meal image from any source or placeholder */}
             <Image 
               priority={false} 
-              loading={"lazy"} 
+              loading={"lazy"}
+              onLoadStart={(e) => e.target.style.opacity = "0"}
+              onLoad={(e) => e.target.style.opacity = "1"}
+              onError={(e) => e.target.src = "/plate_placeholder.png"}
               src={selectedVariant == 0 ? (meal?.image? meal?.imageUrl : "/plate_placeholder.png") : (meal?.altImage? meal?.altImageUrl : "/plate_placeholder.png")}  title={meal?.atextohnezsz1}
               alt="dish-image" className={styles.popupImage} 
               width={1600} height={900} />
@@ -211,12 +214,11 @@ export default function MealPopup({ mealsFull }) {
               {meal.dpartname}
               
               {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
-              {meal?.dpartname == "Salatbüfett" ? <Scale size={20} className={styles.otherIcon} /> : ""}
+              {meal?.dpartname == "Salatbüfett" ? <SaladIcon size={20} className={styles.otherIcon} /> : ""}
               {meal?.dpartname == "Eintopf 1" || meal?.dpartname == "Eintopf 2" ? <SoupIcon size={20} className={styles.otherIcon} /> : ""}
               {meal?.vegiOption ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
               {meal?.veganOption ? <VeganOpIcon className={styles.greenIcon} /> : ""}
               {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}
-              
             </p>
           </div>
 
@@ -275,8 +277,11 @@ export default function MealPopup({ mealsFull }) {
             {meal?.frei1 &&<>
             <p className={styles.sectionTitle}>Information</p>
             <div className={styles.infoText}>
-            <InfoIcon size={18} className={styles.otherIcon} />
-            <p>{meal.frei1+" "+meal.frei2}</p>
+              {meal?.frei1?.includes("Uhr") ? <Clock10Icon size={18} className={styles.otherIcon} /> : 
+              meal?.frei1?.includes("DIY") ? <Scale size={18} className={styles.otherIcon} /> :
+              meal?.frei1?.includes("Vegetarisch") ? <Leaf size={18} className={styles.otherIcon} /> :
+              <InfoIcon size={18} className={styles.otherIcon} />}
+            <p>{meal.frei1+" "+meal.frei2+" "+meal.frei3}</p>
             </div></>}
 
             {/* Additive chips */}

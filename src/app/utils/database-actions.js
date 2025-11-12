@@ -1,11 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { neon } from '@neondatabase/serverless';
-import { InferenceClient } from "@huggingface/inference";
-
-const client = new InferenceClient({
-  token: process.env.HUGGING_FACE_TOKEN,
-});
 
 export async function putRating(legacyId, stars) {
   return { error: "Not implemented", data: null };
