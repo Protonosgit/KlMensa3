@@ -87,7 +87,6 @@ const priceRelationsLookup = {
 //
 // Note: Use redis or something similar to cache the data, THIS IS NOT PRODUCTION READY and will perform badly
 let cachedMenuData = null;
-let cachedMenuIds = null;
 let lastMenuCachedAt = null;
 
 function isToday(timestamp) {
@@ -223,9 +222,6 @@ async function parseMenu(menuData) {
 
         // Generate noncryptographic hash for unique mealid
     const hashId = murmur.v3(obj.atextohnezsz1+obj.atextohnezsz2+obj.atextohnezsz3+obj.atextohnezsz4+obj.atextohnezsz5).toString(16).substring(0, 8);
-    if (!hashIdList.includes(hashId)) {
-        hashIdList.push(hashId);
-    }
 
     // copy vegi or vegan option to seperate var
     const altOption = ((titleAdditiveAdder.match(/\(Plant-based Menü[^)]*|\(Vegetarisches Menü[^)]*|\(Vegetarisches Menü\[1]\)/)?.[0] || '').replace("(Veganes Menü[1]:","").replace("Plant-based Menü[1]:","").replace("Vegetarisches Menü[1]:","")).trim().replace("(","");
@@ -305,11 +301,11 @@ async function parseMenu(menuData) {
         };
     });
 
-    // Cache
+    // write to cache
     cachedMenuData = parsedMenu;
-    cachedMenuIds = hashIdList;
     lastMenuCachedAt = new Date();
 
+    
     return parsedMenu; 
 }
 // Add mensa-kl data to studierendenwerk api data

@@ -8,8 +8,8 @@ export default function Loading() {
         <div className={styles.headerWrapper}>
           <div className={styles.headerContent}>
             <div className={styles.headerTitleSection}>
-              <h1 className={styles.headerTitle}>KL Mensa</h1>
-              <h2 className={styles.headerSubtitle}>Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau try Tribute by Tenacious D!</h2>
+              <h1 className={styles.headerTitle}>Mensa KL</h1>
+              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen Universität in Kaiserslautern. Listen to Ghost!</h2>
             </div>
           </div>
         </div>
