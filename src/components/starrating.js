@@ -3,7 +3,7 @@ import { useState } from "react";
 import styles from "./details.module.css";
 import { Star } from "lucide-react";
 
-export default function StarRating({ disabled = false, starsSet, commonRating = 0, submittedRating, setSubmittedRating }) {
+export default function StarRating({ disabled = false, starsSet, commonRating = 0, submittedRating = null, setSubmittedRating }) {
   const [hovered, setHovered] = useState(null);
 
   const handleClick = (index) => {

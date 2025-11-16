@@ -5,13 +5,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10;
     animation: fadein 0.2s ease-in-out;
     overflow: hidden;
+    backdrop-filter: blur(1px);
 }
 
 @keyframes fadein {
@@ -20,6 +21,14 @@
     }
     to {
         opacity: 1;
+    }
+}
+@keyframes fadeDown {
+    from {
+        transform: translateX(30%);
+    }
+    to {
+        transform: translateX(0);
     }
 }
 
@@ -494,6 +503,7 @@
       max-height: 100vh;
       height: 100%;
       padding-bottom: 6rem;
+      animation: fadeDown 0.2s ease-in-out;
   }
   .popupDetails {
     padding: 0.8rem 0.8rem;

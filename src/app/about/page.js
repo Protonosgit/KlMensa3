@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./page.module.css";
-import { Instagram } from "lucide-react";
+import { CodeIcon } from "lucide-react";
 
 
 export default function ReportPage() {   
@@ -32,13 +32,14 @@ export default function ReportPage() {
         <h3 className={styles.subtitle}>Developed by</h3>
         <div className={styles.profiles}>
           <a href="https://www.johannesschildgen.de/" className={styles.profileBox}>
+            <CodeIcon className={styles.codeIcon} />
             <p className={styles.profileName}>Johannes Schildgen</p>
+            <p className={styles.roleChip}>Founder</p>
           </a>
           <a href="about:blank" className={styles.profileBox}>
+            <CodeIcon className={styles.codeIcon} />
             <p className={styles.profileName}>Dennis Meckel</p>
-          </a>
-          <a href="https://lenz-felix.de/" className={styles.profileBox}>
-            <p className={styles.profileName}>Felix Lenz</p>
+            <p className={styles.roleChip}>Maintainer</p>
           </a>
 
         </div>

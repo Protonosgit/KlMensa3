@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Star, Bot, Scale, SoupIcon, SaladIcon } from "lucide-react";
+import { Star, Bot, SoupIcon, SaladIcon } from "lucide-react";
 import styles from "./mealcard.module.css";
 import { useEffect } from "react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
@@ -24,7 +24,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
   
 
   //  star rating meal (non-interactive)
-  const renderStarRating = () => {
+  const StaticStars = () => {
     return (
       <div className={styles.starRating}>
         {[...Array(5)].map((_, i) => (
@@ -88,7 +88,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
           <h4 className={styles.mealTitle}>{(settingsCookie?.shortitle ? meal?.mergedTitle[0] : meal?.mergedTitle.flat())}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>{meal.price && (meal?.price[settingsCookie?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
-            {renderStarRating()}
+            <StaticStars />
           </div>
         </div>
       </div>

@@ -87,7 +87,7 @@ const priceRelationsLookup = {
 //
 // Note: Use redis or something similar to cache the data, THIS IS NOT PRODUCTION READY and will perform badly
 let cachedMenuData = null;
-let lastMenuCachedAt = null;
+let lastMenuCachedAt = 0; // store as epoch ms
 
 function isToday(timestamp) {
   const inputDate = new Date(timestamp);
@@ -106,8 +106,8 @@ async function fetchMenu() {
 
 
     // Invalidate cache if no last cachedate exists, length of data is 0 or last cached date is older than 3 hours or the schedule is from yesterday
-    if(lastMenuCachedAt && cachedMenuData?.length > 0 && Date.now() - lastMenuCachedAt < 3 * 60 * 60 * 1000 && isToday(lastMenuCachedAt)) {
-        return cachedMenuData;
+    if (lastMenuCachedAt && cachedMenuData?.length > 0 && (Date.now() - lastMenuCachedAt) < 3 * 60 * 60 * 1000 && isToday(lastMenuCachedAt)) {
+      return cachedMenuData;
     }
     try {
         // download latest uncached version of the mensa menu (canteens=1 does nothing?)
@@ -119,7 +119,6 @@ async function fetchMenu() {
                 'Pragma': 'no-cache',
                 'Expires': '0',
                 'Referrer-Policy': 'strict-origin-when-cross-origin',
-                'Content-Type': 'application/json'
             }
         });
         // Check if request went through
@@ -151,7 +150,6 @@ async function fetchMealUserData() {
                 'Pragma': 'no-cache',
                 'Expires': '0',
                 'Referrer-Policy': 'strict-origin-when-cross-origin',
-                'Content-Type': 'application/json'
             }
         });
         // Check if request went through
@@ -303,7 +301,7 @@ async function parseMenu(menuData) {
 
     // write to cache
     cachedMenuData = parsedMenu;
-    lastMenuCachedAt = new Date();
+    lastMenuCachedAt = Date.now();
 
     
     return parsedMenu; 
