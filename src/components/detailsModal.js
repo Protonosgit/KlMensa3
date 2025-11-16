@@ -199,44 +199,121 @@ export default function MealPopup({ mealsFull }) {
       <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.popupImageContainer}>
           {/* Render meal image from any source or placeholder */}
-            <Image 
-              priority={false} 
-              loading={"lazy"}
-              onLoadStart={(e) => e.target.style.opacity = "0"}
-              onLoad={(e) => e.target.style.opacity = "1"}
-              onError={(e) => e.target.src = "/plate_placeholder.png"}
-              src={selectedVariant == 0 ? (meal?.image? meal?.imageUrl : "/plate_placeholder.png") : (meal?.altImage? meal?.altImageUrl : "/plate_placeholder.png")}  title={meal?.atextohnezsz1}
-              alt="dish-image" className={styles.popupImage} 
-              width={1600} height={900} />
+          <Image
+            priority={false}
+            loading={"lazy"}
+            onLoadStart={(e) => (e.target.style.opacity = "0")}
+            onLoad={(e) => (e.target.style.opacity = "1")}
+            onError={(e) => {
+              const img = e.currentTarget;
+              if (img.dataset.fallbackApplied) return;
+              img.onerror = null;
+              img.removeAttribute("srcset");
+              img.dataset.fallbackApplied = "1";
+              img.src = "/plate_placeholder.png";
+            }}
+            src={selectedVariant == 0 ? meal?.image ? meal?.imageUrl : "/plate_placeholder.png" : meal?.altImage ? meal?.altImageUrl : "/plate_placeholder.png"}
+            title={meal?.atextohnezsz1}
+            alt="dish-image"
+            className={styles.popupImage}
+            width={1600}
+            height={900}
+          />
 
           <div className={styles.overlayLocationBar}>
-              <p title="Location" className={styles.popupLocation}>
+            <p title="Location" className={styles.popupLocation}>
               {meal.dpartname}
-              
-              {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
-              {meal?.dpartname == "Salatbüfett" ? <SaladIcon size={20} className={styles.otherIcon} /> : ""}
-              {meal?.dpartname == "Eintopf 1" || meal?.dpartname == "Eintopf 2" ? <SoupIcon size={20} className={styles.otherIcon} /> : ""}
-              {meal?.vegiOption ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
-              {meal?.veganOption ? <VeganOpIcon className={styles.greenIcon} /> : ""}
-              {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}
+
+              {meal?.dpname == "Robotic Kitchen" ? (
+                <Bot size={20} className={styles.otherIcon} />
+              ) : (
+                ""
+              )}
+              {meal?.dpartname == "Salatbüfett" ? (
+                <SaladIcon size={20} className={styles.otherIcon} />
+              ) : (
+                ""
+              )}
+              {meal?.dpartname == "Eintopf 1" ||
+              meal?.dpartname == "Eintopf 2" ? (
+                <SoupIcon size={20} className={styles.otherIcon} />
+              ) : (
+                ""
+              )}
+              {meal?.vegiOption ? (
+                <VeggieOpIcon className={styles.greenIcon} />
+              ) : (
+                ""
+              )}
+              {meal?.veganOption ? (
+                <VeganOpIcon className={styles.greenIcon} />
+              ) : (
+                ""
+              )}
+              {meal?.menuekennztext == "V+" ? (
+                <VeganIcon className={styles.greenIcon} />
+              ) : (
+                ""
+              )}
             </p>
           </div>
 
           <div className={styles.overlayActionsBar}>
             <DropdownMenu>
-              <DropdownMenuTrigger className={styles.popupActionButton}><EllipsisVertical size={18} /></DropdownMenuTrigger>
-                <DropdownMenuContent className={styles.dropdownMenuContent}>
-                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={(e) => (handleBookmark(e))} ><Bookmark size={18} className={isBookmarked ? styles.bookmarkActive : styles.bookmark} />Bookmark</DropdownMenuItem>
-                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}?artid=`+meal?.artikel_id) && toast.success("Link copied to clipboard!")}><Share2Icon size={18} />Share</DropdownMenuItem>
-  
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className={styles.dropdownMenuItem} onClick={() => handleRequestImageTakedown()} ><FlagIcon size={18} />Remove image</DropdownMenuItem>
-                  <DropdownMenuItem className={styles.dropdownMenuItem} style={{display: submittedRating ? "flex" : "none"}} onClick={handleDeleteRating} ><StarOff size={18} />Delete rating</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            <button onClick={requestCloseModal} className={styles.popupActionButton}>×</button>
+              <DropdownMenuTrigger className={styles.popupActionButton}>
+                <EllipsisVertical size={18} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className={styles.dropdownMenuContent}>
+                <DropdownMenuItem
+                  className={styles.dropdownMenuItem}
+                  onClick={(e) => handleBookmark(e)}
+                >
+                  <Bookmark
+                    size={18}
+                    className={
+                      isBookmarked ? styles.bookmarkActive : styles.bookmark
+                    }
+                  />
+                  Bookmark
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className={styles.dropdownMenuItem}
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      `${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}?artid=` +
+                        meal?.artikel_id
+                    ) && toast.success("Link copied to clipboard!")
+                  }
+                >
+                  <Share2Icon size={18} />
+                  Share
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className={styles.dropdownMenuItem}
+                  onClick={() => handleRequestImageTakedown()}
+                >
+                  <FlagIcon size={18} />
+                  Remove image
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className={styles.dropdownMenuItem}
+                  style={{ display: submittedRating ? "flex" : "none" }}
+                  onClick={handleDeleteRating}
+                >
+                  <StarOff size={18} />
+                  Delete rating
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <button
+              onClick={requestCloseModal}
+              className={styles.popupActionButton}
+            >
+              ×
+            </button>
           </div>
-          
         </div>
 
         {/* Render meal details, comments and action buttons */}
@@ -244,7 +321,9 @@ export default function MealPopup({ mealsFull }) {
           <MealTitle />
 
           <div className={styles.popupPriceRating}>
-            <span title="Price" className={styles.popupPrice}>{meal?.price?.stu || meal?.price?.price}</span>
+            <span title="Price" className={styles.popupPrice}>
+              {meal?.price?.stu || meal?.price?.price}
+            </span>
             <div className={styles.popupRating}>
               <div
                 className={styles.tooltipWrapper}
@@ -252,49 +331,109 @@ export default function MealPopup({ mealsFull }) {
                 tabIndex={0}
                 aria-label="Rate this meal"
               >
-                <StarRating disabled={!user} commonRating={selectedVariant == 0 ? meal?.rating : meal?.altRating} submittedRating={submittedRating} setSubmittedRating={setSubmittedRating} starsSet={handleSubmitRating} />
-                <span className={`${styles.tooltipBubble} ${showTooltip ? styles.triggerTooltip : ""}`} role="tooltip">Click to rate this meal!</span>
+                <StarRating
+                  disabled={!user}
+                  commonRating={
+                    selectedVariant == 0 ? meal?.rating : meal?.altRating
+                  }
+                  submittedRating={submittedRating}
+                  setSubmittedRating={setSubmittedRating}
+                  starsSet={handleSubmitRating}
+                />
+                <span
+                  className={`${styles.tooltipBubble} ${
+                    showTooltip ? styles.triggerTooltip : ""
+                  }`}
+                  role="tooltip"
+                >
+                  Click to rate this meal!
+                </span>
               </div>
-               <span className={styles.ratingCount} >({(selectedVariant == 0 ? meal?.rating_amt : meal?.altRating_amt) || "0"})</span>
+              <span className={styles.ratingCount}>
+                (
+                {(selectedVariant == 0
+                  ? meal?.rating_amt
+                  : meal?.altRating_amt) || "0"}
+                )
+              </span>
             </div>
           </div>
 
-
           {/* Alternative options */}
-          {meal.altOption &&     
-          <div className={styles.altBox} onClick={() => {setSelectedVariant(selectedVariant === 0 ? 1 : 0)}}>
-                {meal.vegiOption && <VeggieOpIcon className={styles.altIcon} />  }
-                {meal.veganOption && <VeganOpIcon className={styles.altIcon} /> }
-            <div>
-              <p className={styles.altTitle}>{meal?.veganOption ? "Vegan" : "Veggie"} Alternative</p>
-              <p className={styles.altDescription}>{meal?.altOption}</p>
+          {meal.altOption && (
+            <div
+              className={styles.altBox}
+              onClick={() => {
+                setSelectedVariant(selectedVariant === 0 ? 1 : 0);
+              }}
+            >
+              {meal.vegiOption && <VeggieOpIcon className={styles.altIcon} />}
+              {meal.veganOption && <VeganOpIcon className={styles.altIcon} />}
+              <div>
+                <p className={styles.altTitle}>
+                  {meal?.veganOption ? "Vegan" : "Veggie"} Alternative
+                </p>
+                <p className={styles.altDescription}>{meal?.altOption}</p>
+              </div>
+              <ArrowDownUp
+                size={20}
+                className={`${styles.swapIcon} ${
+                  selectedVariant === 1 ? styles.activeColor : ""
+                }`}
+              />
             </div>
-            <ArrowDownUp size={20} className={`${styles.swapIcon} ${selectedVariant === 1 ? styles.activeColor : ""}`}/>
-          </div>}
+          )}
 
           {/* Additional information */}
-          <div className={styles.divider} style={{display: meal?.frei1 ? "block" : "none"}} />
-            {meal?.frei1 &&<>
-            <p className={styles.sectionTitle}>Information</p>
-            <div className={styles.infoText}>
-              {meal?.frei1?.includes("Uhr") ? <Clock10Icon size={18} className={styles.otherIcon} /> : 
-              meal?.frei1?.includes("DIY") ? <Scale size={18} className={styles.otherIcon} /> :
-              meal?.frei1?.includes("Vegetarisch") ? <Leaf size={18} className={styles.otherIcon} /> :
-              <InfoIcon size={18} className={styles.otherIcon} />}
-            <p>{meal.frei1+" "+meal.frei2+" "+meal.frei3}</p>
-            </div></>}
+          <div
+            className={styles.divider}
+            style={{ display: meal?.frei1 ? "block" : "none" }}
+          />
+          {meal?.frei1 && (
+            <>
+              <p className={styles.sectionTitle}>Information</p>
+              <div className={styles.infoText}>
+                {meal?.frei1?.includes("Uhr") ? (
+                  <Clock10Icon size={18} className={styles.otherIcon} />
+                ) : meal?.frei1?.includes("DIY") ? (
+                  <Scale size={18} className={styles.otherIcon} />
+                ) : meal?.frei1?.includes("Vegetarisch") ? (
+                  <Leaf size={18} className={styles.otherIcon} />
+                ) : (
+                  <InfoIcon size={18} className={styles.otherIcon} />
+                )}
+                <p>{meal.frei1 + " " + meal.frei2 + " " + meal.frei3}</p>
+              </div>
+            </>
+          )}
 
-            {/* Additive chips */}
+          {/* Additive chips */}
           <div className={styles.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
               <p>Additives</p>
               <p className={styles.additivesContext}>Includes all variants</p>
             </div>
-            {computedAdditives?.length > 1 ? <div> {computedAdditives?.map((additive) => <Badge title={additive?.name} onClick={() => setSelectedAdditive(additive?.code)} className={styles.dietaryTag} key={additive?.code}>{additive?.name}</Badge>)}</div> : <p className={styles.additivesContext}>Read the title</p>}
+            {computedAdditives?.length > 1 ? (
+              <div>
+                {" "}
+                {computedAdditives?.map((additive) => (
+                  <Badge
+                    title={additive?.name}
+                    onClick={() => setSelectedAdditive(additive?.code)}
+                    className={styles.dietaryTag}
+                    key={additive?.code}
+                  >
+                    {additive?.name}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <p className={styles.additivesContext}>Read the title</p>
+            )}
           </div>
 
-        {/* Nutrition */}
+          {/* Nutrition */}
           {/* <div className={styles.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
@@ -303,7 +442,7 @@ export default function MealPopup({ mealsFull }) {
             </div>
           </div> */}
 
-            {/* Image upload section */}
+          {/* Image upload section */}
           <div className={styles.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
@@ -312,9 +451,8 @@ export default function MealPopup({ mealsFull }) {
             </div>
             {isOpen && <UploadBox mealId={meal?.legacyId} />}
           </div>
-
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -59,7 +59,14 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
             priority
             fetchPriority="high"
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
-            onError={(e) => e.target.src = "/plate_placeholder.png"}
+            onError={(e) => {
+              const img = e.currentTarget;
+              if (img.dataset.fallbackApplied) return;
+              img.onerror = null;
+              img.removeAttribute("srcset");
+              img.dataset.fallbackApplied = "1";
+              img.src = "/plate_placeholder.png";
+            }}
             alt="dish-image" title={meal.mergedTitle[0]} 
             className={styles.mealImage}
             width={640} height={310} />
