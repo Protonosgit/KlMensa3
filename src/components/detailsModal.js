@@ -216,8 +216,7 @@ export default function MealPopup({ mealsFull }) {
             title={meal?.atextohnezsz1}
             alt="dish-image"
             className={styles.popupImage}
-            width={1600}
-            height={900}
+            width={640} height={310}
           />
 
           <div className={styles.overlayLocationBar}>

@@ -45,13 +45,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 13;
     overflow-y: scroll;
     animation: fadein 0.3s ease-in-out;
+    backdrop-filter: blur(1px);
   }
   @keyframes fadein {
     from {
