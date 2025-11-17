@@ -1,10 +1,11 @@
 import styles from "./page.module.css";
+import shared from "@/styles/shared_page.module.css";
+
 import Schedule from '@/components/schedule';
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { InfoIcon } from "lucide-react";
 import { cookies } from 'next/headers';
-
 
 const DynamicSettingsModal = dynamic(() => import("@/components/settings"), { ssr: true });
 const DynamicFilterMenu = dynamic(() => import("@/components/filtermenu"), { ssr: true });
@@ -40,13 +41,13 @@ export default async function Home() {
 
 
   return (
-    <div className={styles.container}>
-      <header className={styles.headerContainer}>
-        <div className={styles.headerWrapper}>
-          <div className={styles.headerContent}>
-            <div className={styles.headerTitleSection}>
-              <h1 className={styles.headerTitle}>Mensa KL</h1>
-              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen Universität in Kaiserslautern</h2>
+    <div className={shared.container}>
+      <header className={shared.headerContainer}>
+        <div className={shared.headerWrapper}>
+          <div className={shared.headerContent}>
+            <div className={shared.headerTitleSection}>
+              <h1 className={shared.headerTitle}>Mensa KL</h1>
+              <h2 className={shared.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen Universität in Kaiserslautern</h2>
             </div>
           </div>
         </div>
@@ -57,7 +58,7 @@ export default async function Home() {
         <p className={styles.newsText}>Login is disabled and Beta accounts are deleted soon!</p>
       </div>
 
-      <main className={styles.main}>
+      <main className={shared.main}>
         <div className={styles.headerButtonSection}>
           <DynamicSettingsModal />
           <DynamicFilterMenu/>
@@ -66,16 +67,16 @@ export default async function Home() {
           <Schedule settingsCookie={settings}/>
         </Suspense>
       </main>
-      <footer className={styles.footer}>
-        <div className={styles.linkGrid}>
-          <a href="https://www.studierendenwerk-kaiserslautern.de/de/" className={styles.footerLink}>Studierendenwerk</a>
-          <a href="https://rptu.de" className={styles.footerLink}>RPTU</a>
-          <a href="https://www.mensa-kl.de/legal.html" className={styles.footerLink}>Privacy Policy</a>
-          <a href="https://www.mensa-kl.de/#upload" className={styles.footerLink}>Images/Ratings</a>
-          <a href="/about" className={styles.footerLink}>About</a>
-          <a href="https://github.com/Protonosgit/KlMensa3/issues" className={styles.footerLink}>Report issue</a>
-          <a href="https://github.com/Protonosgit/KlMensa3" className={styles.footerLink}>Source</a>
-          <a href="/api/menudata" className={styles.footerLink}>Api</a>
+      <footer className={shared.footer}>
+        <div className={shared.linkGrid}>
+          <a href="https://www.studierendenwerk-kaiserslautern.de/de/" className={shared.footerLink}>Studierendenwerk</a>
+          <a href="https://rptu.de" className={shared.footerLink}>RPTU</a>
+          <a href="https://www.mensa-kl.de/legal.html" className={shared.footerLink}>Privacy Policy</a>
+          <a href="https://www.mensa-kl.de/#upload" className={shared.footerLink}>Images/Ratings</a>
+          <a href="/about" className={shared.footerLink}>About</a>
+          <a href="https://github.com/Protonosgit/KlMensa3/issues" className={shared.footerLink}>Report issue</a>
+          <a href="https://github.com/Protonosgit/KlMensa3" className={shared.footerLink}>Source</a>
+          <a href="/api/menudata" className={shared.footerLink}>Api</a>
         </div>
           <p>2025 mensa-kl v3 prototype 🐡Powered by Fachschaft Biologie<br/></p>
       </footer>

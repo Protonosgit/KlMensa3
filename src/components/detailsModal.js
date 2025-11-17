@@ -3,13 +3,14 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import shared from "@/styles/shared.module.css";
 import styles from "./details.module.css";
 import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie, setCookie } from "@/app/utils/client-system";
 import toast from "react-hot-toast";
-import { ArrowDownUp, Bookmark, Bot, Clock10Icon, EllipsisVertical, FlagIcon, InfoIcon,  Leaf,  SaladIcon,  Scale,  Share2Icon, SoupIcon, StarOff, TimerIcon } from "lucide-react";
+import { ArrowDownUp, Bookmark, Bot, Clock10Icon, EllipsisVertical, FlagIcon, InfoIcon,  Leaf,  SaladIcon,  Scale,  Share2Icon, SoupIcon, StarOff } from "lucide-react";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
@@ -195,8 +196,8 @@ export default function MealPopup({ mealsFull }) {
 
 
   return (
-    <div title="" className={styles.popupOverlay} onClick={requestCloseModal}>
-      <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+    <div title="" className={shared.popupOverlay} onClick={requestCloseModal}>
+      <div className={shared.popupContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.popupImageContainer}>
           {/* Render meal image from any source or placeholder */}
           <Image
@@ -262,9 +263,9 @@ export default function MealPopup({ mealsFull }) {
               <DropdownMenuTrigger className={styles.popupActionButton}>
                 <EllipsisVertical size={18} />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className={styles.dropdownMenuContent}>
+              <DropdownMenuContent className={shared.dropdownMenuContent}>
                 <DropdownMenuItem
-                  className={styles.dropdownMenuItem}
+                  className={shared.dropdownMenuItem}
                   onClick={(e) => handleBookmark(e)}
                 >
                   <Bookmark
@@ -276,7 +277,7 @@ export default function MealPopup({ mealsFull }) {
                   Bookmark
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className={styles.dropdownMenuItem}
+                  className={shared.dropdownMenuItem}
                   onClick={() =>
                     navigator.clipboard.writeText(
                       `${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}?artid=` +
@@ -290,14 +291,14 @@ export default function MealPopup({ mealsFull }) {
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  className={styles.dropdownMenuItem}
+                  className={shared.dropdownMenuItem}
                   onClick={() => handleRequestImageTakedown()}
                 >
                   <FlagIcon size={18} />
                   Remove image
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className={styles.dropdownMenuItem}
+                  className={shared.dropdownMenuItem}
                   style={{ display: submittedRating ? "flex" : "none" }}
                   onClick={handleDeleteRating}
                 >
@@ -325,7 +326,7 @@ export default function MealPopup({ mealsFull }) {
             </span>
             <div className={styles.popupRating}>
               <div
-                className={styles.tooltipWrapper}
+                className={shared.tooltipWrapper}
                 role="button"
                 tabIndex={0}
                 aria-label="Rate this meal"
@@ -340,8 +341,8 @@ export default function MealPopup({ mealsFull }) {
                   starsSet={handleSubmitRating}
                 />
                 <span
-                  className={`${styles.tooltipBubble} ${
-                    showTooltip ? styles.triggerTooltip : ""
+                  className={`${shared.tooltipBubble} ${
+                    showTooltip ? shared.triggerTooltip : ""
                   }`}
                   role="tooltip"
                 >
@@ -385,7 +386,7 @@ export default function MealPopup({ mealsFull }) {
 
           {/* Additional information */}
           <div
-            className={styles.divider}
+            className={shared.divider}
             style={{ display: meal?.frei1 ? "block" : "none" }}
           />
           {meal?.frei1 && (
@@ -407,7 +408,7 @@ export default function MealPopup({ mealsFull }) {
           )}
 
           {/* Additive chips */}
-          <div className={styles.divider} />
+          <div className={shared.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
               <p>Additives</p>
@@ -433,7 +434,7 @@ export default function MealPopup({ mealsFull }) {
           </div>
 
           {/* Nutrition */}
-          {/* <div className={styles.divider} />
+          {/* <div className={shared.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
               <p>Nutrition</p>
@@ -442,7 +443,7 @@ export default function MealPopup({ mealsFull }) {
           </div> */}
 
           {/* Image upload section */}
-          <div className={styles.divider} />
+          <div className={shared.divider} />
           <div className={styles.additivesSection}>
             <div className={styles.sectionTitle}>
               <p>Submit image</p>

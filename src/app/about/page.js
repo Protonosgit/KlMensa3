@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./page.module.css";
+import shared from "@/styles/shared_page.module.css"
 import { CodeIcon } from "lucide-react";
 
 
@@ -8,19 +9,19 @@ export default function ReportPage() {
 
 
   return (
-    <div className={styles.container}>
-      <header className={styles.headerContainer}>
-        <div className={styles.headerWrapper}>
-          <div className={styles.headerContent}>
-            <Link href={"/"} className={styles.headerTitleSection}>
-              <h1 className={styles.headerTitle}>Mensa KL</h1>
-              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen Universität in Kaiserslautern</h2>
+    <div className={shared.container}>
+      <header className={shared.headerContainer}>
+        <div className={shared.headerWrapper}>
+          <div className={shared.headerContent}>
+            <Link href={"/"} className={shared.headerTitleSection}>
+              <h1 className={shared.headerTitle}>Mensa KL</h1>
+              <h2 className={shared.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen Universität in Kaiserslautern</h2>
             </Link>
           </div>
         </div>
       </header>
 
-      <main className={styles.main}>
+      <main className={shared.main}>
         <h3 className={styles.subtitle}>About this page</h3>
         <p className={styles.description}>
           Mensa KL was created in 2008 by <a href="https://www.johannesschildgen.de/">Johannes Schildgen</a>. Since then it's been offering images and ratings about the current meals on the menu. 
