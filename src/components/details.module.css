@@ -1,47 +1,3 @@
-/* Popup Styles */
-.popupOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-    animation: fadein 0.2s ease-in-out;
-    overflow: hidden;
-    backdrop-filter: blur(1px);
-}
-
-@keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-@keyframes fadeDown {
-    from {
-        transform: translateX(30%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
-
-  .popupContent {
-    background-color: var(--main-bg);
-    border-radius: 0.63rem;
-    max-width: 700px;
-    width: 90%;
-    height: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    filter: var(--eyedef-filter);
-  }
   
 .popupImageContainer {
   position: relative;
@@ -57,6 +13,13 @@
     object-fit: cover;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+  }
+  
+  .popupImage:active + .overlayLocationBar {
+    opacity: 0.3;
+  }
+  .popupImage:active ~ .overlayActionsBar {
+    opacity: 0.3;
   }
   
   .overlayActionsBar {
@@ -113,25 +76,6 @@
     align-items: center;
     border: var(--darkmode-border);
     box-shadow: var(--lightmode-shadow);
-  }
-  .dropdownMenuContent {
-    z-index: 11;
-    background-color: var(--main-bg);
-    border-radius: 0.63rem;
-    border: var(--darkmode-border);
-    box-shadow: var(--lightmode-shadow);
-  }
-  .dropdownMenuSeparator {
-    border-bottom: 1px solid var(--border-color);
-  }
-  .dropdownMenuItem {
-    color: var(--main-text);
-    cursor: pointer;
-    transition: background-color 0.3s;
-    border-radius: 0.43rem;
-  }
-  .dropdownMenuItem:hover {
-    background-color: var(--lightbox-bg);
   }
 
   .bookmark {
@@ -254,59 +198,11 @@
   }
 }
 
-.tooltipWrapper {
-  position: relative;
-  display: inline-block;
-  cursor: default;
-  outline: none;
-}
 
-.tooltipBubble {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translate(-50%, 8px);
-  margin-bottom: 8px;
-  background: var(--main-text);
-  color: var(--main-bg);
-  padding: 6px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 300ms ease, transform 250ms ease;
-  pointer-events: none;
-  z-index: 10;
-  box-shadow: 5px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.tooltipBubble::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 6px;
-  border-style: solid;
-  border-color: var(--main-text) transparent transparent transparent;
-}
-
-.triggerTooltip {
-  opacity: 1;
-  transform: translate(-50%, 0);
-  pointer-events: auto;
-}
-  
   .ratingCount {
     margin-left: 0.25rem;
     font-size: 0.875rem;
     color: var(--subtitle-text);
-  }
-
-  .divider {
-    height: 1px;
-    background-color: var(--seperator-color);
-    margin: 0.5rem 0;
   }
 
   .additivesSection {
@@ -402,84 +298,7 @@
     color: var(--subtitle-text);
     font-weight: 500;
   }
-  .commentsSection {
-    display: flex;
-    flex-direction: column;
-  }
-  .commentInfo {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    align-items: center;
-  }
-  .commentDate {
-    font-size: 0.8rem;
-    color: var(--subtitle-color);
-  }
-  .commentsTitle {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--main-text);
-  }
-  .commentText {
-    gap: 0.5rem;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-  }
-  .ownComent {
-    border-radius: 8px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-  .foreignComment {
-    margin-bottom: 1rem;
-    border-left: 5px solid var(--darkbox-border);
-    border-radius: 8px;
-    padding: 0.4rem;
-  }
-  .commentInput {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--lightbox-border);
-    background-color: transparent;
-    border-radius: 4px;
-    max-height: 120px;
-    min-height: 60px;
-  }
-  .commentCounter {
-    font-size: 0.8rem;
-    color: var(--subtitle-text);
-    text-align: right;
-  }
-  .commentButtons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-  }
-  .commentButton {
-    background-color: var(--main-text);
-    color: var(--main-bg);
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: scale 0.3s;
-  }
-  .commentButton:hover {
-    scale: 1.01;
-  }
 
-  .popupImage:active + .overlayLocationBar {
-    opacity: 0.3;
-  }
-  .popupImage:active ~ .overlayActionsBar {
-    opacity: 0.3;
-  }
 
   /* Responsive Design */
   @media (max-width: 768px) {
@@ -496,15 +315,7 @@
     .popupPrice {
       font-size: 1.6rem;
     }
-    .popupContent {
-      border-radius: 0;
-      width: 100%;
-      max-width: none;
-      max-height: 100vh;
-      height: 100%;
-      padding-bottom: 6rem;
-      animation: fadeDown 0.2s ease-in-out;
-  }
+
   .popupDetails {
     padding: 0.8rem 0.8rem;
   }
@@ -531,15 +342,7 @@
   @media (min-width: 769px) and (max-width: 1024px) {
     .popupImage {
     height: 300px;
-    
     border-radius: 0;
     }
-    .popupContent {
-      border-radius: 0;
-      width: 100vw;
-      max-width: none;
-      max-height: 100vh;
-      height: 100%;
-      padding-bottom: 6rem;
-  }
+
   }

@@ -1,0 +1,167 @@
+/* Popup Styles */
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    animation: fadein 0.2s ease-in-out;
+    overflow: hidden;
+    backdrop-filter: blur(1px);
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeDown {
+    from {
+        transform: translateX(30%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.popupContent {
+    background-color: var(--main-bg);
+    border-radius: 0.63rem;
+    max-width: 700px;
+    width: 90%;
+    height: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    filter: var(--eyedef-filter);
+}
+
+
+.dropdownMenuContent {
+    z-index: 11;
+    background-color: var(--main-bg);
+    border-radius: 0.63rem;
+    border: var(--darkmode-border);
+    box-shadow: var(--lightmode-shadow);
+}
+
+.dropdownMenuSeparator {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dropdownMenuItem {
+    color: var(--main-text);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 0.43rem;
+}
+
+.dropdownMenuItem:hover {
+    background-color: var(--lightbox-bg);
+}
+
+.tooltipWrapper {
+    position: relative;
+    display: inline-block;
+    cursor: default;
+    outline: none;
+}
+
+.tooltipBubble {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, 8px);
+    margin-bottom: 8px;
+    background: var(--main-text);
+    color: var(--main-bg);
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 300ms ease, transform 250ms ease;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 5px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tooltipBubble::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: var(--main-text) transparent transparent transparent;
+}
+
+.triggerTooltip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+}
+
+.divider {
+    height: 1px;
+    background-color: var(--seperator-color);
+    margin: 0.5rem 0;
+}
+
+.headderButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--main-text);
+  color: var(--main-bg);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.headderButton:hover .headderIcon {
+  transform: rotate(30deg);
+  transition: transform 0.5s ease-in-out;
+}
+
+.headderButton .headderIcon {
+  transform: rotate(0deg);
+  transition: transform 0.4s ease-in-out;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .popupContent {
+        border-radius: 0;
+        width: 100%;
+        max-width: none;
+        max-height: 100vh;
+        height: 100%;
+        padding-bottom: 6rem;
+        animation: fadeDown 0.2s ease-in-out;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .popupContent {
+        border-radius: 0;
+        width: 100vw;
+        max-width: none;
+        max-height: 100vh;
+        height: 100%;
+        padding-bottom: 6rem;
+    }
+}

@@ -1,5 +1,5 @@
   .mealCard {
-    position: relative; 
+    position: relative;
     display: flex;
     flex-direction: column;
     background-color: var(--bg-color);
@@ -9,21 +9,22 @@
     border: var(--darkmode-border);
     box-shadow: var(--lightmode-shadow);
   }
-  
+
   .mealCard:hover {
     transform: scale(1.01);
   }
-  
+
   .mealImage {
     width: 100%;
     height: 12rem;
     object-fit: cover;
     border-radius: 0.5rem 0.5rem 0 0;
   }
-  .mealImage:hover + .mealLocation {
+
+  .mealImage:hover+.mealLocation {
     opacity: 0.6;
   }
-  
+
   .mealInfo {
     padding: 1rem;
     display: flex;
@@ -31,43 +32,46 @@
     flex-grow: 1;
     gap: 0.3rem
   }
-  
-.mealLocation {
-  font-size: 12px;
-  background-color: var(--lightbox-bg);
-  color: --subtitle-color;
-  border: var(--darkmode-border);
-  box-shadow: var(--lightmode-shadow);
-  padding: 0.3rem 0.5rem;
-  position: absolute;
-  top: 0.4rem;
-  left: 0.4rem;
-  border-radius: 2rem;
-  font-weight: 600;
-  display: flex;
-  flex-direction: row;
-  width: fit-content;
-  gap: 0.4rem;
-  align-items: center;
-  transition: opacity 0.3s ease;
-}
-.mealContextLabels {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.3rem;
-  justify-content: space-between;
-}
-.greenIcon {
-  width: 1.1rem;
-  height: 1.1rem;
-  color: var(--tertiary-color);
-}
-.otherIcon {
-  width: 1.1rem;
-  height: 1.1rem
-}
-  
+
+  .mealLocation {
+    font-size: 12px;
+    background-color: var(--lightbox-bg);
+    color: --subtitle-color;
+    border: var(--darkmode-border);
+    box-shadow: var(--lightmode-shadow);
+    padding: 0.3rem 0.5rem;
+    position: absolute;
+    top: 0.4rem;
+    left: 0.4rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    gap: 0.4rem;
+    align-items: center;
+    transition: opacity 0.3s ease;
+  }
+
+  .mealContextLabels {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.3rem;
+    justify-content: space-between;
+  }
+
+  .greenIcon {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--tertiary-color);
+  }
+
+  .otherIcon {
+    width: 1.1rem;
+    height: 1.1rem
+  }
+
   .mealTitle {
     font-size: 1rem;
     font-weight: 600;
@@ -76,34 +80,38 @@
     word-wrap: break-word;
     hyphens: auto;
   }
-  
+
   .mealFooter {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .mealPrice {
     font-size: 1.1rem;
     font-weight: bold;
     color: var(--secondary-color);
   }
-  
+
   .starRating {
     display: flex;
     align-items: center;
   }
+
   .star {
     width: 1.2rem;
     height: 1.2rem;
   }
+
   .starFilled {
     color: var(--primary-color);
     fill: currentColor;
   }
+
   .starEmpty {
     color: var(--blankstar-color);
   }
+
   .ratingCount {
     margin-left: 0.25rem;
     font-size: 0.875rem;
@@ -112,88 +120,102 @@
 
   @media (max-width: 768px) {
     .mealCard {
-        display: flex;
-        flex-direction: row;
-        max-width: 100%;
-        overflow: hidden;
-        height: 8rem;
-        }
-      .mealInfo {
-        width: 60%;
-        padding: 0.6rem;
-      }
+      display: flex;
+      flex-direction: row;
+      max-width: 100%;
+      overflow: hidden;
+      height: 8rem;
+    }
+
+    .mealInfo {
+      width: 60%;
+      padding: 0.6rem;
+    }
+
     .mealTitle {
       line-height: 1.2rem;
-        font-size: 0.85rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        overflow: hidden;
-        line-clamp: 4;
-        -webkit-line-clamp: 4;
-        -webkit-box-orient: vertical;
-      }
-    .mealImage {
-        width: 40%;
-        height: 100%;
-        border-radius: 0.5rem 0 0 0.5rem;
-      }
-      .mealLocation {
-        font-size: 0.75rem;
-        padding: 0.15rem 0.35rem;
-        top: 0.2rem;
-        left: 0.2rem;
-      }
-      .star {
-        width: 1rem;
-        height: 1rem;
-      }
-      .ratingCount {
-        min-width: 0.8rem;
-        font-size: 0.75rem;
-      }
-      .mealPrice {
-        font-size: 1rem;
-      }
-
-       /* Biglist styles */
-      [data-layout="biglist"] .mealCard {
-        display: flex;
-        flex-direction: column;
-        height: auto;
-      }
-      [data-layout="biglist"] .mealInfo {
-        width: 100%;
-      }
-      [data-layout="biglist"] .mealTitle {
-        min-width: 0;
-        width: 100%;
-      }
-      [data-layout="biglist"] .mealImage {
-        width: 100%;
-        height: 12rem;
-        border-radius: 0.5rem 0.5rem 0 0;
-      }
-      [data-layout="biglist"] .mealLocation {
-        font-size: 0.8rem;
-        padding: 0.3rem 0.5rem;
-      }
-
-       /* Grid styles */
-      [data-layout="grid"] .mealCard {
-        display: flex;
-        flex-direction: column;
-        height: auto;
-      }
-      [data-layout="grid"] .mealInfo {
-        width: 100%;
-      }
-      [data-layout="grid"] .mealTitle {
-       width: 100%;
-      }
-      [data-layout="grid"] .mealImage {
-        width: 100%;
-        height: 8rem;
-        border-radius: 0.5rem 0.5rem 0 0;
-      }
+      font-size: 0.85rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      overflow: hidden;
+      line-clamp: 4;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
     }
+
+    .mealImage {
+      width: 40%;
+      height: 100%;
+      border-radius: 0.5rem 0 0 0.5rem;
+    }
+
+    .mealLocation {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.35rem;
+      top: 0.2rem;
+      left: 0.2rem;
+    }
+
+    .star {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .ratingCount {
+      min-width: 0.8rem;
+      font-size: 0.75rem;
+    }
+
+    .mealPrice {
+      font-size: 1rem;
+    }
+
+    /* Biglist styles */
+    [data-layout="biglist"] .mealCard {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+    }
+
+    [data-layout="biglist"] .mealInfo {
+      width: 100%;
+    }
+
+    [data-layout="biglist"] .mealTitle {
+      min-width: 0;
+      width: 100%;
+    }
+
+    [data-layout="biglist"] .mealImage {
+      width: 100%;
+      height: 12rem;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    [data-layout="biglist"] .mealLocation {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.5rem;
+    }
+
+    /* Grid styles */
+    [data-layout="grid"] .mealCard {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+    }
+
+    [data-layout="grid"] .mealInfo {
+      width: 100%;
+    }
+
+    [data-layout="grid"] .mealTitle {
+      width: 100%;
+    }
+
+    [data-layout="grid"] .mealImage {
+      width: 100%;
+      height: 8rem;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+  }

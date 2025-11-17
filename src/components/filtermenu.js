@@ -64,9 +64,6 @@ export default function FilterMenu() {
   const [mealAdditives, setMealAdditives] = useState([]);
   const [filterActive, setFilterActive] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [allLocationsToggled, setAllLocToggled] = useState(true);
-  const [allAdditiveToggled, setAllAdditiveToggled] = useState(true);
-  const [allProteinToggled, setAllProteinToggled] = useState(true);
 
   function loadFilters() {
     setRefreshing(true);
@@ -226,7 +223,7 @@ export default function FilterMenu() {
             <div className={styles.filterHeadder}>
               <p className={styles.filterTitle}><MapPin size={20} />Location:</p>
               <p className={styles.filterSubtitle}>Select all <input
-                checked={!mealLocationClearname.map(l=>l.codes).flat().every(c => mealLocations.includes(c))}
+                checked={mealLocations.length===0}
                 onChange={(e) => handleSelectAllClicked(!e.target.checked, setMealLocations, mealLocationClearname, true)}
                 type="checkbox" className={styles.filterCheckbox} /></p>
             </div>
@@ -260,7 +257,7 @@ export default function FilterMenu() {
             <div className={styles.filterHeadder}>
               <p className={styles.filterTitle}><Beef size={20} />Protein:</p>
               <p className={styles.filterSubtitle}>Select all <input
-                checked={!mealProteinClearname.map(p=>p.code).every(c => mealProteins.includes(c))}
+                checked={mealProteins.length===0}
                 onChange={(e) => handleSelectAllClicked(!e.target.checked, setMealProteins, mealProteinClearname)}
                 type="checkbox" className={styles.filterCheckbox} /></p>
             </div>
@@ -291,7 +288,7 @@ export default function FilterMenu() {
             <div className={styles.filterHeadder}>
               <p className={styles.filterTitle}><FlaskConical size={20} />Additives:</p>
               <p className={styles.filterSubtitle}>Select all <input
-                checked={!mealAdditiveClearname.map(a=>a.code).every(c => mealAdditives.includes(c))}
+                checked={mealAdditives.length===0}
                 onChange={(e) => handleSelectAllClicked(!e.target.checked, setMealAdditives, mealAdditiveClearname)}
                 type="checkbox" className={styles.filterCheckbox} /></p>
             </div>

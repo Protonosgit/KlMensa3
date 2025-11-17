@@ -1,6 +1,7 @@
 "use client";
 import styles from "./settings.module.css";
-import { useEffect, useRef, useState } from "react";
+import shared from "@/styles/shared.module.css"
+import { useEffect, useState } from "react";
 import { CatIcon, ImageIcon, MailIcon, Settings, StarIcon, X } from "lucide-react";
 import { toast, Toaster } from 'react-hot-toast';
 import { login,logout } from "@/app/utils/auth-actions";
@@ -117,12 +118,12 @@ export default function SettingsModal({}) {
   return (
     <>
       {/* Button to open the settings modal */}
-      <button className={styles.settingsButton} title="Settings and Account" onClick={() => setModalVisible(true)}>
-        <Settings className={styles.filterIcon} />
+      <button className={shared.headderButton} title="Settings and Account" onClick={() => setModalVisible(true)}>
+        <Settings className={shared.headderIcon} />
       </button>
       {modalVisible && (
-        <div className={styles.popupOverlay} onClick={() => setModalVisible(false)}>
-          <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+        <div className={shared.popupOverlay} onClick={() => setModalVisible(false)}>
+          <div className={shared.popupContent} onClick={(e) => e.stopPropagation()}>
             {/* Close button */}
             <button onClick={() => setModalVisible(false)} className={styles.popupCloseButton}><X /></button>
             <h2 className={styles.popupTitle}>Settings</h2>
@@ -167,7 +168,7 @@ export default function SettingsModal({}) {
                         </label>
                         </div>
 
-                        <div className={styles.seperator}></div>
+                        <div className={shared.divider}></div>
 
                         <div className={styles.popupOption}>
                           <span style={{width: "100%", textAlign: "left"}}>Price category: </span>
@@ -227,7 +228,7 @@ export default function SettingsModal({}) {
                         </label>
                         </div>
 
-                        <div className={styles.seperator}></div>
+                        <div className={shared.divider}></div>
 
                         <div className={styles.popupOption}>
                           <span style={{width: "100%", textAlign: "left"}}>Time: </span>
@@ -239,7 +240,7 @@ export default function SettingsModal({}) {
                           </select>
                         </div>
 
-                        <div className={styles.seperator}></div>
+                        <div className={shared.divider}></div>
 
                         <p>Bookmarks</p>
 
