@@ -1,27 +1,12 @@
-"use client";
 import Image from "next/image";
 import { Star, Bot, SoupIcon, SaladIcon } from "lucide-react";
-import styles from "./mealcard.module.css";
-import { useEffect } from "react";
+import styles from "./MealCard.module.css";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
-import { useModalStore } from "@/app/utils/contextStore";
+import MealModalTrigger from "./MealCardClient";
 
-export default function Meal({ meal, mealIndex, settingsCookie }) {
-
-  const { openModal, isOpen } = useModalStore();
-
-
-  useEffect(() => {
-    // Disable page scrolling when the meal popup is open
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [isOpen]);
-  
+export default function MealCard({ meal, mealIndex, settingsCookie }) {
 
   //  star rating meal (non-interactive)
   const StaticStars = () => {
@@ -40,33 +25,18 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
     );
   };
 
-  // Open the meal popup and set url param for back gesture detection
-  const requestOpenModal = () => {
-    if(isOpen) return;
-    window.history.pushState(null, '', window.location.href+"?artid="+meal.artikel_id);
-    openModal(meal);
-  };
-
   // Render the meal card and popup
   return (
       <div
         key={mealIndex}
         data-layout={settingsCookie?.layout}
         className={styles.mealCard}
-        onClick={() => requestOpenModal()} 
+        data-item-id={meal?.artikel_id}
       >
           <Image
             priority
             fetchPriority="high"
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
-            onError={(e) => {
-              const img = e.currentTarget;
-              if (img.dataset.fallbackApplied) return;
-              img.onerror = null;
-              img.removeAttribute("srcset");
-              img.dataset.fallbackApplied = "1";
-              img.src = "/plate_placeholder.png";
-            }}
             alt="dish-image" title={meal.mergedTitle[0]} 
             className={styles.mealImage}
             width={640} height={310} />
@@ -91,7 +61,7 @@ export default function Meal({ meal, mealIndex, settingsCookie }) {
             <StaticStars />
           </div>
         </div>
+        <MealModalTrigger meal={meal}/>
       </div>
-    
   );
 }

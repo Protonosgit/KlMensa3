@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import styles from "./uploadbox.module.css";
+import styles from "./UploadBox.module.css";
 import toast from "react-hot-toast";
 import { Upload } from "lucide-react";
 

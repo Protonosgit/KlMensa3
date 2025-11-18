@@ -2,13 +2,14 @@ import { cookies } from 'next/headers';
 import { fetchMenu } from '@/app/utils/schedule-parser';
 import styles from "../app/page.module.css";
 import { format } from 'date-fns';
-import Meal from './meal';
+import Meal from './MealCard';
 import { applyFilters } from '@/app/utils/filter.js';
 import dynamic from "next/dynamic";
-const DynamicMealPopup = dynamic(() => import("./detailsModal"), { ssr: true });
+
+const DynamicMealPopup = dynamic(() => import("./DetailsModal"), { ssr: true });
 
 
-export default async function Schedule({settingsCookie}) {
+export default async function ScheduleGrid({settingsCookie}) {
   const cookieStore = await cookies();
 
   let locationFilter, proteinFilter, additiveFilter;

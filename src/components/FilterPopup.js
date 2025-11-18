@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import styles from "./filter.module.css";
+import styles from "./FIlterPopup.module.css";
 import { Filter,  MapPin, Beef, FlaskConical, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { revalidatePage } from "@/app/utils/auth-actions";
