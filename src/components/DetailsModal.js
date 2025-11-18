@@ -181,14 +181,16 @@ export default function MealModal({ mealsFull }) {
   // Render the meal title based on settings.
   const MealTitle = () => {
 
+    console.log(meal);
+
     if(settings?.threebar) return (
       <ul className={styles.popupTitleBullets} >
-        {meal?.mergedATitle?.map((title, index) => <li key={index} className={meal?.additivePointer[index]?.includes(selectedAdditive) ? styles.highlighted : undefined}>{title.trim().replace(", ", '')}</li>)}
+        {meal?.title?.map((titlepart, index) => <li key={index} className={meal?.additivesMap[index]?.includes(selectedAdditive) ? styles.highlighted : undefined}>{titlepart.trim().replace(", ", '')}</li>)}
       </ul>);
 
     return (
       <h2 className={styles.popupTitle} >
-        {meal?.mergedTitle?.map((title, index) =>  <span className={meal?.additivePointer[index]?.includes(selectedAdditive) ? styles.highlighted : undefined} key={index}>{title}</span>)}
+        {meal?.title?.map((titlepart, index) =>  <span className={meal?.additivesMap[index]?.includes(selectedAdditive) ? styles.highlighted : undefined} key={index}>{titlepart}</span>)}
       </h2>);
   }
 
@@ -214,7 +216,7 @@ export default function MealModal({ mealsFull }) {
               img.src = "/plate_placeholder.png";
             }}
             src={selectedVariant == 0 ? meal?.image ? meal?.imageUrl : "/plate_placeholder.png" : meal?.altImage ? meal?.altImageUrl : "/plate_placeholder.png"}
-            title={meal?.atextohnezsz1}
+            title={meal?.title[0]}
             alt="dish-image"
             className={styles.popupImage}
             width={640} height={310}
@@ -240,12 +242,12 @@ export default function MealModal({ mealsFull }) {
               ) : (
                 ""
               )}
-              {meal?.vegiOption ? (
+              {meal?.altType === 1 ? (
                 <VeggieOpIcon className={styles.greenIcon} />
               ) : (
                 ""
               )}
-              {meal?.veganOption ? (
+              {meal?.altType === 2 ? (
                 <VeganOpIcon className={styles.greenIcon} />
               ) : (
                 ""
@@ -281,7 +283,7 @@ export default function MealModal({ mealsFull }) {
                   onClick={() =>
                     navigator.clipboard.writeText(
                       `${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}?artid=` +
-                        meal?.artikel_id
+                        meal?.murmurID
                     ) && toast.success("Link copied to clipboard!")
                   }
                 >
@@ -367,11 +369,11 @@ export default function MealModal({ mealsFull }) {
                 setSelectedVariant(selectedVariant === 0 ? 1 : 0);
               }}
             >
-              {meal.vegiOption && <VeggieOpIcon className={styles.altIcon} />}
-              {meal.veganOption && <VeganOpIcon className={styles.altIcon} />}
+              {meal.altType === 1 && <VeggieOpIcon className={styles.altIcon} />}
+              {meal.altType === 2 && <VeganOpIcon className={styles.altIcon} />}
               <div>
                 <p className={styles.altTitle}>
-                  {meal?.veganOption ? "Vegan" : "Veggie"} Alternative
+                  {meal?.altType === 2 ? "Vegan" : "Veggie"} Alternative
                 </p>
                 <p className={styles.altDescription}>{meal?.altOption}</p>
               </div>
@@ -387,22 +389,22 @@ export default function MealModal({ mealsFull }) {
           {/* Additional information */}
           <div
             className={shared.divider}
-            style={{ display: meal?.frei1 ? "block" : "none" }}
+            style={{ display: meal?.mergedFreitextList[0] ? "block" : "none" }}
           />
-          {meal?.frei1 && (
+          {meal?.mergedFreitextList[0] && (
             <>
               <p className={styles.sectionTitle}>Information</p>
               <div className={styles.infoText}>
-                {meal?.frei1?.includes("Uhr") ? (
+                {meal?.mergedFreitextList[0]?.includes("Uhr") ? (
                   <Clock10Icon size={18} className={styles.otherIcon} />
-                ) : meal?.frei1?.includes("DIY") ? (
+                ) : meal?.mergedFreitextList[0]?.includes("DIY") ? (
                   <Scale size={18} className={styles.otherIcon} />
-                ) : meal?.frei1?.includes("Vegetarisch") ? (
+                ) : meal?.mergedFreitextList[0]?.includes("Vegetarisch") ? (
                   <Leaf size={18} className={styles.otherIcon} />
                 ) : (
                   <InfoIcon size={18} className={styles.otherIcon} />
                 )}
-                <p>{meal.frei1 + " " + meal.frei2 + " " + meal.frei3}</p>
+                <p>{meal?.mergedFreitextList[0]}</p>
               </div>
             </>
           )}

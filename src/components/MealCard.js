@@ -37,7 +37,7 @@ export default function MealCard({ meal, mealIndex, dayIndex, settingsCookie }) 
             priority
             fetchPriority="high"
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
-            alt="dish-image" title={meal.mergedTitle[0]} 
+            alt="dish-image" title={meal.title[0]} 
             className={styles.mealImage}
             width={640} height={310} />
 
@@ -47,15 +47,15 @@ export default function MealCard({ meal, mealIndex, dayIndex, settingsCookie }) 
           {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
           {meal?.dpartname == "Salatbüfett" ? <SaladIcon size={20} className={styles.otherIcon} /> : ""}
           {meal?.dpartname == "Eintopf 1" || meal?.dpartname == "Eintopf 2" ? <SoupIcon size={20} className={styles.otherIcon} /> : ""}
-          {meal?.vegiOption ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
-          {meal?.veganOption ? <VeganOpIcon className={styles.greenIcon} /> : ""}
+          {meal?.altType=== 1 ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
+          {meal?.altType=== 2 ? <VeganOpIcon className={styles.greenIcon} /> : ""}
           {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}
         </p>
 
         {/* Meal details */}
         <div className={styles.mealInfo}>
           <div className={styles.mealContextLabels}></div>
-          <h4 className={styles.mealTitle}>{(settingsCookie?.shortitle ? meal?.mergedTitle[0] : meal?.mergedTitle.flat())}</h4>
+          <h4 className={styles.mealTitle}>{(settingsCookie?.shortitle ? meal?.title[0] : meal?.title.flat())}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>{meal.price && (meal?.price[settingsCookie?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             <StaticStars />

@@ -11,7 +11,7 @@ import Switch from "react-switch";
 import { revalidatePage, retrieveUserAccountData } from "@/app/utils/auth-actions";
 
 export default function SettingsModal({}) {
-  // State variables for managing modal visibility, settings, and user authentication.
+  // State variables for managing modal visibility, settings, and user authentication
   const [modalVisible, setModalVisible] = useState(false);
   const [userAccountData, setUserAccountData] = useState({});
 
@@ -34,13 +34,13 @@ export default function SettingsModal({}) {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    // Fetch settings from cookies and initialize state.
+    // Fetch settings from cookies and initialize state
     const settingsString = getCookie('settings');
     if (settingsString && settingsString.length > 0) {
       const parsed = JSON.parse(settingsString);
       setSettings(parsed);
     }
-    // Fetch user data from Supabase.
+    // Fetch user data from Supabase
      async function fetchUserData() {
       if (false) {
         setUser(null);
@@ -59,7 +59,7 @@ export default function SettingsModal({}) {
     // }
     // checkSubscription();
 
-    // Check if user just logged in
+    // Check if user just logged in to display toast notification
     const urlParams = new URLSearchParams(window.location.search);
     const autstat = urlParams.get('authstatus');
     if(autstat === '0') {
@@ -69,7 +69,38 @@ export default function SettingsModal({}) {
       toast.error('Login failed!');
       window.history.pushState({}, '', window.location.pathname);
     }
+    // console.log("If you can read this you are good enough to contribute to the repo!");
   }, []);
+
+    // Detect back gesture on Android, Windows and maybe ios and close modal if open
+    useEffect(() => {
+      const handlePopState = () => {
+        if (modalVisible) {
+          setModalVisible(false);
+        }
+      };
+  
+      const handleEscapePress = (event) => {
+        if (event.key === 'Escape' && modalVisible) {
+          setModalVisible(false);
+          window.history.back();
+        }
+      };
+  
+      document.addEventListener('keydown', handleEscapePress);
+      window.addEventListener('popstate', handlePopState);
+  
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+        document.removeEventListener('keydown', handleEscapePress);
+      };
+  
+    }, [modalVisible]);
+
+    function handleCloseModal() {
+      setModalVisible(false);
+      window.history.back();
+    }
 
   useEffect(() => {
     // Disable page scrolling when the settings modal is open.
@@ -118,14 +149,14 @@ export default function SettingsModal({}) {
   return (
     <>
       {/* Button to open the settings modal */}
-      <button className={shared.headderButton} title="Settings and Account" onClick={() => setModalVisible(true)}>
+      <button className={shared.headderButton} title="Settings and Account" onClick={() => {setModalVisible(true); window.history.pushState(null, '', window.location.href+"#settings");}}>
         <Settings className={shared.headderIcon} />
       </button>
       {modalVisible && (
-        <div className={shared.popupOverlay} onClick={() => setModalVisible(false)}>
+        <div className={shared.popupOverlay} onClick={() => handleCloseModal()}>
           <div className={shared.popupContent} onClick={(e) => e.stopPropagation()}>
             {/* Close button */}
-            <button onClick={() => setModalVisible(false)} className={styles.popupCloseButton}><X /></button>
+            <button onClick={() => handleCloseModal()} className={styles.popupCloseButton}><X /></button>
             <h2 className={styles.popupTitle}>Settings</h2>
             <Tabs defaultValue="general" className={styles.popupTabs}>
               <TabsList className={styles.popupTabsList}>
@@ -147,7 +178,7 @@ export default function SettingsModal({}) {
                         <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("threebar", e)} checked={settings.threebar} className={styles.optionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
-                          <span>Bulletpoints with Codes</span>
+                          <span>Bulletpoints</span>
                           <p className={styles.popupOptionDescription}>Display the meal title in a bullet point format (popup)</p>
                         </label>
                         </div>
