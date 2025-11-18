@@ -2,8 +2,7 @@
 import { useEffect } from "react";
 import { useModalStore } from "@/app/utils/contextStore";
 
-export default function MealModalTrigger({ meal }) {
-
+export default function MealModalTrigger({ meal, fullIndex }) {
   const { openModal, isOpen } = useModalStore();
 
   useEffect(() => {
@@ -23,8 +22,9 @@ export default function MealModalTrigger({ meal }) {
     openModal(meal);
   };
 
+
   useEffect(() => {
-    const parent = document.querySelector(`[data-item-id="${meal.artikel_id}"]`);
+    const parent = document.querySelector(`[data-item-id="${fullIndex}"]`);
     if (!parent) return;
 
     const handleClick = () => {
@@ -35,6 +35,7 @@ export default function MealModalTrigger({ meal }) {
     return () => parent.removeEventListener('click', handleClick);
 
   }, [meal.artikel_id]);
+
 
   return null;
 }
