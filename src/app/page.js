@@ -76,7 +76,7 @@ export default async function Home() {
           <a href="/about" className={shared.footerLink}>About</a>
           <a href="https://github.com/Protonosgit/KlMensa3/issues" className={shared.footerLink}>Report issue</a>
           <a href="https://github.com/Protonosgit/KlMensa3" className={shared.footerLink}>Source</a>
-          <a href="/api/menudata" className={shared.footerLink}>Api</a>
+          <a href="/api/menudata" className={shared.footerLink}>Api V1</a>
         </div>
           <p>2025 mensa-kl v3 prototype 🐡Powered by Fachschaft Biologie<br/></p>
       </footer>

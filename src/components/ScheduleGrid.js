@@ -37,8 +37,6 @@ export default async function ScheduleGrid({settingsCookie}) {
   const menu = menuData?.slice(0, maxMealCount);
 
 
-
-
   // Check if menu data is available
   if (!menu || !menu?.length) {
     return (

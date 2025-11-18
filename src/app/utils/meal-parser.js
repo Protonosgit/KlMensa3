@@ -285,7 +285,6 @@ async function ParseMenu() {
         altType,
         additivesMap,
         murmurID,
-        sisterItem,
         price: priceRelationsLookup[obj.artgebname],
         menuekennztext: obj?.menuekennztext,
         dpartname: obj?.dpartname,
@@ -306,8 +305,8 @@ async function ParseMenu() {
       });
     }
 
-    // Filter out undefined values
-    // menuData = menuData.filter(item => Object.keys(item).every(key => item[key] !== undefined));
+    // remove undefined values from meals in the future here:
+    // menuData= menuData
 
     // Group by date
     const groupedByDate = Object.fromEntries(
@@ -346,8 +345,6 @@ async function ParseMenu() {
             meals: sortedMeals
         };
     });
-
-
 
   // Cache menu data
   cachedMenuData = parsedMenu;
