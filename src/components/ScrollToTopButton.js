@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ArrowUp } from "lucide-react";
-import styles from "./settings.module.css";
+import styles from "./SettingsModal.module.css";
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);

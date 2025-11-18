@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import shared from "@/styles/shared.module.css";
-import styles from "./details.module.css";
+import styles from "./DetailsModal.module.css";
 import { extractAdditives } from "@/app/utils/additives";
-import StarRating from "./starrating";
+import StarRating from "./Starrating";
 import { Badge } from "@/components/ui/badge"
 import { getCookie, setCookie } from "@/app/utils/client-system";
 import toast from "react-hot-toast";
@@ -23,9 +23,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useModalStore } from '@/app/utils/contextStore';
 // lazy-load upload box to avoid loading heavy code unless modal is open
-const UploadBox = dynamic(() => import("./uploadBox"), { ssr: false, loading: () => null });
+const UploadBox = dynamic(() => import("./UploadBox"), { ssr: false, loading: () => null });
 
-export default function MealPopup({ mealsFull }) {
+export default function MealModal({ mealsFull }) {
   const { isOpen, meal,openModal, closeModal } = useModalStore();
   const [showTooltip, setShowTooltip] = useState(false);
   const [user, setUser] = useState();

@@ -1,5 +1,5 @@
 "use client";
-import styles from "./settings.module.css";
+import styles from "./SettingsModal.module.css";
 import shared from "@/styles/shared.module.css"
 import { useEffect, useState } from "react";
 import { CatIcon, ImageIcon, MailIcon, Settings, StarIcon, X } from "lucide-react";

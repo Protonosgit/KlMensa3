@@ -1,14 +1,14 @@
 import styles from "./page.module.css";
 import shared from "@/styles/shared_page.module.css";
 
-import Schedule from '@/components/schedule';
+import Schedule from '@/components/ScheduleGrid';
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { InfoIcon } from "lucide-react";
 import { cookies } from 'next/headers';
 
-const DynamicSettingsModal = dynamic(() => import("@/components/settings"), { ssr: true });
-const DynamicFilterMenu = dynamic(() => import("@/components/filtermenu"), { ssr: true });
+const DynamicSettingsModal = dynamic(() => import("@/components/SettingsModal"), { ssr: true });
+const DynamicFilterMenu = dynamic(() => import("@/components/FilterPopup"), { ssr: true });
 const DynamicScrollToTopButton = dynamic(() => import("@/components/ScrollToTopButton"), { ssr: true });
 
 

@@ -27,7 +27,7 @@
 
 @keyframes fadeDown {
     from {
-        transform: translateX(30%);
+        transform: translateX(70%);
     }
 
     to {
