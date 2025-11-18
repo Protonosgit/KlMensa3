@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { fetchMenu } from '@/app/utils/schedule-parser';
+import ParseMenu from '@/app/utils/meal-parser';
 import styles from "../app/page.module.css";
 import { format } from 'date-fns';
 import Meal from './MealCard';
@@ -11,6 +11,7 @@ const DynamicMealPopup = dynamic(() => import("./DetailsModal"), { ssr: true });
 
 export default async function ScheduleGrid({settingsCookie}) {
   const cookieStore = await cookies();
+
 
   let locationFilter, proteinFilter, additiveFilter;
 
@@ -30,9 +31,12 @@ export default async function ScheduleGrid({settingsCookie}) {
     additiveFilter = JSON.parse(additiveFilterCookie.value);
   }
 
-  let menuData = await fetchMenu();
+
+  let menuData = await ParseMenu();
   const maxMealCount = settingsCookie?.nolimit ? undefined : 8;
   const menu = menuData?.slice(0, maxMealCount);
+
+
 
 
   // Check if menu data is available

@@ -69,6 +69,7 @@ export default function SettingsModal({}) {
       toast.error('Login failed!');
       window.history.pushState({}, '', window.location.pathname);
     }
+    // console.log("If you can read this you are good enough to contribute to the repo!");
   }, []);
 
     // Detect back gesture on Android, Windows and maybe ios and close modal if open
@@ -80,7 +81,7 @@ export default function SettingsModal({}) {
       };
   
       const handleEscapePress = (event) => {
-        if (event.key === 'Escape' && isOpen) {
+        if (event.key === 'Escape' && modalVisible) {
           setModalVisible(false);
           window.history.back();
         }
@@ -148,7 +149,7 @@ export default function SettingsModal({}) {
   return (
     <>
       {/* Button to open the settings modal */}
-      <button className={shared.headderButton} title="Settings and Account" onClick={() => {setModalVisible(true); window.history.pushState(null, '', window.location.href+"?modal=settings");}}>
+      <button className={shared.headderButton} title="Settings and Account" onClick={() => {setModalVisible(true); window.history.pushState(null, '', window.location.href+"#settings");}}>
         <Settings className={shared.headderIcon} />
       </button>
       {modalVisible && (
@@ -177,7 +178,7 @@ export default function SettingsModal({}) {
                         <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("threebar", e)} checked={settings.threebar} className={styles.optionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
-                          <span>Bulletpoints with Codes</span>
+                          <span>Bulletpoints</span>
                           <p className={styles.popupOptionDescription}>Display the meal title in a bullet point format (popup)</p>
                         </label>
                         </div>

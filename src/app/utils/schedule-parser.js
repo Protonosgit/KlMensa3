@@ -176,7 +176,6 @@ const murmur = require('murmurhash');
 //
 // Sort, truncate and add fields neccessary for the frontend to the raw mensa schedule
 async function parseMenu(menuData) {
-    const hashIdList = [];
 
     // Only return rptu mensa and robotic kitchen
     const locationFiltered = menuData.filter(item => item.ort_id === 310 || item.ort_id === 410);

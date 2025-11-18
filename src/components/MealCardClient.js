@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useModalStore } from "@/app/utils/contextStore";
 
+
 export default function MealModalTrigger({ meal, fullIndex }) {
   const { openModal, isOpen } = useModalStore();
 
