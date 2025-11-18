@@ -6,7 +6,7 @@ import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
 import MealModalTrigger from "./MealCardClient";
 
-export default function MealCard({ meal, mealIndex, settingsCookie }) {
+export default function MealCard({ meal, mealIndex, dayIndex, settingsCookie }) {
 
   //  star rating meal (non-interactive)
   const StaticStars = () => {
@@ -28,10 +28,10 @@ export default function MealCard({ meal, mealIndex, settingsCookie }) {
   // Render the meal card and popup
   return (
       <div
-        key={mealIndex}
+        key={mealIndex+''+dayIndex}
         data-layout={settingsCookie?.layout}
         className={styles.mealCard}
-        data-item-id={meal?.artikel_id}
+        data-item-id={mealIndex+''+dayIndex}
       >
           <Image
             priority
@@ -61,7 +61,7 @@ export default function MealCard({ meal, mealIndex, settingsCookie }) {
             <StaticStars />
           </div>
         </div>
-        <MealModalTrigger meal={meal}/>
+        <MealModalTrigger meal={meal} fullIndex={mealIndex+''+dayIndex}/>
       </div>
   );
 }

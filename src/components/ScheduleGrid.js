@@ -67,6 +67,7 @@ export default async function ScheduleGrid({settingsCookie}) {
                     key={mealIndex}
                     meal={meal}
                     mealIndex={mealIndex}
+                    dayIndex={dayIndex}
                     settingsCookie={settingsCookie}
                   />
                 );
