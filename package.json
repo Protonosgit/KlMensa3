@@ -17,6 +17,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "groq-sdk": "^0.35.0",
     "heic2any": "^0.0.4",
     "lucide-react": "^0.451.0",
     "murmurhash": "^2.0.1",
