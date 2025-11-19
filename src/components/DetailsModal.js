@@ -88,7 +88,7 @@ export default function MealModal({ mealsFull }) {
       if (bookmarksCookie) {
         try {
           const bookmarks = JSON.parse(bookmarksCookie);
-          setIsBookmarked(bookmarks.includes(meal?.artikel_id));
+          setIsBookmarked(bookmarks.includes(meal?.murmurID));
         } catch(e) {
       }
     }
@@ -110,7 +110,7 @@ export default function MealModal({ mealsFull }) {
       const urlParams = new URLSearchParams(window.location.search);
       const mealId = urlParams.get('artid');
       if (mealId) {
-        const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m?.artikel_id === mealId);
+        const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m?.murmurID === mealId);
         if (!foundmeal) {
           alert('Meal has expired!');
           window.location.replace('/');
@@ -170,8 +170,8 @@ export default function MealModal({ mealsFull }) {
     const cookieValue = getCookie("bookmarks");
     let bookmarks = [];
     try { bookmarks = cookieValue ? JSON.parse(cookieValue) : []; } catch(e) { bookmarks = []; }
-    const idx = bookmarks.indexOf(meal?.artikel_id);
-    if (idx !== -1) bookmarks.splice(idx, 1); else bookmarks.push(meal?.artikel_id);
+    const idx = bookmarks.indexOf(meal?.murmurID);
+    if (idx !== -1) bookmarks.splice(idx, 1); else bookmarks.push(meal?.murmurID);
     setCookie("bookmarks", JSON.stringify(bookmarks));
     setIsBookmarked(prev => !prev);
   }, [meal?.artikel_id, setCookie]);

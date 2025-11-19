@@ -3,7 +3,7 @@ import ParseMenu from '@/app/utils/meal-parser';
 import styles from "../app/page.module.css";
 import { format } from 'date-fns';
 import Meal from './MealCard';
-import { applyFilters } from '@/app/utils/filter.js';
+import { applyFilterList } from '@/app/utils/filter.js';
 import dynamic from "next/dynamic";
 
 const DynamicMealPopup = dynamic(() => import("./DetailsModal"), { ssr: true });
@@ -57,7 +57,7 @@ export default async function ScheduleGrid({settingsCookie}) {
             </div>
             <div
               className={styles.mealList}>
-              {applyFilters(
+              {applyFilterList(
                 locationFilter,
                 proteinFilter,
                 additiveFilter,
