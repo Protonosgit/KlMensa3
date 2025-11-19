@@ -199,6 +199,7 @@ export default function SettingsModal({}) {
                         </label>
                         </div>
 
+
                         <div className={shared.divider}></div>
 
                         <div className={styles.popupOption}>

@@ -19,7 +19,7 @@ export default function MealModalTrigger({ meal, fullIndex }) {
   // Open the meal popup and set url param for back gesture detection
   const requestOpenModal = () => {
     if(isOpen) return;
-    window.history.pushState(null, '', window.location.href+"?artid="+meal.artikel_id);
+    window.history.pushState(null, '', window.location.href+"?artid="+meal.murmurID);
     openModal(meal);
   };
 
@@ -35,7 +35,7 @@ export default function MealModalTrigger({ meal, fullIndex }) {
     parent.addEventListener('click', handleClick);
     return () => parent.removeEventListener('click', handleClick);
 
-  }, [meal.artikel_id]);
+  }, [meal.murmurID]);
 
 
   return null;
