@@ -219,8 +219,12 @@
     align-items: center;
     gap: 0.5rem;
   }
-  .additivesContext {
+  .sectionContext {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
     color: var(--subtitle-text);
+    align-items: center;
     font-weight: 500;
     font-size: 0.85rem;
   }
@@ -299,6 +303,35 @@
     font-weight: 500;
   }
 
+.nutritionTable {
+  width: 100%;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--subtitle-text);
+  border: 1px solid var(--darkbox-border);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.nutritionTable thead th,
+.nutritionTable tbody td {
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid var(--darkbox-border);
+}
+
+.nutritionTable thead th {
+  font-weight: 600;
+  color: var(--main-text);
+  background: var(--lightbox-bg);
+}
+
+/* remove bottom border on last row */
+.nutritionTable tbody tr:last-child td {
+  border-bottom: none;
+}
 
   /* Responsive Design */
   @media (max-width: 768px) {
@@ -335,6 +368,11 @@
   }
   .altDescription {
     font-weight: 500;
+    font-size: 0.9rem;
+  }
+  .nutritionTable thead th,
+  .nutritionTable tbody td {
+    padding: 0.4rem 0.5rem;
     font-size: 0.9rem;
   }
   }

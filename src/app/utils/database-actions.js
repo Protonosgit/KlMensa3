@@ -1,12 +1,26 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { neon } from '@neondatabase/serverless';
+const sql = neon(`${process.env.DATABASE_URL}`);
 
 export async function putRating(legacyId, stars) {
   return { error: "Not implemented", data: null };
 }
 
 export async function deleteRating(legacyId) {
+  return { error: "Not implemented", data: null };
+}
+
+export async function getNutritionForId(mumurId) {
+  try {
+    const data = await sql.query(
+      "SELECT * FROM nutrition WHERE a_id = $1",
+      [mumurId]
+    );
+    return { error: null, data };
+  } catch (e) {
+    console.error(e);
+  }
   return { error: "Not implemented", data: null };
 }
 
