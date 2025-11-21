@@ -1,30 +1,12 @@
+  
 .popupImageContainer {
-    position: relative;
-    overflow: hidden;
+  position: relative;
     /* position: sticky;
     top: 0;
     z-index: 2;
     background: var(--main-bg); */
-  }
-
-  /* dark gradient at bottom */
-.popupImageContainer::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 45%;
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,0) 0%,
-    rgba(0,0,0,0.4) 50%,
-    rgba(0,0,0,0.88) 100%
-  );
-  pointer-events: none;
-  z-index: 5;
 }
-
+  
   .popupImage {
     width: 100%;
     height: 400px;
@@ -32,18 +14,14 @@
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
   }
-
-  .popupImage:hover+.overlayLocationBar,
-  .popupImage:hover~.overlayActionsBar,
-  .popupImage:hover~.popupPriceRating {
-    opacity: 0.25;
+  
+  .popupImage:active + .overlayLocationBar {
+    opacity: 0.3;
   }
-
-  .popupImageContainer:hover::after {
-    background: none;
+  .popupImage:active ~ .overlayActionsBar {
+    opacity: 0.3;
   }
-
-
+  
   .overlayActionsBar {
     position: absolute;
     top: 15px;
@@ -52,7 +30,6 @@
     gap: 0.5rem;
     z-index: 10;
   }
-
   .overlayLocationBar {
     position: absolute;
     top: 15px;
@@ -76,18 +53,17 @@
     border: var(--darkmode-border);
     box-shadow: var(--lightmode-shadow);
   }
-
+  
   .greenIcon {
     width: 1.2rem;
     height: 1.2rem;
     color: var(--tertiary-color);
   }
-
   .otherIcon {
     width: 1.2rem;
     height: 1.2rem
   }
-
+  
   .popupActionButton {
     background-color: var(--lightbox-bg);
     border-radius: 50%;
@@ -110,14 +86,13 @@
     fill: var(--bookmark-bg);
     color: var(--bookmark-bg);
   }
-
   .popupDetails {
     padding: 0.8rem 1.2rem;
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
   }
-
+  
   .popupTitle {
     font-size: 1.5rem;
     font-weight: 700;
@@ -137,7 +112,6 @@
     from {
       text-decoration-thickness: 4px;
     }
-
     to {
       text-decoration-thickness: 6px;
     }
@@ -158,22 +132,15 @@
     justify-content: space-between;
     align-items: center;
   }
-
+  
   .popupPriceRating {
-    position: absolute;
-    bottom: 0.2rem;
     display: flex;
-    width: 100%;
     justify-content: space-between;
     align-items: center;
-    padding-inline: 0.8rem;
-    color: white;
-    z-index: 6;
-  
   }
-
+  
   .popupPrice {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: var(--secondary-color);
   }
@@ -189,55 +156,53 @@
     display: flex;
     align-items: center;
   }
+  
+.star-rating {
+  display: flex;
+  gap: 5px;
+}
+
+.star {
+  color: var(--blankstar-color);
+  cursor: pointer;
+  transition: color 0.4s;
+}
+
+.star-rating.disabled .star {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.star.predefined {
+  color: var(--primary-color);
+  fill: var(--primary-color);
+}
+
+.star.active {
+  color: var(--main-text);
+  animation: highlight 0.4s ease-in-out;
+}
+
+@keyframes highlight {
+  0% {
+    color: var(--blankstar-color);
+    scale: 1;
+  }
+  50% {
+    color: var(--main-text);
+    scale: 1.2;
+  }
+  100% {
+    color: var(--main-text);
+    scale: 1;
+  }
+}
+
 
   .ratingCount {
     margin-left: 0.25rem;
-    font-size: 0.85rem;
-  }
-
-  .star-rating {
-    display: flex;
-    gap: 5px;
-  }
-
-  .star {
-    color: var(--blankstar-color);
-    cursor: pointer;
-    transition: color 0.4s;
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .star-rating.disabled .star {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .star.predefined {
-    color: var(--primary-color);
-    fill: var(--primary-color);
-  }
-
-  .star.active {
-    color: var(--main-text);
-    animation: highlight 0.4s ease-in-out;
-  }
-
-  @keyframes highlight {
-    0% {
-      color: var(--blankstar-color);
-      scale: 1;
-    }
-
-    50% {
-      color: var(--main-text);
-      scale: 1.2;
-    }
-
-    100% {
-      color: var(--main-text);
-      scale: 1;
-    }
+    font-size: 0.875rem;
+    color: var(--subtitle-text);
   }
 
   .additivesSection {
@@ -245,7 +210,6 @@
     flex-direction: column;
     gap: 0.5rem;
   }
-
   .sectionTitle {
     font-size: 1rem;
     font-weight: 600;
@@ -255,13 +219,12 @@
     align-items: center;
     gap: 0.5rem;
   }
-
   .additivesContext {
     color: var(--subtitle-text);
     font-weight: 500;
     font-size: 0.85rem;
   }
-
+  
   .dietaryTag {
     background-color: var(--darkbox-bg);
     color: var(--subtitle-text);
@@ -272,7 +235,6 @@
     cursor: pointer;
     border: 1px solid var(--darkbox-border);
   }
-
   .dietaryTag:hover {
     border: 1px solid var(--primary-color);
   }
@@ -289,19 +251,16 @@
     background-color: var(--greenbox-bg);
     cursor: pointer;
   }
-
   .altTitle {
     color: var(--greentext-color);
     font-size: 1.2rem;
     font-weight: 600;
   }
-
   .altDescription {
     color: var(--greentext-color);
     font-weight: 500;
     font-size: 1rem;
   }
-
   .altIcon {
     color: var(--greentext-color);
     animation: scaleBounce 0.75s ease-out;
@@ -309,7 +268,6 @@
     height: 2rem;
     display: inline-block;
   }
-
   .swapIcon {
     color: var(--greentext-color);
     position: absolute;
@@ -322,24 +280,16 @@
   }
 
   @keyframes scaleBounce {
-
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
+    0%, 20%, 50%, 80%, 100% {
       transform: scale(1);
     }
-
     40% {
       transform: scale(1.1);
     }
-
     60% {
       transform: scale(0.9);
     }
   }
-
   .infoText {
     display: flex;
     flex-direction: row;
@@ -351,61 +301,48 @@
 
 
   /* Responsive Design */
-    @media (max-width: 768px) {
-      .popupImage {
-        height: 280px;
-        border-radius: 0;
-      }
-  
-      .popupTitle {
-        font-size: 1.2rem;
-      }
-  
-      .popupLocation {
-        font-size: 1rem;
-      }
-  
-      .popupPrice {
-        font-size: 1.6rem;
-      }
-  
-      .star {
-        width: 1.3rem;
-        height: 1.3rem;
-      }
-  
-      .popupDetails {
-        padding: 0.8rem 0.8rem;
-      }
-  
-      .overlayLocationBar {
-        position: fixed;
-      }
-  
-      .overlayActionsBar {
-        position: fixed;
-      }
-  
-      .popupLocation {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.85rem;
-      }
-  
-      .altTitle {
-        font-size: 1rem;
-        font-weight: 600;
-      }
-  
-      .altDescription {
-        font-weight: 500;
-        font-size: 0.9rem;
-      }
+  @media (max-width: 768px) {
+    .popupImage {
+    height: 280px;
+    border-radius: 0;
     }
+    .popupTitle {
+      font-size: 1.2rem;
+    }
+    .popupLocation {
+      font-size: 1rem;
+    }
+    .popupPrice {
+      font-size: 1.6rem;
+    }
+
+  .popupDetails {
+    padding: 0.8rem 0.8rem;
+  }
+  .overlayLocationBar {
+    position: fixed;
+  }
+  .overlayActionsBar {
+    position: fixed;
+  }
+  .popupLocation {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  .altTitle {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .altDescription {
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  }
 
   @media (min-width: 769px) and (max-width: 1024px) {
     .popupImage {
-      height: 300px;
-      border-radius: 0;
+    height: 300px;
+    border-radius: 0;
     }
 
   }
