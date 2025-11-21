@@ -1,7 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { neon } from '@neondatabase/serverless';
-const sql = neon(`${process.env.DATABASE_URL}`);
 
 export async function putRating(legacyId, stars) {
   return { error: "Not implemented", data: null };
@@ -12,6 +11,7 @@ export async function deleteRating(legacyId) {
 }
 
 export async function getNutritionForId(mumurId) {
+  const sql = neon(`${process.env.DATABASE_URL}`);
   try {
     const data = await sql.query(
       "SELECT * FROM nutrition WHERE a_id = $1",
