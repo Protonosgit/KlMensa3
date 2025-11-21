@@ -1,0 +1,6 @@
+{
+  "crons": [{
+    "path": "/api/ai-nutritions",
+    "schedule": "0 10 * * *"
+  }]
+}
