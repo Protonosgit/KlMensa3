@@ -1,10 +1,6 @@
 {
   "crons": [{
     "path": "/api/ai-nutritions",
-    "schedule": "0 2,11 * * *"
-  },
-  {
-    "path": "/api/notification",
-    "schedule": "0 9,10,11,12 * * 1-5"
+    "schedule": "0 10 * * *"
   }]
 }
