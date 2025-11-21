@@ -1,32 +1,55 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import shared from "@/styles/shared.module.css";
 import styles from "./DetailsModal.module.css";
 import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./Starrating";
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 import { getCookie, setCookie } from "@/app/utils/client-system";
 import toast from "react-hot-toast";
-import { ArrowDownUp, Bookmark, Bot, Clock10Icon, EllipsisVertical, FlagIcon, InfoIcon,  Leaf,  SaladIcon,  Scale,  Share2Icon, SoupIcon, StarOff } from "lucide-react";
-import  VeganIcon from "../../public/icons/VeganIcon.svg";
+import {
+  ArrowDownUp,
+  Bookmark,
+  Bot,
+  Clock10Icon,
+  EllipsisVertical,
+  FlagIcon,
+  InfoIcon,
+  Leaf,
+  SaladIcon,
+  Scale,
+  Share2Icon,
+  SoupIcon,
+  StarOff,
+} from "lucide-react";
+import VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
-import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
+import VeganOpIcon from "../../public/icons/VeganOpIcon.svg";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { useModalStore } from '@/app/utils/contextStore';
+} from "@/components/ui/dropdown-menu";
+import { useModalStore } from "@/app/utils/contextStore";
 // lazy-load upload box to avoid loading heavy code unless modal is open
-const UploadBox = dynamic(() => import("./UploadBox"), { ssr: false, loading: () => null });
+const UploadBox = dynamic(() => import("./UploadBox"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function MealModal({ mealsFull }) {
-  const { isOpen, meal,openModal, closeModal } = useModalStore();
+  const { isOpen, meal, openModal, closeModal } = useModalStore();
   const [showTooltip, setShowTooltip] = useState(false);
   const [user, setUser] = useState();
   const [settings, setSettings] = useState();
@@ -41,7 +64,7 @@ export default function MealModal({ mealsFull }) {
   const requestCloseModal = () => {
     closeModal();
     window.history.back();
-  }
+  };
 
   // Detect back gesture on Android, Windows and maybe ios and close modal if open
   useEffect(() => {
@@ -52,97 +75,104 @@ export default function MealModal({ mealsFull }) {
     };
 
     const handleEscapePress = (event) => {
-      if (event.key === 'Escape' && isOpen) {
+      if (event.key === "Escape" && isOpen) {
         closeModal();
         window.history.back();
       }
     };
 
-    document.addEventListener('keydown', handleEscapePress);
-    window.addEventListener('popstate', handlePopState);
+    document.addEventListener("keydown", handleEscapePress);
+    window.addEventListener("popstate", handlePopState);
 
     return () => {
-      window.removeEventListener('popstate', handlePopState);
-      document.removeEventListener('keydown', handleEscapePress);
+      window.removeEventListener("popstate", handlePopState);
+      document.removeEventListener("keydown", handleEscapePress);
     };
-
   }, [isOpen]);
 
-
   //settings and userdata
-    const computedAdditives = useMemo(() => extractAdditives(meal?.zsnumnamen), [meal?.zsnumnamen]);
+  const computedAdditives = useMemo(
+    () => extractAdditives(meal?.zsnumnamen),
+    [meal?.zsnumnamen]
+  );
 
-    useEffect(() => {
-      setSelectedAdditive("");
-      const settingsCookie = getCookie('settings') || null;
-      if (settingsCookie) {
-        try {
-          const parsed = JSON.parse(settingsCookie);
-          if (JSON.stringify(parsed) !== JSON.stringify(settings)) setSettings(parsed);
-        } catch (e) {  }
-      }
-
-      setSelectedVariant(0);
-
-      const bookmarksCookie = getCookie("bookmarks");
-      if (bookmarksCookie) {
-        try {
-          const bookmarks = JSON.parse(bookmarksCookie);
-          setIsBookmarked(bookmarks.includes(meal?.murmurID));
-        } catch(e) {
-      }
+  useEffect(() => {
+    setSelectedAdditive("");
+    const settingsCookie = getCookie("settings") || null;
+    if (settingsCookie) {
+      try {
+        const parsed = JSON.parse(settingsCookie);
+        if (JSON.stringify(parsed) !== JSON.stringify(settings))
+          setSettings(parsed);
+      } catch (e) {}
     }
 
-      if (user) {
-        setSubmittedRating(ownedRatings.current.find(r => r.lId === meal?.legacyId)?.rating || 0);
+    setSelectedVariant(0);
+
+    const bookmarksCookie = getCookie("bookmarks");
+    if (bookmarksCookie) {
+      try {
+        const bookmarks = JSON.parse(bookmarksCookie);
+        setIsBookmarked(bookmarks.includes(meal?.murmurID));
+      } catch (e) {}
+    }
+
+    if (user) {
+      setSubmittedRating(
+        ownedRatings.current.find((r) => r.lId === meal?.legacyId)?.rating || 0
+      );
+    }
+
+    return () => {
+      if (tooltipTimer.current) {
+        clearTimeout(tooltipTimer.current);
+        tooltipTimer.current = null;
+        setShowTooltip(false);
       }
+    };
+  }, [meal, mealsFull, computedAdditives, user]);
 
-      return () => {
-        if (tooltipTimer.current) {
-          clearTimeout(tooltipTimer.current);
-          tooltipTimer.current = null;
-          setShowTooltip(false);
-        }
-      };
-    }, [meal, mealsFull, computedAdditives, user]);
-
-    useEffect(() => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const mealId = urlParams.get('artid');
-      if (mealId) {
-        const foundmeal = mealsFull?.flatMap(m => m.meals).find(m => m?.murmurID === mealId);
-        if (!foundmeal) {
-          alert('Meal has expired!');
-          window.location.replace('/');
-          return;
-        }
-        openModal(foundmeal);
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mealId = urlParams.get("artid");
+    if (mealId) {
+      const foundmeal = mealsFull
+        ?.flatMap((m) => m.meals)
+        .find((m) => m?.murmurID === mealId);
+      if (!foundmeal) {
+        alert("Meal has expired!");
+        window.location.replace("/");
+        return;
       }
+      openModal(foundmeal);
+    }
 
-      async function fetchUserData() {
-      }
-      fetchUserData();
+    async function fetchUserData() {}
+    fetchUserData();
 
-      return () => { mounted.current = false; }
-    }, []);
-    
-
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   // Handle publish / update comment
-  const handleSubmitRating = useCallback(async (rating) => {
-    if (!meal?.legacyId) return;
-    const previous = submittedRating;
-    setSubmittedRating(rating);
-    try {
-      // if your putRating supports AbortController, pass one; otherwise await and handle errors
-      await putRating(meal.legacyId, rating);
-      toast.success("Rating saved");
-    } catch (err) {
-      setSubmittedRating(previous);
-      toast.error("Failed to save rating");
-      console.error(err);
-    }
-  }, [meal?.legacyId, submittedRating]);
+  const handleSubmitRating = useCallback(
+    async (rating) => {
+      if (!meal?.legacyId) return;
+      const previous = submittedRating;
+      setSubmittedRating(rating);
+      try {
+        // if your putRating supports AbortController, pass one; otherwise await and handle errors
+        await putRating(meal.legacyId, rating);
+        toast.success("Rating saved");
+      } catch (err) {
+        setSubmittedRating(previous);
+        toast.error("Failed to save rating");
+        console.error(err);
+      }
+    },
+    [meal?.legacyId, submittedRating]
+  );
 
   // Handle delete comment
   const handleDeleteRating = useCallback(async () => {
@@ -165,37 +195,64 @@ export default function MealModal({ mealsFull }) {
   }
 
   // Handle bookmark
-  const handleBookmark = useCallback((e) => {
-    e?.preventDefault();
-    const cookieValue = getCookie("bookmarks");
-    let bookmarks = [];
-    try { bookmarks = cookieValue ? JSON.parse(cookieValue) : []; } catch(e) { bookmarks = []; }
-    const idx = bookmarks.indexOf(meal?.murmurID);
-    if (idx !== -1) bookmarks.splice(idx, 1); else bookmarks.push(meal?.murmurID);
-    setCookie("bookmarks", JSON.stringify(bookmarks));
-    setIsBookmarked(prev => !prev);
-  }, [meal?.artikel_id, setCookie]);
-
-
+  const handleBookmark = useCallback(
+    (e) => {
+      e?.preventDefault();
+      const cookieValue = getCookie("bookmarks");
+      let bookmarks = [];
+      try {
+        bookmarks = cookieValue ? JSON.parse(cookieValue) : [];
+      } catch (e) {
+        bookmarks = [];
+      }
+      const idx = bookmarks.indexOf(meal?.murmurID);
+      if (idx !== -1) bookmarks.splice(idx, 1);
+      else bookmarks.push(meal?.murmurID);
+      setCookie("bookmarks", JSON.stringify(bookmarks));
+      setIsBookmarked((prev) => !prev);
+    },
+    [meal?.artikel_id, setCookie]
+  );
 
   // Render the meal title based on settings.
   const MealTitle = () => {
-
-    console.log(meal);
-
-    if(settings?.threebar) return (
-      <ul className={styles.popupTitleBullets} >
-        {meal?.title?.map((titlepart, index) => <li key={index} className={meal?.additivesMap[index]?.includes(selectedAdditive) ? styles.highlighted : undefined}>{titlepart.trim().replace(", ", '')}</li>)}
-      </ul>);
+    if (settings?.threebar)
+      return (
+        <ul className={styles.popupTitleBullets}>
+          {meal?.title?.map((titlepart, index) => (
+            <li
+              key={index}
+              className={
+                meal?.additivesMap[index]?.includes(selectedAdditive)
+                  ? styles.highlighted
+                  : undefined
+              }
+            >
+              {titlepart.trim().replace(", ", "")}
+            </li>
+          ))}
+        </ul>
+      );
 
     return (
-      <h2 className={styles.popupTitle} >
-        {meal?.title?.map((titlepart, index) =>  <span className={meal?.additivesMap[index]?.includes(selectedAdditive) ? styles.highlighted : undefined} key={index}>{titlepart}</span>)}
-      </h2>);
-  }
+      <h2 className={styles.popupTitle}>
+        {meal?.title?.map((titlepart, index) => (
+          <span
+            className={
+              meal?.additivesMap[index]?.includes(selectedAdditive)
+                ? styles.highlighted
+                : undefined
+            }
+            key={index}
+          >
+            {titlepart}
+          </span>
+        ))}
+      </h2>
+    );
+  };
 
-  if(!meal || !isOpen) return null;
-
+  if (!meal || !isOpen) return null;
 
   return (
     <div title="" className={shared.popupOverlay} onClick={requestCloseModal}>
@@ -215,13 +272,23 @@ export default function MealModal({ mealsFull }) {
               img.dataset.fallbackApplied = "1";
               img.src = "/plate_placeholder.png";
             }}
-            src={selectedVariant == 0 ? meal?.image ? meal?.imageUrl : "/plate_placeholder.png" : meal?.altImage ? meal?.altImageUrl : "/plate_placeholder.png"}
+            src={
+              selectedVariant == 0
+                ? meal?.image
+                  ? meal?.imageUrl
+                  : "/plate_placeholder.png"
+                : meal?.altImage
+                ? meal?.altImageUrl
+                : "/plate_placeholder.png"
+            }
             title={meal?.title[0]}
             alt="dish-image"
             className={styles.popupImage}
-            width={640} height={310}
+            width={640}
+            height={310}
           />
 
+          {/* Render overlay bars */}
           <div className={styles.overlayLocationBar}>
             <p title="Location" className={styles.popupLocation}>
               {meal.dpartname}
@@ -316,16 +383,9 @@ export default function MealModal({ mealsFull }) {
               ×
             </button>
           </div>
-        </div>
-
-        {/* Render meal details, comments and action buttons */}
-        <div className={styles.popupDetails}>
-          <MealTitle />
+          {/* Render rating and price */}
 
           <div className={styles.popupPriceRating}>
-            <span title="Price" className={styles.popupPrice}>
-              {meal?.price?.stu || meal?.price?.price}
-            </span>
             <div className={styles.popupRating}>
               <div
                 className={shared.tooltipWrapper}
@@ -359,7 +419,15 @@ export default function MealModal({ mealsFull }) {
                 )
               </span>
             </div>
+            <span title="Price" className={styles.popupPrice}>
+              {meal?.price?.stu || meal?.price?.price}
+            </span>
           </div>
+        </div>
+
+        {/* Render meal details, comments and action buttons */}
+        <div className={styles.popupDetails}>
+          <MealTitle />
 
           {/* Alternative options */}
           {meal.altOption && (
@@ -369,7 +437,9 @@ export default function MealModal({ mealsFull }) {
                 setSelectedVariant(selectedVariant === 0 ? 1 : 0);
               }}
             >
-              {meal.altType === 1 && <VeggieOpIcon className={styles.altIcon} />}
+              {meal.altType === 1 && (
+                <VeggieOpIcon className={styles.altIcon} />
+              )}
               {meal.altType === 2 && <VeganOpIcon className={styles.altIcon} />}
               <div>
                 <p className={styles.altTitle}>
