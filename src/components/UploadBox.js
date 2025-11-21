@@ -94,7 +94,6 @@ export default function UploadBox({ mealId }) {
       if (res.ok) {
         toast.dismiss();
         toast.success("Image submitted!");
-        console.log(res);
         setFile(null);
         setFileInfo(null);
       } else {
