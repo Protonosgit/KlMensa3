@@ -12,7 +12,7 @@ const groq = new Groq({
 
 
 export async function GET( req, res ) {
-  const sql = neon(`${process.env.DATABASE_URL}`);
+  const sql = neon(`${process.env.NEON_DATABASE_URL_UNPOOLED}`);
     if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}` && process.env.NEXT_PUBLIC_CURRENT_DOMAIN !== "http://localhost:3000") {
         return NextResponse.json({ "error": "Unauthorized" }, { status: 401 });
     }

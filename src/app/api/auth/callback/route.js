@@ -30,7 +30,7 @@ export async function GET(request) {
 
   // Insert user into neon db
   // try {
-  // const sql = neon(`${process.env.DATABASE_URLF}`);
+  // const sql = neon(`${process.env.NEON_DATABASE_URL_UNPOOLED}`);
   // const reqCheck = await sql.query(
   //   'INSERT INTO public.users (email, metadata) SELECT $1::varchar, $2::jsonb WHERE NOT EXISTS (SELECT 1 FROM public.users WHERE email = $1::varchar)',
   //   ['dummy@example.com', JSON.stringify({test: "nuululu"})]

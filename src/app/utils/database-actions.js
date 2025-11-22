@@ -11,7 +11,7 @@ export async function deleteRating(legacyId) {
 }
 
 export async function getNutritionForId(mumurId) {
-  const sql = neon(`${process.env.DATABASE_URL}`);
+  const sql = neon(`${process.env.NEON_DATABASE_URL_UNPOOLED}`);
   try {
     const data = await sql.query(
       "SELECT * FROM nutrition WHERE a_id = $1",
