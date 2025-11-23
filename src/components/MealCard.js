@@ -6,7 +6,7 @@ import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
 import MealModalTrigger from "./MealCardClient";
 
-export default function MealCard({ meal, mealIndex, dayIndex, settingsCookie }) {
+export default async function MealCard({ meal, mealIndex, dayIndex, settingsCookie }) {
 
   //  star rating meal (non-interactive)
   const StaticStars = () => {
@@ -29,7 +29,6 @@ export default function MealCard({ meal, mealIndex, dayIndex, settingsCookie }) 
   return (
       <div
         key={mealIndex+''+dayIndex}
-        data-layout={settingsCookie?.layout}
         className={styles.mealCard}
         data-item-id={mealIndex+''+dayIndex}
       >
