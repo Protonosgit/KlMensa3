@@ -9,31 +9,23 @@ import dynamic from "next/dynamic";
 const DynamicMealPopup = dynamic(() => import("./DetailsModal"), { ssr: true });
 
 
-export default async function ScheduleGrid({settingsCookie}) {
+export default async function ScheduleGrid({}) {
   const cookieStore = await cookies();
 
 
-  let locationFilter, proteinFilter, additiveFilter;
-
   //Read cookies
-  const locationFilterCookie = cookieStore.get("location") || null;
-  const proteinFilterCookie = cookieStore.get("protein") || null;
-  const additiveFilterCookie = cookieStore.get("additive") || null;
-
-  //Parse cookies
-  if (locationFilterCookie?.value) {
-    locationFilter = JSON.parse(locationFilterCookie.value);
-  }
-  if (proteinFilterCookie?.value) {
-    proteinFilter = JSON.parse(proteinFilterCookie.value);
-  }
-  if (additiveFilterCookie?.value) {
-    additiveFilter = JSON.parse(additiveFilterCookie.value);
-  }
+  const locationFilterCookie = cookieStore.get('location')
+  const locationFilter = locationFilterCookie?.value ? JSON.parse(locationFilterCookie.value) : null
+  const proteinFilterCookie = cookieStore.get('protein')
+  const proteinFilter = proteinFilterCookie?.value ? JSON.parse(proteinFilterCookie.value) : null
+  const additiveFilterCookie = cookieStore.get('additive')
+  const additiveFilter = additiveFilterCookie?.value ? JSON.parse(additiveFilterCookie.value) : null
+  const settingsCookie = cookieStore.get('settings')
+  const settings = settingsCookie?.value ? JSON.parse(settingsCookie.value) : null
 
 
   let menuData = await ParseMenu();
-  const maxMealCount = settingsCookie?.nolimit ? undefined : 8;
+  const maxMealCount = settings?.nolimit ? undefined : 8;
   const menu = menuData?.slice(0, maxMealCount);
 
 
@@ -70,7 +62,7 @@ export default async function ScheduleGrid({settingsCookie}) {
                     meal={meal}
                     mealIndex={mealIndex}
                     dayIndex={dayIndex}
-                    settingsCookie={settingsCookie}
+                    settingsCookie={settings}
                   />
                 );
               })}

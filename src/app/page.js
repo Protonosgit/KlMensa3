@@ -4,24 +4,13 @@ import Schedule from '@/components/ScheduleGrid';
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { InfoIcon } from "lucide-react";
-import { cookies } from 'next/headers';
 
 const DynamicSettingsModal = dynamic(() => import("@/components/SettingsModal"), { ssr: true });
 const DynamicFilterMenu = dynamic(() => import("@/components/FilterPopup"), { ssr: true });
 const DynamicScrollToTopButton = dynamic(() => import("@/components/ScrollToTopButton"), { ssr: true });
 
 
-async function retrieveCookies() {
-  const cookieStore = await cookies();
-  const settingsCookie = cookieStore.get("settings") || null;
-  if (settingsCookie?.value) {
-    return JSON.parse(settingsCookie.value);
-  }
-  return null;
-}
-
 export default async function Home() {
-  const settings = await retrieveCookies(); // <-- resolve here
 
   // Skeleton loading animation
     const SkeletonLoading = () => (
@@ -63,7 +52,7 @@ export default async function Home() {
           <DynamicFilterMenu/>
         </div>
         <Suspense fallback={<SkeletonLoading />}>
-          <Schedule settingsCookie={settings}/>
+          <Schedule/>
         </Suspense>
       </main>
       <footer className={shared.footer}>

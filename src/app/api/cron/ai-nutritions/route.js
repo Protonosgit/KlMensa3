@@ -16,7 +16,7 @@ export async function GET( req, res ) {
     if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}` && process.env.NEXT_PUBLIC_CURRENT_DOMAIN !== "http://localhost:3000") {
         return NextResponse.json({ "error": "Unauthorized" }, { status: 401 });
     }
-    const rawmenu = (await ParseMenu()).slice(0,1);
+    const rawmenu = (await ParseMenu()).slice(0,2);
     //
     // Here objects should be filtered out which have a nutrition set present
     //
