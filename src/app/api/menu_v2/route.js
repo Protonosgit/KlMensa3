@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { fetchMenu } from '@/app/utils/schedule-parser';
+import ParseMenu from '@/app/utils/meal-parser';
 
 export async function GET(req, res) {
 
   try {
-    const menu = await fetchMenu();
+    const menu = await ParseMenu();
 
     if (!menu || !menu?.length) {
       return NextResponse.json({ message: 'Error fetching data' });

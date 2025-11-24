@@ -103,14 +103,15 @@ function isToday(timestamp) {
 }
 
 function removeUnwantedStrings(target, strings) {
-  return target.map(s => strings.reduce((acc, cur) => acc.replace(cur, ""), s));
-}
-function detectMealVariations(target, strings) {
-  return target.filter(s => strings.some(cur => s.includes(cur)));
+  return target.map(s => strings.reduce((acc, cur) => acc.replace(cur, "@&@"), s));
 }
 
 function stripAdditivesFromArray(target) {
-  return target.map(s => s.replace(/\s*\([0-9A-Za-zÄäÖöÜüß.,\/\-\s]+\)\s*$/g, "").trim());
+  return target.map(s =>
+    s.replace(/\s*\(([0-9A-Za-zÄäÖöÜüß.,\/\-\s]+)\)\s*$/g, (match, inside) =>
+      inside.includes("@&@") ? match : ""
+    ).replace("@&@", "")
+  );
 }
 function extractAdditivesAsArray(target) {
   const regex = /\(([^)]+)\)/g;
@@ -128,6 +129,34 @@ function extractAdditivesAsArray(target) {
     }
     return additives;
   });
+}
+
+function splitNormalAndVariant(aTitleList) {
+  const variantIList = [];
+
+  const normList = [];
+  const variList = [];
+
+  // locate the index of strings which contain a meal variant
+  for (let i = 0; i < aTitleList.length; i++) {
+    const element = aTitleList[i];
+    taggedStrings.some(tag => element.includes(tag)) ? variantIList.push(i) : null;
+  }
+
+    //Split the list
+  for (let i = 0; i < aTitleList.length; i++) {
+    // to regular
+    if(!variantIList.includes(i)) {
+      normList.push(aTitleList[i]);
+    }
+    // and variant
+    if(variantIList.includes(i) || !variantIList.includes(i + 1)) {
+      variList.push(aTitleList[i]);
+    }
+
+  }
+
+  return [normList, variList];
 }
 
 function detectAltVariant(target) {
@@ -193,31 +222,7 @@ async function ParseMenu() {
     for (let i = 0; i < lfStudiApi.length; i++) {
       const obj = lfStudiApi[i];
 
-      // this is fast
-      const mergedTitleList = [
-        obj.atextohnezsz1,
-        obj.atextohnezsz2
-          ? (obj.atextohnezsz2.startsWith(",") ? "" : " ") + obj.atextohnezsz2
-          : "",
-        obj.atextohnezsz3
-          ? (obj.atextohnezsz3.startsWith(",") ? "" : " ") + obj.atextohnezsz3
-          : "",
-        obj.atextohnezsz4
-          ? (obj.atextohnezsz4.startsWith(",") ? "" : " ") + obj.atextohnezsz4
-          : "",
-        obj.atextohnezsz5
-          ? (obj.atextohnezsz5.startsWith(",") ? "" : " ") + obj.atextohnezsz5
-          : "",
-        obj.atextohnezsz6
-          ? (obj.atextohnezsz6.startsWith(",") ? "" : " ") + obj.atextohnezsz6
-          : "",
-        obj.atextohnezsz7
-          ? (obj.atextohnezsz7.startsWith(",") ? "" : " ") + obj.atextohnezsz7
-          : "",
-        obj.atextohnezsz8
-          ? (obj.atextohnezsz8.startsWith(",") ? "" : " ") + obj.atextohnezsz8
-          : "",
-      ].filter(Boolean);
+      // this is fast but ugly
 
       const mergedATitleList = [
         obj.atextz1,
@@ -244,6 +249,7 @@ async function ParseMenu() {
           : "",
       ].filter(Boolean);
 
+
       const mergedFreitextList = [
         obj?.frei1,
         obj?.frei2
@@ -267,30 +273,39 @@ async function ParseMenu() {
             mergedATitleList[7]
         ).toString(16).substring(0, 8);
 
-      // Create usable title array
-      const title = removeUnwantedStrings(mergedTitleList, taggedStrings);
+      // Detect which type of variant the meal is (vegan, veggi)
+      const altType = detectAltVariant(mergedATitleList);
 
-      // Create usable alt shortile
-      const altOption = removeUnwantedStrings(
-        detectMealVariations(stripAdditivesFromArray(mergedATitleList),taggedStrings), taggedStrings).flatMap((s) => s.slice(1, -1)).join("").trim();
+      // perform title split
+      const splitTitles = splitNormalAndVariant(mergedATitleList);
+
+      // Create usable title array
+      const titleRegTmp = splitTitles[0];
+      const titleReg = stripAdditivesFromArray(titleRegTmp);
+
+      // Create usable alt title array
+      const titleAltTmp = removeUnwantedStrings(splitTitles[1], taggedStrings);
+      const titleAlt = stripAdditivesFromArray(titleAltTmp);
+
 
       // Create usable additives list synced with the title
-      const additivesMap = extractAdditivesAsArray(mergedATitleList);
+      const titleRegAdditives = extractAdditivesAsArray(titleRegTmp);
+      const titleAltAdditives = extractAdditivesAsArray(titleAltTmp);
 
       // Identify sibling in other dataset
-      const matchKey = title.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
+      const matchKey = titleReg.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
       const sisterItem = rawLegacyApi.find((item) => item.title.replace(/&quot;/g, "").toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
       const brotherItem = rawLegacyApi.find(option => option?.loc === sisterItem?.loc && option?.date === sisterItem?.date && option?.m_id !== sisterItem?.m_id);
 
-      const altType = detectAltVariant(mergedATitleList);
-
       menuData.push({
         date: obj?.proddatum,
-        title,
-        altOption,
-        altType,
-        additivesMap,
         murmurID,
+        titleReg,
+        titleAlt,
+        altType,
+        titleRegAdditives,
+        titleAltAdditives,
+        mergedFreitextList,
         price: priceRelationsLookup[obj.artgebname],
         menuekennztext: obj?.menuekennztext,
         dpartname: obj?.dpartname,
@@ -298,7 +313,6 @@ async function ParseMenu() {
         zsnumnamen: obj?.zsnumnamen,
         zsnummern: obj?.zsnummern,
         dispoart_id: obj?.dispoart_id,
-        mergedFreitextList,
         legacyId:sisterItem?.m_id,
         rating: sisterItem?.rating,
         rating_amt: sisterItem?.rating_amt,
@@ -322,9 +336,11 @@ async function ParseMenu() {
       }, new Map())
     );
 
+
     const sortedGroupedByDate = Object.fromEntries(
         Object.entries(groupedByDate).sort(([a], [b]) => new Date(a) - new Date(b))
     );
+
 
     // Check if cutoff time has been reached and the slice todays date
     const today = new Date().toISOString().split('T')[0];
@@ -334,6 +350,7 @@ async function ParseMenu() {
     const cutGroupedByDate = (firstKey === today) && (currentTime > cutoffTime)
         ? Object.fromEntries(Object.entries(sortedGroupedByDate).slice(1))
         : sortedGroupedByDate;
+    
     
 
     const parsedMenu = Object.entries(cutGroupedByDate).map(([date, items]) => {
