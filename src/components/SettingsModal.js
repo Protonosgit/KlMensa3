@@ -36,9 +36,11 @@ export default function SettingsModal({}) {
   useEffect(() => {
     // Fetch settings from cookies and initialize state
     const settingsString = getCookie('settings');
+    const tokenString = getCookie('access_token');
     if (settingsString && settingsString.length > 0) {
       const parsed = JSON.parse(settingsString);
       setSettings(parsed);
+      setUser(tokenString);
     }
     // Fetch user data from Supabase
      async function fetchUserData() {
@@ -66,7 +68,7 @@ export default function SettingsModal({}) {
       toast.success('Login was successfull!');
       window.history.pushState({}, '', window.location.pathname);
     } else if(autstat === '1') {
-      toast.error('Login failed!');
+      toast.error('Login attempt failed please try again!');
       window.history.pushState({}, '', window.location.pathname);
     }
     // console.log("If you can read this you are good enough to contribute to the repo!");
@@ -280,13 +282,13 @@ export default function SettingsModal({}) {
                         <TabsContent value="identity">
                         {/* Render identity management options */}
                 <div className={styles.popupOption}>
-                  {false ? (
+                  {user ? (
                     <div className={styles.popupUserContainer}>
-                      <p className={styles.userAccounttext}><MailIcon /><b>{"dummymail@dummyuser1233333.com"}</b></p>
+                      <p className={styles.userAccounttext}><b>dummymail@dummyuser1233333.com</b></p>
                       {userAccountData?.metadata?.theme && <CatIcon />}
                       <div className={styles.activitySection} > 
                         <div className={styles.activityBlob}> <StarIcon /> <p>Ratings: </p> <b> {0}</b></div>
-                        <div className={styles.activityBlob}> <ImageIcon /> <p>Images: </p> <b> {0}</b></div>
+                        <div className={styles.activityBlob}> <ImageIcon /> <p>Submissions: </p> <b> {0}</b></div>
                       </div>
 
                       <button className={styles.popupButton} onClick={() => handleLogout()}>Logout</button>
