@@ -236,7 +236,7 @@ export default function MealModal({ mealsFull }) {
     if (settings?.threebar)
       return (
         <ul className={styles.popupTitleBullets}>
-          {meal?.title?.map((titlepart, index) => (
+          {meal?.titleReg?.map((titlepart, index) => (
             <li
               key={index}
               className={
@@ -253,10 +253,10 @@ export default function MealModal({ mealsFull }) {
 
     return (
       <h2 className={styles.popupTitle}>
-        {meal?.title?.map((titlepart, index) => (
+        {meal?.titleReg?.map((titlepart, index) => (
           <span
             className={
-              meal?.additivesMap[index]?.includes(selectedAdditive)
+              meal?.titleRegAdditives[index]?.includes(selectedAdditive)
                 ? styles.highlighted
                 : undefined
             }
@@ -298,7 +298,7 @@ export default function MealModal({ mealsFull }) {
                 ? meal?.altImageUrl
                 : "/plate_placeholder.png"
             }
-            title={meal?.title[0]}
+            title={meal?.titleReg[0]}
             alt="dish-image"
             className={styles.popupImage}
             width={640}
@@ -445,7 +445,7 @@ export default function MealModal({ mealsFull }) {
           </div>
 
           {/* Alternative options */}
-          {meal.altOption && (
+          {meal?.altType >0 && (
             <div
               className={styles.altBox}
               onClick={() => {
@@ -460,7 +460,7 @@ export default function MealModal({ mealsFull }) {
                 <p className={styles.altTitle}>
                   {meal?.altType === 2 ? "Vegan" : "Veggie"} Alternative
                 </p>
-                <p className={styles.altDescription}>{meal?.altOption}</p>
+                <p className={styles.altDescription}>{meal?.titleAlt.flat()}</p>
               </div>
               <ArrowDownUp
                 size={20}
