@@ -6,7 +6,8 @@ import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
 import MealModalTrigger from "./MealCardClient";
 
-export default async function MealCard({ meal, mealIndex, dayIndex, settingsCookie }) {
+export default async function MealCard({ meal, mealIndex, dayIndex, settings }) {
+  "use server"
 
   //  star rating meal (non-interactive)
   const StaticStars = () => {
@@ -30,7 +31,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settingsCook
       <div
         key={mealIndex+''+dayIndex}
         className={styles.mealCard}
-        data-item-id={mealIndex+''+dayIndex}
+        data-item-id={mealIndex+';'+dayIndex}
       >
           <Image
             priority
@@ -38,6 +39,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settingsCook
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
             alt="dish-image" title={meal.title[0]} 
             className={styles.mealImage}
+            data-layout={settings?.layout}
             width={640} height={310} />
 
         <p className={styles.mealLocation}>
@@ -54,13 +56,13 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settingsCook
         {/* Meal details */}
         <div className={styles.mealInfo}>
           <div className={styles.mealContextLabels}></div>
-          <h4 className={styles.mealTitle}>{(settingsCookie?.shortitle ? meal?.title[0] : meal?.title.flat())}</h4>
+          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.title[0] : meal?.title.flat())}</h4>
           <div className={styles.mealFooter}>
-            <span className={styles.mealPrice}>{meal.price && (meal?.price[settingsCookie?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
+            <span className={styles.mealPrice}>{meal.price && (meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             <StaticStars />
           </div>
         </div>
-        <MealModalTrigger meal={meal} fullIndex={mealIndex+''+dayIndex}/>
+        <MealModalTrigger meal={meal} fullIndex={mealIndex+';'+dayIndex} settings={settings}/>
       </div>
   );
 }

@@ -100,6 +100,7 @@ export default function MealModal({ mealsFull }) {
   );
 
   async function loadNutrition(id) {
+    return null;
     const nutrition = await getNutritionForId(id);
     setNutrition(nutrition?.data[0]);
   }
@@ -517,7 +518,7 @@ export default function MealModal({ mealsFull }) {
           </div>
 
           {/* Nutrition */}
-          {nutrition && selectedVariant === 0 ? (
+          {/* {nutrition && selectedVariant === 0 ? (
             <div className={styles.additivesSection}>
               <div className={shared.divider} />
               <div className={styles.sectionTitle}>
@@ -546,7 +547,7 @@ export default function MealModal({ mealsFull }) {
                 </tbody>
               </table>
             </div>
-          ) : null}
+          ) : null} */}
 
           {/* Image upload section */}
           <div className={shared.divider} />
