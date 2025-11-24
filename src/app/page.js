@@ -11,7 +11,6 @@ const DynamicScrollToTopButton = dynamic(() => import("@/components/ScrollToTopB
 
 
 export default async function Home() {
-  "use server"
 
   // Skeleton loading animation
     const SkeletonLoading = () => (
