@@ -7,8 +7,6 @@ import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
 import MealModalTrigger from "./MealCardClient";
 
 export default async function MealCard({ meal, mealIndex, dayIndex, settings }) {
-  "use cache"
-
   //  star rating meal (non-interactive)
   const StaticStars = () => {
     return (
@@ -31,7 +29,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
       <div
         key={mealIndex+''+dayIndex}
         className={styles.mealCard}
-        data-item-id={mealIndex+';'+dayIndex}
+        data-item-id={mealIndex+''+dayIndex}
       >
           <Image
             priority
@@ -62,7 +60,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
             <StaticStars />
           </div>
         </div>
-        <MealModalTrigger meal={meal} fullIndex={mealIndex+';'+dayIndex} settings={settings}/>
+        <MealModalTrigger meal={meal} fullIndex={mealIndex+''+dayIndex} settings={settings}/>
       </div>
   );
 }
