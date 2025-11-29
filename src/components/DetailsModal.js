@@ -18,7 +18,6 @@ import { getCookie, setCookie } from "@/app/utils/client-system";
 import toast from "react-hot-toast";
 import { getNutritionForId } from "@/app/utils/database-actions";
 import {
-  ArrowDownUp,
   Bookmark,
   Bot,
   Clock10Icon,
@@ -26,6 +25,7 @@ import {
   FlagIcon,
   InfoIcon,
   Leaf,
+  MaximizeIcon,
   SaladIcon,
   Scale,
   Share2Icon,
@@ -231,12 +231,12 @@ export default function MealModal({ mealsFull }) {
   );
 
   // Render the meal title based on settings.
-  const MealTitle = () => {
+  const MealTitle = ({titleVariant}) => {
 
     if (settings?.threebar)
       return (
         <ul className={styles.popupTitleBullets}>
-          {meal?.titleReg?.map((titlepart, index) => (
+          {titleVariant?.map((titlepart, index) => (
             <li
               key={index}
               className={
@@ -253,7 +253,7 @@ export default function MealModal({ mealsFull }) {
 
     return (
       <h2 className={styles.popupTitle}>
-        {meal?.titleReg?.map((titlepart, index) => (
+        {titleVariant?.map((titlepart, index) => (
           <span
             className={
               meal?.titleRegAdditives[index]?.includes(selectedAdditive)
@@ -403,7 +403,7 @@ export default function MealModal({ mealsFull }) {
 
         {/* Render meal details, comments and action buttons */}
         <div className={styles.popupDetails}>
-          <MealTitle />
+          <MealTitle titleVariant={selectedVariant === 0 ? meal?.titleReg : meal?.titleAlt} />
 
           <div className={styles.popupPriceRating}>
             <span title="Price" className={styles.popupPrice}>
@@ -462,7 +462,7 @@ export default function MealModal({ mealsFull }) {
                 </p>
                 <p className={styles.altDescription}>{meal?.titleAlt.flat()}</p>
               </div>
-              <ArrowDownUp
+              <MaximizeIcon
                 size={20}
                 className={`${styles.swapIcon} ${
                   selectedVariant === 1 ? styles.activeColor : ""
