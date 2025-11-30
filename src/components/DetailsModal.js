@@ -44,6 +44,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useModalStore } from "@/app/utils/contextStore";
+import { add } from "date-fns";
 // lazy-load upload box to avoid loading heavy code unless modal is open
 const UploadBox = dynamic(() => import("./UploadBox"), {
   ssr: false,
@@ -233,14 +234,17 @@ export default function MealModal({ mealsFull }) {
   // Render the meal title based on settings.
   const MealTitle = ({titleVariant}) => {
 
+    const titleArray = selectedVariant === 0 ? meal?.titleReg || [] : meal?.titleAlt || [];
+    const additivesArray = selectedVariant === 0 ? meal?.titleRegAdditives || [] : meal?.titleAltAdditives || [];
+
     if (settings?.threebar)
       return (
         <ul className={styles.popupTitleBullets}>
-          {titleVariant?.map((titlepart, index) => (
+          {titleArray?.map((titlepart, index) => (
             <li
               key={index}
               className={
-                meal?.additivesMap[index]?.includes(selectedAdditive)
+                additivesArray[index]?.includes(selectedAdditive)
                   ? styles.highlighted
                   : undefined
               }
@@ -253,10 +257,10 @@ export default function MealModal({ mealsFull }) {
 
     return (
       <h2 className={styles.popupTitle}>
-        {titleVariant?.map((titlepart, index) => (
+        {titleArray?.map((titlepart, index) => (
           <span
             className={
-              meal?.titleRegAdditives[index]?.includes(selectedAdditive)
+              additivesArray[index]?.includes(selectedAdditive)
                 ? styles.highlighted
                 : undefined
             }
@@ -267,7 +271,7 @@ export default function MealModal({ mealsFull }) {
         ))}
       </h2>
     );
-  };
+  }
 
   if (!meal || !isOpen) return null;
 
@@ -403,7 +407,7 @@ export default function MealModal({ mealsFull }) {
 
         {/* Render meal details, comments and action buttons */}
         <div className={styles.popupDetails}>
-          <MealTitle titleVariant={selectedVariant === 0 ? meal?.titleReg : meal?.titleAlt} />
+          <MealTitle titleVariant={selectedVariant === 0 ? meal?.titleReg : meal?.titleAlt} additivesMapVariant={selectedVariant === 0 ? meal?.titleRegAdditives : meal?.titleAltAdditives} />
 
           <div className={styles.popupPriceRating}>
             <span title="Price" className={styles.popupPrice}>
