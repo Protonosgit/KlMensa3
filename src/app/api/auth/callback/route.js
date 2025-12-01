@@ -10,14 +10,18 @@ export async function GET(request) {
     return NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=1");
   }
 
+  console.log(CSRF_TOKEN, expected_CSRF_TOKEN, userAccessToken);
+  
   // Validate CSRF
   if (!CSRF_TOKEN || CSRF_TOKEN !== expected_CSRF_TOKEN) {
-    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+    console.warn("CSRF token mismatch");
+    return NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=1");
   }
 
   // Validate secret
   if (!USER_MEMENTO || USER_MEMENTO.length < 3) {
-    return NextResponse.json({ error: "No secret provided" }, { status: 500 });
+    console.warn("No secret provided");
+    return NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=1");
   }
 
 
