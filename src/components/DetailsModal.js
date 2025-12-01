@@ -18,7 +18,6 @@ import { getCookie, setCookie } from "@/app/utils/client-system";
 import toast from "react-hot-toast";
 import { getNutritionForId } from "@/app/utils/database-actions";
 import {
-  ArrowDownUp,
   Bookmark,
   Bot,
   Clock10Icon,
@@ -234,7 +233,7 @@ export default function MealModal({ mealsFull }) {
   );
 
   // Render the meal title based on settings.
-  const MealTitle = () => {
+  const MealTitle = ({titleVariant}) => {
 
     const titleArray = selectedVariant === 0 ? meal?.titleReg || [] : meal?.titleAlt || [];
     const additivesArray = selectedVariant === 0 ? meal?.titleRegAdditives || [] : meal?.titleAltAdditives || [];
