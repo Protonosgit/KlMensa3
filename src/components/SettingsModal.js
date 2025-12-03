@@ -31,22 +31,24 @@ export default function SettingsModal({}) {
     booknoti: false,
     schedulenoti: false,
   });
+  const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState();
 
   useEffect(() => {
     // Fetch settings from cookies and initialize state
-    const settingsString = getCookie('settings');
-    const tokenString = getCookie('access_token');
-    if (settingsString && settingsString.length > 0) {
-      const parsed = JSON.parse(settingsString);
-      setSettings(parsed);
-      setUser(tokenString);
-    }
-    // Fetch user data from Supabase
+    const settingsString = getCookie('settings')?.trim();
+    setSettings(settingsString ? JSON.parse(settingsString) : {});
+
+    // Fetch user data from mkl
      async function fetchUserData() {
-      if (false) {
-        setUser(null);
-      }
+        const tokenString = getCookie('access_token');
+        console.log(tokenString);
+        if(tokenString) {
+          setloggedIn(true);
+          // const res = await fetch('https://www.mensa-kl.de/api/v1/about-user', { method: 'GET', headers: { Authorization: `Bearer ${tokenString}` }});
+          // const user = await res.json();
+          // setUser(user);
+        }
     }
     fetchUserData();
 
@@ -138,13 +140,8 @@ export default function SettingsModal({}) {
 
   // Handle user logout.
   async function handleLogout() {
-    const error = await logout();
-    if(!error) {
-      setUser(null);
-      toast.success('Logged out');
-    } else {
-      toast.error(error);
-    }
+    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
+    document.location.reload();
   }
 
   // Render the settings modal UI.
@@ -282,9 +279,9 @@ export default function SettingsModal({}) {
                         <TabsContent value="identity">
                         {/* Render identity management options */}
                 <div className={styles.popupOption}>
-                  {user ? (
+                  {loggedIn ? (
                     <div className={styles.popupUserContainer}>
-                      <p className={styles.userAccounttext}><b>dummymail@dummyuser1233333.com</b></p>
+                      <p className={styles.userAccounttext}><b>here should be your email</b></p>
                       {userAccountData?.metadata?.theme && <CatIcon />}
                       <div className={styles.activitySection} > 
                         <div className={styles.activityBlob}> <StarIcon /> <p>Ratings: </p> <b> {0}</b></div>
