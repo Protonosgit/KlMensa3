@@ -23,6 +23,7 @@ import {
   Clock10Icon,
   EllipsisVertical,
   FlagIcon,
+  FullscreenIcon,
   InfoIcon,
   Leaf,
   MaximizeIcon,
@@ -232,7 +233,7 @@ export default function MealModal({ mealsFull }) {
   );
 
   // Render the meal title based on settings.
-  const MealTitle = ({titleVariant}) => {
+  const MealTitle = () => {
 
     const titleArray = selectedVariant === 0 ? meal?.titleReg || [] : meal?.titleAlt || [];
     const additivesArray = selectedVariant === 0 ? meal?.titleRegAdditives || [] : meal?.titleAltAdditives || [];
@@ -283,8 +284,6 @@ export default function MealModal({ mealsFull }) {
           <Image
             priority={false}
             loading={"lazy"}
-            onLoadStart={(e) => (e.target.style.opacity = "0")}
-            onLoad={(e) => (e.target.style.opacity = "1")}
             onError={(e) => {
               const img = e.currentTarget;
               if (img.dataset.fallbackApplied) return;
@@ -355,6 +354,7 @@ export default function MealModal({ mealsFull }) {
               <DropdownMenuContent className={shared.dropdownMenuContent}>
                 <DropdownMenuItem
                   className={shared.dropdownMenuItem}
+                  title={isBookmarked ? "Remove bookmark" : "Bookmark meal"}
                   onClick={(e) => handleBookmark(e)}
                 >
                   <Bookmark
@@ -367,6 +367,7 @@ export default function MealModal({ mealsFull }) {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className={shared.dropdownMenuItem}
+                  title="Share meal link"
                   onClick={() =>
                     navigator.clipboard.writeText(
                       `${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}?artid=` +
@@ -381,6 +382,7 @@ export default function MealModal({ mealsFull }) {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className={shared.dropdownMenuItem}
+                  title="Report image for takedown"
                   onClick={() => handleRequestImageTakedown()}
                 >
                   <FlagIcon size={18} />
@@ -407,7 +409,7 @@ export default function MealModal({ mealsFull }) {
 
         {/* Render meal details, comments and action buttons */}
         <div className={styles.popupDetails}>
-          <MealTitle titleVariant={selectedVariant === 0 ? meal?.titleReg : meal?.titleAlt} additivesMapVariant={selectedVariant === 0 ? meal?.titleRegAdditives : meal?.titleAltAdditives} />
+          <MealTitle />
 
           <div className={styles.popupPriceRating}>
             <span title="Price" className={styles.popupPrice}>

@@ -99,6 +99,7 @@
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
+    min-height: 5rem;
   }
 
   .highlighted {
