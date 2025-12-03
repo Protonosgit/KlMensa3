@@ -1,7 +1,6 @@
 import { extractAdditiveCodes } from "./additives";
 
 
-
 function applyFilterList(locCookie, protCookie, adiCookie, meals) {
   if(!locCookie || !protCookie || !adiCookie) return meals;
 
@@ -38,25 +37,15 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
     }
 
     // Trap2 variant specific additive filtering
-    if(r_test_1 || a_test_1) {
-      if(r_test_1) {
+    if(r_test_1 || a_test_1 || r_test_2 || a_test_2) {
+      if(r_test_1 || r_test_2) {
         meal.titleReg = meal.titleAlt
         meal.titleRegAdditives = meal.titleAltAdditives
       }
-        meal.titleAlt = null
-        meal.titleAltAdditives = null
-        meal.altType = 0
+        delete meal.titleAlt;
+        delete meal.titleAltAdditives;
+        delete meal.altType;
     }
-    if(r_test_2 || a_test_2) {
-      if(r_test_2) {
-        meal.titleReg = meal.titleAlt
-        meal.titleRegAdditives = meal.titleAltAdditives
-      }
-        meal.titleAlt = null
-        meal.titleAltAdditives = null
-        meal.altType = 0
-     }
-
 
     rebuildMeals.push(meal);
   }
