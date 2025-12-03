@@ -174,6 +174,7 @@ export default function FilterMenu() {
     loadFilters();
     try {
       await revalidatePage();
+
     } finally {
       setRefreshing(false);
     }

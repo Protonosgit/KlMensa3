@@ -39,10 +39,22 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
 
     // Trap2 variant specific additive filtering
     if(r_test_1 || a_test_1) {
-      meal.altType = -1
+      if(r_test_1) {
+        meal.titleReg = meal.titleAlt
+        meal.titleRegAdditives = meal.titleAltAdditives
+      }
+        meal.titleAlt = null
+        meal.titleAltAdditives = null
+        meal.altType = 0
     }
     if(r_test_2 || a_test_2) {
-      meal.altType = -1
+      if(r_test_2) {
+        meal.titleReg = meal.titleAlt
+        meal.titleRegAdditives = meal.titleAltAdditives
+      }
+        meal.titleAlt = null
+        meal.titleAltAdditives = null
+        meal.altType = 0
      }
 
 

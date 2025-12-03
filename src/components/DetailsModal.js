@@ -233,7 +233,7 @@ export default function MealModal({ mealsFull }) {
   );
 
   // Render the meal title based on settings.
-  const MealTitle = ({titleVariant}) => {
+  const MealTitle = () => {
 
     const titleArray = selectedVariant === 0 ? meal?.titleReg || [] : meal?.titleAlt || [];
     const additivesArray = selectedVariant === 0 ? meal?.titleRegAdditives || [] : meal?.titleAltAdditives || [];
