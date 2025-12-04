@@ -228,7 +228,7 @@ export default function MealModal({ mealsFull }) {
       setCookie("bookmarks", JSON.stringify(bookmarks));
       setIsBookmarked((prev) => !prev);
     },
-    [meal?.artikel_id, setCookie]
+    [meal?.murmurID, setCookie]
   );
 
   // Render the meal title based on settings.
