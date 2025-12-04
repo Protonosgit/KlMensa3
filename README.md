@@ -4,7 +4,6 @@
 ![Uptime Robot status](https://img.shields.io/uptimerobot/status/m801918923-aa18cd40098f476409790b61?label=Status)
 ![Vercel](https://vercelbadge.vercel.app/api/Protonosgit/KlMensa3)
 ![Size](https://img.shields.io/github/languages/code-size/Protonosgit/KlMensa3)
-![TopLang](https://img.shields.io/github/languages/top/Protonosgit/KlMensa3)
 
 
 ## Built with:
