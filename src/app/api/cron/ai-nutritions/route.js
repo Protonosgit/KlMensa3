@@ -56,7 +56,7 @@ export async function GET( req, res ) {
 
 function makeListReadable(list) {
   const rlist = list.map((meal) => {
-    const title = meal.title?.map(item => item).join(", ");
+    const title = meal.titleReg?.map(item => item).join(", ");
     const aiD = meal.murmurID;
     const additives = meal?.zsnumnamen
 
@@ -65,42 +65,35 @@ function makeListReadable(list) {
   return rlist;
 }
 
-//     {
-//       "role": "user",
-//       "content": `aID: ${aID}\nTitle: Seelachsfilet "Toskana" mit Tomatensugo, Basilikum-Nudeln und Salat\nAdditives: Farbstoff, Fisch, Glutenhaltiges Getreide, Eier und Eierzeugnisse, Laktoses, Sellerie`
-//     }
 
 async function requestNutrition(rlist) {
+  const mealListString = rlist.join("\n");
 
-  const finalList = rlist.map(item => {
-    return {
-      "role": "user",
-      "content": item
-    }
+  const chatCompletion = await groq.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content:
+          'Bitte nutze die folgenden Parameter (aID, Titel, Zusatz) und versuche die Nährwerte für eine Portion jedes einzelnen Mensa Gerichts in der Liste, so präzise wie möglich zu berechnen. Gebe NUR die gewünschten Nahrungswerte als JSON array zurück, je höher der Score, desto gesünder!  [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...]',
+      },
+      {
+        role: "user",
+        content: mealListString,
+      },
+    ],
+
+    stream: false, // dont touch
+
+    // "model": "qwen/qwen3-32b", "reasoning_effort":"low", "tools":[{"type":"browser_search"}],"response_format":{"type": "json_object"},
+    //"model": "openai/gpt-oss-20b", "reasoning_effort": "low", "response_format": { type: "json_object" }, //"tools":[{"type":"browser_search"}],
+    model: "openai/gpt-oss-120b", response_format: { type: "json_object" }, reasoning_effort: "medium",// tools: [{ type: "browser_search" }],
+    // "model":"groq/compound", "compound_custom": {"tools":{"enabled_tools":["web_search","visit_website"]}},
+
+    temperature: 0.2, // touch, default 0.2
+    max_completion_tokens: 4024, // dont touch
+    top_p: 1, // dont touch
+    stop: null, // idk what this does
   });
-  finalList.unshift({
-    "role": "system",
-    "content": "Bitte nutze die folgenden Parameter (aID, Titel, Zusatz) und versuche die Nährwerte für eine Portion jedes einzenlen Gerichts, so präzise wie möglich einzuschätzen, nutze dazu Internet. Gebe NUR die gewünschten Nahrungswerte als JSON array zurück! [aID, Kalorien_kcal, Fett_g, Zucker_g, Protein_g, Kohlenhydrate_g, Score_% (0 ist schlecht)]"
-  });
 
-  // return finalList
-
-
-const chatCompletion = await groq.chat.completions.create({
-  "messages": finalList,
-
-  "stream": false, // dont touch
-
-  // "model": "qwen/qwen3-32b", "reasoning_effort":"low", "tools":[{"type":"browser_search"}],"response_format":{"type": "json_object"},
-  "model":"openai/gpt-oss-20b", "reasoning_effort":"low", "response_format": {"type": "json_object"}, //"tools":[{"type":"browser_search"}],
-  // "model":"openai/gpt-oss-120b", "reasoning_effort":"medium", tools=[{"type":"browser_search"}],
-  // "model":"groq/compound", "compound_custom": {"tools":{"enabled_tools":["web_search","visit_website"]}},
-
-  "temperature": 0.05, // touch default 0.05
-  "max_completion_tokens": 4024, // dont touch
-  "top_p": 1, // dont touch
-  "stop": null, // idk what this does
-});
-
-return chatCompletion.choices[0].message.content;
+  return chatCompletion.choices[0].message.content;
 }
