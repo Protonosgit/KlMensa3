@@ -537,7 +537,6 @@ export default function MealModal({ mealsFull }) {
           </div>
 
           {/* Nutrition */}
-          
           {nutrition && selectedVariant === 0 ? (
             <div className={styles.additivesSection}>
               <div className={shared.divider} />
@@ -548,7 +547,7 @@ export default function MealModal({ mealsFull }) {
                   AI powered
                 </p>
               </div>
-              <table title="Nutritional value is estimated by ai and can be wrong" className={styles.nutritionTable} style={getScoreStyle(nutrition?.score_pct)}>
+              <table title="Nutritional value is estimated by ai and can be wrong" className={styles.nutritionTable}>
                 <thead>
                   <tr>
                     <th>Calories (kcal)</th>

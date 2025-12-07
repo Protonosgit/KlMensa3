@@ -35,7 +35,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
             priority
             fetchPriority="high"
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
-            alt="dish-image" title={meal.titleReg[0]} 
+            alt="dish-image" title={"Meal image"} 
             className={styles.mealImage}
             data-layout={settings?.layout}
             width={640} height={310} />

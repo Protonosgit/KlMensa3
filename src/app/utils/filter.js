@@ -42,9 +42,9 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
         meal.titleReg = meal.titleAlt
         meal.titleRegAdditives = meal.titleAltAdditives
       }
-        delete meal.titleAlt;
-        delete meal.titleAltAdditives;
-        delete meal.altType;
+        meal.titleAlt = [];
+        meal.titleAltAdditives = [];
+        meal.altType = 0;
     }
 
     rebuildMeals.push(meal);
