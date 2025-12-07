@@ -1,7 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { cookies } from "next/headers";
-import { Suspense } from 'react'
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,24 +27,15 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  return (
-    <html lang="de">
-      <body className="...">
-        <Suspense fallback={<div>Loading settings...</div>}>
-          <ThemeWrapper>{children}</ThemeWrapper>
-        </Suspense>
-      </body>
-    </html>
-  )
-}
-
-async function ThemeWrapper({ children }) {
   const cookieStore = await cookies()
   const settingsCookie = cookieStore.get('settings')
   const settings = settingsCookie?.value ? JSON.parse(settingsCookie.value) : {}
+
   return (
-    <div data-theme={settings.dark ? "dark" : "light"} data-layout={settings.layout} data-eyedef={settings.eyedef}>
-      {children}
-    </div>
+    <html lang="de">
+      <body data-theme={settings.dark ? "dark" : "light"} data-layout={settings.layout} data-eyedef={settings.eyedef}>
+        {children}
+      </body>
+    </html>
   )
 }
