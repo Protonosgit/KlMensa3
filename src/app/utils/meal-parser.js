@@ -110,7 +110,7 @@ function stripAdditivesFromArray(target) {
   return target.map(s =>
     s.replace(/\s*\(([0-9A-Za-zÄäÖöÜüß.,\/\-\s]+)\)\s*$/g, (match, inside) =>
       inside.includes("@&@") ? match : ""
-    ).replace("@&@", "")
+    ).replace("@&@", "").replace(/[\(\)]/g, "")
   );
 }
 function extractAdditivesAsArray(target) {

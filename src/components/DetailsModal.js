@@ -231,6 +231,20 @@ export default function MealModal({ mealsFull }) {
     [meal?.murmurID, setCookie]
   );
 
+
+  function pctToHue(pct = 0, invert = true) {
+    const value = (Math.max(0, Math.min(100, Number(pct || 0))))/100;
+    return invert ? 120 - 120 * value : 120 * value;
+  }
+
+  function getScoreStyle(pct) {
+    const hue = pctToHue(pct, false); // true => 0% = green, 100% = red
+    const softBg = `hsla(${hue}, 85%, 50%, 0.25)`;
+    return {
+      background: softBg,
+    };
+  }
+
   // Render the meal title based on settings.
   const MealTitle = () => {
 
@@ -534,7 +548,7 @@ export default function MealModal({ mealsFull }) {
                   AI powered
                 </p>
               </div>
-              <table className={styles.nutritionTable}>
+              <table title="Nutritional value is estimated by ai and can be wrong" className={styles.nutritionTable} style={getScoreStyle(nutrition?.score_pct)}>
                 <thead>
                   <tr>
                     <th>Calories (kcal)</th>
@@ -552,6 +566,7 @@ export default function MealModal({ mealsFull }) {
                   </tr>
                 </tbody>
               </table>
+              {/* <a href="https://ernaehrung.de/tipps/allgemeine_infos/">More information</a> */}
             </div>
           ) : null}
 
