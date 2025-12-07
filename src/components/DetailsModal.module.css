@@ -202,6 +202,7 @@
 
   .ratingCount {
     margin-left: 0.25rem;
+    min-width: 1.6rem;
     font-size: 0.875rem;
     color: var(--subtitle-text);
   }

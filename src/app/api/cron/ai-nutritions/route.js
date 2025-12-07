@@ -74,7 +74,7 @@ async function requestNutrition(rlist) {
       {
         role: "system",
         content:
-          'Bitte nutze die folgenden Parameter (aID, Titel, Zusatz) und versuche die Nährwerte für eine Portion jedes einzelnen Mensa Gerichts in der Liste, so präzise wie möglich zu berechnen. Gebe NUR die gewünschten Nahrungswerte als JSON array zurück, je höher der Score, desto gesünder!  [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...]',
+          'Bitte nutze die folgenden Parameter (aID, Titel, Zusatz) und versuche die Nährwerte in Ganzzahlen für eine Portion jedes einzelnen Mensa Gerichts in der Liste, so präzise wie möglich zu berechnen. Gebe NUR die gewünschten Nahrungswerte als JSON array zurück, je höher der Score, desto gesünder!  [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...]',
       },
       {
         role: "user",
