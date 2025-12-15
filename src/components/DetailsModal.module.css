@@ -199,7 +199,6 @@
   }
 }
 
-
   .ratingCount {
     margin-left: 0.25rem;
     min-width: 1.6rem;
@@ -256,6 +255,7 @@
     margin: 0.7rem 0;
     background-color: var(--greenbox-bg);
     cursor: pointer;
+    animation: scaleBounce 0.75s ease-out;
   }
   .altTitle {
     color: var(--greentext-color);
@@ -269,7 +269,6 @@
   }
   .altIcon {
     color: var(--greentext-color);
-    animation: scaleBounce 0.75s ease-out;
     width: 2rem;
     height: 2rem;
     display: inline-block;
@@ -290,10 +289,10 @@
       transform: scale(1);
     }
     40% {
-      transform: scale(1.1);
+      transform: scale(1.03);
     }
     60% {
-      transform: scale(0.9);
+     transform: scale(0.96);
     }
   }
   .infoText {
