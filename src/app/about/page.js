@@ -32,15 +32,10 @@ export default function ReportPage() {
         </p>
         <h3 className={styles.subtitle}>Developed by</h3>
         <div className={styles.profiles}>
-          <a href="https://www.johannesschildgen.de/" className={styles.profileBox}>
+          <a href="https://felixlenz.de/" className={styles.profileBox}>
             <CodeIcon className={styles.codeIcon} />
-            <p className={styles.profileName}>Johannes Schildgen</p>
-            <p className={styles.roleChip}>Founder</p>
-          </a>
-          <a href="about:blank" className={styles.profileBox}>
-            <CodeIcon className={styles.codeIcon} />
-            <p className={styles.profileName}>Dennis Meckel</p>
-            <p className={styles.roleChip}>Maintainer</p>
+            <p className={styles.profileName}>Felix Lenz</p>
+            <p className={styles.roleChip}>V2 Developer</p>
           </a>
 
         </div>
