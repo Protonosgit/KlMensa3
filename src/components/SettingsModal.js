@@ -161,7 +161,7 @@ export default function SettingsModal({}) {
               <TabsList className={styles.popupTabsList}>
                 {/* Tabs for general settings and identity management */}
                 <TabsTrigger className={styles.popupTabsTrigger} value="general">General</TabsTrigger>
-                {/* <TabsTrigger className={styles.popupTabsTrigger} value="notifications">Notifications</TabsTrigger> */}
+                <TabsTrigger className={styles.popupTabsTrigger} value="notifications">Notifications</TabsTrigger>
                 <TabsTrigger className={styles.popupTabsTrigger} value="identity">Profile</TabsTrigger>
               </TabsList>
               <TabsContent value="general">
@@ -243,7 +243,9 @@ export default function SettingsModal({}) {
                         </TabsContent>
                         <TabsContent value="notifications">
 
-                        <div className={styles.popupOption}>
+                          <h3>Under construction 🛠️</h3>
+
+                        {/* <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("schedulenoti", e)} checked={settings.schedulenoti} className={styles.optionSwitch} onColor="#fbbf24"  />
                         <label className={styles.popupOptionLabel}>
                           <span>Push notifications</span>
@@ -273,7 +275,7 @@ export default function SettingsModal({}) {
 
                         <div className={shared.divider}></div>
 
-                        <p>Bookmarks</p>
+                        <p>Bookmarks</p> */}
 
                         </TabsContent>
                         <TabsContent value="identity">

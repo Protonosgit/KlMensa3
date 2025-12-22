@@ -86,7 +86,8 @@ const priceRelationsLookup = {
     "Warmer Snack / Imbiss (34)": { "price": "6,00 €" },
 };
 
-const taggedStrings = ["Vegetarisches Menü[1]:", "Plant-based Menü[1]:", "Veganes Menü[1]:"]
+// Some are due to mistakes in the source data
+const taggedStrings = ["Vegetarisches Menü[1]:", "Plant-based Menü[1]:", "Veganes Menü[1]:","Veganuary Menü[1]:", "Veganuary Menü1]:"]
 
 let cachedMenuData = null;
 let lastMenuCachedAt = 0;
@@ -161,8 +162,9 @@ function splitNormalAndVariant(aTitleList) {
 
 function detectAltVariant(target) {
   for (let i = 0; i < target.length; i++) {
-    if (target[i].includes("Vegetarisches Menü")) return 1;
+    if (target[i].includes("Vegetarisches Menü") ) return 1;
     if (target[i].includes("Plant-based Menü") || target[i].includes("Veganes Menü")) return 2;
+    if (target[i].includes("Veganuary Menü")) return 2;
   }
   return 0;
 }
