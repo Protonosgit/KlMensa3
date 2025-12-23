@@ -30,10 +30,11 @@ const mealAdditiveClearname = [
   { name: "Antioxidant", code: "3" },
   { name: "Flavor enhancer", code: "4" },
   { name: "Sulphured", code: "5" },
-  // { name: "unknown", code: "6" },
+  { name: "Blackened", code: "6" },
   // { name: "unknown", code: "7" },
   { name: "Phosphate", code: "8" },
   { name: "Sweetener", code: "9" },
+  { name: "Phenylalanine", code: "10"}
   { name: "Eggs", code: "ei" },
   { name: "Soy", code: "so" },
   { name: "Residual alcohol", code: "a" },
