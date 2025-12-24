@@ -74,7 +74,7 @@
     display: flex;
     flex-direction: column;
     margin: 1rem 0;
-    background-color: rgba(255, 68, 0, 0.677);
+    background-color: rgba(255, 68, 0, 0.55);
     color: var(--main-text);
     cursor: pointer;
   }
