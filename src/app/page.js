@@ -41,9 +41,9 @@ export default async function Home() {
         </div>
       </header>
 
-      <div className={styles.newsBox} style={{display: "none"}}>
-        <p className={styles.newsTitle}><InfoIcon size={20} />Account deletion</p>
-        <p className={styles.newsText}>Login is disabled and Beta accounts are deleted soon!</p>
+      <div className={styles.newsBox} >
+        <p className={styles.newsTitle}><InfoIcon size={20} />Open Beta</p>
+        <p className={styles.newsText}>The open beta test will start soon, expected regular outages.</p>
       </div>
 
       <main className={shared.main}>
@@ -66,7 +66,7 @@ export default async function Home() {
           <a href="https://github.com/Protonosgit/KlMensa3" className={shared.footerLink}>Source</a>
           <a href="/api/menu_v1" className={shared.footerLink}>Api</a>
         </div>
-          <p>2025 mensa-kl v3 prototype<br/></p>
+          <p>2025 kl-mensa v2 prototype<br/></p>
       </footer>
       <DynamicScrollToTopButton />
     </div>
