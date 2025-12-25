@@ -2,5 +2,6 @@
   "crons": [{
     "path": "/api/cron/ai-nutritions",
     "schedule": "0 10 * * *"
-  }]
+  }],
+  "bunVersion": "1.3.5"
 }
