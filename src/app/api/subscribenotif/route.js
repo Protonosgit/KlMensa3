@@ -9,7 +9,7 @@ webpush.setVapidDetails(
 
 export async function POST(req) {
   try {
-    const sql = neon(process.env.NEON_DATABASE_URL_UNPOOLED);
+    const sql = neon(process.env.NEON_DATABASE_URL);
     const subscription = await req.json();
     
     // Store subscription in database
@@ -42,7 +42,7 @@ export async function POST(req) {
 
 export async function DELETE(req) {
   try {
-    const sql = neon(process.env.NEON_DATABASE_URL_UNPOOLED);
+    const sql = neon(process.env.NEON_DATABASE_URL);
     const subscription = await req.json();
     
 
