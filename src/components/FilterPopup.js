@@ -42,7 +42,10 @@ const mealAdditiveClearname = [
   { name: "Sulfur dioxide", code: "sw" },
   { name: "Sesame", code: "se" },
   { name: "Mustard", code: "sf" },
-  { name: "Celery", code: "sl" }
+  { name: "Celery", code: "sl" },
+  // { name: "Bio", code: "unknown" },
+  // { name: "Lupine", code: "unknown" },
+  // { name: "Waxed", code: "unknown" },
 ];
 
 const mealProteinClearname = [

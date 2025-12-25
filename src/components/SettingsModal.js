@@ -37,7 +37,7 @@ export default function SettingsModal({}) {
   useEffect(() => {
     // Fetch settings from cookies and initialize state
     const settingsString = getCookie('settings')?.trim();
-    setSettings(settingsString ? JSON.parse(settingsString) : {});
+    if(!settingsString) setCookie('settings', JSON.stringify(settings));
 
     // Fetch user data from mkl
      async function fetchUserData() {
@@ -243,7 +243,7 @@ export default function SettingsModal({}) {
                         </TabsContent>
                         <TabsContent value="notifications">
 
-                          <h3>Under construction 🛠️</h3>
+                          <h3 className={shared.centerFlat}>Under construction 🛠️</h3>
 
                         {/* <div className={styles.popupOption}>
                           <Switch onChange={(e) => handleSettingChange("schedulenoti", e)} checked={settings.schedulenoti} className={styles.optionSwitch} onColor="#fbbf24"  />

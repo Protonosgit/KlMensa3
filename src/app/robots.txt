@@ -1,0 +1,7 @@
+User-agent: baiduspider
+Disallow: /
+User-agent: yahoo-blogs/v3.9
+Disallow: /
+User-agent: *
+Disallow: 
+Disallow: /cgi-bin/

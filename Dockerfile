@@ -1,31 +1,19 @@
-# 1) Build stage
-FROM node:24-alpine AS builder
-
+# 1) Dependencies with Bun
+FROM oven/bun:alpine AS deps
 WORKDIR /app
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
 
-# Install dependencies (only once if lockfile exists)
-COPY package.json package-lock.json ./
-RUN npm ci
-
-# Copy all source files
+# 2) Builder
+FROM oven/bun:alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN bun run build
 
-# Build the Next.js app for production
-RUN npm run build
-
-# 2) Production image
-FROM node:24-alpine AS runner
-
+# 3) Runner
+FROM oven/bun:alpine AS runner
 WORKDIR /app
-
-# Copy built app from builder
 COPY --from=builder /app ./
-
-# Expose the port your app will run on (Next.js default: 3000)
 EXPOSE 3000
-
-# Set production environment
-ENV NODE_ENV=production
-
-# Start the app
-CMD ["npm", "start"]
+CMD ["bun", "run", "start"]
