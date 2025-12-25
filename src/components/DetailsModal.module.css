@@ -229,6 +229,13 @@
     font-weight: 500;
     font-size: 0.85rem;
   }
+
+  .dietaryTagContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0rem;
+  }
   
   .dietaryTag {
     background-color: var(--darkbox-bg);
@@ -238,6 +245,8 @@
     margin: 0.15rem 0.15rem;
     padding: 0.4rem 0.6rem;
     cursor: pointer;
+    border-radius: 20px;
+    width: fit-content;
     border: 1px solid var(--darkbox-border);
   }
   .dietaryTag:hover {
@@ -345,6 +354,10 @@
     }
     .popupLocation {
       font-size: 1rem;
+    }
+    .popupActionButton {
+      width: 2.4rem;
+      height: 2.4rem;
     }
     .popupPrice {
       font-size: 1.6rem;

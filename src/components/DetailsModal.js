@@ -13,7 +13,6 @@ import shared from "@/styles/shared.module.css";
 import styles from "./DetailsModal.module.css";
 import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./Starrating";
-import { Badge } from "@/components/ui/badge";
 import { getCookie, setCookie } from "@/app/utils/client-system";
 import toast from "react-hot-toast";
 import { getNutritionForId } from "@/app/utils/database-actions";
@@ -21,9 +20,7 @@ import {
   Bookmark,
   Bot,
   Clock10Icon,
-  EllipsisVertical,
   FlagIcon,
-  FullscreenIcon,
   InfoIcon,
   Leaf,
   MaximizeIcon,
@@ -37,15 +34,7 @@ import {
 import VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon from "../../public/icons/VeganOpIcon.svg";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useModalStore } from "@/app/utils/contextStore";
-import { add } from "date-fns";
 // lazy-load upload box to avoid loading heavy code unless modal is open
 const UploadBox = dynamic(() => import("./UploadBox"), {
   ssr: false,
@@ -127,7 +116,7 @@ export default function MealModal({ mealsFull }) {
       } catch (e) {}
     }
 
-    if(isOpen) {
+    if (isOpen) {
       loadNutrition(meal?.murmurID);
     }
 
@@ -162,9 +151,7 @@ export default function MealModal({ mealsFull }) {
       openModal(foundmeal);
     }
 
-    async function fetchUserData() {
-      
-    }
+    async function fetchUserData() {}
     fetchUserData();
 
     return () => {
@@ -231,9 +218,8 @@ export default function MealModal({ mealsFull }) {
     [meal?.murmurID, setCookie]
   );
 
-
   function pctToHue(pct = 0, invert = true) {
-    const value = (Math.max(0, Math.min(100, Number(pct || 0))))/100;
+    const value = Math.max(0, Math.min(100, Number(pct || 0))) / 100;
     return invert ? 120 - 120 * value : 120 * value;
   }
 
@@ -247,9 +233,12 @@ export default function MealModal({ mealsFull }) {
 
   // Render the meal title based on settings.
   const MealTitle = () => {
-
-    const titleArray = selectedVariant === 0 ? meal?.titleReg || [] : meal?.titleAlt || [];
-    const additivesArray = selectedVariant === 0 ? meal?.titleRegAdditives || [] : meal?.titleAltAdditives || [];
+    const titleArray =
+      selectedVariant === 0 ? meal?.titleReg || [] : meal?.titleAlt || [];
+    const additivesArray =
+      selectedVariant === 0
+        ? meal?.titleRegAdditives || []
+        : meal?.titleAltAdditives || [];
 
     if (settings?.threebar)
       return (
@@ -285,7 +274,7 @@ export default function MealModal({ mealsFull }) {
         ))}
       </h2>
     );
-  }
+  };
 
   if (!meal || !isOpen) return null;
 
@@ -360,57 +349,39 @@ export default function MealModal({ mealsFull }) {
           </div>
 
           <div className={styles.overlayActionsBar}>
-            <DropdownMenu>
-              <DropdownMenuTrigger className={styles.popupActionButton}>
-                <EllipsisVertical size={18} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className={shared.dropdownMenuContent}>
-                <DropdownMenuItem
-                  className={shared.dropdownMenuItem}
-                  title={isBookmarked ? "Remove bookmark" : "Bookmark meal"}
-                  onClick={(e) => handleBookmark(e)}
-                >
-                  <Bookmark
-                    size={18}
-                    className={
-                      isBookmarked ? styles.bookmarkActive : styles.bookmark
-                    }
-                  />
-                  Bookmark
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className={shared.dropdownMenuItem}
-                  title="Share meal link"
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      `${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}?artid=` +
-                        meal?.murmurID
-                    ) && toast.success("Link copied to clipboard!")
-                  }
-                >
-                  <Share2Icon size={18} />
-                  Share
-                </DropdownMenuItem>
+            <div
+              className={styles.popupActionButton}
+              style={{ display: false ? "flex" : "none" }}
+              onClick={handleDeleteRating}
+            >
+              <StarOff size={18} />
+            </div>
 
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className={shared.dropdownMenuItem}
-                  title="Report image for takedown"
-                  onClick={() => handleRequestImageTakedown()}
-                >
-                  <FlagIcon size={18} />
-                  Remove image
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className={shared.dropdownMenuItem}
-                  style={{ display: submittedRating ? "flex" : "none" }}
-                  onClick={handleDeleteRating}
-                >
-                  <StarOff size={18} />
-                  Delete rating
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div
+              className={styles.popupActionButton}
+              title="Share meal link"
+              onClick={() =>
+                navigator.clipboard.writeText(
+                  `${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}?artid=` +
+                    meal?.murmurID
+                ) && toast.success("Link copied to clipboard!")
+              }
+            >
+              <Share2Icon size={18} />
+            </div>
+            <div
+              className={styles.popupActionButton}
+              title={isBookmarked ? "Remove bookmark" : "Bookmark meal"}
+              onClick={(e) => handleBookmark(e)}
+            >
+              <Bookmark
+                size={18}
+                className={
+                  isBookmarked ? styles.bookmarkActive : styles.bookmark
+                }
+              />
+            </div>
+
             <button
               onClick={requestCloseModal}
               className={styles.popupActionButton}
@@ -464,7 +435,7 @@ export default function MealModal({ mealsFull }) {
           </div>
 
           {/* Alternative options */}
-          {meal?.altType >0 && (
+          {meal?.altType > 0 && (
             <div
               className={styles.altBox}
               onClick={() => {
@@ -518,17 +489,18 @@ export default function MealModal({ mealsFull }) {
               <p className={styles.sectionContext}>Includes all variants</p>
             </div>
             {computedAdditives?.length > 1 ? (
-              <div>
+              <div className={styles.dietaryTagContainer}> 
                 {" "}
                 {computedAdditives?.map((additive) => (
-                  <Badge
+                  <div
                     title={additive?.name}
                     onClick={() => setSelectedAdditive(additive?.code)}
                     className={styles.dietaryTag}
+                    // style={{ opacity: selectedVariant === 0 ? (meal?.titleRegAdditives?.flat().includes(additive?.code) ? 1 : 0.5) : (meal?.titleAltAdditives?.flat().includes(additive?.code) ? 1 : 0.5) }} strips away additives used in both
                     key={additive?.code}
                   >
                     {additive?.name}
-                  </Badge>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -547,7 +519,10 @@ export default function MealModal({ mealsFull }) {
                   AI powered
                 </p>
               </div>
-              <table title="Nutritional value is estimated by ai and can be wrong" className={styles.nutritionTable}>
+              <table
+                title="Nutritional value is estimated by ai and can be wrong"
+                className={styles.nutritionTable}
+              >
                 <thead>
                   <tr>
                     <th>Calories (kcal)</th>
@@ -576,6 +551,14 @@ export default function MealModal({ mealsFull }) {
               <p>Submit image</p>
             </div>
             {isOpen && <UploadBox mealId={meal?.legacyId} />}
+            <div
+            className={shared.centerFlat}
+              title="Report image for takedown"
+              onClick={() => handleRequestImageTakedown()}
+            >
+              Request image removal 
+              <FlagIcon size={18} />
+            </div>
           </div>
         </div>
       </div>

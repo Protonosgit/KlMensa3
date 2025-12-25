@@ -54,7 +54,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
         {/* Meal details */}
         <div className={styles.mealInfo}>
           <div className={styles.mealContextLabels}></div>
-          <h4 className={styles.mealTitle}>{(settings?.shortitle ? meal?.titleReg[0] : meal?.titleReg.flat())}</h4>
+          <h4 className={styles.mealTitle}>{(settings?.shortitle ? (meal?.dpname == "Robotic Kitchen" ? meal?.titleAlt[0] : meal?.dpname) : meal?.titleReg.flat())}</h4>
           <div className={styles.mealFooter}>
             <span className={styles.mealPrice}>{meal.price && (meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             <StaticStars />
