@@ -29,8 +29,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
       <div
         key={mealIndex+''+dayIndex}
         className={styles.mealCard}
-        data-item-id={mealIndex+''+dayIndex}
-      >
+        data-item-id={mealIndex+''+dayIndex}>
           <Image
             priority
             fetchPriority="high"

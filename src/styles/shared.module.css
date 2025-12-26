@@ -36,6 +36,7 @@
 }
 
 .popupContent {
+    position: relative;
     background-color: var(--main-bg);
     border-radius: 0.63rem;
     max-width: 700px;
@@ -151,6 +152,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .popupContent {
+        position: relative;
         border-radius: 0;
         width: 100%;
         max-width: none;
@@ -168,6 +170,7 @@
 
 @media (min-width: 769px) and (max-width: 1024px) {
     .popupContent {
+        position: relative;
         border-radius: 0;
         width: 100vw;
         max-width: none;

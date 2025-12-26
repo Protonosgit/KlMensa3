@@ -22,12 +22,14 @@
 
 .popupCloseButton {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 1rem;
+  right: 1rem;
   color: var(--main-text);
   border: none;
-  font-size: 3rem;
+  font-size: 1.8rem;
   cursor: pointer;
+  background: transparent;
+  z-index: 12;
 }
 
 .popupTitle {
@@ -36,24 +38,24 @@
   margin: 1rem;
 }
 
-.popupTabs {
-  width: 100%;
-  margin-bottom: 1rem;
-  padding: 1rem;
+.tabsContainer {
+  padding: 0.5rem;
 }
-
-.popupTabsList {
+.tabList {
+  display:  flex;
   width: 100%;
-  display: flex;
   gap: 0.5rem;
+  padding: 0.8rem 0.8rem;
 }
-
-.popupTabsTrigger {
+.tabElement {
   flex: 1;
   border-bottom: var(--seperator-color) solid 2px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: center;
+  transition: border-bottom-color 0.1s ease-in-out;
 }
-
-.popupTabsTrigger[data-state="active"] {
+.tabElementActive {
   border-bottom: var(--primary-color) solid 3px;
   font-weight: bold;
 }
