@@ -4,8 +4,8 @@ import Link from 'next/link'
 export default function NotFound() {
   return (
     <div className="wrapper">
-      <h1>Page Not Found</h1>
-      <p>Sorry, we couldn’t find what you were looking for.</p>
+      <h1>404</h1>
+      <p>Page not found, go back or try a different link</p>
       <p>
         <Link href="/">Return home</Link>
       </p>

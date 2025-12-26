@@ -78,6 +78,10 @@
     box-shadow: var(--lightmode-shadow);
   }
 
+  .popupActionButton:active {
+    transform: scale(0.9);
+  }
+
   .bookmark {
     color: var(--main-text);
   }
@@ -264,7 +268,6 @@
     margin: 0.7rem 0;
     background-color: var(--greenbox-bg);
     cursor: pointer;
-    animation: scaleBounce 0.75s ease-out;
   }
   .altTitle {
     color: var(--greentext-color);
