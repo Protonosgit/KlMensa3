@@ -1,6 +1,6 @@
 "use server"
 
-import { Bold } from 'lucide-react';
+import { extractAdditives, extractAdditiveCodes } from './additives';
 
 const murmur = require('murmurhash');
 const priceRelationsLookup = {
@@ -294,6 +294,10 @@ async function ParseMenu() {
       const titleRegAdditives = extractAdditivesAsArray(titleRegTmp);
       const titleAltAdditives = extractAdditivesAsArray(titleAltTmp);
 
+      // Extract additives from string to array
+      const commonAdditives = extractAdditives(obj?.zsnumnamen);
+      const commonAdditiveCodes = extractAdditiveCodes(obj?.zsnummern); // This is redundant but we keep it as a pet
+
       // Identify sibling in other dataset
       const matchKey = titleReg.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
       const sisterItem = rawLegacyApi.find((item) => item.title.replace(/&quot;/g, "").toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
@@ -312,8 +316,8 @@ async function ParseMenu() {
         menuekennztext: obj?.menuekennztext,
         dpartname: obj?.dpartname,
         dpname: obj?.dpname,
-        zsnumnamen: obj?.zsnumnamen,
-        zsnummern: obj?.zsnummern,
+        zsnumnamen: commonAdditives,
+        zsnummern: commonAdditiveCodes,
         dispoart_id: obj?.dispoart_id,
         legacyId:sisterItem?.m_id,
         rating: sisterItem?.rating,

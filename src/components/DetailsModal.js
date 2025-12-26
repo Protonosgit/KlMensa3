@@ -11,7 +11,6 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import shared from "@/styles/shared.module.css";
 import styles from "./DetailsModal.module.css";
-import { extractAdditives } from "@/app/utils/additives";
 import StarRating from "./Starrating";
 import { getCookie, setCookie } from "@/app/utils/client-system";
 import toast from "react-hot-toast";
@@ -85,10 +84,6 @@ export default function MealModal({ mealsFull }) {
   }, [isOpen]);
 
   //settings and userdata
-  const computedAdditives = useMemo(
-    () => extractAdditives(meal?.zsnumnamen),
-    [meal?.zsnumnamen]
-  );
 
   async function loadNutrition(id) {
     const nutrition = await getNutritionForId(id);
@@ -133,7 +128,7 @@ export default function MealModal({ mealsFull }) {
         setShowTooltip(false);
       }
     };
-  }, [meal, mealsFull, computedAdditives, user]);
+  }, [meal, mealsFull, user]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -488,15 +483,17 @@ export default function MealModal({ mealsFull }) {
               <p>Additives</p>
               <p className={styles.sectionContext}>Includes all variants</p>
             </div>
-            {computedAdditives?.length > 1 ? (
-              <div className={styles.dietaryTagContainer}> 
+            {meal?.zsnumnamen?.length > 1 ? (
+              <div className={styles.dietaryTagContainer}>
                 {" "}
-                {computedAdditives?.map((additive) => (
+                {meal.zsnumnamen?.map((additive) => (
                   <div
                     title={additive?.name}
                     onClick={() => setSelectedAdditive(additive?.code)}
                     className={styles.dietaryTag}
-                    // style={{ opacity: selectedVariant === 0 ? (meal?.titleRegAdditives?.flat().includes(additive?.code) ? 1 : 0.5) : (meal?.titleAltAdditives?.flat().includes(additive?.code) ? 1 : 0.5) }} strips away additives used in both
+                    style={{opacity:selectedVariant === 0 ? 
+                      ((meal?.titleRegAdditives?.flat().includes(additive?.code) || !meal?.titleAltAdditives?.flat()?.includes(additive?.code)) ? 1 : 0.4) : 
+                      ((!meal?.titleRegAdditives.flat()?.includes(additive?.code) || meal?.titleAltAdditives?.flat()?.includes(additive?.code)) ? 1 : 0.4),}}
                     key={additive?.code}
                   >
                     {additive?.name}
@@ -552,11 +549,11 @@ export default function MealModal({ mealsFull }) {
             </div>
             {isOpen && <UploadBox mealId={meal?.legacyId} />}
             <div
-            className={shared.centerFlat}
+              className={shared.centerFlat}
               title="Report image for takedown"
               onClick={() => handleRequestImageTakedown()}
             >
-              Request image removal 
+              Request image removal
               <FlagIcon size={18} />
             </div>
           </div>

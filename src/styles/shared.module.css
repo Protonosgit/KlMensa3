@@ -159,6 +159,11 @@
         padding-bottom: 6rem;
         animation: fadeDown 0.2s ease-in-out;
     }
+    .popupOverlay {
+        background-color: none;
+        animation: none;
+        backdrop-filter: none;
+    }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -169,5 +174,10 @@
         max-height: 100vh;
         height: 100%;
         padding-bottom: 6rem;
+    }
+    .popupOverlay {
+        background-color: none;
+        animation: none;
+        backdrop-filter: none;
     }
 }
