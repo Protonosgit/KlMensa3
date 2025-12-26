@@ -14,6 +14,7 @@ function extractAdditiveCodes(inputString) {
   return codes;
 }
 
+// Deprecated!!!
 function additiveFromString(additiveTitleArray) {
   // Accept either an array of strings or a single string
   if (!Array.isArray(additiveTitleArray)) {

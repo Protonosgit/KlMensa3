@@ -17,7 +17,7 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
     // Set up lists for filtering
     const regAdditives = meal?.titleRegAdditives?.flat() || [];
     const altAdditives = meal?.titleAltAdditives?.flat() || [];
-    const generalAdditives = extractAdditiveCodes(meal.zsnummern);
+    const generalAdditives = meal.zsnummern;
 
     // Set up traps
     const r_test_1 = protCookie.some(protein => regAdditives.includes(protein))
@@ -39,12 +39,10 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
     // Trap2 variant specific additive filtering
     if(r_test_1 || a_test_1 || r_test_2 || a_test_2) {
       if(r_test_1 || r_test_2) {
-        meal.titleReg = meal.titleAlt
-        meal.titleRegAdditives = meal.titleAltAdditives
+        // Reg hits trap
+        meal.defaultVariant = 1; // unused but could be useful
       }
-        meal.titleAlt = [];
-        meal.titleAltAdditives = [];
-        meal.altType = 0;
+        // Alt hits trap
     }
 
     rebuildMeals.push(meal);
