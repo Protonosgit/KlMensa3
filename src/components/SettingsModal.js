@@ -2,9 +2,11 @@
 import styles from "./SettingsModal.module.css";
 import shared from "@/styles/shared.module.css";
 import { useEffect, useState } from "react";
+import { Switch } from "./Switch";
 import {
   CatIcon,
   ImageIcon,
+  LayoutList,
   MailIcon,
   Settings,
   StarIcon,
@@ -13,7 +15,6 @@ import {
 import { toast, Toaster } from "react-hot-toast";
 import { login, logout } from "@/app/utils/auth-actions";
 import { getCookie, setCookie } from "@/app/utils/client-system";
-import Switch from "react-switch";
 import {
   revalidatePage,
   retrieveUserAccountData,
@@ -224,66 +225,43 @@ export default function SettingsModal({}) {
               {selectedTab === "general" && (
                 <>
                   {/* Render general settings */}
-                  <div className={styles.popupOption}>
-                    <Switch
-                      onChange={(e) => handleSettingChange("dark", e)}
-                      checked={settings.dark}
-                      className={styles.optionSwitch}
-                      onColor="#fbbf24"
-                    />
-                    <label className={styles.popupOptionLabel}>
-                      <span>Dark mode</span>
-                      <p className={styles.popupOptionDescription}>
-                        Turn of the lights
-                      </p>
-                    </label>
-                  </div>
+                  <Switch
+                    id="darkmode"
+                    title="Dark Mode"
+                    description="Turn off the lights"
+                    defaultChecked={settings.dark}
+                    onChange={(checked) =>
+                      handleSettingChange("dark", checked)
+                    }
+                  />
+                  <Switch
+                    id="darkmode"
+                    title="Bulletpoints"
+                    description="Display the meal title in a bullet point format (popup)"
+                    defaultChecked={settings.threebar}
+                    onChange={(checked) =>
+                      handleSettingChange("threebar", checked)
+                    }
+                  />
+                <Switch
+                    id="darkmode"
+                    title="Short Tile"
+                    description="Only show a shortened version of the meal title"
+                    defaultChecked={settings.shortitle}
+                    onChange={(checked) =>
+                      handleSettingChange("shortitle", checked)
+                    }
+                  />
+                <Switch
+                    id="darkmode"
+                    title="No Limits"
+                    description=" Remove the limit to display more than 8 days in advance (slow)"
+                    defaultChecked={settings.nolimit}
+                    onChange={(checked) =>
+                      handleSettingChange("nolimit", checked)
+                    }
+                  />
 
-                  <div className={styles.popupOption}>
-                    <Switch
-                      onChange={(e) => handleSettingChange("threebar", e)}
-                      checked={settings.threebar}
-                      className={styles.optionSwitch}
-                      onColor="#fbbf24"
-                    />
-                    <label className={styles.popupOptionLabel}>
-                      <span>Bulletpoints</span>
-                      <p className={styles.popupOptionDescription}>
-                        Display the meal title in a bullet point format (popup)
-                      </p>
-                    </label>
-                  </div>
-
-                  <div className={styles.popupOption}>
-                    <Switch
-                      onChange={(e) => handleSettingChange("shortitle", e)}
-                      checked={settings.shortitle}
-                      className={styles.optionSwitch}
-                      onColor="#fbbf24"
-                    />
-                    <label className={styles.popupOptionLabel}>
-                      <span>Short titles</span>
-                      <p className={styles.popupOptionDescription}>
-                        Only show a shortened version of the meal title
-                      </p>
-                    </label>
-                  </div>
-
-                  <div className={styles.popupOption}>
-                    <Switch
-                      onChange={(e) => handleSettingChange("nolimit", e)}
-                      checked={settings.nolimit}
-                      className={styles.optionSwitch}
-                      onColor="#fbbf24"
-                    />
-                    <label className={styles.popupOptionLabel}>
-                      <span>Disable limiter</span>
-                      <p className={styles.popupOptionDescription}>
-                        Remove the limit to display more than 8 days in advance
-                        (slow)
-                      </p>
-                    </label>
-                  </div>
 
                   <div className={shared.divider}></div>
 
@@ -400,9 +378,12 @@ export default function SettingsModal({}) {
               )}
               {selectedTab === "identity" && (
                 <>
-                <h3 className={shared.centerFlat}>Under construction 🛠️</h3>
+                  <h3 className={shared.centerFlat}>Under construction 🛠️</h3>
                   {/* Render identity management options */}
-                  <div className={styles.popupOption} style={{display: "none"}}>
+                  <div
+                    className={styles.popupOption}
+                    style={{ display: "none" }}
+                  >
                     {loggedIn ? (
                       <div className={styles.popupUserContainer}>
                         <p className={styles.userAccounttext}>
