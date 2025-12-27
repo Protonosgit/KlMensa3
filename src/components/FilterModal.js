@@ -4,7 +4,7 @@ import shared from "@/styles/shared.module.css";
 import { useEffect, useState } from "react";
 import { getCookie, setCookie } from "@/app/utils/client-system";
 import { revalidatePage } from "@/app/utils/auth-actions";
-import { Filter, MapPin, Beef, FlaskConical, Trash2 } from "lucide-react";
+import { Filter, MapPin, Beef, FlaskConical, Trash2, XIcon } from "lucide-react";
 
 // Define clear names and codes for meal locations, additives, and proteins.
 const mealLocationClearname = [
@@ -272,6 +272,10 @@ export default function FilterModal({}) {
       {modalVisible && (
         <div className={shared.popupOverlay} onClick={handleCloseModal}>
           <div className={shared.popupContent} onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => handleCloseModal()} className={styles.popupCloseButton} >
+              <XIcon />
+            </button>
+            <h2 className={styles.popupTitle}>Filter</h2>
             {/* Render location filter section */}
             <div className={styles.filterSection}>
               <div className={styles.filterHeadder}>
