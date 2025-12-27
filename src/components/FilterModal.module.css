@@ -33,9 +33,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding: 2rem 1rem;
 }
 .filterList {
   display: grid;
+  width: 100%;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.1rem;
 }
@@ -43,11 +45,11 @@
   margin-bottom: 0.3rem;
   margin-right: 0.2rem;
   white-space: nowrap;
-  display: flex;
   align-items: center;
 }
 .filterLabel {
   margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 .filterHeadder {
   display: flex;
@@ -130,10 +132,7 @@
     display: none;
   }
   .filterList {
-    display: block;
-  }
-  .filterSubtitle {
-    display: none;
+    grid-template-columns: repeat(3, 1fr);
 }
 }
 

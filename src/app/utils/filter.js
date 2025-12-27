@@ -4,10 +4,9 @@ import { extractAdditiveCodes } from "./additives";
 function applyFilterList(locCookie, protCookie, adiCookie, meals) {
   if(!locCookie || !protCookie || !adiCookie) return meals;
 
-
   const rebuildMeals = [];
   for (let index = 0; index < meals.length; index++) {
-    let meal = meals[index];
+    const meal = meals[index];
 
     // Filter for locations
     if (locCookie.includes(meal.dispoart_id)) {
@@ -37,15 +36,16 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
     }
 
     // Trap2 variant specific additive filtering
+    let outputMeal = meal;
     if(r_test_1 || a_test_1 || r_test_2 || a_test_2) {
       if(r_test_1 || r_test_2) {
-        // Reg hits trap
-        meal.defaultVariant = 1; // unused but could be useful
+        // reg hits filter
+        outputMeal = { ...meal, defaultVariant: 1 };
       }
-        // Alt hits trap
+      // alt hits filter
     }
 
-    rebuildMeals.push(meal);
+    rebuildMeals.push(outputMeal);
   }
 
   return rebuildMeals;

@@ -29,7 +29,8 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
       <div
         key={mealIndex+''+dayIndex}
         className={styles.mealCard}
-        data-item-id={mealIndex+''+dayIndex}>
+        data-item-id={mealIndex+''+dayIndex}
+        style={{backgroundColor: meal?.defaultVariant === 1 ? "rgba(255, 0, 0, 0.4)" : ""}}>
           <Image
             priority
             fetchPriority="high"
