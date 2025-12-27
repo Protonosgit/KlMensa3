@@ -47,12 +47,13 @@ export default function SettingsModal({}) {
   useEffect(() => {
     // Fetch settings from cookies and initialize state
     const settingsString = getCookie("settings")?.trim();
-    if (!settingsString) setCookie("settings", JSON.stringify(settings));
+    if (settingsString) {
+      setSettings(JSON.parse(settingsString));
+    }
 
     // Fetch user data from mkl
     async function fetchUserData() {
       const tokenString = getCookie("access_token");
-      console.log(tokenString);
       if (tokenString) {
         setloggedIn(true);
         // const res = await fetch('https://www.mensa-kl.de/api/v1/about-user', { method: 'GET', headers: { Authorization: `Bearer ${tokenString}` }});
@@ -132,10 +133,8 @@ export default function SettingsModal({}) {
 
     // Apply specific changes based on the setting toggled.
     if (key === "dark") {
-      document.documentElement.setAttribute(
-        "data-theme",
-        value ? "dark" : "light"
-      );
+      const theme = value ? "dark" : "light";
+      if (document.body) document.body.setAttribute("data-theme", theme);
     }
     if (key === "layout") {
       document.documentElement.setAttribute("data-layout", value);
@@ -181,14 +180,8 @@ export default function SettingsModal({}) {
       </button>
       {modalVisible && (
         <div className={shared.popupOverlay} onClick={() => handleCloseModal()}>
-          <div
-            className={shared.popupContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => handleCloseModal()}
-              className={styles.popupCloseButton}
-            >
+          <div className={shared.popupContent} onClick={(e) => e.stopPropagation()} >
+            <button onClick={() => handleCloseModal()} className={styles.popupCloseButton} >
               <X />
             </button>
             <h2 className={styles.popupTitle}>Settings</h2>
