@@ -173,7 +173,7 @@ export default function SettingsModal({}) {
           window.history.pushState(
             null,
             "",
-            window.location.href + "#settings"
+            window.location.pathname + "#settings"
           );
         }}
       >
@@ -210,7 +210,7 @@ export default function SettingsModal({}) {
                   }`}
                   onClick={() => setSelectedTab("notifications")}
                 >
-                  Notification
+                  Notifications
                 </p>
                 <p
                   className={`${styles.tabElement} ${
@@ -230,38 +230,35 @@ export default function SettingsModal({}) {
                     title="Dark Mode"
                     description="Turn off the lights"
                     defaultChecked={settings.dark}
-                    onChange={(checked) =>
-                      handleSettingChange("dark", checked)
-                    }
+                    onChange={(checked) => handleSettingChange("dark", checked)}
                   />
                   <Switch
                     id="darkmode"
                     title="Bulletpoints"
-                    description="Display the meal title in a bullet point format (popup)"
+                    description="Display title as bulletpoints (popup)"
                     defaultChecked={settings.threebar}
                     onChange={(checked) =>
                       handleSettingChange("threebar", checked)
                     }
                   />
-                <Switch
+                  <Switch
                     id="darkmode"
-                    title="Short Tile"
-                    description="Only show a shortened version of the meal title"
+                    title="Short Title"
+                    description="Show alternative titles"
                     defaultChecked={settings.shortitle}
                     onChange={(checked) =>
                       handleSettingChange("shortitle", checked)
                     }
                   />
-                <Switch
+                  <Switch
                     id="darkmode"
                     title="No Limits"
-                    description=" Remove the limit to display more than 8 days in advance (slow)"
+                    description="Display more days (slow)"
                     defaultChecked={settings.nolimit}
                     onChange={(checked) =>
                       handleSettingChange("nolimit", checked)
                     }
                   />
-
 
                   <div className={shared.divider}></div>
 
@@ -343,37 +340,48 @@ export default function SettingsModal({}) {
                 <>
                   <h3 className={shared.centerFlat}>Under construction 🛠️</h3>
 
-                  {/* <div className={styles.popupOption}>
-                          <Switch onChange={(e) => handleSettingChange("schedulenoti", e)} checked={settings.schedulenoti} className={styles.optionSwitch} onColor="#fbbf24"  />
-                        <label className={styles.popupOptionLabel}>
-                          <span>Push notifications</span>
-                          <p className={styles.popupOptionDescription}>Receive todays meals in a push notification</p>
-                        </label>
-                        </div>
+                  {/* <Switch
+                    id="darkmode"
+                    title="Daily Notification"
+                    description="Receive todays meals in a push notification"
+                    defaultChecked={settings.schedulenoti}
+                    onChange={(checked) =>
+                      handleSettingChange("schedulenoti", checked)
+                    }
+                  />
+                  <Switch
+                    id="darkmode"
+                    title="Bookmark Notification"
+                    description="Receive a notification when a bookmark is on the menu"
+                    defaultChecked={settings.booknoti}
+                    onChange={(checked) =>
+                      handleSettingChange("booknoti", checked)
+                    }
+                  />
 
-                        <div className={styles.popupOption}>
-                          <Switch onChange={(e) => handleSettingChange("booknoti", e)} checked={settings.booknoti} className={styles.optionSwitch} onColor="#fbbf24"  />
-                        <label className={styles.popupOptionLabel}>
-                          <span>Bookmark notifications</span>
-                          <p className={styles.popupOptionDescription}>Receive a notification when a bookmark is on the menu</p>
-                        </label>
-                        </div>
+                  <div className={shared.divider}></div>
 
-                        <div className={shared.divider}></div>
+                  <div className={styles.popupOption}>
+                    <span style={{ width: "100%", textAlign: "left" }}>
+                      Time:{" "}
+                    </span>
+                    <select
+                      className={styles.popupSelect}
+                      value={settings.notitime}
+                      onChange={(e) =>
+                        handleSettingChange("notitime", e.target.value)
+                      }
+                    >
+                      <option value="8">8am</option>
+                      <option value="9">9am</option>
+                      <option value="10">10am</option>
+                      <option value="11">11am</option>
+                    </select>
+                  </div>
 
-                        <div className={styles.popupOption}>
-                          <span style={{width: "100%", textAlign: "left"}}>Time: </span>
-                          <select className={styles.popupSelect} value={settings.notitime} onChange={(e) => handleSettingChange("notitime", e.target.value)} >
-                          <option value="8">8am</option>
-                          <option value="9">9am</option>
-                          <option value="10">10am</option>
-                          <option value="11">11am</option>
-                          </select>
-                        </div>
+                  <div className={shared.divider}></div>
 
-                        <div className={shared.divider}></div>
-
-                        <p>Bookmarks</p> */}
+                  <p>Bookmarks</p> */}
                 </>
               )}
               {selectedTab === "identity" && (

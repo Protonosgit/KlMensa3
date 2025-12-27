@@ -264,18 +264,14 @@ export default function FilterModal({}) {
         title="Meal filters"
         onClick={() => {
           setModalVisible(true);
-          window.history.pushState(
-            null,
-            "",
-            window.location.href + "#filter"
-          );
+          window.history.pushState(null, "", window.location.pathname + "#filter");
         }}
       >
         <Filter className={shared.headderIcon} />
       </button>
       {modalVisible && (
-        <div className={shared.popupOverlay}>
-          <div className={styles.popupContent}>
+        <div className={shared.popupOverlay} onClick={handleCloseModal}>
+          <div className={shared.popupContent} onClick={(e) => e.stopPropagation()}>
             {/* Render location filter section */}
             <div className={styles.filterSection}>
               <div className={styles.filterHeadder}>
@@ -415,8 +411,7 @@ export default function FilterModal({}) {
                 })}
               </ul>
             </div>
-          </div>
-          {/* Render action buttons */}
+                      {/* Render action buttons */}
           <div className={styles.buttonBar}>
             <button
               title="Apply filter"
@@ -435,6 +430,7 @@ export default function FilterModal({}) {
             >
               <Trash2 size={20} />
             </button>
+          </div>
           </div>
         </div>
       )}
