@@ -6,8 +6,8 @@ import { Suspense } from "react";
 import { InfoIcon } from "lucide-react";
 
 const DynamicSettingsModal = dynamic(() => import("@/components/SettingsModal"), { ssr: true });
-// const DynamicFilterModal = dynamic(() => import("@/components/FilterModal"), { ssr: true });
-const DynamicFilterMenu = dynamic(() => import("@/components/FilterPopup"), { ssr: true });
+const DynamicFilterModal = dynamic(() => import("@/components/FilterModal"), { ssr: true });
+// const DynamicFilterMenu = dynamic(() => import("@/components/FilterPopup"), { ssr: true });
 const DynamicScrollToTopButton = dynamic(() => import("@/components/ScrollToTopButton"), { ssr: true });
 
 
@@ -50,8 +50,7 @@ export default async function Home() {
       <main className={shared.main}>
         <div className={styles.headerButtonSection}>
           <DynamicSettingsModal />
-          <DynamicFilterMenu/>
-          {/* <DynamicFilterModal/> */}
+          <DynamicFilterModal/>
         </div>
         <Suspense fallback={<SkeletonLoading />}>
           <Schedule/>

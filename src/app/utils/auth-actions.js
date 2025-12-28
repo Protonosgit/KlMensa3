@@ -11,14 +11,6 @@ export async function retrieveUserAccountData() {
     console.log(res);
 }
 
-export async function logout() {
-  const res = await fetch('https://www.mensa-kl.de/external_auth/logout', { method: 'POST' });
-  if(!res.ok) return true;
-  return false;
-}
-
-
-
 export async function revalidatePage() {
   revalidatePath('/');
 }

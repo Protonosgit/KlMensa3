@@ -158,7 +158,7 @@
         max-width: none;
         max-height: 100vh;
         height: 100%;
-        padding-bottom: 6rem;
+        padding-bottom: 1rem;
         animation: fadeDown 0.2s ease-in-out;
     }
     .popupOverlay {
@@ -176,7 +176,7 @@
         max-width: none;
         max-height: 100vh;
         height: 100%;
-        padding-bottom: 6rem;
+        padding-bottom: 3rem;
     }
     .popupOverlay {
         background-color: none;

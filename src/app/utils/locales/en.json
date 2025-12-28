@@ -1,0 +1,22 @@
+{
+  "filter": {
+    "buttonTitle": "Meal filters",
+    "title": "Filter",
+    "location": { "title": "Location:" },
+    "protein": { "title": "Protein:" },
+    "additives": { "title": "Additives:" },
+    "selectAll": "Select all",
+    "apply": "Apply",
+    "reset": "Reset filter"
+  },
+  "settings": {
+    "title": "Settings",
+    "dark": "Dark mode",
+    "layout": "Layout",
+    "eyedef": "Vision assistance",
+    "language": "Language",
+    "nolimit": "No limit",
+    "shortitle": "Short title",
+    "pricecat": "Price category"
+  }
+}

@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 12px 0;
+  padding: 8px 0;
 }
 
 .switchContainer:last-child {
@@ -22,7 +22,7 @@
 }
 
 .description {
-  font-size: 14px;
+  font-size: 1rem;
   color: var(--subtitle-text);
   margin: 0;
 }

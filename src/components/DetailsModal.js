@@ -19,6 +19,7 @@ import {
   Bookmark,
   Bot,
   Clock10Icon,
+  CrossIcon,
   FlagIcon,
   InfoIcon,
   Leaf,
@@ -29,6 +30,7 @@ import {
   SoupIcon,
   SparklesIcon,
   StarOff,
+  XIcon,
 } from "lucide-react";
 import VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
@@ -381,7 +383,7 @@ export default function MealModal({ mealsFull }) {
               onClick={requestCloseModal}
               className={styles.popupActionButton}
             >
-              ×
+              <XIcon size={20} />
             </button>
           </div>
         </div>

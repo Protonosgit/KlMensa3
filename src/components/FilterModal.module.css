@@ -34,38 +34,34 @@
   gap: 1rem;
 }
 .filterSection {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1rem ;
+  padding: 1rem;
 }
 .filterList {
   display: grid;
-  width: 100%;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.1rem;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 .filterItem {
-  margin-bottom: 0.3rem;
+  display: flex;
+  margin-bottom: 0.4rem;
   margin-right: 0.2rem;
   white-space: nowrap;
   align-items: center;
 }
 .filterLabel {
-  margin-left: 0.5rem;
-  margin-bottom: 0.5rem;
+  /* test */
 }
 .filterHeadder {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-content: center;
-}
-.buttonBar {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
 }
 .filterCheckbox {
   margin-right: 0.5rem;
@@ -94,7 +90,11 @@
   transform: translate(-50%, -50%);
 }
 
-
+.buttonBar {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
 .applyButton {
   background-color: var(--primary-color);
   color: var(--main-bg);
@@ -121,11 +121,6 @@
 }
 .resetButton:hover {
   background-color: var(--primary-color);
-}
-.seperator {
-  height: 1px;
-  width: 100%;
-  background-color: var(--seperator-color);
 }
 
 @media (min-width: 768px) {
