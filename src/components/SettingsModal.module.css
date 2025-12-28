@@ -118,13 +118,20 @@
 }
 
 .popupSelect {
-  width: 55%;
+  width: 70%;
   padding: 0.3rem;
   border: 1px solid var(--darkbox-border);
   border-radius: 0.5rem;
   font-size: 1rem;
   color: var(--main-text);
   background-color: var(--darkbox-bg);
+}
+
+.selectTitle {
+  width: 100%;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .popupLabel {

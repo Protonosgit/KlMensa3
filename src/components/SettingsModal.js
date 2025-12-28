@@ -13,14 +13,13 @@ import {
   X,
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
-import { login, logout } from "@/app/utils/auth-actions";
 import { getCookie, setCookie } from "@/app/utils/client-system";
 import {
   revalidatePage,
   retrieveUserAccountData,
 } from "@/app/utils/auth-actions";
 
-export default function SettingsModal({}) {
+export default function SettingsModal() {
   // State variables for managing modal visibility, settings, and user authentication
   const [modalVisible, setModalVisible] = useState(false);
   const [userAccountData, setUserAccountData] = useState({});
@@ -40,6 +39,7 @@ export default function SettingsModal({}) {
     notitime: "8",
     booknoti: false,
     schedulenoti: false,
+    experiments : false,
   });
   const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState();
@@ -141,6 +141,9 @@ export default function SettingsModal({}) {
     }
     if (key === "eyedef") {
       document.documentElement.setAttribute("data-eyedef", value);
+    }
+    if (key === "language") {
+      //setLocale();
     }
     if (
       key === "by2lay" ||
@@ -256,7 +259,7 @@ export default function SettingsModal({}) {
                   <div className={shared.divider}></div>
 
                   <div className={styles.popupOption}>
-                    <span style={{ width: "100%", textAlign: "left" }}>
+                    <span className={styles.selectTitle}>
                       Price category:{" "}
                     </span>
                     <select
@@ -275,7 +278,7 @@ export default function SettingsModal({}) {
                   <div
                     className={`${styles.popupOption} ${styles.mobileLayoutOption}`}
                   >
-                    <span style={{ width: "100%", textAlign: "left" }}>
+                    <span className={styles.selectTitle}>
                       Layout:{" "}
                     </span>
                     <select
@@ -292,7 +295,7 @@ export default function SettingsModal({}) {
                   </div>
 
                   <div className={styles.popupOption}>
-                    <span style={{ width: "100%", textAlign: "left" }}>
+                    <span className={styles.selectTitle}>
                       🅱️ Vision assistance:{" "}
                     </span>
                     <select
@@ -313,7 +316,7 @@ export default function SettingsModal({}) {
                   </div>
 
                   <div className={styles.popupOption}>
-                    <span style={{ width: "100%", textAlign: "left" }}>
+                    <span className={styles.selectTitle}>
                       🅱️ Language:{" "}
                     </span>
                     <select

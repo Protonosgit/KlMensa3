@@ -32,7 +32,7 @@ export default async function RootLayout({ children }) {
   const settings = settingsCookie?.value ? JSON.parse(settingsCookie.value) : {}
 
   return (
-    <html lang="de">
+    <html lang="de" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body data-theme={settings.dark ? "dark" : "light"} data-layout={settings.layout} data-eyedef={settings.eyedef}>
         {children}
       </body>

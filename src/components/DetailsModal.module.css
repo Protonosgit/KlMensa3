@@ -65,6 +65,7 @@
   }
   
   .popupActionButton {
+    color: var(--main-text);
     background-color: var(--lightbox-bg);
     border-radius: 50%;
     width: 2.5rem;

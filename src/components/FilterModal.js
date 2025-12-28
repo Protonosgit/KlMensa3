@@ -4,7 +4,7 @@ import shared from "@/styles/shared.module.css";
 import { useEffect, useState } from "react";
 import { getCookie, setCookie } from "@/app/utils/client-system";
 import { revalidatePage } from "@/app/utils/auth-actions";
-import { Filter, MapPin, Beef, FlaskConical, Trash2, XIcon } from "lucide-react";
+import { Filter, MapPin, Beef, FlaskConical, Trash2, XIcon, Check } from "lucide-react";
 
 // Define clear names and codes for meal locations, additives, and proteins.
 const mealLocationClearname = [
@@ -64,10 +64,8 @@ export default function FilterModal({}) {
   const [mealProteins, setMealProteins] = useState([]);
   const [mealAdditives, setMealAdditives] = useState([]);
   const [filterActive, setFilterActive] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-
   function loadFilters() {
-    setRefreshing(true);
+
     setFilterActive(false);
 
     // parse cookies once and safely JSON.parse values
@@ -120,8 +118,6 @@ export default function FilterModal({}) {
     } else {
       setMealProteins([]);
     }
-
-    setRefreshing(false);
   }
 
   useEffect(() => {
@@ -165,7 +161,6 @@ export default function FilterModal({}) {
 
   // Store selected filters in cookies and reload the page.
   async function storeFilter() {
-    setRefreshing(true);
     const locArray = encodeURIComponent(JSON.stringify(mealLocations));
     document.cookie = `location=${locArray}; path=/`;
     const protArray = encodeURIComponent(JSON.stringify(mealProteins));
@@ -178,12 +173,11 @@ export default function FilterModal({}) {
     try {
       await revalidatePage();
     } finally {
-      setRefreshing(false);
+      // handleCloseModal();
     }
   }
 
   async function resetFilter() {
-    setRefreshing(true);
     document.cookie =
       "location=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     document.cookie = "protein=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
@@ -198,7 +192,6 @@ export default function FilterModal({}) {
     try {
       await revalidatePage();
     } finally {
-      setRefreshing(false);
     }
   }
 
@@ -420,15 +413,13 @@ export default function FilterModal({}) {
             <button
               title="Apply filter"
               onClick={storeFilter}
-              disabled={refreshing}
               className={styles.applyButton}
             >
-              {refreshing ? <Spinner /> : "Apply"}
+              Apply
             </button>
             <button
               title="Reset filter"
               onClick={resetFilter}
-              disabled={refreshing}
               className={styles.resetButton}
               style={{ display: filterActive ? "block" : "none" }}
             >

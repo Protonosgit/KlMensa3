@@ -21,7 +21,7 @@ export function Switch({
   };
 
   return (
-    <div className={styles.switchContainer}>
+    <div className={styles.switchContainer} onClick={handleChange}>
       <div className={styles.content}>
         <p htmlFor={id} className={styles.title}>
           {title}
@@ -33,7 +33,6 @@ export function Switch({
         role="switch"
         aria-checked={checked}
         aria-label={title}
-        onClick={handleChange}
         disabled={disabled}
         className={`${styles.switch} ${checked ? styles.checked : ""} ${
           disabled ? styles.disabled : ""
