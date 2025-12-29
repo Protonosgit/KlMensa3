@@ -1,5 +1,3 @@
-import { extractAdditiveCodes } from "./additives";
-
 
 function applyFilterList(locCookie, protCookie, adiCookie, meals) {
   if(!locCookie || !protCookie || !adiCookie) return meals;
@@ -36,13 +34,22 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
     }
 
     // Trap2 variant specific additive filtering
+    let hitCounter = false;
     let outputMeal = meal;
     if(r_test_1 || a_test_1 || r_test_2 || a_test_2) {
       if(r_test_1 || r_test_2) {
         // reg hits filter
-        outputMeal = { ...meal, defaultVariant: 1 };
+        outputMeal = { ...meal, partialFiltered: 1 };
+        hitCounter = true;
       }
-      // alt hits filter
+      if(a_test_1 || a_test_2) {
+        // alt hits filter
+        if(hitCounter) {
+          // Both variants are contaminated! Remove
+          continue;
+        }
+        outputMeal = { ...meal, partialFiltered: 1 };
+      }
     }
 
     rebuildMeals.push(outputMeal);
@@ -52,46 +59,5 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
 }
 
 
-function applyFilterListOld(locCookie, protCookie, adiCookie, meals) {
-  if(!locCookie || !protCookie || !adiCookie) return meals;
 
-  // Filter the meals by location
-  const filteredMeals = meals.filter(meal => {
-    if (locCookie.includes(meal.dispoart_id)) {
-      return false;
-    }
-    // Filter the meals by protein used
-    if (protCookie.some(protein => extractAdditiveCodes(meal.zsnummern).includes(protein))) {
-      return false;
-    }
-    // Filter the meals by additives
-    if (adiCookie.some(additive => extractAdditiveCodes(meal.zsnummern).includes(additive))) {
-      return false;
-    }
-    return true;
-  });
-
-  return filteredMeals;
-}
-
-function applyFilter(locCookie, protCookie, adiCookie, meal) {
-  if(!locCookie || !protCookie || !adiCookie) return true;
-
-    // Filter the meals by location
-    if (locCookie.includes(meal.dispoart_id)) {
-      return false;
-    }
-    // Filter the meals by protein used
-    if (protCookie.some(protein => extractAdditiveCodes(meal.zsnummern).includes(protein))) {
-      return false;
-    }
-    // Filter the meals by additives
-    if (adiCookie.some(additive => extractAdditiveCodes(meal.zsnummern).includes(additive))) {
-      return false;
-    }
-    return true;
-}
-
-
-
-export { applyFilter, applyFilterList };
+export { applyFilterList };

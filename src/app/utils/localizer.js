@@ -1,7 +1,7 @@
 // Contains ai written code!!
 
 import { useCallback, useEffect, useState, useMemo } from "react";
-import { getCookie, setCookie } from "@/app/utils/client-system";
+import { getCookie, setCookie } from "@/app/utils/client-utils";
 import en from "./locales/en.json";
 import de from "./locales/de.json";
 

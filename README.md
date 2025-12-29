@@ -10,7 +10,7 @@
 - NextJS 16
 - ~~Supabase~~
 - Neon
-- Shadcn
+- ~~Shadcn~~
 - Lucide React
 
 ## Contributions

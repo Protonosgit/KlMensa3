@@ -2,13 +2,12 @@
 import { revalidatePath } from "next/cache";
 import { neon } from '@neondatabase/serverless';
 
-export async function putRating(legacyId, stars) {
-  return { error: "Not implemented", data: null };
-}
-
-export async function deleteRating(legacyId) {
-  return { error: "Not implemented", data: null };
-}
+// async function requestAccountData() {
+//   const sql = neon(`${process.env.NEON_DATABASE_URL}`);
+//     const email = 'dummy@example.com';
+//     const res = await sql.query('SELECT * from users WHERE email = $1', [email]);
+//     console.log(res);
+// }
 
 export async function getNutritionForId(mumurId) {
   const sql = neon(`${process.env.NEON_DATABASE_URL}`);
@@ -24,6 +23,10 @@ export async function getNutritionForId(mumurId) {
   return { error: "Not implemented", data: null };
 }
 
+
+export async function revalidatePage() {
+  revalidatePath('/');
+}
 
 export async function sendSystemTGMessage(text) {
 

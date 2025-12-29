@@ -11,12 +11,36 @@
   },
   "settings": {
     "title": "Settings",
-    "dark": "Dark mode",
-    "layout": "Layout",
-    "eyedef": "Vision assistance",
-    "language": "Language",
-    "nolimit": "No limit",
-    "shortitle": "Short title",
-    "pricecat": "Price category"
+    "tab_general": "General",
+    "tab_notif": "Notifications",
+    "tab_acount": "Account",
+
+    "general": {
+      "darkmode": "Dark Mode",
+      "darkmode_desc": "Turn of the lights",
+      "bullets": "Bulletpoints",
+      "bullets_desc": "Display title as bulletpoints (popup)",
+      "shortle": "Short title",
+      "shortle_desc": "Display alternative title",
+      "limitless": "No limit",
+      "limitless_desc": "Display more days (slow)",
+
+      "pricecat": "Price category",
+      "pricecat_stu": "Students",
+      "pricecat_emp": "Employees",
+      "pricecat_gue": "Guests",
+      "visas": "Vision assistance",
+      "visas_norm": "Normal Vision",
+      "visas_maly": "Deuteranomaly/Protanomaly",
+      "visas_opia": "Deuteranopia/Protanopia",
+      "visas_cata": "Cataracts/AMD",
+      "visas_phot": "Photophobia",
+      "visas_trit": "Tritanopia",
+      "visas_gray": "Grayscale",
+      
+      "language": "Language",
+      "language_en": "English",
+      "language_de": "Deutsch"
+    }
   }
 }
