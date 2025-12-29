@@ -326,6 +326,12 @@ export default function SettingsModal() {
                       {/* <option value="ger">German</option> */}
                     </select>
                   </div>
+                  <a className={styles.crowdTranslateBox} href="https://www.crowdtranslate.net/contribute/klmensa/">
+                    <h3>Help translate Klmensa!</h3>
+                    <p>
+                      Click to help translate Klmensa into <u>YOUR</u> language!{" "}
+                    </p>
+                  </a>
                 </>
               )}
               {selectedTab === "notifications" && (
