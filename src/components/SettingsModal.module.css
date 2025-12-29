@@ -63,7 +63,7 @@
 .popupOption {
   display: flex;
   align-items: center;
-  margin: 1rem 0.5rem;
+  margin: 1rem 0rem;
   gap: 0.8rem;
 }
 
@@ -176,6 +176,17 @@
   height: 1px;
   background-color: var(--seperator-color);
   margin: 1rem 0;
+}
+
+.crowdTranslateBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-top: 2rem;
+  box-shadow: var(--lightmode-shadow);
 }
 
 
