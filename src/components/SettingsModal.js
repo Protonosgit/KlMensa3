@@ -13,11 +13,10 @@ import {
   X,
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
-import { getCookie, setCookie } from "@/app/utils/client-system";
+import { getCookie, setCookie } from "@/app/utils/client-utils";
 import {
   revalidatePage,
-  retrieveUserAccountData,
-} from "@/app/utils/auth-actions";
+} from "@/app/utils/database-actions";
 
 export default function SettingsModal() {
   // State variables for managing modal visibility, settings, and user authentication
@@ -56,8 +55,6 @@ export default function SettingsModal() {
       const tokenString = getCookie("access_token");
       if (tokenString) {
         setloggedIn(true);
-        // const res = await fetch('https://www.mensa-kl.de/api/v1/about-user', { method: 'GET', headers: { Authorization: `Bearer ${tokenString}` }});
-        // const user = await res.json();
         // setUser(user);
       }
     }
@@ -84,7 +81,6 @@ export default function SettingsModal() {
       toast.error("Login attempt failed please try again!");
       window.history.pushState({}, "", window.location.pathname);
     }
-    // console.log("If you can read this you are good enough to contribute to the repo!");
   }, []);
 
   // Detect back gesture on Android, Windows and maybe ios and close modal if open

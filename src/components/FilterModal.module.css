@@ -94,14 +94,14 @@
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
+  padding-inline: 1rem;
 }
 .applyButton {
   background-color: var(--primary-color);
   color: var(--main-bg);
   border: none;
-  margin: 1rem;
   flex: 1;
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -112,8 +112,7 @@
   background-color: transparent;
   color: var(--main-text);
   border: 2px solid var(--primary-color);
-  margin: 1rem;
-  padding: 0.5rem 1rem;
+  padding-inline: 1.5rem;
   font-size: 1rem;
   cursor: pointer;
   border-radius: 0.5rem;

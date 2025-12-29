@@ -1,3 +1,4 @@
+// Contains ai generated code
 "use client";
 import { useState } from "react";
 import styles from "./DetailsModal.module.css";
@@ -16,12 +17,12 @@ export default function StarRating({ disabled = false, starsSet, commonRating = 
     const baseClass = index <= commonRating ? `${styles.star} ${styles.predefined}` : styles.star;
 
     if (hovered !== null) {
-      // On hover → black
+      // On hover => black
       return index <= hovered ? `${baseClass} ${styles.active}` : baseClass;
     }
 
     if (submittedRating !== null) {
-      // After user selects → always black
+      // After user selects => always black
       return index <= submittedRating ? `${baseClass} ${styles.active}` : baseClass;
     }
 

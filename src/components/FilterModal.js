@@ -2,8 +2,7 @@
 import styles from "./FilterModal.module.css";
 import shared from "@/styles/shared.module.css";
 import { useEffect, useState } from "react";
-import { getCookie, setCookie } from "@/app/utils/client-system";
-import { revalidatePage } from "@/app/utils/auth-actions";
+import { revalidatePage } from "@/app/utils/database-actions";
 import { Filter, MapPin, Beef, FlaskConical, Trash2, XIcon, Check } from "lucide-react";
 
 // Define clear names and codes for meal locations, additives, and proteins.
@@ -423,7 +422,7 @@ export default function FilterModal({}) {
               className={styles.resetButton}
               style={{ display: filterActive ? "block" : "none" }}
             >
-              <Trash2 size={20} />
+              <Trash2 size={22} />
             </button>
           </div>
           </div>

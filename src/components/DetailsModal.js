@@ -12,7 +12,7 @@ import Image from "next/image";
 import shared from "@/styles/shared.module.css";
 import styles from "./DetailsModal.module.css";
 import StarRating from "./Starrating";
-import { getCookie, setCookie } from "@/app/utils/client-system";
+import { getCookie, setCookie } from "@/app/utils/client-utils";
 import toast from "react-hot-toast";
 import { getNutritionForId } from "@/app/utils/database-actions";
 import {

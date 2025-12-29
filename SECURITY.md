@@ -6,6 +6,7 @@
 | ------- | ------------------ |
 | Live    | :white_check_mark: |
 | Staging | :white_check_mark: |
+| Others  | :negative_squared_cross_mark:   |
 
 ## Reporting a Vulnerability
 
