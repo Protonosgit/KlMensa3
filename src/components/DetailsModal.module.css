@@ -348,7 +348,7 @@
 }
 
   /* Responsive Design */
-  @media (max-width: 768px) {
+  @media (max-width: 880px) {
     .popupImage {
     height: 280px;
     border-radius: 0;
@@ -395,10 +395,12 @@
   }
   }
 
-  @media (min-width: 769px) and (max-width: 1024px) {
+@media (any-pointer: coarse) and (min-width: 801px) and (max-width: 1380px) {
     .popupImage {
     height: 300px;
     border-radius: 0;
     }
-
+    .popupTitle {
+      font-size: 1.2rem;
+    }
   }

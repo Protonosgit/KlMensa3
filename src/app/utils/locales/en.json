@@ -1,46 +1,38 @@
 {
-  "filter": {
-    "buttonTitle": "Meal filters",
-    "title": "Filter",
-    "location": { "title": "Location:" },
-    "protein": { "title": "Protein:" },
-    "additives": { "title": "Additives:" },
-    "selectAll": "Select all",
-    "apply": "Apply",
-    "reset": "Reset filter"
-  },
-  "settings": {
-    "title": "Settings",
-    "tab_general": "General",
-    "tab_notif": "Notifications",
-    "tab_acount": "Account",
+  "filter_buttonTitle": "Meal filters",
+  "filter_title": "Filter",
+  "filter_selectAll": "Select all",
+  "filter_applyButton": "Apply",
+  "filter_resetButton": "Reset filter",
 
-    "general": {
-      "darkmode": "Dark Mode",
-      "darkmode_desc": "Turn of the lights",
-      "bullets": "Bulletpoints",
-      "bullets_desc": "Display title as bulletpoints (popup)",
-      "shortle": "Short title",
-      "shortle_desc": "Display alternative title",
-      "limitless": "No limit",
-      "limitless_desc": "Display more days (slow)",
+  "settings_title": "Settings",
+  "tab_general": "General",
+  "tab_notif": "Notifications",
+  "tab_acount": "Account",
 
-      "pricecat": "Price category",
-      "pricecat_stu": "Students",
-      "pricecat_emp": "Employees",
-      "pricecat_gue": "Guests",
-      "visas": "Vision assistance",
-      "visas_norm": "Normal Vision",
-      "visas_maly": "Deuteranomaly/Protanomaly",
-      "visas_opia": "Deuteranopia/Protanopia",
-      "visas_cata": "Cataracts/AMD",
-      "visas_phot": "Photophobia",
-      "visas_trit": "Tritanopia",
-      "visas_gray": "Grayscale",
-      
-      "language": "Language",
-      "language_en": "English",
-      "language_de": "Deutsch"
-    }
-  }
+  "switch_darkmode": "Dark Mode",
+  "switch_darkmode_desc": "Turn of the lights",
+  "switch_bullets": "Bulletpoints",
+  "switch_bullets_desc": "Display title as bulletpoints (popup)",
+  "switch_shortle": "Short title",
+  "switch_shortle_desc": "Display alternative title",
+  "switch_limitless": "No limit",
+  "switch_limitless_desc": "Display more days (slow)",
+
+  "select_pricecat": "Price category",
+  "select_pricecat_stu": "Students",
+  "select_pricecat_emp": "Employees",
+  "select_pricecat_gue": "Guests",
+  "select_visas": "Vision assistance",
+  "select_visas_norm": "Normal Vision",
+  "select_visas_maly": "Deuteranomaly/Protanomaly",
+  "select_visas_opia": "Deuteranopia/Protanopia",
+  "select_visas_cata": "Cataracts/AMD",
+  "select_visas_phot": "Photophobia",
+  "select_visas_trit": "Tritanopia",
+  "select_visas_gray": "Grayscale",
+  "select_language": "Language",
+  "select_language_en": "English",
+  "select_language_de": "Deutsch"
+    
 }

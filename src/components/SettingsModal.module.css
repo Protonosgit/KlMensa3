@@ -190,7 +190,7 @@
 }
 
 
-@media (min-width: 768px) {
+@media (min-width: 880px) {
   .scrollToTopButton {
     bottom: 2rem;
     right: 4rem;
@@ -206,5 +206,6 @@
   }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+  @media (any-pointer: coarse) and (min-width: 881px) and (max-width: 1380px) {
+
 }

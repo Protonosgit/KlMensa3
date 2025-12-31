@@ -45,6 +45,7 @@
     max-height: 90vh;
     overflow-y: auto;
     filter: var(--eyedef-filter);
+    padding-bottom: 1rem;
 }
 
 
@@ -150,7 +151,7 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 880px) {
     .popupContent {
         position: relative;
         border-radius: 0;
@@ -168,16 +169,8 @@
     }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
-    .popupContent {
-        position: relative;
-        border-radius: 0;
-        width: 100vw;
-        max-width: none;
-        max-height: 100vh;
-        height: 100%;
-        padding-bottom: 3rem;
-    }
+@media (any-pointer: coarse) and (min-width: 801px) and (max-width: 1380px) {
+
     .popupOverlay {
         background-color: none;
         animation: none;
