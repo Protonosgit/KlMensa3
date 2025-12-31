@@ -93,7 +93,7 @@
   }
 
 
-    @media (max-width: 768px) {
+    @media (max-width: 880px) {
       .mealList {
         display: grid;
         grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -130,22 +130,21 @@
       }
     }
 
-    
-    @media (min-width: 769px) and (max-width: 1024px) {
+  @media (any-pointer: coarse) and (min-width: 881px) and (max-width: 1380px) {
       .mealList {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.7rem;
       }
       [data-layout="grid"] .mealList {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.5rem;
       }
       .skeletonGrid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
       }
       .headerButtonSection {
         justify-content: flex-end;
       }
-    }
+}

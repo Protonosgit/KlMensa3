@@ -64,7 +64,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .container {
     padding: 0 0.3rem;
   }
@@ -87,12 +87,11 @@
 }
 
 
-@media (min-width: 769px) and (max-width: 1024px) {
-  .container {
-    padding: 0 1rem;
-  }
 
-  .linkGrid {
-    grid-template-columns: repeat(3, 2fr);
-  }
+
+@media (any-pointer: coarse) and (min-width: 801px) and (max-width: 1380px) {
+  .container { padding: 0 1rem; }
+  .linkGrid { grid-template-columns: repeat(3, 2fr); }
+  .headerTitle { font-size: 1.7rem; }
+  .headerSubtitle { font-size: 1.1rem; }
 }
