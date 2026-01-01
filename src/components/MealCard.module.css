@@ -179,7 +179,7 @@
     }
 
     [data-layout="biglist"] .mealInfo {
-      width: 100%;
+      width: auto;
     }
 
     [data-layout="biglist"] .mealTitle {
@@ -206,7 +206,8 @@
     }
 
     [data-layout="grid"] .mealInfo {
-      width: 100%;
+      width: auto;
+      padding: 0.25em;
     }
 
     [data-layout="grid"] .mealTitle {
