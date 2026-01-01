@@ -494,8 +494,8 @@ export default function MealModal({ mealsFull }) {
                     onClick={() => setSelectedAdditive(additive?.code)}
                     className={styles.dietaryTag}
                     style={{opacity:selectedVariant === 0 ? 
-                      ((meal?.titleRegAdditives?.flat().includes(additive?.code) || !meal?.titleAltAdditives?.flat()?.includes(additive?.code)) ? 1 : 0.4) : 
-                      ((!meal?.titleRegAdditives.flat()?.includes(additive?.code) || meal?.titleAltAdditives?.flat()?.includes(additive?.code)) ? 1 : 0.4),}}
+                      ((meal?.titleRegAdditives?.flat().includes(additive?.code) || !meal?.titleAltAdditives?.flat()?.includes(additive?.code)) ? 1 : 0.35) : 
+                      ((!meal?.titleRegAdditives.flat()?.includes(additive?.code) || meal?.titleAltAdditives?.flat()?.includes(additive?.code)) ? 1 : 0.35),}}
                     key={additive?.code}
                   >
                     {additive?.name}

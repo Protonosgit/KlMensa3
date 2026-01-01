@@ -151,7 +151,7 @@
 }
 
 /* Responsive Design */
-@media (max-width: 880px) {
+@media (max-width: 920px) {
     .popupContent {
         position: relative;
         border-radius: 0;
@@ -169,7 +169,7 @@
     }
 }
 
-@media (any-pointer: coarse) and (min-width: 801px) and (max-width: 1380px) {
+@media (any-pointer: coarse) and (min-width: 921px) and (max-width: 1380px) {
 
     .popupOverlay {
         background-color: none;
