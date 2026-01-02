@@ -324,6 +324,7 @@ async function ParseMenu() {
         rating_amt: sisterItem?.rating_amt,
         image: sisterItem?.image,
         imageUrl: sisterItem?.image_url_webp,
+        legacyId_alt:brotherItem?.m_id,
         altRating: brotherItem?.rating,
         altRating_amt: brotherItem?.rating_amt,
         altImage: brotherItem?.image,

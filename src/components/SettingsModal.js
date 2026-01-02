@@ -384,11 +384,10 @@ export default function SettingsModal() {
               )}
               {selectedTab === "identity" && (
                 <>
-                  <h3 className={shared.centerFlat}>Under construction 🛠️</h3>
-                  {/* Render identity management options */}
+                  {/* <h3 className={shared.centerFlat}>Under construction 🛠️</h3> */}
                   <div
                     className={styles.popupOption}
-                    style={{ display: "none" }}
+                    // style={{ display: "none" }}
                   >
                     {loggedIn ? (
                       <div className={styles.popupUserContainer}>

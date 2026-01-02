@@ -4,7 +4,7 @@ export async function GET() {
   const clientUuid = process.env.LEGACY_API_URL_APP_UUID;
   const CSRF_TOKEN = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-  const loginUrl = `${process.env.LEGACY_API_URL}/api/v1/authorize-client?client_uuid=${clientUuid}&csrf_token=${CSRF_TOKEN}`;
+  const loginUrl = `${process.env.NEXT_PUBLIC_LEGACY_API_URL}/api/v1/authorize-client?client_uuid=${clientUuid}&csrf_token=${CSRF_TOKEN}`;
 
   const res = NextResponse.redirect(loginUrl);
     res.cookies.set({
