@@ -3,8 +3,9 @@
 
 async function requestUserData() {
     try {
-        const res = await fetch('https://www.mensa-kl.de/api/v1/about-user', { method: 'GET', headers: { Authorization: `Bearer ${tokenString}` }});
-        const user = await res.json();
+        const tokenString = getCookie("access_token");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LEGACY_API_URL}/api/v1/about-user`, { method: 'GET', headers: { Authorization: `Bearer ${tokenString}` }});
+        const user = await response.json();
 
         return { error: "", data: user };
     } catch (error) {
@@ -12,24 +13,22 @@ async function requestUserData() {
     }
 }
 
-async function submitRating(legacyId, stars) {
-    try {
-        const res = await fetch('https://www.mensa-kl.de/api/v1/send-stars', { method: 'GET',body: { legacyId: legacyId, stars: stars }, headers: { Authorization: `Bearer ${tokenString}` }});
-        const result = await res.json();
-
-        return { error: "", data: user };
-    } catch (error) {
-        return { error: "Server issue", data: null };
+async function rateMeal(legacyId, stars) {
+    return null; // Moved to server because cors is ####
+    if(stars < 1 || stars > 5) {
+        return { error: "Invalid rating", data: null };
     }
-}
-
-async function deleteRating(legacyId) {
     try {
-        const res = await fetch('https://www.mensa-kl.de/api/v1/delete-stars', { method: 'GET', body: { legacyId: legacyId }, headers: { Authorization: `Bearer ${tokenString}` }});
-        const result = await res.json();
+        console.log(legacyId, stars);
+        const tokenString = getCookie("access_token");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LEGACY_API_URL}/api/v1/rate-meal`, { method: 'POST',body: { meal_id: legacyId, rating: stars }, headers: { Authorization: `Bearer ${tokenString}` }});
+        console.log(response);
+        const result = await response.json();
+        console.log(result);
 
-        return { error: "", data: user };
+        return { error: "", data: result };
     } catch (error) {
+        console.log(error);
         return { error: "Server issue", data: null };
     }
 }
@@ -55,4 +54,4 @@ function getCookie(name) {
 }
 
 
-export { setCookie, getCookie };
+export { setCookie, getCookie, rateMeal };

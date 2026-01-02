@@ -14,12 +14,11 @@ import styles from "./DetailsModal.module.css";
 import StarRating from "./Starrating";
 import { getCookie, setCookie } from "@/app/utils/client-utils";
 import toast from "react-hot-toast";
-import { getNutritionForId } from "@/app/utils/database-actions";
+import { getNutritionForId, rateMeal } from "@/app/utils/database-actions";
 import {
   Bookmark,
   Bot,
   Clock10Icon,
-  CrossIcon,
   FlagIcon,
   InfoIcon,
   Leaf,
@@ -49,7 +48,6 @@ export default function MealModal({ mealsFull }) {
   const [settings, setSettings] = useState();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedAdditive, setSelectedAdditive] = useState("");
-  const ownedRatings = React.useRef([]);
   const [submittedRating, setSubmittedRating] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [nutrition, setNutrition] = useState({});
@@ -57,6 +55,7 @@ export default function MealModal({ mealsFull }) {
   const mounted = useRef(true);
 
   const requestCloseModal = () => {
+    setSubmittedRating(0);
     closeModal();
     window.history.back();
   };
@@ -86,7 +85,18 @@ export default function MealModal({ mealsFull }) {
   }, [isOpen]);
 
   //settings and userdata
+  function loadStars() {
+    const currentRatings = localStorage.getItem("ownedRatings") || "[]";
+    const ratings = JSON.parse(currentRatings);
+    const currentTargetlId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
 
+    if(!currentTargetlId || !ratings) return;
+
+    const targetRating = ratings.find((r) => r.Id === currentTargetlId);
+    if (targetRating) {
+      setSubmittedRating(targetRating.stars);
+    }
+  }
   async function loadNutrition(id) {
     const nutrition = await getNutritionForId(id);
     setNutrition(nutrition?.data[0]);
@@ -104,6 +114,7 @@ export default function MealModal({ mealsFull }) {
     }
 
     setSelectedVariant(0);
+    loadStars();
 
     const bookmarksCookie = getCookie("bookmarks");
     if (bookmarksCookie) {
@@ -117,12 +128,6 @@ export default function MealModal({ mealsFull }) {
       loadNutrition(meal?.murmurID);
     }
 
-    if (user) {
-      setSubmittedRating(
-        ownedRatings.current.find((r) => r.lId === meal?.legacyId)?.rating || 0
-      );
-    }
-
     return () => {
       if (tooltipTimer.current) {
         clearTimeout(tooltipTimer.current);
@@ -133,6 +138,7 @@ export default function MealModal({ mealsFull }) {
   }, [meal, mealsFull, user]);
 
   useEffect(() => {
+    setUser({test: user});
     const urlParams = new URLSearchParams(window.location.search);
     const mealId = urlParams.get("artid");
     if (mealId) {
@@ -156,16 +162,38 @@ export default function MealModal({ mealsFull }) {
     };
   }, []);
 
+  function saveRatingLocal(ratingNow) {
+    const currentRatings = localStorage.getItem("ownedRatings") || "[]";
+    const ratings = JSON.parse(currentRatings);
+    const currentTargetlId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
+
+    if(!currentTargetlId || !ratingNow) return;
+
+    const targetRating = ratings.find((r) => r.Id === currentTargetlId);
+    if (targetRating) {
+      targetRating.stars = ratingNow;
+    } else {
+      ratings.push({ Id: currentTargetlId, stars: ratingNow });
+    }
+    localStorage.setItem("ownedRatings", JSON.stringify(ratings));
+  }
+
   // Handle publish / update comment
   const handleSubmitRating = useCallback(
     async (rating) => {
-      if (!meal?.legacyId) return;
       const previous = submittedRating;
       setSubmittedRating(rating);
+      const currentTargetlId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
       try {
-        // if your putRating supports AbortController, pass one; otherwise await and handle errors
-        await putRating(meal.legacyId, rating);
-        toast.success("Rating saved");
+        const res = await rateMeal(currentTargetlId, rating);
+        if(!res?.error) {
+          saveRatingLocal(rating);
+          toast.success("Rating saved");
+        } else {
+          toast.error("Rating unavailable please wait");
+          setSubmittedRating(previous);
+        }
+        
       } catch (err) {
         setSubmittedRating(previous);
         toast.error("Failed to save rating");
@@ -192,7 +220,8 @@ export default function MealModal({ mealsFull }) {
 
   // Handle reporting a comment or image.
   async function handleRequestImageTakedown() {
-    toast.error("Under construction!");
+    // add telegram api
+    toast("Under construction!", { icon: "🚧" });
   }
 
   // Handle bookmark
@@ -215,18 +244,18 @@ export default function MealModal({ mealsFull }) {
     [meal?.murmurID, setCookie]
   );
 
-  function pctToHue(pct = 0, invert = true) {
-    const value = Math.max(0, Math.min(100, Number(pct || 0))) / 100;
-    return invert ? 120 - 120 * value : 120 * value;
-  }
+  // function pctToHue(pct = 0, invert = true) {
+  //   const value = Math.max(0, Math.min(100, Number(pct || 0))) / 100;
+  //   return invert ? 120 - 120 * value : 120 * value;
+  // }
 
-  function getScoreStyle(pct) {
-    const hue = pctToHue(pct, false); // true => 0% = green, 100% = red
-    const softBg = `hsla(${hue}, 85%, 50%, 0.25)`;
-    return {
-      background: softBg,
-    };
-  }
+  // function getScoreStyle(pct) {
+  //   const hue = pctToHue(pct, false); // true => 0% = green, 100% = red
+  //   const softBg = `hsla(${hue}, 85%, 50%, 0.25)`;
+  //   return {
+  //     background: softBg,
+  //   };
+  // }
 
   // Render the meal title based on settings.
   const MealTitle = () => {
@@ -404,7 +433,7 @@ export default function MealModal({ mealsFull }) {
                 aria-label="Rate this meal"
               >
                 <StarRating
-                  disabled={!user}
+                  disabled={!user || !meal?.legacyId}
                   commonRating={
                     selectedVariant == 0 ? meal?.rating : meal?.altRating
                   }
@@ -437,6 +466,7 @@ export default function MealModal({ mealsFull }) {
               className={styles.altBox}
               onClick={() => {
                 setSelectedVariant(selectedVariant === 0 ? 1 : 0);
+                loadStars();
               }}
             >
               {meal.altType === 1 && (
