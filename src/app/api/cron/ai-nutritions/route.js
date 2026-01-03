@@ -24,6 +24,8 @@ export async function GET( req, res ) {
     const dedupedList = [...new Set(mealsList)];
     const readableList = makeListReadable(dedupedList);
 
+    // return NextResponse.json({ readableList }); // debugging
+
     const aiResult = await requestNutrition(readableList)
     let jsonArr;
     try {
@@ -58,7 +60,8 @@ function makeListReadable(list) {
   const rlist = list.map((meal) => {
     const title = meal.titleReg?.map(item => item).join(", ");
     const aiD = meal.murmurID;
-    const additives = meal?.zsnumnamen
+    const additives = meal?.zsnumnamen?.map(item => item.name).filter(Boolean) || [];
+
 
     return `aID: ${aiD} Titel: ${title} Zusatz: ${additives}`
   });
@@ -69,12 +72,18 @@ function makeListReadable(list) {
 async function requestNutrition(rlist) {
   const mealListString = rlist.join("\n");
 
-  const chatCompletion = await groq.chat.completions.create({
+// 'Bitte nutze die folgenden Parameter (aID, Titel, Zusatz) und versuche die Nährwerte in Ganzzahlen für eine Portion jedes einzelnen Mensa Gerichts in der Liste, 
+// so präzise wie möglich zu berechnen. Ignoriere den Eintrag falls ein Ergebnis nicht bestimmt werden kann. Gebe NUR die gewünschten Nahrungswerte als JSON array zurück, 
+// je höher der Score, desto gesünder!  
+// [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...]',
+//
+  try {
+    const chatCompletion = await groq.chat.completions.create({
     messages: [
       {
         role: "system",
         content:
-          'Bitte nutze die folgenden Parameter (aID, Titel, Zusatz) und versuche die Nährwerte in Ganzzahlen für eine Portion jedes einzelnen Mensa Gerichts in der Liste, so präzise wie möglich zu berechnen. Ignoriere den Eintrag falls ein Ergebnis nicht bestimmt werden kann. Gebe NUR die gewünschten Nahrungswerte als JSON array zurück, je höher der Score, desto gesünder!  [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...]',
+          'Du erhälst eine List mit Einträgen einer deutschen aktuellen Mensa-Speisekarte und hast die Aufgabe, die Nährwerte für jedes Gericht so präzise wie möglich zu schätzen. Gib alle Daten in einer JSON-String-Liste zurück, sollte das nicht möglich sein überspringst jeden Eintrag der nicht berechnet werden kann und sei dabei Fehlertollerant! Das Format: [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...] , achte auf Ganzzahlen, der Gesundheits-Score ist höher, je gesünder etwas ist!',
       },
       {
         role: "user",
@@ -89,11 +98,15 @@ async function requestNutrition(rlist) {
     model: "openai/gpt-oss-120b", response_format: { type: "json_object" }, reasoning_effort: "medium",// tools: [{ type: "browser_search" }],
     // "model":"groq/compound", "compound_custom": {"tools":{"enabled_tools":["web_search","visit_website"]}},
 
-    temperature: 0.2, // touch, default 0.2
+    temperature: 0.25, // touch, default 0.2
     max_completion_tokens: 4024, // dont touch
     top_p: 1, // dont touch
     stop: null, // idk what this does
-  });
+   });
 
-  return chatCompletion.choices[0].message.content;
+    return chatCompletion.choices[0].message.content;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
