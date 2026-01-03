@@ -393,14 +393,26 @@
     padding: 0.4rem 0.5rem;
     font-size: 0.9rem;
   }
+  .star.active {
+    color: var(--blankstar-color);
+  }
+  .popupImage:hover + .overlayLocationBar {
+    opacity: 0.3;
+  }
+  .popupImage:hover ~ .overlayActionsBar {
+    opacity: 0.3;
+  }
   }
 
 @media (any-pointer: coarse) and (min-width: 801px) and (max-width: 1380px) {
     .popupImage {
-    height: 300px;
-    border-radius: 0;
+      height: 300px;
+      border-radius: 0;
     }
     .popupTitle {
       font-size: 1.2rem;
     }
+    .star.active {
+      color: var(--blankstar-color);
+  }
   }

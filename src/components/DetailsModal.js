@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import shared from "@/styles/shared.module.css";
@@ -43,108 +37,103 @@ const UploadBox = dynamic(() => import("./UploadBox"), {
 
 export default function MealModal({ mealsFull }) {
   const { isOpen, meal, openModal, closeModal } = useModalStore();
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [user, setUser] = useState();
-  const [settings, setSettings] = useState();
+  const [user, setUser] = useState(null);
+  const [settings, setSettings] = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedAdditive, setSelectedAdditive] = useState("");
   const [submittedRating, setSubmittedRating] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(0);
-  const [nutrition, setNutrition] = useState({});
-  const tooltipTimer = useRef(null);
+  const [nutrition, setNutrition] = useState(null);
   const mounted = useRef(true);
 
-  const requestCloseModal = () => {
+  const requestCloseModal = useCallback(() => {
     setSubmittedRating(0);
     closeModal();
-    window.history.back();
-  };
+    try {
+      window.history.back();
+    } catch (e) {}
+  }, [closeModal]);
 
   // Detect back gesture on Android, Windows and maybe ios and close modal if open
   useEffect(() => {
     const handlePopState = () => {
-      if (isOpen) {
-        closeModal();
-      }
+      if (isOpen) closeModal();
     };
 
     const handleEscapePress = (event) => {
       if (event.key === "Escape" && isOpen) {
         closeModal();
-        window.history.back();
+        try {
+          window.history.back();
+        } catch (e) {}
       }
     };
 
     document.addEventListener("keydown", handleEscapePress);
     window.addEventListener("popstate", handlePopState);
-
     return () => {
       window.removeEventListener("popstate", handlePopState);
       document.removeEventListener("keydown", handleEscapePress);
     };
-  }, [isOpen]);
+  }, [isOpen, closeModal]);
 
   //settings and userdata
-  function loadStars() {
-    const currentRatings = localStorage.getItem("ownedRatings") || "[]";
-    const ratings = JSON.parse(currentRatings);
-    const currentTargetlId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
-
-    if(!currentTargetlId || !ratings) return;
-
-    const targetRating = ratings.find((r) => r.Id === currentTargetlId);
-    if (targetRating) {
-      setSubmittedRating(targetRating.stars);
+  const safeJSONParse = (str) => {
+    try {
+      return JSON.parse(str);
+    } catch (e) {
+      return null;
     }
+  };
+
+  async function loadStars() {
+    const currentRatings = localStorage.getItem("ownedRatings") || "[]";
+    const ratings = safeJSONParse(currentRatings) || [];
+    const currentTargetId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
+    if (!currentTargetId) return;
+    const targetRating = ratings.find((r) => r.Id === currentTargetId);
+    if (targetRating) setSubmittedRating(Number(targetRating.stars) || 0);
   }
-  async function loadNutrition(id) {
-    const nutrition = await getNutritionForId(id);
-    setNutrition(nutrition?.data[0]);
+
+  async function loadNutrition (id) {
+    if (!id) return;
+    try {
+      const res = await getNutritionForId(id);
+      if (!mounted.current) return;
+      setNutrition(res?.data?.[0] || null);
+    } catch (e) {
+      if (!mounted.current) return;
+      setNutrition(null);
+    }
   }
 
   useEffect(() => {
     setSelectedAdditive("");
-    const settingsCookie = getCookie("settings") || null;
-    if (settingsCookie) {
-      try {
-        const parsed = JSON.parse(settingsCookie);
-        if (JSON.stringify(parsed) !== JSON.stringify(settings))
-          setSettings(parsed);
-      } catch (e) {}
-    }
-
     setSelectedVariant(0);
+    // load settings from cookie (fast path and avoid deep compares)
+    const settingsCookie = getCookie("settings");
+    const parsedSettings = settingsCookie ? safeJSONParse(settingsCookie) : null;
+    if (parsedSettings) setSettings(parsedSettings);
+
     loadStars();
 
     const bookmarksCookie = getCookie("bookmarks");
-    if (bookmarksCookie) {
-      try {
-        const bookmarks = JSON.parse(bookmarksCookie);
-        setIsBookmarked(bookmarks.includes(meal?.murmurID));
-      } catch (e) {}
-    }
+    const bookmarks = bookmarksCookie ? safeJSONParse(bookmarksCookie) || [] : [];
+    setIsBookmarked(Boolean(bookmarks && meal?.murmurID && bookmarks.includes(meal.murmurID)));
 
-    if (isOpen) {
-      loadNutrition(meal?.murmurID);
-    }
-
-    return () => {
-      if (tooltipTimer.current) {
-        clearTimeout(tooltipTimer.current);
-        tooltipTimer.current = null;
-        setShowTooltip(false);
-      }
-    };
-  }, [meal, mealsFull, user]);
+    if (isOpen) loadNutrition(meal?.murmurID);
+  }, [meal, mealsFull, isOpen]);
 
   useEffect(() => {
-    setUser({test: user});
+    // Read simple user cookie if present
+    const userCookie = getCookie("access_token");
+    const parsedUser = userCookie ? safeJSONParse(userCookie) : null;
+    setUser(parsedUser || null);
+
     const urlParams = new URLSearchParams(window.location.search);
     const mealId = urlParams.get("artid");
     if (mealId) {
-      const foundmeal = mealsFull
-        ?.flatMap((m) => m.meals)
-        .find((m) => m?.murmurID === mealId);
+      const foundmeal = mealsFull?.flatMap((m) => m.meals).find((m) => m?.murmurID === mealId);
       if (!foundmeal) {
         alert("Meal has expired!");
         window.location.replace("/");
@@ -154,9 +143,6 @@ export default function MealModal({ mealsFull }) {
       openModal(foundmeal);
     }
 
-    async function fetchUserData() {}
-    fetchUserData();
-
     return () => {
       mounted.current = false;
     };
@@ -164,23 +150,23 @@ export default function MealModal({ mealsFull }) {
 
   function saveRatingLocal(ratingNow) {
     const currentRatings = localStorage.getItem("ownedRatings") || "[]";
-    const ratings = JSON.parse(currentRatings);
-    const currentTargetlId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
+    const ratings = safeJSONParse(currentRatings) || [];
+    const currentTargetId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
 
-    if(!currentTargetlId || !ratingNow) return;
+    if (!currentTargetId) return;
 
-    const targetRating = ratings.find((r) => r.Id === currentTargetlId);
-    if (targetRating) {
-      targetRating.stars = ratingNow;
-    } else {
-      ratings.push({ Id: currentTargetlId, stars: ratingNow });
-    }
-    localStorage.setItem("ownedRatings", JSON.stringify(ratings));
+    const targetRating = ratings.find((r) => r.Id === currentTargetId);
+
+    if (targetRating) targetRating.stars = ratingNow;
+    else ratings.push({ Id: currentTargetId, stars: ratingNow });
+    
+    try {
+      localStorage.setItem("ownedRatings", JSON.stringify(ratings));
+    } catch (e) {}
   }
 
   // Handle publish / update comment
-  const handleSubmitRating = useCallback(
-    async (rating) => {
+  async function handleSubmitRating(rating) {
       const previous = submittedRating;
       setSubmittedRating(rating);
       const currentTargetlId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
@@ -190,7 +176,7 @@ export default function MealModal({ mealsFull }) {
           saveRatingLocal(rating);
           toast.success("Rating saved");
         } else {
-          toast.error("Rating unavailable please wait");
+          toast.error("Rating unavailable, please wait");
           setSubmittedRating(previous);
         }
         
@@ -199,24 +185,7 @@ export default function MealModal({ mealsFull }) {
         toast.error("Failed to save rating");
         console.error(err);
       }
-    },
-    [meal?.legacyId, submittedRating]
-  );
-
-  // Handle delete comment
-  const handleDeleteRating = useCallback(async () => {
-    if (!meal?.legacyId) return;
-    const previous = submittedRating;
-    setSubmittedRating(0);
-    try {
-      await deleteRating(meal.legacyId);
-      toast.success("Rating deleted");
-    } catch (err) {
-      setSubmittedRating(previous);
-      toast.error("Failed to delete rating");
-      console.error(err);
     }
-  }, [meal?.legacyId, submittedRating]);
 
   // Handle reporting a comment or image.
   async function handleRequestImageTakedown() {
@@ -225,24 +194,18 @@ export default function MealModal({ mealsFull }) {
   }
 
   // Handle bookmark
-  const handleBookmark = useCallback(
-    (e) => {
+  function handleBookmark(e) {
       e?.preventDefault();
       const cookieValue = getCookie("bookmarks");
-      let bookmarks = [];
-      try {
-        bookmarks = cookieValue ? JSON.parse(cookieValue) : [];
-      } catch (e) {
-        bookmarks = [];
-      }
+      const bookmarks = cookieValue ? safeJSONParse(cookieValue) || [] : [];
       const idx = bookmarks.indexOf(meal?.murmurID);
+
       if (idx !== -1) bookmarks.splice(idx, 1);
       else bookmarks.push(meal?.murmurID);
+      
       setCookie("bookmarks", JSON.stringify(bookmarks));
       setIsBookmarked((prev) => !prev);
-    },
-    [meal?.murmurID, setCookie]
-  );
+    }
 
   // function pctToHue(pct = 0, invert = true) {
   //   const value = Math.max(0, Math.min(100, Number(pct || 0))) / 100;
@@ -258,7 +221,7 @@ export default function MealModal({ mealsFull }) {
   // }
 
   // Render the meal title based on settings.
-  const MealTitle = () => {
+const MealTitle = () => {
     const titleArray =
       selectedVariant === 0 ? meal?.titleReg || [] : meal?.titleAlt || [];
     const additivesArray =
@@ -300,12 +263,13 @@ export default function MealModal({ mealsFull }) {
         ))}
       </h2>
     );
-  };
+  }
 
   if (!meal || !isOpen) return null;
 
+
   return (
-    <div title="" className={shared.popupOverlay} onClick={requestCloseModal}>
+    <div title="" className={shared.popupOverlay} onClick={() => {requestCloseModal()}}>
       <div className={shared.popupContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.popupImageContainer}>
           {/* Render meal image from any source or placeholder */}
@@ -378,7 +342,7 @@ export default function MealModal({ mealsFull }) {
             <div
               className={styles.popupActionButton}
               style={{ display: false ? "flex" : "none" }}
-              onClick={handleDeleteRating}
+              onClick={(e) => {handleSubmitRating(null)}}
             >
               <StarOff size={18} />
             </div>
@@ -441,14 +405,14 @@ export default function MealModal({ mealsFull }) {
                   setSubmittedRating={setSubmittedRating}
                   starsSet={handleSubmitRating}
                 />
-                <span
+                {/* <span
                   className={`${shared.tooltipBubble} ${
                     showTooltip ? shared.triggerTooltip : ""
                   }`}
                   role="tooltip"
                 >
                   Click to rate this meal!
-                </span>
+                </span> */}
               </div>
               <span className={styles.ratingCount}>
                 (
