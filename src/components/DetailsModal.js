@@ -127,8 +127,7 @@ export default function MealModal({ mealsFull }) {
   useEffect(() => {
     // Read simple user cookie if present
     const userCookie = getCookie("access_token");
-    const parsedUser = userCookie ? safeJSONParse(userCookie) : null;
-    setUser(parsedUser || null);
+    setUser(userCookie);
 
     const urlParams = new URLSearchParams(window.location.search);
     const mealId = urlParams.get("artid");
@@ -403,7 +402,7 @@ const MealTitle = () => {
                   }
                   submittedRating={submittedRating}
                   setSubmittedRating={setSubmittedRating}
-                  starsSet={handleSubmitRating}
+                  starsSet={(rating) => handleSubmitRating(rating)}
                 />
                 {/* <span
                   className={`${shared.tooltipBubble} ${

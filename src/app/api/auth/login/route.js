@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
+  // uuid will be leaked!
   const clientUuid = process.env.LEGACY_API_URL_APP_UUID;
   const CSRF_TOKEN = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
