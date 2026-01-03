@@ -13,26 +13,6 @@ async function requestUserData() {
     }
 }
 
-async function rateMeal(legacyId, stars) {
-    return null; // Moved to server because cors is ####
-    if(stars < 1 || stars > 5) {
-        return { error: "Invalid rating", data: null };
-    }
-    try {
-        console.log(legacyId, stars);
-        const tokenString = getCookie("access_token");
-        const response = await fetch(`${process.env.NEXT_PUBLIC_LEGACY_API_URL}/api/v1/rate-meal`, { method: 'POST',body: { meal_id: legacyId, rating: stars }, headers: { Authorization: `Bearer ${tokenString}` }});
-        console.log(response);
-        const result = await response.json();
-        console.log(result);
-
-        return { error: "", data: result };
-    } catch (error) {
-        console.log(error);
-        return { error: "Server issue", data: null };
-    }
-}
-
 
 function setCookie(name, value, days) {
     if (typeof days !== "number" || days <= 0) {
@@ -54,4 +34,4 @@ function getCookie(name) {
 }
 
 
-export { setCookie, getCookie, rateMeal };
+export { setCookie, getCookie };
