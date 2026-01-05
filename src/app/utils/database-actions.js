@@ -26,7 +26,7 @@ export async function getNutritionForId(mumurId) {
 
 
 export async function rateMeal(legacyId, stars) {
-    if(stars < 1 || stars > 5) {
+    if((stars < 1 || stars > 5) && stars !== null) {
         return { error: "Invalid rating", data: null };
     }
     const store = await cookies();
@@ -36,18 +36,19 @@ export async function rateMeal(legacyId, stars) {
     }
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_LEGACY_API_URL}/api/v1/rate-meal`, { method: 'POST',body: JSON.stringify({ meal_id: legacyId, rating: stars }), headers: { Authorization: `Bearer ${tokenString}` }});
-        const result = await response.json();
-        if(result?.status === "fail") {
-            return { error: "Rating blocked", data: result?.data };
+        const result = await response.json().catch(() => {stars = "jsonparse_error";});
+
+        if(result?.status === "success") {
+          return { error: null, data: result };
         }
 
-        return { error: null, data: result };
+        return { error: "Rating blocked", data: result?.data };
+
     } catch (error) {
         console.log(error);
         return { error: "Server issue", data: null };
     }
 }
-
 
 export async function revalidatePage() {
   revalidatePath('/');

@@ -86,13 +86,14 @@ export default function MealModal({ mealsFull }) {
     }
   };
 
-  async function loadStars() {
+  async function loadStars(currentSelectedVariant) {
     const currentRatings = localStorage.getItem("ownedRatings") || "[]";
     const ratings = safeJSONParse(currentRatings) || [];
-    const currentTargetId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
+    const currentTargetId = currentSelectedVariant === 1 ? meal?.legacyId_alt : meal?.legacyId;
+
     if (!currentTargetId) return;
     const targetRating = ratings.find((r) => r.Id === currentTargetId);
-    if (targetRating) setSubmittedRating(Number(targetRating.stars) || 0);
+    setSubmittedRating(Number(targetRating?.stars) || 0);
   }
 
   async function loadNutrition (id) {
@@ -115,7 +116,7 @@ export default function MealModal({ mealsFull }) {
     const parsedSettings = settingsCookie ? safeJSONParse(settingsCookie) : null;
     if (parsedSettings) setSettings(parsedSettings);
 
-    loadStars();
+    loadStars(0);
 
     const bookmarksCookie = getCookie("bookmarks");
     const bookmarks = bookmarksCookie ? safeJSONParse(bookmarksCookie) || [] : [];
@@ -154,6 +155,16 @@ export default function MealModal({ mealsFull }) {
 
     if (!currentTargetId) return;
 
+    if(ratingNow === null) {
+      const index = ratings.findIndex((r) => r.Id === currentTargetId);
+      if (index !== -1) ratings.splice(index, 1);
+
+      try {
+        localStorage.setItem("ownedRatings", JSON.stringify(ratings));
+      } catch (e) {}
+      return;
+    }
+
     const targetRating = ratings.find((r) => r.Id === currentTargetId);
 
     if (targetRating) targetRating.stars = ratingNow;
@@ -171,6 +182,7 @@ export default function MealModal({ mealsFull }) {
       const currentTargetlId = selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt;
       try {
         const res = await rateMeal(currentTargetlId, rating);
+
         if(!res?.error) {
           saveRatingLocal(rating);
           toast.success("Rating saved");
@@ -340,7 +352,7 @@ const MealTitle = () => {
           <div className={styles.overlayActionsBar}>
             <div
               className={styles.popupActionButton}
-              style={{ display: false ? "flex" : "none" }}
+              style={{ display: submittedRating ? "flex" : "none" }}
               onClick={(e) => {handleSubmitRating(null)}}
             >
               <StarOff size={18} />
@@ -429,7 +441,7 @@ const MealTitle = () => {
               className={styles.altBox}
               onClick={() => {
                 setSelectedVariant(selectedVariant === 0 ? 1 : 0);
-                loadStars();
+                loadStars(selectedVariant === 0 ? 1 : 0);
               }}
             >
               {meal.altType === 1 && (

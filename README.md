@@ -23,6 +23,6 @@ Be informed that the dev, build and hosted version behave differently!
 - mensa-kl.de
 - studierendenwerk-kaiserslautern.de
 
-## Blocklist
-- AI-bots
-- Suspicious countries (see blocking page)
+## Forbidden usage
+Due to resource constraints, bot/scraper/spam traffic is strictly prohibited and will be rewarded with a personal entry inside my firewall!
+Please use the provided API.
