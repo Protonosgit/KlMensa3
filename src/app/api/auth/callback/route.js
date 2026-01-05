@@ -24,13 +24,19 @@ export async function GET(request) {
 
 
   // Store secret as cookie and return home
-  const res = NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=0");
-  res.cookies.delete("csrf_token", { path: "/" });
-  res.cookies.set("access_token", userAccessToken, {
+  const response = NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=0");
+  response.cookies.delete("csrf_token", { path: "/" });
+  response.cookies.set("access_token", userAccessToken, {
+    path: "/",
+    maxAge: 15552000, // 6 months
+  });
+
+  const res = {}; // replace with fetch once api is done
+  response.cookies.set("uindat", JSON.stringify(res), {
     path: "/",
     maxAge: 15552000, // 6 months
   });
 
 
-  return res;
+  return response;
 }
