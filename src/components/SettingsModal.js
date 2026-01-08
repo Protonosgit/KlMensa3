@@ -392,7 +392,7 @@ export default function SettingsModal() {
                     {loggedIn ? (
                       <div className={styles.popupUserContainer}>
                         <p className={styles.userAccounttext}>
-                          <b>here should be your email</b>
+                          <b>demo@testmail.com</b>
                         </p>
                         {userAccountData?.metadata?.theme && <CatIcon />}
                         <div className={styles.activitySection}>

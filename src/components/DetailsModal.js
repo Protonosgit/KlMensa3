@@ -118,9 +118,9 @@ export default function MealModal({ mealsFull }) {
 
     loadStars(0);
 
-    const bookmarksCookie = getCookie("bookmarks");
-    const bookmarks = bookmarksCookie ? safeJSONParse(bookmarksCookie) || [] : [];
-    setIsBookmarked(Boolean(bookmarks && meal?.murmurID && bookmarks.includes(meal.murmurID)));
+    const bookmarkdata = localStorage.getItem("bookmarks");
+    const bookmarks = bookmarkdata ? safeJSONParse(bookmarkdata) || [] : [];
+    setIsBookmarked(Boolean(bookmarks && meal?.murmurID && bookmarks.includes(meal?.murmurID)));
 
     if (isOpen) loadNutrition(meal?.murmurID);
   }, [meal, mealsFull, isOpen]);
@@ -200,24 +200,27 @@ export default function MealModal({ mealsFull }) {
 
   // Handle reporting a comment or image.
   async function handleRequestImageTakedown() {
-    if(confirm("Would you like to report the image?")) {
-      //sendSystemTGMessage(`Image reported: ${meal?.legacyId} / ${meal?.legacyId_alt} for variant ${selectedVariant}`);
+    const answer = prompt("Please peovide the reason for the takedown", "Accidental upload");
+    if(answer.length > 0 && answer.length < 31) {
+      const res = await sendSystemTGMessage(`Image reported: ${meal?.legacyId} / ${meal?.legacyId_alt} for variant ${selectedVariant} with reason: ${answer}`);
+      console.log(res);
+    } else {
+      toast.error("Invalid reason");
     }
-    // add telegram api
-    toast("Under construction!", { icon: "🚧" });
+    // toast("Under construction!", { icon: "🚧" });
   }
 
   // Handle bookmark
   function handleBookmark(e) {
       e?.preventDefault();
-      const cookieValue = getCookie("bookmarks");
-      const bookmarks = cookieValue ? safeJSONParse(cookieValue) || [] : [];
+      const bookmarkdata = localStorage.getItem("bookmarks");
+      const bookmarks = bookmarkdata ? safeJSONParse(bookmarkdata) || [] : (localStorage.setItem("bookmarks", "[]"), [] || []);
       const idx = bookmarks.indexOf(meal?.murmurID);
 
       if (idx !== -1) bookmarks.splice(idx, 1);
       else bookmarks.push(meal?.murmurID);
       
-      setCookie("bookmarks", JSON.stringify(bookmarks));
+      localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
       setIsBookmarked((prev) => !prev);
     }
 

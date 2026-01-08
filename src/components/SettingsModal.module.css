@@ -165,6 +165,8 @@
   background-color: var(--main-text);
   color: var(--main-bg);
   transition: background-color 0.3s;
+  font-weight: 700;
+  font-size: 0.8rem;
 }
 
 .popupButton:hover {

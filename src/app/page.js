@@ -43,8 +43,8 @@ export default async function Home() {
       </header>
 
       <div className={styles.newsBox} >
-        <p className={styles.newsTitle}><InfoIcon size={20} />Open Beta</p>
-        <p className={styles.newsText}>The open beta test will start soon, expected regular outages.</p>
+        <p className={styles.newsTitle}><InfoIcon size={20} />Beta testing</p>
+        <p className={styles.newsText}>Please provide feedback on <u><a href="https://github.com/Protonosgit/KlMensa3/issues">Github</a></u></p>
       </div>
 
       <main className={shared.main}>

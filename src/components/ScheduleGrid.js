@@ -12,16 +12,22 @@ const DynamicMealPopup = dynamic(() => import("./DetailsModal"), { ssr: true });
 export default async function ScheduleGrid({}) {
   const cookieStore = await cookies();
 
+  const safeJSONParse = (str) => {
+    try {
+      return JSON.parse(str);
+    } catch (e) {
+      return null;
+    }
+  };
 
-  //Read cookies
   const locationFilterCookie = cookieStore.get('location')
-  const locationFilter = locationFilterCookie?.value ? JSON.parse(locationFilterCookie.value) : null
+  const locationFilter = locationFilterCookie?.value ? safeJSONParse(locationFilterCookie.value) : null
   const proteinFilterCookie = cookieStore.get('protein')
-  const proteinFilter = proteinFilterCookie?.value ? JSON.parse(proteinFilterCookie.value) : null
+  const proteinFilter = proteinFilterCookie?.value ? safeJSONParse(proteinFilterCookie.value) : null
   const additiveFilterCookie = cookieStore.get('additive')
-  const additiveFilter = additiveFilterCookie?.value ? JSON.parse(additiveFilterCookie.value) : null
+  const additiveFilter = additiveFilterCookie?.value ? safeJSONParse(additiveFilterCookie.value) : null
   const settingsCookie = cookieStore.get('settings')
-  const settings = settingsCookie?.value ? JSON.parse(settingsCookie.value) : null
+  const settings = settingsCookie?.value ? safeJSONParse(settingsCookie.value) : null
 
 
   let menuData = await ParseMenu();

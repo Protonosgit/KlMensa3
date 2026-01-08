@@ -10,9 +10,9 @@ export default function Error({ error, reset }) {
   return (
     <div className="container">
       <h1>Server Error</h1>
-      <p>🦐 If you see this I f***ed up again 🦞</p>
-      <button onClick={() => reset()}>Retry</button>
-      <a  href='https://github.com/Protonosgit/KlMensa3/issues/new?template=bug_report.md'><button >Report Issue</button></a>
+      <p>If you see this I f***ed up again</p>
+      <button onClick={() => reset()}>🦞 Retry 🦞</button>
+      <a  href='https://github.com/Protonosgit/KlMensa3/issues/new?template=bug_report.md'><button >🦐 Report Issue 🦐</button></a>
 
       <style jsx>{`
         .container {
@@ -35,7 +35,7 @@ export default function Error({ error, reset }) {
         button {
         margin-top: 1rem;
           padding: 0.5rem 1rem;
-          background-color: #0070f3;
+          background-color: #0059beff;
           color: white;
           border: none;
           border-radius: 4px;
