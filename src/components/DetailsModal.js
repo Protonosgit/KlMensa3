@@ -8,7 +8,7 @@ import styles from "./DetailsModal.module.css";
 import StarRating from "./Starrating";
 import { getCookie, setCookie } from "@/app/utils/client-utils";
 import toast from "react-hot-toast";
-import { getNutritionForId, rateMeal } from "@/app/utils/database-actions";
+import { getNutritionForId, rateMeal, sendSystemTGMessage } from "@/app/utils/database-actions";
 import {
   Bookmark,
   Bot,
@@ -200,6 +200,9 @@ export default function MealModal({ mealsFull }) {
 
   // Handle reporting a comment or image.
   async function handleRequestImageTakedown() {
+    if(confirm("Would you like to report the image?")) {
+      //sendSystemTGMessage(`Image reported: ${meal?.legacyId} / ${meal?.legacyId_alt} for variant ${selectedVariant}`);
+    }
     // add telegram api
     toast("Under construction!", { icon: "🚧" });
   }
@@ -315,7 +318,7 @@ const MealTitle = () => {
             <p title="Location" className={styles.popupLocation}>
               {meal.dpartname}
 
-              {meal?.dpname == "Robotic Kitchen" ? (
+              {meal?.dpname == "Robotic Kitchen" || meal?.dpname == "Frische ausgewogene Bowls" ? (
                 <Bot size={20} className={styles.otherIcon} />
               ) : (
                 ""
