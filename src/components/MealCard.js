@@ -43,7 +43,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
         <p className={styles.mealLocation}>
           {meal?.dpartname}
 
-          {meal?.dpname == "Robotic Kitchen" ? <Bot size={20} className={styles.otherIcon} /> : ""}
+          {meal?.dpname == "Robotic Kitchen" || meal?.dpname == "Frische ausgewogene Bowls" ? <Bot size={20} className={styles.otherIcon} /> : ""}
           {meal?.dpartname == "Salatbüfett" ? <SaladIcon size={20} className={styles.otherIcon} /> : ""}
           {meal?.dpartname == "Eintopf 1" || meal?.dpartname == "Eintopf 2" ? <SoupIcon size={20} className={styles.otherIcon} /> : ""}
           {meal?.altType=== 1 ? <VeggieOpIcon className={styles.greenIcon} /> : ""}

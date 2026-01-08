@@ -56,17 +56,20 @@ export async function revalidatePage() {
 
 export async function sendSystemTGMessage(text) {
 
-    const obj = {
-        chat_id: process.env.TELEGRAM_CHAT_ID,
-        text: text
-    };
+    var raw = JSON.stringify({
+      "chat_id": process.env.TELEGRAM_CHAT_ID,
+      "text": text
+    });
+
+    console.log(raw);
 
     const res =await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(obj)
-    });
+        body: raw,
+        redirect: "follow"
+      });
     console.log(res);
 }
