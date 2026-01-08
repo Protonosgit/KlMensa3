@@ -56,20 +56,31 @@ export async function revalidatePage() {
 
 export async function sendSystemTGMessage(text) {
 
+  if(text.length > 150 || text.length < 1) {
+    return { error: "Invalid message length", data: null };
+  }
+
+  try {
     var raw = JSON.stringify({
-      "chat_id": process.env.TELEGRAM_CHAT_ID,
-      "text": text
+      chat_id: process.env.TELEGRAM_CHAT_ID,
+      text: text,
     });
 
-    console.log(raw);
-
-    const res =await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    const res = await fetch(
+      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: raw,
-        redirect: "follow"
-      });
-    console.log(res);
+        redirect: "follow",
+      }
+    );
+
+    return { error: null, data: null };
+  } catch (error) {
+    console.log(error);
+    return { error: "Server issue", data: null };
+  }
 }
