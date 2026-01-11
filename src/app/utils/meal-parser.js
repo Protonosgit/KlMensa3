@@ -87,7 +87,7 @@ const priceRelationsLookup = {
 };
 
 // Some are due to mistakes in the source data
-const taggedStrings = ["Vegetarisches Menü[1]:", "Plant-based Menü[1]:", "Veganes Menü[1]:","Veganuary Menü[1]:", "Veganuary Menü1]:"]
+const taggedStrings = ["Vegetarisches Menü[1]:", "Plant-based Menü[1]:", "Plant-based Menü[2]:", "Veganes Menü[1]:","Veganuary Menü[1]:", "Veganuary Menü1]:"]
 
 let cachedMenuData = null;
 let lastMenuCachedAt = 0;
