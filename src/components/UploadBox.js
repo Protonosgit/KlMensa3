@@ -10,58 +10,72 @@ export default function UploadBox({ mealId }) {
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
   const handleFile = async (file) => {
+    
     if (!file) return;
 
-    // allow images or heic/heif by extension (some HEIC uploads may not report a proper mime type)
-    const isHeic = file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif");
-    if (!file.type.startsWith("image/") && !isHeic) {
+    // allow regular images or heic/heif
+    //const { isHeic } = await import("heic-to"); // better lib but double the size
+    //const heicDetected = await isHeic(file); 
+    const heicDetected = file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif");
+
+    if (!file.type.startsWith("image/") && !heicDetected) {
       alert("Only image files are allowed.");
       return;
     }
 
-    if (file.size > MAX_SIZE) {
-      alert("Maximum file size is 10MB");
-      return;
-    }
+    // Convert and write info
+    let processedFile = null;
+    if(heicDetected) {
+      // const { heicTo } = await import("heic-to"); // better lib but double the size
+      const heic2any = (await import("heic2any")).default;
 
-    if (isHeic) {
-      toast.loading("Processing...");
+      toast.loading("Converting file...");
+
       try {
-        const heic2any = (await import("heic2any")).default;
-        const heicblob = await heic2any({
+        // Convert pic
+        const jpegConverted = await heic2any({
           blob: file,
           toType: "image/jpeg",
           quality: 0.9,
         });
 
+        // const jpegConverted = await heicTo({
+        //   blob: file,
+        //   type: "image/jpeg",
+        //   quality: 0.9
+        // });
+
         const convertedFile = new File(
-          [heicblob],
+          [jpegConverted],
           file.name.replace(/\.(heic|heif)$/i, ".jpg"),
           { type: "image/jpeg" }
         );
-        toast.dismiss();
-        setFile(convertedFile);
-        setFileInfo({
-          name: convertedFile.name,
-          size: (convertedFile.size / 1024 / 1024).toFixed(2) + " MB",
-          preview: URL.createObjectURL(convertedFile),
-        });
-        URL.revokeObjectURL(file.preview);
+        processedFile = convertedFile;
+
       } catch (error) {
-        toast.dismiss();
-        toast.error("Failed convert image.");
-        console.error("HEIC conversion error:", error);
+        toast.error("Failed to convert file");
         return;
       }
+
+      toast.dismiss();
     } else {
-      setFile(file);
-      setFileInfo({
-        name: file.name,
-        size: (file.size / 1024 / 1024).toFixed(2) + " MB",
-        preview: URL.createObjectURL(file),
-      });
-      if (fileInfo?.preview) URL.revokeObjectURL(fileInfo.preview);
+      processedFile = file;
     }
+
+    if (processedFile.size > MAX_SIZE) {
+      alert("Maximum file size is 10MB");
+      return;
+    }
+
+    setFile(processedFile);
+    setFileInfo({
+      name: processedFile.name,
+      size: (processedFile.size / 1024 / 1024).toFixed(2) + " MB",
+      preview: URL.createObjectURL(processedFile),
+    });
+
+    // try to prevent mem leaks (lets hope so at least)
+    if (fileInfo?.preview) URL.revokeObjectURL(fileInfo.preview);
   };
 
   const handleChange = (e) => {
@@ -76,6 +90,7 @@ export default function UploadBox({ mealId }) {
 
   const handleSubmit = async () => {
     if (!mealId || !file) {
+      toast.error("No file selected or id missing");
       return;
     }
     toast.loading("Uploading...");
@@ -97,13 +112,14 @@ export default function UploadBox({ mealId }) {
         setFile(null);
         setFileInfo(null);
       } else {
+        toast.dismiss();
         toast.error("Image was rejected");
       }
     } catch (err) {
       console.error(err);
+      toast.dismiss();
       toast.error("Upload failed");
     }
-    toast.dismiss();
   };
 
   return (
