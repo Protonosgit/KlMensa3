@@ -535,18 +535,18 @@ const MealTitle = () => {
               >
                 <thead>
                   <tr>
-                    <th>Calories (kcal)</th>
-                    <th>Protein (g)</th>
-                    <th>Fat (g)</th>
-                    <th>Carbohydrates (g)</th>
+                    <th>Calories</th>
+                    <th>Protein</th>
+                    <th>Fat</th>
+                    <th>Carbohydrates</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{nutrition?.kalorien_kcal || "?"}</td>
-                    <td>{nutrition?.protein_g || "?"}</td>
-                    <td>{nutrition?.fett_g || "?"}</td>
-                    <td>{nutrition?.kohlenhydrate_g || "?"}</td>
+                    <td>{nutrition?.kalorien_kcal+" kcal" || "?"}</td>
+                    <td>{nutrition?.protein_g+" g" || "?"}</td>
+                    <td>{nutrition?.fett_g+" g" || "?"}</td>
+                    <td>{nutrition?.kohlenhydrate_g+" g" || "?"}</td>
                   </tr>
                 </tbody>
               </table>
