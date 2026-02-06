@@ -394,7 +394,7 @@
     font-size: 0.9rem;
   }
   .star.active {
-    color: var(--blankstar-color);
+    color: var(--main-text);
   }
   .popupImage:hover + .overlayLocationBar {
     opacity: 0.3;
@@ -413,6 +413,6 @@
       font-size: 1.2rem;
     }
     .star.active {
-      color: var(--blankstar-color);
-  }
+      color: var(--main-text);
+    }
   }
