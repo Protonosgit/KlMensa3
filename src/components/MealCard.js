@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Star, Bot, SoupIcon, SaladIcon } from "lucide-react";
+import { Star, Bot, SoupIcon, SaladIcon, Flame } from "lucide-react";
 import styles from "./MealCard.module.css";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
@@ -46,6 +46,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
           {meal?.dpname == "Robotic Kitchen" || meal?.dpname == "Frische ausgewogene Bowls" ? <Bot size={20} className={styles.otherIcon} /> : ""}
           {meal?.dpartname == "Salatbüfett" ? <SaladIcon size={20} className={styles.otherIcon} /> : ""}
           {meal?.dpartname == "Eintopf 1" || meal?.dpartname == "Eintopf 2" ? <SoupIcon size={20} className={styles.otherIcon} /> : ""}
+          {meal?.dpartname == "Grill" ? <Flame size={20} className={styles.otherIcon} /> : ""}
           {meal?.altType=== 1 ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
           {meal?.altType=== 2 ? <VeganOpIcon className={styles.greenIcon} /> : ""}
           {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}
