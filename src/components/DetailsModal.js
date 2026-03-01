@@ -14,6 +14,7 @@ import {
   Bot,
   Clock10Icon,
   FlagIcon,
+  Flame,
   InfoIcon,
   Leaf,
   MaximizeIcon,
@@ -352,6 +353,7 @@ const MealTitle = () => {
               ) : (
                 ""
               )}
+              {meal?.dpartname == "Grill" ? <Flame size={20} className={styles.otherIcon} /> : ""}
             </p>
           </div>
 
