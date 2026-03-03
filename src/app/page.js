@@ -44,7 +44,7 @@ export default async function Home() {
 
       <div className={styles.newsBox} >
         <p className={styles.newsTitle}><InfoIcon size={20} />Beta testing</p>
-        <p className={styles.newsText}>Please provide feedback on <u><a href="https://github.com/Protonosgit/KlMensa3/issues">Github</a></u></p>
+        <p className={styles.newsText}>Please provide feedback on <u><a href="https://github.com/Protonosgit/KlMensa3/issues">Github</a></u>!</p>
       </div>
 
       <main className={shared.main}>

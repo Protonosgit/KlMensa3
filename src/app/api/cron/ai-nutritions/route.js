@@ -94,7 +94,7 @@ async function requestNutrition(rlist) {
       ],
 
       "model": "openai/gpt-oss-120b",
-      "temperature": 0.25,
+      "temperature": 0.27,
       "max_completion_tokens": 8192,
       "top_p": 1,
       "stream": false,

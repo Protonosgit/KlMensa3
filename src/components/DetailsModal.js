@@ -327,6 +327,11 @@ const MealTitle = () => {
               ) : (
                 ""
               )}
+              {meal?.dpartname == "Grill" ? (
+                <Flame size={20} className={styles.otherIcon} />
+              ) : (
+                ""
+              )}
               {meal?.dpartname == "Salatbüfett" ? (
                 <SaladIcon size={20} className={styles.otherIcon} />
               ) : (
@@ -353,7 +358,6 @@ const MealTitle = () => {
               ) : (
                 ""
               )}
-              {meal?.dpartname == "Grill" ? <Flame size={20} className={styles.otherIcon} /> : ""}
             </p>
           </div>
 
@@ -453,9 +457,9 @@ const MealTitle = () => {
               }}
             >
               {meal.altType === 1 && (
-                <VeggieOpIcon className={styles.altIcon} />
+                <VeggieOpIcon size={20} className={styles.altIcon} />
               )}
-              {meal.altType === 2 && <VeganOpIcon className={styles.altIcon} />}
+              {meal.altType === 2 && <VeganOpIcon size={20} className={styles.altIcon} />}
               <div>
                 <p className={styles.altTitle}>
                   {meal?.altType === 2 ? "Vegan" : "Veggie"} Alternative
