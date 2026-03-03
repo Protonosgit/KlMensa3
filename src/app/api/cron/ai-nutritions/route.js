@@ -48,7 +48,7 @@ export async function GET( req, res ) {
       await sql.query(
         `INSERT INTO nutrition (a_id, kalorien_kcal, fett_g, zucker_g, protein_g, kohlenhydrate_g, score_pct) 
         VALUES ($1,$2,$3,$4,$5,$6,$7)
-        ON CONFLICT (a_id) DO NOTHING`,
+        ON CONFLICT (a_id) DO UPDATE SET kalorien_kcal = $2, fett_g = $3, zucker_g = $4, protein_g = $5, kohlenhydrate_g = $6, score_pct = $7`,
         [aID, kal, fett, zucker, protein, kohlen, score]
       );
     }
@@ -70,7 +70,8 @@ function makeListReadable(list) {
 
 
 async function requestNutrition(rlist) {
-  const mealListString = rlist.join("\n");
+  //const mealListString = rlist.join("\n");
+
 
 // 'Bitte nutze die folgenden Parameter (aID, Titel, Zusatz) und versuche die Nährwerte in Ganzzahlen für eine Portion jedes einzelnen Mensa Gerichts in der Liste, 
 // so präzise wie möglich zu berechnen. Ignoriere den Eintrag falls ein Ergebnis nicht bestimmt werden kann. Gebe NUR die gewünschten Nahrungswerte als JSON array zurück, 
@@ -78,31 +79,31 @@ async function requestNutrition(rlist) {
 // [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...]',
 //
   try {
+
     const chatCompletion = await groq.chat.completions.create({
-    messages: [
-      {
-        role: "system",
-        content:
-          'Du erhälst eine List mit Einträgen einer deutschen aktuellen Mensa-Speisekarte und hast die Aufgabe, die Nährwerte für jedes Gericht so präzise wie möglich zu schätzen. Gib alle Daten in einer JSON-String-Liste zurück, sollte das nicht möglich sein überspringst jeden Eintrag der nicht berechnet werden kann und sei dabei Fehlertollerant! Das Format: [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...] , achte auf Ganzzahlen, der Gesundheits-Score ist höher, je gesünder etwas ist!',
+      messages: [
+        {
+          role: "system",
+          content:
+            'Du erhälst eine List mit Einträgen einer deutschen aktuellen Mensa-Speisekarte und hast die Aufgabe, die Nährwerte für jedes Gericht so präzise wie möglich zu schätzen. Gib alle Daten in einer JSON-String-Liste zurück, sollte das nicht möglich sein überspringst jeden Eintrag der nicht berechnet werden kann und sei dabei Fehlertollerant! Das Format: [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...] , achte auf Ganzzahlen, der Gesundheits-Score ist höher, je gesünder etwas ist!',
+        },
+        {
+          role: "user",
+          content: "JSON-data: "+JSON.stringify(rlist),
+        },
+      ],
+
+      "model": "openai/gpt-oss-120b",
+      "temperature": 0.27,
+      "max_completion_tokens": 8192,
+      "top_p": 1,
+      "stream": false,
+      "reasoning_effort": "high",
+      "response_format": {
+        "type": "json_object"
       },
-      {
-        role: "user",
-        content: mealListString,
-      },
-    ],
-
-    stream: false, // dont touch
-
-    // "model": "qwen/qwen3-32b", "reasoning_effort":"low", "tools":[{"type":"browser_search"}],"response_format":{"type": "json_object"},
-    //"model": "openai/gpt-oss-20b", "reasoning_effort": "low", "response_format": { type: "json_object" }, //"tools":[{"type":"browser_search"}],
-    model: "openai/gpt-oss-120b", response_format: { type: "json_object" }, reasoning_effort: "medium",// tools: [{ type: "browser_search" }],
-    // "model":"groq/compound", "compound_custom": {"tools":{"enabled_tools":["web_search","visit_website"]}},
-
-    temperature: 0.25, // touch, default 0.2
-    max_completion_tokens: 4024, // dont touch
-    top_p: 1, // dont touch
-    stop: null, // idk what this does
-   });
+      "stop": null,
+    });
 
     return chatCompletion.choices[0].message.content;
   } catch (error) {
@@ -110,3 +111,14 @@ async function requestNutrition(rlist) {
     return [];
   }
 }
+
+      // stream: false, // dont touch
+      // // "model": "qwen/qwen3-32b", "reasoning_effort":"low", "tools":[{"type":"browser_search"}],"response_format":{"type": "json_object"},
+      // //"model": "openai/gpt-oss-20b", "reasoning_effort": "low", "response_format": { type: "json_object" }, //"tools":[{"type":"browser_search"}],
+      // model: "openai/gpt-oss-120b", response_format: { type: "json_object" }, reasoning_effort: "medium",// tools: [{ type: "browser_search" }],
+      // // "model":"groq/compound", "compound_custom": {"tools":{"enabled_tools":["web_search","visit_website"]}},
+
+      // temperature: 0.25, // touch, default 0.2
+      // max_completion_tokens: 4024, // dont touch
+      // top_p: 1, // dont touch
+      // stop: null, // idk what this does

@@ -285,7 +285,16 @@
     width: 2rem;
     height: 2rem;
     display: inline-block;
-  }
+    flex: 0 0 2rem;
+    min-width: 2rem;
+    min-height: 2rem;
+   }
+
+   .altIcon svg {
+     display: block;
+     width: 100%;
+     height: 100%;
+   }
   .swapIcon {
     color: var(--greentext-color);
     position: absolute;
