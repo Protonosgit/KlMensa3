@@ -11,20 +11,20 @@ export async function POST(req) {
   try {
     const sql = neon(process.env.NEON_DATABASE_URL);
     const subscription = await req.json();
+    const account_data = JSON.parse(req.cookies.get('account_data')?.value) || {};
+    console.log(account_data.hashedId);
+
     
     //
     // Store subscription in database
-    // Warning set query to update when signing in is implemented!!!!!
+    // Warning this system ONLY SUPPORTS ONE DEVICE AT A TIME  previous subscriptions will be OVERWRITTEN!!!!!
     //
     await sql`
-    INSERT INTO users (push_endpoint, push_auth, push_p256dh)
-    VALUES (${subscription.endpoint}, ${subscription.keys.auth}, ${subscription.keys.p256dh})
+    UPDATE users
+    SET push_endpoint = ${subscription.endpoint}, push_auth = ${subscription.keys.auth}, push_p256dh = ${subscription.keys.p256dh}
+    WHERE hash_id = ${account_data.hashedId};
     `;
-    
-    const payload = JSON.stringify('Wellcome to kl-mensa v2!');
 
-    // Send test notification
-    await webpush.sendNotification(subscription, payload);
 
     return new Response(JSON.stringify({ message: 'Subscription successful' }), {
       status: 200,

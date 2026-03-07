@@ -1,19 +1,14 @@
-self.addEventListener('push', event => {
-    const options = {
-      body: event.data.text(),
-      icon: '/logo.png',
-      badge: '/logo.png',
-      tag: 'push-message',
-      actions: [
-        { action: 'open', title: 'Open'},
-        { action: 'close', title: 'Close' }
-      ]
-    };
-  
-    event.waitUntil(
-      self.registration.showNotification('KL-Mensa', options)
-    );
-  });
+self.addEventListener("push", event => {
+  const data = event.data.json();
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: data.icon,
+      data: { url: data.url }
+    })
+  );
+});
 
   self.addEventListener('notificationclick', event => {
     event.notification.close();

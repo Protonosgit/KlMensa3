@@ -17,7 +17,6 @@ import { getCookie, setCookie } from "@/app/utils/client-utils";
 import {
   revalidatePage,
 } from "@/app/utils/database-actions";
-import { set } from "date-fns";
 
 export default function SettingsModal() {
   // State variables for managing modal visibility, settings, and user authentication
@@ -180,6 +179,7 @@ export default function SettingsModal() {
         return;
       }
 
+      toast.success('Success');
       setWebpushSubscription(sub);
     } catch (error) {
       console.error(error);
@@ -205,6 +205,7 @@ export default function SettingsModal() {
         throw new Error('Failed to unsubscribe');
       }
 
+      toast.success('Roger, you are unsubscribed!');
       setWebpushSubscription(null);
 
     } catch (error) {
@@ -218,6 +219,8 @@ export default function SettingsModal() {
   async function handleLogout() {
     document.cookie =
       "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
+      document.cookie =
+      "account_data=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
     document.location.reload();
   }
 
@@ -404,8 +407,8 @@ export default function SettingsModal() {
               {selectedTab === "notifications" && (
                 <>
                   <h3 className={shared.centerFlat}>Under construction 🛠️</h3>
-{/* 
-                  <Switch
+
+                  {/* <Switch
                     id="schedulenoti"
                     title="Daily Notification"
                     description="Receive todays meals in a push notification"
