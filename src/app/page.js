@@ -67,7 +67,7 @@ export default async function Home() {
           <a href="https://github.com/Protonosgit/KlMensa3" className={shared.footerLink}>Source</a>
           <a href="/api/menu_v1" className={shared.footerLink}>Api</a>
         </div>
-          <p>2025 kl-mensa v2 prototype<br/></p>
+           <p>2025 kl-mensa v2 prototype{/* 🇺🇦 */}<br/></p>
       </footer>
       <DynamicScrollToTopButton />
     </div>
