@@ -12,13 +12,16 @@ export async function POST(req) {
     const sql = neon(process.env.NEON_DATABASE_URL);
     const subscription = await req.json();
     
+    //
     // Store subscription in database
+    // Warning set query to update when signing in is implemented!!!!!
+    //
     await sql`
-    INSERT INTO webpush_clients (endpoint, auth, p256dh, uid)
-    VALUES (${subscription.endpoint}, ${subscription.keys.auth}, ${subscription.keys.p256dh}, ${"userid"})
+    INSERT INTO users (push_endpoint, push_auth, push_p256dh)
+    VALUES (${subscription.endpoint}, ${subscription.keys.auth}, ${subscription.keys.p256dh})
     `;
     
-    const payload = JSON.stringify('Your are all set for receiving updates!');
+    const payload = JSON.stringify('Wellcome to kl-mensa v2!');
 
     // Send test notification
     await webpush.sendNotification(subscription, payload);
@@ -47,8 +50,10 @@ export async function DELETE(req) {
     
 
     // Remove subscription in database
-    await sql`DELETE FROM webpush_clients WHERE endpoint = ${subscription.endpoint} AND uid = ${"userid"}`;
-    
+    await sql`
+    UPDATE users
+    SET push_endpoint = '', push_auth = '', push_p256dh = ''
+    WHERE push_endpoint = ${subscription.endpoint} AND push_auth = ${subscription.keys.auth}`;    
 
     return new Response(JSON.stringify({ message: 'Unsubscription successful' }), {
       status: 200,

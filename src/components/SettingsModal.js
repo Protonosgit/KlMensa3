@@ -17,6 +17,7 @@ import { getCookie, setCookie } from "@/app/utils/client-utils";
 import {
   revalidatePage,
 } from "@/app/utils/database-actions";
+import { set } from "date-fns";
 
 export default function SettingsModal() {
   // State variables for managing modal visibility, settings, and user authentication
@@ -42,6 +43,8 @@ export default function SettingsModal() {
   });
   const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState();
+  const [registration, setRegistration] = useState(null);
+  const [webpushSubscription, setWebpushSubscription] = useState(null);
 
   useEffect(() => {
     // Fetch settings from cookies and initialize state
@@ -60,17 +63,6 @@ export default function SettingsModal() {
     }
     fetchUserData();
 
-    // async function checkSubscription() {
-    //   if (Notification.permission === "granted") {
-    //     const registration = await navigator.serviceWorker.ready;
-    //     const subscription = await registration.pushManager.getSubscription();
-    //     setIsSubscribed(!!subscription);
-    //   } else {
-    //     setIsSubscribed(false);
-    //   }
-    // }
-    // checkSubscription();
-
     // Check if user just logged in to display toast notification
     const urlParams = new URLSearchParams(window.location.search);
     const autstat = urlParams.get("authstatus");
@@ -80,6 +72,20 @@ export default function SettingsModal() {
     } else if (autstat === "1") {
       toast.error("Login attempt failed please try again!");
       window.history.pushState({}, "", window.location.pathname);
+    }
+
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      // Register service worker
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((reg) => {
+          setRegistration(reg);
+          reg.pushManager.getSubscription().then((sub) => {
+            setWebpushSubscription(sub);
+          });
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
     }
   }, []);
 
@@ -152,6 +158,62 @@ export default function SettingsModal() {
     }
   };
 
+    const subscribeUser = async () => {
+    try {
+      const sub = await registration?.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+      });
+
+      // Send subscription to backend
+      const response = await fetch('/api/webpush', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sub)
+      });
+
+      if (!response.ok) {
+        toast.error('Server error while subscribing');
+        handleCloseModal();
+        return;
+      }
+
+      setWebpushSubscription(sub);
+    } catch (error) {
+      console.error(error);
+      toast.error("Permission denied!");
+      handleCloseModal();
+    }
+  };
+  const unsubscribeUser = async () => {
+    try {
+      // unsubscribe from push manager
+      await webpushSubscription?.unsubscribe();
+      
+      // remove from backend
+      const response = await fetch('/api/webpush', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webpushSubscription)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to unsubscribe');
+      }
+
+      setWebpushSubscription(null);
+
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to unsubscribe');
+      handleCloseModal();
+    }
+  };
+
   // Handle user logout.
   async function handleLogout() {
     document.cookie =
@@ -171,7 +233,7 @@ export default function SettingsModal() {
           window.history.pushState(
             null,
             "",
-            window.location.pathname + "#settings"
+            window.location.pathname + "#settings",
           );
         }}
       >
@@ -179,8 +241,14 @@ export default function SettingsModal() {
       </button>
       {modalVisible && (
         <div className={shared.popupOverlay} onClick={() => handleCloseModal()}>
-          <div className={shared.popupContent} onClick={(e) => e.stopPropagation()} >
-            <button onClick={() => handleCloseModal()} className={styles.popupCloseButton} >
+          <div
+            className={shared.popupContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => handleCloseModal()}
+              className={styles.popupCloseButton}
+            >
               <X />
             </button>
             <h2 className={styles.popupTitle}>Settings</h2>
@@ -225,7 +293,7 @@ export default function SettingsModal() {
                     onChange={(checked) => handleSettingChange("dark", checked)}
                   />
                   <Switch
-                    id="darkmode"
+                    id="threebar"
                     title="Bulletpoints"
                     description="Display title as bulletpoints (popup)"
                     defaultChecked={settings.threebar}
@@ -234,7 +302,7 @@ export default function SettingsModal() {
                     }
                   />
                   <Switch
-                    id="darkmode"
+                    id="shortitle"
                     title="Short Title"
                     description="Show alternative titles"
                     defaultChecked={settings.shortitle}
@@ -243,7 +311,7 @@ export default function SettingsModal() {
                     }
                   />
                   <Switch
-                    id="darkmode"
+                    id="nolimit"
                     title="No Limits"
                     description="Display more days (slow)"
                     defaultChecked={settings.nolimit}
@@ -255,9 +323,7 @@ export default function SettingsModal() {
                   <div className={shared.divider}></div>
 
                   <div className={styles.popupOption}>
-                    <span className={styles.selectTitle}>
-                      Price category:{" "}
-                    </span>
+                    <span className={styles.selectTitle}>Price category: </span>
                     <select
                       className={styles.popupSelect}
                       value={settings.pricecat}
@@ -274,9 +340,7 @@ export default function SettingsModal() {
                   <div
                     className={`${styles.popupOption} ${styles.mobileLayoutOption}`}
                   >
-                    <span className={styles.selectTitle}>
-                      Layout:{" "}
-                    </span>
+                    <span className={styles.selectTitle}>Layout: </span>
                     <select
                       className={styles.popupSelect}
                       value={settings.layout}
@@ -312,9 +376,7 @@ export default function SettingsModal() {
                   </div>
 
                   <div className={styles.popupOption}>
-                    <span className={styles.selectTitle}>
-                      🅱️ Language:{" "}
-                    </span>
+                    <span className={styles.selectTitle}>🅱️ Language: </span>
                     <select
                       className={styles.popupSelect}
                       value={settings.lang}
@@ -326,10 +388,15 @@ export default function SettingsModal() {
                       {/* <option value="ger">German</option> */}
                     </select>
                   </div>
-                  <a className={styles.crowdTranslateBox} href="https://www.crowdtranslate.net/contribute/klmensa/" style={{display: "none"}}>
+                  <a
+                    className={styles.crowdTranslateBox}
+                    href="https://www.crowdtranslate.net/contribute/klmensa/"
+                    style={{ display: "none" }}
+                  >
                     <h3>Help translate Klmensa!</h3>
                     <p>
-                      Click to help translate Klmensa into <u>YOUR</u> language!{" "}
+                      Click to help translate Klmensa into <u>your</u>{" "}
+                      language!{" "}
                     </p>
                   </a>
                 </>
@@ -337,49 +404,51 @@ export default function SettingsModal() {
               {selectedTab === "notifications" && (
                 <>
                   <h3 className={shared.centerFlat}>Under construction 🛠️</h3>
-
-                  {/* <Switch
-                    id="darkmode"
+{/* 
+                  <Switch
+                    id="schedulenoti"
                     title="Daily Notification"
                     description="Receive todays meals in a push notification"
-                    defaultChecked={settings.schedulenoti}
-                    onChange={(checked) =>
-                      handleSettingChange("schedulenoti", checked)
-                    }
+                    defaultChecked={webpushSubscription !== null}
+                    onChange={(checked) =>{
+                      if(checked) {
+                        subscribeUser();  
+                      } else {
+                        unsubscribeUser();
+                      }
+                    }}
                   />
+                  {settings.schedulenoti && false ? ( // Not implemented yet
+                    <div className={styles.popupOption}>
+                      <span style={{ width: "100%", textAlign: "left" }}>
+                        Time:{" "}
+                      </span>
+                      <select
+                        className={styles.popupSelect}
+                        value={settings.notitime}
+                        onChange={(e) =>
+                          handleSettingChange("notitime", e.target.value)
+                        }
+                      >
+                        <option value="8">8am</option>
+                        <option value="9">9am</option>
+                        <option value="10">10am</option>
+                        <option value="11">11am</option>
+                      </select>
+                    </div>
+                  ) : null}
+
                   <Switch
-                    id="darkmode"
+                    id="booknoti"
+                    disabled
                     title="Bookmark Notification"
                     description="Receive a notification when a bookmark is on the menu"
                     defaultChecked={settings.booknoti}
                     onChange={(checked) =>
                       handleSettingChange("booknoti", checked)
                     }
-                  />
-
-                  <div className={shared.divider}></div>
-
-                  <div className={styles.popupOption}>
-                    <span style={{ width: "100%", textAlign: "left" }}>
-                      Time:{" "}
-                    </span>
-                    <select
-                      className={styles.popupSelect}
-                      value={settings.notitime}
-                      onChange={(e) =>
-                        handleSettingChange("notitime", e.target.value)
-                      }
-                    >
-                      <option value="8">8am</option>
-                      <option value="9">9am</option>
-                      <option value="10">10am</option>
-                      <option value="11">11am</option>
-                    </select>
-                  </div>
-
-                  <div className={shared.divider}></div>
-
-                  <p>Bookmarks</p> */}
+                  /> */}
+                  
                 </>
               )}
               {selectedTab === "identity" && (

@@ -4,7 +4,6 @@ self.addEventListener('push', event => {
       icon: '/logo.png',
       badge: '/logo.png',
       tag: 'push-message',
-      vibrate: [100, 50, 100],
       actions: [
         { action: 'open', title: 'Open'},
         { action: 'close', title: 'Close' }
