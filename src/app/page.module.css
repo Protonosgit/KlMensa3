@@ -66,11 +66,6 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-
-    /* For masonry layout
-    display: block;
-    column-count: 3;
-    column-gap: 1.5rem; */
   }
 
   [data-layout="masonry"] .mealList {

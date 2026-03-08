@@ -288,6 +288,7 @@
     flex: 0 0 2rem;
     min-width: 2rem;
     min-height: 2rem;
+    animation: scaleBounce 0.75s ease-out;
    }
 
    .altIcon svg {
@@ -311,10 +312,10 @@
       transform: scale(1);
     }
     40% {
-      transform: scale(1.03);
+      transform: scale(1.08);
     }
     60% {
-     transform: scale(0.96);
+     transform: scale(0.92);
     }
   }
   .infoText {
