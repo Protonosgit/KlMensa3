@@ -6,13 +6,9 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-        port: '',
-        pathname: '**',
-      },
-    ],
+    { protocol: 'https', hostname: 'mensa-kl.de' },
+    { protocol: 'https', hostname: '*.mensa-kl.de' },
+    ]
   },
   // For backwards compatibility
   webpack(config, { webpack }) {

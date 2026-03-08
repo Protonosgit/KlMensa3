@@ -68,10 +68,15 @@ export default function UploadBox({ mealId }) {
     }
 
     setFile(processedFile);
-    setFileInfo({
-      name: processedFile.name,
-      size: (processedFile.size / 1024 / 1024).toFixed(2) + " MB",
-      preview: URL.createObjectURL(processedFile),
+    setFileInfo(prevInfo => {
+      if (prevInfo?.preview) {
+        URL.revokeObjectURL(prevInfo.preview);
+      }
+      return {
+        name: processedFile.name,
+        size: (processedFile.size / 1024 / 1024).toFixed(2) + " MB",
+        preview: URL.createObjectURL(processedFile),
+      };
     });
 
     // try to prevent mem leaks (lets hope so at least)
