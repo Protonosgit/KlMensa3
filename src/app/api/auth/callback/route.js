@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
+import { neon } from '@neondatabase/serverless';
+
 
 export async function GET(request) {
+  const sql = neon(process.env.NEON_DATABASE_URL);
   const { searchParams } = new URL(request.url);
+
   const CSRF_TOKEN = searchParams.get("csrf_token");
   const expected_CSRF_TOKEN = request.cookies.get("csrf_token")?.value;
   const userAccessToken = searchParams.get("auth_token");
@@ -27,16 +31,26 @@ export async function GET(request) {
   const response = NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=0");
   response.cookies.delete("csrf_token", { path: "/" });
   response.cookies.set("access_token", userAccessToken, {
+    // maybe use httponly
     path: "/",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 15552000, // 6 months
   });
 
-  const res = {}; // replace with fetch once api is done
-  response.cookies.set("uindat", JSON.stringify(res), {
-    path: "/",
-    maxAge: 15552000, // 6 months
-  });
+  // legacy site should provide this information
+  // const hereshouldbeanapi = {email: "test12345@fmail.cow",hashedId: "2c042f25af393f70495953f482e9f4ed",reviews: 3571, images: 1}
 
+  // const res = await sql.query(
+  //   `INSERT INTO users (email, hash_id) VALUES ($1, $2) ON CONFLICT (email) DO NOTHING`,
+  //   [hereshouldbeanapi.email, hereshouldbeanapi.hashedId]
+  // );
+
+  // response.cookies.set("account_data", JSON.stringify(hereshouldbeanapi), {
+  //   // maybe use httponlyy
+  //   secure: process.env.NODE_ENV === "production",
+  //   path: "/",
+  //   maxAge: 15552000, // 6 months
+  // });
 
   return response;
 }
