@@ -18,6 +18,7 @@ import {
   InfoIcon,
   Leaf,
   MaximizeIcon,
+  MoonIcon,
   SaladIcon,
   Scale,
   Share2Icon,
@@ -329,6 +330,11 @@ const MealTitle = () => {
               )}
               {meal?.dpartname == "Grill" ? (
                 <Flame size={20} className={styles.otherIcon} />
+              ) : (
+                ""
+              )}
+              {meal?.dpartname == "Abendmensadonotuse" ? (
+                <MoonIcon size={20} className={styles.otherIcon} />
               ) : (
                 ""
               )}

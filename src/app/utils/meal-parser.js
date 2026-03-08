@@ -87,7 +87,10 @@ const priceRelationsLookup = {
 };
 
 // Some are due to mistakes in the source data
-const taggedStrings = ["Vegetarisches Menü[1]:", "Plant-based Menü[1]:", "Plant-based Menü[2]:", "Veganes Menü[1]:","Veganuary Menü[1]:", "Veganuary Menü1]:"]
+
+const veggieIndexTags = ["Vegetarisches Menü[1]:", "Vegetarischer Bagel[1]:"];
+const veganIndexTags = ["Veganes Menü[1]:", "Veganuary Menü[1]:", "Veganuary Menü1]:", "Plant-based Menü[1]:", "Plant based Menü[1]:", "Plant-based Menü[2]:"];
+const taggedStrings = [...veggieIndexTags, ...veganIndexTags];
 
 let cachedMenuData = null;
 let lastMenuCachedAt = 0;
@@ -160,11 +163,11 @@ function splitNormalAndVariant(aTitleList) {
   return [normList, variList];
 }
 
+
 function detectAltVariant(target) {
   for (let i = 0; i < target.length; i++) {
-    if (target[i].includes("Vegetarisches Menü") ) return 1;
-    if (target[i].includes("Plant-based Menü") || target[i].includes("Veganes Menü")) return 2;
-    if (target[i].includes("Veganuary Menü")) return 2;
+    if (veggieIndexTags.some(tag => target[i].includes(tag))) return 1;
+    if (veganIndexTags.some(tag => target[i].includes(tag))) return 2;
   }
   return 0;
 }
@@ -221,11 +224,10 @@ async function ParseMenu() {
     const rawLegacyApi = inputData?.legacyApi;
 
     // Iterate over meals and yes there are 8
-    for (let i = 0; i < lfStudiApi.length; i++) {
+    for (let i = 0; i < lfStudiApi.length; i++) { // DEBUG !!!!! for (let i = 0; i < lfStudiApi.length; i++) {
       const obj = lfStudiApi[i];
 
       // this is fast but ugly
-
       const mergedATitleList = [
         obj.atextz1,
         obj.atextz2
@@ -299,9 +301,9 @@ async function ParseMenu() {
       const commonAdditiveCodes = extractAdditiveCodes(obj?.zsnummern); // This is redundant but we keep it as a pet
 
       // Identify sibling in other dataset
-      const matchKey = titleReg.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
-      const sisterItem = rawLegacyApi.find((item) => item.title.replace(/&quot;/g, "").toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
-      const brotherItem = rawLegacyApi.find(option => option?.loc === sisterItem?.loc && option?.date === sisterItem?.date && option?.m_id !== sisterItem?.m_id);
+      const matchKey = titleReg?.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
+      const sisterItem = rawLegacyApi.find((item) => item?.title?.replace(/&quot;|&amp;/g, "").toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
+      const brotherItem = rawLegacyApi.find(option => option?.loc === sisterItem?.loc && option?.price === sisterItem?.price && option?.date === sisterItem?.date && option?.m_id !== sisterItem?.m_id);
 
       menuData.push({
         date: obj?.proddatum,

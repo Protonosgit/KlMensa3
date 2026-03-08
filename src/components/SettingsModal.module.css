@@ -191,7 +191,9 @@
   box-shadow: var(--lightmode-shadow);
 }
 
-
+.mobilegone {
+    display: none;
+  }
 @media (min-width: 880px) {
   .scrollToTopButton {
     bottom: 2rem;
@@ -199,8 +201,11 @@
     transform: translateX(50%);
   }
 
-  .mobileLayoutOption {
+  .desktopgone {
     display: none;
+  }
+  .mobilegone {
+    display: block;
   }
 
   .popupSelect {

@@ -8,6 +8,14 @@
     cursor: pointer;
     border: var(--darkmode-border);
     box-shadow: var(--lightmode-shadow);
+
+    /* For masonry layout
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    -moz-column-break-inside: avoid; */
   }
 
   .mealCard:hover {
@@ -118,6 +126,16 @@
     color: var(--subtitle-text);
   }
 
+  [data-layout="masonry"] .mealCard {
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    -moz-column-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
   @media (max-width: 768px) {
     .mealCard {
       display: flex;
@@ -152,9 +170,13 @@
 
     .mealLocation {
       font-size: 0.75rem;
-      padding: 0.15rem 0.35rem;
+      padding: 0 0.2rem;
       top: 0.2rem;
       left: 0.2rem;
+    }
+    .otherIcon, .greenIcon {
+      width: 0.95rem;
+      height: 0.95rem;
     }
 
     .star {

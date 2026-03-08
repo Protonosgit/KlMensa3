@@ -352,8 +352,9 @@ export default function SettingsModal() {
                       }
                     >
                       <option value="list">Smol List</option>
-                      <option value="biglist">Big list</option>
-                      <option value="grid">Grid</option>
+                      <option className={styles.desktopgone} value="biglist">Big list</option>
+                      <option className={styles.desktopgone} value="grid">Grid</option>
+                      <option className={styles.mobilegone} value="masonry">Pinterest-Mensa</option>
                     </select>
                   </div>
 
