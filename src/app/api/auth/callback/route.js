@@ -21,24 +21,14 @@ export async function GET(request) {
   }
 
   // Validate secret
-  if (!userAccessToken || userAccessToken.length < 3) {
+  if (!userAccessToken || userAccessToken.length < 20) {
     console.warn("No secret provided");
     return NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=1");
   }
 
-
-  // Store secret as cookie and return home
-  const response = NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=0");
-  response.cookies.delete("csrf_token", { path: "/" });
-  response.cookies.set("access_token", userAccessToken, {
-    // maybe use httponly
-    path: "/",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 15552000, // 6 months
-  });
-
   // legacy site should provide this information
   // const hereshouldbeanapi = {email: "test12345@fmail.cow",hashedId: "2c042f25af393f70495953f482e9f4ed",reviews: 3571, images: 1}
+  // if it fails, throw an error because token invalid
 
   // const res = await sql.query(
   //   `INSERT INTO users (email, hash_id) VALUES ($1, $2) ON CONFLICT (email) DO NOTHING`,
@@ -51,6 +41,17 @@ export async function GET(request) {
   //   path: "/",
   //   maxAge: 15552000, // 6 months
   // });
+
+
+    // Store secret as cookie and return home
+  const response = NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=0");
+  response.cookies.delete("csrf_token", { path: "/" });
+  response.cookies.set("access_token", userAccessToken, {
+    // maybe use httponly
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 15552000, // 6 months
+  });
 
   return response;
 }

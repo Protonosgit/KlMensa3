@@ -409,7 +409,7 @@ export default function SettingsModal() {
                 <>
                   <h3 className={shared.centerFlat}>Under construction 🛠️</h3>
 
-                  {/* <Switch
+                  <Switch
                     id="schedulenoti"
                     title="Daily Notification"
                     description="Receive todays meals in a push notification"
@@ -451,7 +451,7 @@ export default function SettingsModal() {
                     onChange={(checked) =>
                       handleSettingChange("booknoti", checked)
                     }
-                  /> */}
+                  />
                   
                 </>
               )}

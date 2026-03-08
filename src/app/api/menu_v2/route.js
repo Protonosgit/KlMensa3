@@ -13,7 +13,7 @@ export async function GET(req, res) {
     return NextResponse.json({ menu });
 
   } catch (error) {
-    return NextResponse.json({ message: 'Error fetching data', error });
+    return NextResponse.json({ message: 'Error fetching data' });
   }
 }
 
