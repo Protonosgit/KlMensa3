@@ -1,6 +1,8 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { cookies } from "next/headers";
+import { Toaster } from "react-hot-toast";
+import { Suspense } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,9 +35,14 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="de" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body data-theme={settings.dark ? "dark" : "light"} data-layout={settings.layout} data-eyedef={settings.eyedef}>
+      <body
+        data-theme={settings.dark ? "dark" : "light"}
+        data-layout={settings.layout}
+        data-eyedef={settings.eyedef}
+      >
         {children}
+        <Toaster />
       </body>
     </html>
-  )
+  );
 }

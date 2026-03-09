@@ -181,7 +181,7 @@ async function fetchMensaData() {
         "https://www.studierendenwerk-kaiserslautern.de/fileadmin/templates/stw-kl/loadcsv/load_db_speiseplan.php?canteens=1",
         {
           method: "GET",
-          // next: { revalidate: 1800 },
+          next: { revalidate: 1000 },
           headers: {
             "Referrer-Policy": "strict-origin-when-cross-origin",
             "Cache-Control": "no-store, no-cache, must-revalidate",
@@ -192,7 +192,7 @@ async function fetchMensaData() {
       ).then((response) => response.json()),
       fetch("https://www.mensa-kl.de/api.php?format=json&date=all", {
           method: "GET",
-          // next: { revalidate: 1800 },
+          // next: { revalidate: 900 },
           headers: {
             "Referrer-Policy": "strict-origin-when-cross-origin",
             "Cache-Control": "no-store, no-cache, must-revalidate",
