@@ -6,7 +6,7 @@ import Image from "next/image";
 import shared from "@/styles/shared.module.css";
 import styles from "./DetailsModal.module.css";
 import StarRating from "./Starrating";
-import { getCookie, setCookie } from "@/app/utils/client-utils";
+import { getCookie } from "@/app/utils/client-utils";
 import toast from "react-hot-toast";
 import { getNutritionForId, rateMeal, sendSystemTGMessage } from "@/app/utils/database-actions";
 import {
@@ -31,13 +31,14 @@ import VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon from "../../public/icons/VeganOpIcon.svg";
 import { useModalStore } from "@/app/utils/contextStore";
+import {retrieveMenuCached} from "@/app/utils/meal-parser";
 // lazy-load upload box to avoid loading heavy code unless modal is open
 const UploadBox = dynamic(() => import("./UploadBox"), {
   ssr: false,
   loading: () => null,
 });
 
-export default function MealModal({ mealsFull }) {
+export default function MealModal() {
   const { isOpen, meal, openModal, closeModal } = useModalStore();
   const [user, setUser] = useState(null);
   const [settings, setSettings] = useState(null);
@@ -125,25 +126,29 @@ export default function MealModal({ mealsFull }) {
     setIsBookmarked(Boolean(bookmarks && meal?.murmurID && bookmarks.includes(meal?.murmurID)));
 
     if (isOpen) loadNutrition(meal?.murmurID);
-  }, [meal, mealsFull, isOpen]);
+  }, [meal, isOpen]);
 
   useEffect(() => {
     // Read simple user cookie if present
     const userCookie = getCookie("access_token");
     setUser(userCookie);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const mealId = urlParams.get("artid");
-    if (mealId) {
-      const foundmeal = mealsFull?.flatMap((m) => m.meals).find((m) => m?.murmurID === mealId);
-      if (!foundmeal) {
-        alert("Meal has expired!");
-        window.location.replace("/");
-        return;
+    async function loadMealFromID(mealId) {
+      if (mealId) {
+        const fullMenu = await retrieveMenuCached();
+        const foundmeal = fullMenu?.flatMap((m) => m.meals).find((m) => m?.murmurID === mealId);
+        if (!foundmeal) {
+          alert("Meal has expired!");
+          window.location.replace("/");
+          return;
+        }
+        loadNutrition(foundmeal?.murmurID);
+        openModal(foundmeal);
       }
-      loadNutrition(foundmeal?.murmurID);
-      openModal(foundmeal);
     }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    loadMealFromID(urlParams.get("artid"));
 
     return () => {
       mounted.current = false;
@@ -295,6 +300,8 @@ const MealTitle = () => {
           <Image
             priority={false}
             loading={"lazy"}
+            placeholder="blur"
+            blurDataURL="/plate_placeholder.png"
             onError={(e) => {
               const img = e.currentTarget;
               if (img.dataset.fallbackApplied) return;

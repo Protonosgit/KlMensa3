@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { neon } from '@neondatabase/serverless';
-import ParseMenu from '@/app/utils/meal-parser';
+import {retrieveMenuCached} from '@/app/utils/meal-parser';
 
 export async function GET(req, res) {
     if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}` && process.env.NEXT_PUBLIC_CURRENT_DOMAIN !== "http://localhost:3000") {
@@ -19,7 +19,7 @@ export async function GET(req, res) {
   );
 
   const pushlist =  await sql.query( `SELECT timeslot, endpoint, auth, p256dh FROM pushlist`);
-  const menulist = await ParseMenu();
+  const menulist = await retrieveMenuCached();
   const todaysmenu = menulist[0]?.meals;
 
   const titles = todaysmenu?.map(meal => `• ${meal.titleReg[0]}`).join('\n');

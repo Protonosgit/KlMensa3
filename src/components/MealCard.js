@@ -36,6 +36,8 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
             loading={mealIndex < 6 && dayIndex === 0 ? "eager" : "lazy"}
             fetchPriority="high"
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
+            placeholder="blur"
+            blurDataURL="/plate_placeholder.png"
             alt="dish-image" title={"Meal image"} 
             className={styles.mealImage}
             data-layout={settings?.layout}

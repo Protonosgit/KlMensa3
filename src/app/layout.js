@@ -2,7 +2,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { cookies } from "next/headers";
 import { Toaster } from "react-hot-toast";
-import { Suspense } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,6 +28,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+
   const cookieStore = await cookies()
   const settingsCookie = cookieStore.get('settings')
   const settings = settingsCookie?.value ? JSON.parse(settingsCookie.value) : {}

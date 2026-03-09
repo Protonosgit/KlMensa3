@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Groq } from 'groq-sdk';
-import ParseMenu from '@/app/utils/meal-parser';
+import {retrieveMenuCached} from '@/app/utils/meal-parser';
 import { neon } from '@neondatabase/serverless';
 
 const groq = new Groq({
@@ -16,7 +16,7 @@ export async function GET( req, res ) {
         return NextResponse.json({ "error": "Unauthorized" }, { status: 401 });
     }
     const sql = neon(`${process.env.NEON_DATABASE_URL}`);
-    const rawmenu = (await ParseMenu()).slice(0,2);
+    const rawmenu = (await retrieveMenuCached()).slice(0,2);
     //
     // Here objects should be filtered out which have a nutrition set present
     //
