@@ -3,40 +3,26 @@ import { useEffect } from "react";
 import { useModalStore } from "@/app/utils/contextStore";
 
 
-export default function MealModalTrigger({ meal, fullIndex }) {
+export default function MealModalTrigger({ meal, children }) {
   const { openModal, isOpen } = useModalStore();
 
   useEffect(() => {
-    // Disable page scrolling when the meal popup is open
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
       document.body.style.overflow = '';
-    }
+    };
   }, [isOpen]);
-  
 
-  // Open the meal popup and set url param for back gesture detection
-  const requestOpenModal = () => {
-    if(isOpen) return;
-    window.history.pushState(null, '', window.location.href+"?artid="+meal.murmurID);
+  const handleClick = () => {
+    console.log("meal");
+    if (isOpen) return;
+    window.history.pushState(null, '', window.location.href + "?artid=" + meal.murmurID);
     openModal(meal);
   };
 
-
-  useEffect(() => {
-    const parent = document.querySelector(`[data-item-id="${fullIndex}"]`);
-    if (!parent) return;
-
-    const handleClick = () => {
-      requestOpenModal();
-    };
-
-    parent.addEventListener('click', handleClick);
-    return () => parent.removeEventListener('click', handleClick);
-
-  }, [meal.murmurID]);
-
-
-  return null;
+  return (
+    <div onClick={handleClick} style={{ display: "contents" }}>
+      {children}
+    </div>
+  );
 }

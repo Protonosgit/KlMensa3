@@ -12,7 +12,7 @@ import {
   StarIcon,
   X,
 } from "lucide-react";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { getCookie, setCookie } from "@/app/utils/client-utils";
 import {
   revalidatePage,
@@ -507,7 +507,6 @@ export default function SettingsModal() {
           </div>
         </div>
       )}
-      <Toaster />
     </>
   );
 }

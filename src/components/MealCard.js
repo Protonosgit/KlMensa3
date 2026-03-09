@@ -26,19 +26,20 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
 
   // Render the meal card and popup
   return (
+    <MealModalTrigger meal={meal}>
       <div
         key={mealIndex+''+dayIndex}
         className={styles.mealCard}
-        data-item-id={mealIndex+''+dayIndex}
         style={{backgroundColor: meal?.partialFiltered ? "rgba(255, 0, 0, 0.45)" : ""}}>
           <Image
-            priority
+            priority={mealIndex < 6 && dayIndex === 0}
+            loading={mealIndex < 6 && dayIndex === 0 ? "eager" : "lazy"}
             fetchPriority="high"
             src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
             alt="dish-image" title={"Meal image"} 
             className={styles.mealImage}
             data-layout={settings?.layout}
-            width={640} height={310} />
+            width={302} height={227} />
 
         <p className={styles.mealLocation}>
           {meal?.dpartname}
@@ -62,7 +63,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
             <StaticStars />
           </div>
         </div>
-        <MealModalTrigger meal={meal} fullIndex={mealIndex+''+dayIndex} settings={settings}/>
       </div>
+    </MealModalTrigger>
   );
 }
