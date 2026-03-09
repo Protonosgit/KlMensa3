@@ -86,10 +86,11 @@ const priceRelationsLookup = {
     "Warmer Snack / Imbiss (34)": { "price": "6,00 €" },
 };
 
-// Some are due to mistakes in the source data
-
-const veggieIndexTags = ["Vegetarisches Menü[1]:", "Vegetarischer Bagel[1]:"];
-const veganIndexTags = ["Veganes Menü[1]:", "Veganuary Menü[1]:", "Veganuary Menü1]:", "Plant-based Menü[1]:", "Plant based Menü[1]:", "Plant-based Menü[2]:"];
+// List of tags that indicate veggie or vegan
+// Due to someone making frequent typos this list contains some very special variants which should not be considered as a mistake on my side ;)
+//
+const veggieIndexTags = ["Vegetarisches Menü[1]:", "Vegetarischer Bagel[1]:", "Vegetarisches Menü[2]:"];
+const veganIndexTags = ["Veganes Menü[1]:", "Veganuary Menü[1]:", "Veganuary Menü1]:", "Plant-based Menü[1]:", "Plant based Menü[1]:", "Plant-based Menü[2]:", "Plant based Menü[2]:"];
 const taggedStrings = [...veggieIndexTags, ...veganIndexTags];
 
 let cachedMenuData = null;
@@ -154,7 +155,7 @@ function splitNormalAndVariant(aTitleList) {
       normList.push(aTitleList[i]);
     }
     // and variant
-    if(variantIList.includes(i) || !variantIList.includes(i + 1)) {
+    if(variantIList.includes(i) || (!variantIList.includes(i + 1) && !aTitleList.join().includes("[2]"))) {
       variList.push(aTitleList[i]);
     }
 
@@ -298,7 +299,7 @@ async function ParseMenu() {
 
       // Extract additives from string to array
       const commonAdditives = extractAdditives(obj?.zsnumnamen);
-      const commonAdditiveCodes = extractAdditiveCodes(obj?.zsnummern); // This is redundant but we keep it as a pet
+      const commonAdditiveCodes = extractAdditiveCodes(obj?.zsnummern); // for filter only
 
       // Identify sibling in other dataset
       const matchKey = titleReg?.flat().join("").toLowerCase().replace(/[^a-z]/g, "");

@@ -7,7 +7,7 @@ export async function GET(req, res) {
     const menu = await fetchMenu();
 
     if (!menu || !menu?.length) {
-      return NextResponse.json({ message: 'Error fetching data' });
+      throw new Error('Parser returned invalid data');
     }
 
     return NextResponse.json({ menu });

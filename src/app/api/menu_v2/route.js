@@ -7,12 +7,13 @@ export async function GET(req, res) {
     const menu = await ParseMenu();
 
     if (!menu || !menu?.length) {
-      return NextResponse.json({ message: 'Error fetching data' });
+      throw new Error('Parser returned invalid data');
     }
 
     return NextResponse.json({ menu });
 
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ message: 'Error fetching data' });
   }
 }
