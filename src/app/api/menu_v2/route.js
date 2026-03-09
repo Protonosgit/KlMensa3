@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import ParseMenu from '@/app/utils/meal-parser';
+import {ParseMenu} from '@/app/utils/meal-parser';
 
 export async function GET(req, res) {
 

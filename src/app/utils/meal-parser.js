@@ -1,5 +1,5 @@
 "use server"
-
+import { unstable_cache } from "next/cache"
 import { extractAdditives, extractAdditiveCodes } from './additives';
 
 const murmur = require('murmurhash');
@@ -210,7 +210,7 @@ async function fetchMensaData() {
 async function ParseMenu() {
 
     // Invalidate cache if no last cachedate exists, length of data is 0 or last cached date is older than 3 hours or the schedule is from yesterday
-    if (lastMenuCachedAt && cachedMenuData?.length > 0 && (Date.now() - lastMenuCachedAt) < 3 * 60 * 60 * 1000 && isToday(lastMenuCachedAt)) {
+    if (lastMenuCachedAt && cachedMenuData?.length > 0 && (Date.now() - lastMenuCachedAt) < 15 * 60 * 1000 && isToday(lastMenuCachedAt)) {
       return cachedMenuData;
     }
 
@@ -387,4 +387,14 @@ async function ParseMenu() {
   return parsedMenu;
 }
 
-export default ParseMenu;
+const retrieveMenuCached = unstable_cache(
+  async () => {
+    return ParseMenu()
+  },
+  ["menu-data-full"], // key
+  {
+    revalidate: 1000, // 16min
+    tags: ["json-data"],
+  }
+)
+export {ParseMenu, retrieveMenuCached};
