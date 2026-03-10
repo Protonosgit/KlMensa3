@@ -32,7 +32,7 @@ import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon from "../../public/icons/VeganOpIcon.svg";
 import { useModalStore } from "@/app/utils/contextStore";
 import {retrieveMenuCached} from "@/app/utils/meal-parser";
-// lazy-load upload box to avoid loading heavy code unless modal is open
+
 const UploadBox = dynamic(() => import("./UploadBox"), {
   ssr: false,
   loading: () => null,
@@ -48,6 +48,7 @@ export default function MealModal() {
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [nutrition, setNutrition] = useState(null);
   const mounted = useRef(true);
+
 
   const requestCloseModal = useCallback(() => {
     setSubmittedRating(0);
@@ -207,7 +208,7 @@ export default function MealModal() {
 
   // Handle reporting a comment or image.
   async function handleRequestImageTakedown() {
-    const answer = prompt("Please peovide the reason for the takedown", "Accidental upload");
+    const answer = prompt("Please provide the reason for the takedown", "Accidental upload");
     if(answer.length > 0 && answer.length < 31) {
       const res = await sendSystemTGMessage(`Image reported: ${meal?.legacyId} / ${meal?.legacyId_alt} for variant ${selectedVariant} with reason: ${answer}`);
       console.log(res);
@@ -298,10 +299,6 @@ const MealTitle = () => {
         <div className={styles.popupImageContainer}>
           {/* Render meal image from any source or placeholder */}
           <Image
-            priority={false}
-            loading={"lazy"}
-            placeholder="blur"
-            blurDataURL="/plate_placeholder.png"
             onError={(e) => {
               const img = e.currentTarget;
               if (img.dataset.fallbackApplied) return;

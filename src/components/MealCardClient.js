@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useModalStore } from "@/app/utils/contextStore";
 
 
-export default function MealModalTrigger({ meal, children }) {
+export default function MealModalTrigger({meals}) {
   const { openModal, isOpen } = useModalStore();
 
   useEffect(() => {
@@ -13,16 +13,22 @@ export default function MealModalTrigger({ meal, children }) {
     };
   }, [isOpen]);
 
-  const handleClick = () => {
-    console.log("meal");
-    if (isOpen) return;
-    window.history.pushState(null, '', window.location.href + "?artid=" + meal.murmurID);
-    openModal(meal);
-  };
+  useEffect(() => {
+    const cards = document.querySelectorAll("#mealcard")
 
-  return (
-    <div onClick={handleClick} style={{ display: "contents" }}>
-      {children}
-    </div>
-  );
+    cards.forEach((card) => {
+      card.addEventListener("click", (event) => {
+        const el = event.currentTarget
+        const id = el.dataset.id
+        console.log(id)
+
+        if (isOpen) return;
+        window.history.pushState(null, '', window.location.href + "?artid=" + id);
+        const meal = meals?.flatMap(day => day.meals).find(meal => meal.murmurID === id);
+        openModal(meal);
+      })
+    })
+  }, [])
+
+  return null
 }

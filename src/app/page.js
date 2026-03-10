@@ -4,11 +4,10 @@ import Schedule from '@/components/ScheduleGrid';
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { InfoIcon } from "lucide-react";
-import SettingsModal from "@/components/wrapper/SettingsModalWrapper";
-import FilterModal from "@/components/wrapper/FilterModalWrapper";
 
+const DynamicSettingsModal = dynamic(() => import("@/components/SettingsModal"), { ssr: true });
+const DynamicFilterModal = dynamic(() => import("@/components/FilterModal"), { ssr: true });
 const DynamicScrollToTopButton = dynamic(() => import("@/components/ScrollToTopButton"), { ssr: true });
-
 
 export default async function Home() {
 
@@ -48,8 +47,8 @@ export default async function Home() {
 
       <main className={shared.main}>
         <div className={styles.headerButtonSection}>
-          <SettingsModal />
-          <FilterModal/>
+          <DynamicSettingsModal />
+          <DynamicFilterModal/>
         </div>
         <Suspense fallback={<SkeletonLoading />}>
           <Schedule/>
