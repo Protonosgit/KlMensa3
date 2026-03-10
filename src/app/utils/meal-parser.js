@@ -1,8 +1,7 @@
 "use server"
 import { unstable_cache } from "next/cache"
 import { extractAdditives, extractAdditiveCodes } from './additives';
-
-const murmur = require('murmurhash');
+import murmur from 'murmurhash';
 const priceRelationsLookup = {
     "Port.": { "stu": "3,50 €", "bed": "5,30 €", "gas": "6,25 €" }, 
     "Port.I": { "stu": "4,10 €", "bed": "6,10 €", "gas": "7,05 €" },
