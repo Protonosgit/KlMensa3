@@ -4,7 +4,6 @@ import styles from "./MealCard.module.css";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
-import MealModalTrigger from "./MealCardClient";
 
 export default async function MealCard({ meal, mealIndex, dayIndex, settings }) {
   //  star rating meal (non-interactive)

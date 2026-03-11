@@ -211,7 +211,7 @@
     color: var(--subtitle-text);
   }
 
-  .additivesSection {
+  .detailsSection {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -365,9 +365,6 @@
     }
     .popupTitle {
       font-size: 1.2rem;
-    }
-    .popupLocation {
-      font-size: 1rem;
     }
     .popupActionButton {
       width: 2.4rem;

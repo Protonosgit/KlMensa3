@@ -6,7 +6,7 @@
   text-align: center;
   align-items: center;
   max-width: 400px;
-  margin: 30px auto;
+  margin: 0.8rem auto;
   padding: 20px;
   border: 2px dashed var(--lightbox-border);
   border-radius: 10px;

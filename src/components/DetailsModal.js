@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback, Suspense } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import shared from "@/styles/shared.module.css";
@@ -134,23 +134,6 @@ export default function MealModal() {
     const userCookie = getCookie("access_token");
     setUser(userCookie);
 
-    async function loadMealFromID(mealId) {
-      if (mealId) {
-        const fullMenu = await retrieveMenuCached();
-        const foundmeal = fullMenu?.flatMap((m) => m.meals).find((m) => m?.murmurID === mealId);
-        if (!foundmeal) {
-          alert("Meal has expired!");
-          window.location.replace("/");
-          return;
-        }
-        loadNutrition(foundmeal?.murmurID);
-        openModal(foundmeal);
-      }
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    loadMealFromID(urlParams.get("artid"));
-
     return () => {
       mounted.current = false;
     };
@@ -209,9 +192,10 @@ export default function MealModal() {
   // Handle reporting a comment or image.
   async function handleRequestImageTakedown() {
     const answer = prompt("Please provide the reason for the takedown", "Accidental upload");
+    if(!answer) return;
     if(answer.length > 0 && answer.length < 31) {
-      const res = await sendSystemTGMessage(`Image reported: ${meal?.legacyId} / ${meal?.legacyId_alt} for variant ${selectedVariant} with reason: ${answer}`);
-      console.log(res);
+      await sendSystemTGMessage(`Image reported: ${meal?.legacyId} / ${meal?.legacyId_alt} for variant ${selectedVariant} with reason: ${answer}`);
+      toast.success("Request sent!");
     } else {
       toast.error("Invalid reason");
     }
@@ -299,6 +283,7 @@ const MealTitle = () => {
         <div className={styles.popupImageContainer}>
           {/* Render meal image from any source or placeholder */}
           <Image
+          priority
             onError={(e) => {
               const img = e.currentTarget;
               if (img.dataset.fallbackApplied) return;
@@ -506,7 +491,7 @@ const MealTitle = () => {
           )}
 
           {/* Additive chips */}
-          <div className={styles.additivesSection}>
+          <div className={styles.detailsSection}>
             <div className={shared.divider} />
             <div className={styles.sectionTitle}>
               <p>Additives</p>
@@ -536,7 +521,7 @@ const MealTitle = () => {
 
           {/* Nutrition */}
           {nutrition && selectedVariant === 0 ? (
-            <div className={styles.additivesSection}>
+            <div className={styles.detailsSection}>
               <div className={shared.divider} />
               <div className={styles.sectionTitle}>
                 <p>Nutrition</p>
@@ -572,18 +557,18 @@ const MealTitle = () => {
 
           {/* Image upload section */}
           <div className={shared.divider} />
-          <div className={styles.additivesSection}>
+          <div className={styles.detailsSection}>
             <div className={styles.sectionTitle}>
               <p>Submit image</p>
             </div>
-            {isOpen && <UploadBox mealId={meal?.legacyId} />}
+              <UploadBox mealId={meal?.legacyId} />
             <div
               className={shared.centerFlat}
               title="Report image for takedown"
               onClick={() => handleRequestImageTakedown()}
             >
               Request image removal
-              <FlagIcon size={18} />
+              <FlagIcon style={{ marginLeft: "5px" }} size={18} />
             </div>
           </div>
         </div>
