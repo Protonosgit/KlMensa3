@@ -63,6 +63,11 @@
   text-decoration: underline;
 }
 
+.loadingText {
+  text-align: center;
+  margin: 2rem 0;
+}
+
 
 @media (max-width: 920px) {
   .container {
