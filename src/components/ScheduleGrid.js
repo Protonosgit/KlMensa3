@@ -4,7 +4,7 @@ import styles from "../app/page.module.css";
 import Meal from './MealCard';
 import { applyFilterList } from '@/app/utils/filter.js';
 import dynamic from "next/dynamic";
-import MealModalTrigger from './MealCardClient';
+import MealModalTrigger from './CardModalTrigger';
 
 const DynamicMealPopup = dynamic(() => import("./DetailsModal"), { ssr: true });
 
@@ -43,7 +43,7 @@ const weekdayFormatter = new Intl.DateTimeFormat(undefined, {
   weekday: "long",
 });
 
-const dayMonthFormatter = new Intl.DateTimeFormat(undefined, {
+const dayMonthFormatter = new Intl.DateTimeFormat("de-DE", {
   day: "2-digit",
   month: "2-digit",
 });
