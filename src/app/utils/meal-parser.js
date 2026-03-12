@@ -392,7 +392,7 @@ const retrieveMenuCached = unstable_cache(
   },
   ["menu-data-full"], // key
   {
-    revalidate: 1000, // 16min
+    revalidate: 1200, // 20min
     tags: ["json-data"],
   }
 )

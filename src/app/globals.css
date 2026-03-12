@@ -1,5 +1,6 @@
 :root {
-  --main-bg : hsl(0, 0%, 100%);
+  --main-bg : hsl(220, 33%, 97%);
+  --card-bg: hsl(240, 33%, 99%);
   --main-text: hsl(220, 43%, 11%);
   --primary-color: #f3bd1d;
   --secondary-color: #1f5ada;
@@ -7,7 +8,7 @@
   --greenbox-bg: oklch(96.427% 0.0555 154.822);
   --greentext-color: oklch(44.8% 0.119 151.328);
   --bookmark-bg: red;
-  --subtitle-text: oklch(37.3% 0.034 259.733);
+  --subtitle-text: oklch(35.486% 0.03426 262.057);
   --lightbox-bg: oklch(96.7% 0.003 264.542);
   --darkbox-bg: oklch(94.611% 0.00011 271.152);
   --seperator-color: oklch(92.8% 0.006 264.531);
@@ -20,9 +21,10 @@
 }
 
 [data-theme="dark"] {
-  --main-bg : #121212;
+  --main-bg : #05070b;
+  --card-bg:hsl(218, 22%, 7%);
   --main-text: white;
-  --primary-color: #f3bd1d;
+  --primary-color: #e3b016;
   --secondary-color: oklch(66.019% 0.1841 254.638);
   --tertiary-color: #22c55e;
   --greenbox-bg: oklch(88.192% 0.10575 153.764);

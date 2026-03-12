@@ -23,6 +23,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
     );
   };
 
+
   // Render the meal card and popup
   return (
       <div
@@ -30,7 +31,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
         id="mealcard"
         data-id={meal?.murmurID}
         className={styles.mealCard}
-        style={{backgroundColor: meal?.partialFiltered ? "rgba(255, 0, 0, 0.45)" : ""}}>
+        style={{ background: meal?.partialFiltered ? "repeating-linear-gradient(45deg, rgba(255,0,0,0.3), rgba(255,0,0,0.3) 10px, transparent 10px, transparent 20px)" : "" }}>
           <Image
             priority={mealIndex < 6 && dayIndex === 0}
             loading={mealIndex < 6 && dayIndex === 0 ? "eager" : "lazy"}

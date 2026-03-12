@@ -2,7 +2,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-color);
+    background-color: var(--card-bg);
     border-radius: 0.63rem;
     transition: transform 0.3s ease;
     cursor: pointer;
@@ -20,6 +20,7 @@
     object-fit: cover;
     border-radius: 0.5rem 0.5rem 0 0;
   }
+
 
   .mealImage:hover+.mealLocation {
     opacity: 0.6;
@@ -79,6 +80,13 @@
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    overflow: hidden;
+    line-clamp: 6;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
   }
 
   .mealFooter {
@@ -126,6 +134,10 @@
     -webkit-column-break-inside: avoid;
     -moz-column-break-inside: avoid;
     margin-bottom: 1rem;
+  }
+
+  [data-layout="test"] .mealImage {
+    content: url('/nonexistant.png');
   }
 
   @media (max-width: 768px) {

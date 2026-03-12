@@ -33,16 +33,17 @@ export default function Error({ error, reset }) {
           margin: 1rem 0;
         }
         button {
-        margin-top: 1rem;
+          margin-top: 1rem;
+          display: inline-block;
           padding: 0.5rem 1rem;
-          background-color: #0059beff;
-          color: white;
           border: none;
-          border-radius: 4px;
+          border-radius: 0.5rem;
+          background-color: #cacaca;
+          font-size: 1.1rem;
           cursor: pointer;
         }
         button:hover {
-          background-color: #0059c1;
+          background-color: #4485d0;
         }
       `}</style>
     </div>
