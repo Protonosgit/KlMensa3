@@ -136,6 +136,10 @@
     margin-bottom: 1rem;
   }
 
+  [data-layout="test"] .mealImage {
+    content: url('/nonexistant.png');
+  }
+
   @media (max-width: 768px) {
     .mealCard {
       display: flex;

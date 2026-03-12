@@ -138,10 +138,10 @@ export default function SettingsModal() {
       if (document.body) document.body.setAttribute("data-theme", theme);
     }
     if (key === "layout") {
-      document.documentElement.setAttribute("data-layout", value);
+      if (document.body) document.body.setAttribute("data-layout", value);
     }
     if (key === "eyedef") {
-      document.documentElement.setAttribute("data-eyedef", value);
+      if (document.body) document.body.setAttribute("data-eyedef", value);
     }
     if (key === "language") {
       //setLocale();

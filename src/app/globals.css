@@ -22,9 +22,9 @@
 
 [data-theme="dark"] {
   --main-bg : #05070b;
-  --card-bg:hsl(223, 21%, 6%);
+  --card-bg:hsl(218, 22%, 7%);
   --main-text: white;
-  --primary-color: #f3bd1d;
+  --primary-color: #e3b016;
   --secondary-color: oklch(66.019% 0.1841 254.638);
   --tertiary-color: #22c55e;
   --greenbox-bg: oklch(88.192% 0.10575 153.764);

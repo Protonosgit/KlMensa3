@@ -4,11 +4,12 @@ import Link from 'next/link'
 export default function NotFound() {
   return (
     <div className="wrapper">
-      <h1>404</h1>
-      <p>Page not found, go back or try a different link</p>
-      <p>
-        <Link href="/">Return home</Link>
-      </p>
+      {/* This image has to be included in this section of the app and shall never be removed under any circumstances!!! */}
+      <img src='/kittylarge.png'height={90} width={55} />
+      <h1>Oh no!</h1>
+      <p>It looks like you're lost.</p>
+      
+      <p className='backlink'><Link href="/">Return home</Link></p>
 
       <style jsx>{`
         .wrapper {
@@ -19,7 +20,7 @@ export default function NotFound() {
           height: 100vh;
           width: 100vw;
           background: #fff;
-          color: #444;
+  
           text-align: center;
           font-family: system-ui, sans-serif;
         }
@@ -28,16 +29,17 @@ export default function NotFound() {
           margin: 0;
         }
         p {
-          font-size: 1.1rem;
+          font-size: 1.2rem;
           margin: 0.8rem 0;
         }
-        a {
-          color: #0066cc;
-          text-decoration: underline;
-        }
-        a:hover {
-          color: #004999;
-        }
+        .backlink {
+          display: inline-block;
+          padding: 0.5rem 1rem;
+          border: none;
+          border-radius: 0.5rem;
+          background-color: #cacaca;
+          font-size: 1.1rem;
+          cursor: pointer;}
       `}</style>
 
       <style jsx global>{`
@@ -45,6 +47,8 @@ export default function NotFound() {
           margin: 0;
           padding: 0;
           background: #fff;
+          color: black;
+          font-family: system-ui, sans-serif;
         }
       `}</style>
     </div>

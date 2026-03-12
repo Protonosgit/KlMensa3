@@ -23,6 +23,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
     );
   };
 
+
   // Render the meal card and popup
   return (
       <div
