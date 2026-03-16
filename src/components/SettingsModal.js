@@ -271,7 +271,7 @@ export default function SettingsModal() {
                       ? styles.tabElementActive
                       : ""
                   }`}
-                  onClick={() => setSelectedTab("notifications")}
+                  onClick={() => {loggedIn? (setSelectedTab("notifications")):(toast.error("Please log in to use notifications!"))}}
                 >
                   Notifications
                 </p>

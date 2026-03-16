@@ -10,6 +10,12 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
     if (locCookie.includes(meal.dispoart_id)) {
       continue;
     }
+
+    // Exempt Salatbuffet from protein and additive filtering
+    if (meal?.dpartname === "Salatbüfett") {
+      rebuildMeals.push(meal);
+      continue;
+    }
     
     // Set up lists for filtering
     const regAdditives = meal?.titleRegAdditives?.flat() || [];
@@ -38,7 +44,7 @@ function applyFilterList(locCookie, protCookie, adiCookie, meals) {
     let outputMeal = meal;
     if(r_test_1 || a_test_1 || r_test_2 || a_test_2) {
       if(r_test_1 || r_test_2) {
-        // reg hits filter
+        // reg hits filter (would be possible to distinguish between variants and swap defaults but buggy)
         outputMeal = { ...meal, partialFiltered: 1 };
         hitCounter = true;
       }
