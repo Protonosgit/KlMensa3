@@ -194,6 +194,7 @@
 .mobilegone {
     display: none;
   }
+
 @media (min-width: 880px) {
   .scrollToTopButton {
     bottom: 2rem;
@@ -211,8 +212,4 @@
   .popupSelect {
     padding: 0.35rem;
   }
-}
-
-  @media (any-pointer: coarse) and (min-width: 881px) and (max-width: 1380px) {
-
 }

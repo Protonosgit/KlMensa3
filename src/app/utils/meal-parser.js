@@ -141,6 +141,16 @@ function splitNormalAndVariant(aTitleList) {
   const normList = [];
   const variList = [];
 
+
+  const oderIndex = aTitleList.findIndex(element => element.trim().includes("oder:"));
+  if(oderIndex !== -1) {
+    // Meal contains alternative without spacifications (veggi/vegan)
+    const normList = aTitleList.slice(0, oderIndex);
+    const variList = aTitleList.slice(oderIndex+1);
+
+    return [normList, variList];
+  }
+
   // locate the index of strings which contain a meal variant
   for (let i = 0; i < aTitleList.length; i++) {
     const element = aTitleList[i];
@@ -168,6 +178,7 @@ function detectAltVariant(target) {
   for (let i = 0; i < target.length; i++) {
     if (veggieIndexTags.some(tag => target[i].includes(tag))) return 1;
     if (veganIndexTags.some(tag => target[i].includes(tag))) return 2;
+    if (target[i].trim() === "oder:") return 3;
   }
   return 0;
 }
@@ -223,8 +234,8 @@ async function ParseMenu() {
 
     const rawLegacyApi = inputData?.legacyApi;
 
-    // Iterate over meals and yes there are 8
-    for (let i = 0; i < lfStudiApi.length; i++) { // DEBUG !!!!! for (let i = 0; i < lfStudiApi.length; i++) {
+    // Iterate over meals
+    for (let i = 0; i < 13; i++) { // DEBUG !!!!! for (let i = 0; i < lfStudiApi.length; i++) {
       const obj = lfStudiApi[i];
 
       // this is fast but ugly
@@ -291,7 +302,6 @@ async function ParseMenu() {
       const titleAltTmp = removeUnwantedStrings(splitTitles[1], taggedStrings);
       const titleAlt = stripAdditivesFromArray(titleAltTmp);
 
-
       // Create usable additives list synced with the title
       const titleRegAdditives = extractAdditivesAsArray(titleRegTmp);
       const titleAltAdditives = extractAdditivesAsArray(titleAltTmp);
@@ -302,8 +312,11 @@ async function ParseMenu() {
 
       // Identify sibling in other dataset
       const matchKey = titleReg?.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
+      const altMatchKey = titleAlt?.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
       const sisterItem = rawLegacyApi.find((item) => item?.title?.replace(/&quot;|&amp;/g, "").toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
-      const brotherItem = rawLegacyApi.find(option => option?.loc === sisterItem?.loc && option?.price === sisterItem?.price && option?.date === sisterItem?.date && option?.m_id !== sisterItem?.m_id);
+      const brotherItem = rawLegacyApi.find((item) => item?.title?.replace(/&quot;|&amp;/g, "").toLowerCase().replace(/[^a-z]/g, "").includes(altMatchKey));
+      // The one above is experimental even though it should be obvious that the solution below is borderline dumb
+      //const brotherItem = rawLegacyApi.find(option => option?.loc === sisterItem?.loc && option?.price === sisterItem?.price && option?.date === sisterItem?.date && option?.m_id !== sisterItem?.m_id);
 
       menuData.push({
         date: obj?.proddatum,

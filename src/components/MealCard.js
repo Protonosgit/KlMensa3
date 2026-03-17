@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Star, Bot, SoupIcon, SaladIcon, Flame, MoonIcon } from "lucide-react";
+import { Star, Bot, SoupIcon, SaladIcon, Flame, MoonIcon, BadgePlusIcon } from "lucide-react";
 import styles from "./MealCard.module.css";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
@@ -22,6 +22,8 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
       </div>
     );
   };
+
+  const mealHasShortitle = meal?.dpname == "Robotic Kitchen" || meal?.dpname == "Frische ausgewogene Bowls"  || meal?.dpname == "Eintopf";
 
 
   // Render the meal card and popup
@@ -51,15 +53,16 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
           {meal?.dpartname == "Abendmensadonotuse" ? <MoonIcon size={20} className={styles.otherIcon} /> : ""}
           {meal?.altType=== 1 ? <VeggieOpIcon className={styles.greenIcon} /> : ""}
           {meal?.altType=== 2 ? <VeganOpIcon className={styles.greenIcon} /> : ""}
+          {meal?.altType=== 3 ? <BadgePlusIcon className={styles.otherIcon} /> : ""}
           {meal?.menuekennztext == "V+" ? <VeganIcon className={styles.greenIcon}/> : ""}
         </p>
 
         {/* Meal details */}
         <div className={styles.mealInfo}>
           <div className={styles.mealContextLabels}></div>
-          <h4 className={styles.mealTitle}>{(settings?.shortitle ? (meal?.dpname == "Robotic Kitchen" ? meal?.titleAlt[0] : meal?.dpname) : meal?.titleReg.flat())}</h4>
+          <h4 className={styles.mealTitle}>{(settings?.shortitle ? (mealHasShortitle ? meal?.titleAlt[0] : meal?.dpname) : meal?.titleReg.flat())}</h4>
           <div className={styles.mealFooter}>
-            <span className={styles.mealPrice}>{meal.price && (meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
+            <span className={styles.mealPrice}>{meal?.price && (meal?.price[settings?.pricecat] || meal?.price?.stu) || meal?.price?.price}</span>
             <StaticStars />
           </div>
         </div>

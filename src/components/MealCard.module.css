@@ -139,6 +139,12 @@
   [data-layout="test"] .mealImage {
     content: url('/nonexistant.png');
   }
+   @media (any-pointer: coarse) and (min-width: 881px) and (max-width: 1380px) {
+
+    .mealInfo {
+      padding: 0.8rem;
+    }
+   }
 
   @media (max-width: 768px) {
     .mealCard {
