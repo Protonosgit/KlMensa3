@@ -235,7 +235,7 @@ async function ParseMenu() {
     const rawLegacyApi = inputData?.legacyApi;
 
     // Iterate over meals
-    for (let i = 0; i < 13; i++) { // DEBUG !!!!! for (let i = 0; i < lfStudiApi.length; i++) {
+    for (let i = 0; i < lfStudiApi.length; i++) { // DEBUG !!!!! for (let i = 0; i < lfStudiApi.length; i++) {
       const obj = lfStudiApi[i];
 
       // this is fast but ugly
