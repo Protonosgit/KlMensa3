@@ -169,11 +169,16 @@
     }
 }
 
-@media (any-pointer: coarse) and (min-width: 921px) and (max-width: 1380px) {
-
+@media (any-pointer: coarse) and (min-width: 881px) and (max-width: 1380px) {
     .popupOverlay {
         background-color: none;
         animation: none;
         backdrop-filter: none;
+    }
+    .popupContent {
+        width: 80%;
+        max-width: none;
+        max-height: 100vh;
+        height: 90%;
     }
 }

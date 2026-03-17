@@ -137,6 +137,13 @@
     }
 
   @media (any-pointer: coarse) and (min-width: 881px) and (max-width: 1380px) {
+    .dayHeader {
+        margin: 0.5rem 0;
+      }
+    .dayContainer {
+        padding: 0rem 0;
+        margin-bottom: 3rem;
+      }
       .mealList {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.7rem;

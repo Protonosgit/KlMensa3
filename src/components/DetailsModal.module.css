@@ -268,20 +268,20 @@
     padding: 0.8rem;
     margin: 0.7rem 0;
     background-color: var(--greenbox-bg);
+    color: var(--greentext-color);
     cursor: pointer;
   }
   .altTitle {
-    color: var(--greentext-color);
     font-size: 1.2rem;
     font-weight: 600;
+    color: inherit;
   }
   .altDescription {
-    color: var(--greentext-color);
     font-weight: 500;
     font-size: 1rem;
+    color: inherit;
   }
   .altIcon {
-    color: var(--greentext-color);
     width: 2rem;
     height: 2rem;
     display: inline-block;
@@ -289,6 +289,7 @@
     min-width: 2rem;
     min-height: 2rem;
     animation: scaleBounce 0.75s ease-out;
+    color: inherit;
    }
 
    .altIcon svg {
@@ -297,7 +298,8 @@
      height: 100%;
    }
   .swapIcon {
-    color: var(--greentext-color);
+    color: inherit;
+    cursor: pointer;
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;

@@ -10,6 +10,7 @@ import { getCookie } from "@/app/utils/client-utils";
 import toast from "react-hot-toast";
 import { getNutritionForId, rateMeal, sendSystemTGMessage } from "@/app/utils/database-actions";
 import {
+  BadgePlusIcon,
   Bookmark,
   Bot,
   Clock10Icon,
@@ -348,6 +349,11 @@ const MealTitle = () => {
               ) : (
                 ""
               )}
+              {meal?.altType === 3 ? (
+                <BadgePlusIcon className={styles.otherIcon} />
+              ) : (
+                ""
+              )}
               {meal?.menuekennztext == "V+" ? (
                 <VeganIcon className={styles.greenIcon} />
               ) : (
@@ -446,6 +452,11 @@ const MealTitle = () => {
           {meal?.altType > 0 && (
             <div
               className={styles.altBox}
+              style={{
+                backgroundColor:
+                  meal.altType === 3 ? "var(--darkbox-bg)" : null,
+                color: meal.altType === 3 ? "var(--main-text)" : null,
+              }}
               onClick={() => {
                 setSelectedVariant(selectedVariant === 0 ? 1 : 0);
                 loadStars(selectedVariant === 0 ? 1 : 0);
@@ -455,9 +466,10 @@ const MealTitle = () => {
                 <VeggieOpIcon size={20} className={styles.altIcon} />
               )}
               {meal.altType === 2 && <VeganOpIcon size={20} className={styles.altIcon} />}
+              {meal.altType === 3 && <BadgePlusIcon size={20} className={styles.altIcon} />}
               <div>
                 <p className={styles.altTitle}>
-                  {meal?.altType === 2 ? "Vegan" : "Veggie"} Alternative
+                  {meal?.altType === 2 ? "Vegan" : meal?.altType === 1 ? "Veggie": ""} Alternative
                 </p>
                 <p className={styles.altDescription}>{meal?.titleAlt.flat()}</p>
               </div>
