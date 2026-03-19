@@ -2,6 +2,8 @@
 import { unstable_cache } from "next/cache"
 import { extractAdditives, extractAdditiveCodes } from './additives';
 import murmur from 'murmurhash';
+import { decode } from "he";
+
 const priceRelationsLookup = {
     "Port.": { "stu": "3,50 €", "bed": "5,30 €", "gas": "6,25 €" }, 
     "Port.I": { "stu": "4,10 €", "bed": "6,10 €", "gas": "7,05 €" },
@@ -313,8 +315,9 @@ async function ParseMenu() {
       // Identify sibling in other dataset
       const matchKey = titleReg?.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
       const altMatchKey = titleAlt?.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
-      const sisterItem = rawLegacyApi.find((item) => item?.title?.replace(/&quot;|&amp;/g, "").toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
-      const brotherItem = rawLegacyApi.find((item) => item?.title?.replace(/&quot;|&amp;/g, "").toLowerCase().replace(/[^a-z]/g, "").includes(altMatchKey));
+      // maybe index the oder: tag and split string when legacy api does nto want to fix this issue
+      const sisterItem = rawLegacyApi.find((item) => decode(item?.title || "").toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
+      const brotherItem = rawLegacyApi.find((item) => decode(item?.title || "").toLowerCase().replace(/[^a-z]/g, "").includes(altMatchKey));
       // The one above is experimental even though it should be obvious that the solution below is borderline dumb
       //const brotherItem = rawLegacyApi.find(option => option?.loc === sisterItem?.loc && option?.price === sisterItem?.price && option?.date === sisterItem?.date && option?.m_id !== sisterItem?.m_id);
 
