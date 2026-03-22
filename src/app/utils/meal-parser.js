@@ -94,9 +94,6 @@ const veggieIndexTags = ["Vegetarisches Menü[1]:", "Vegetarischer Bagel[1]:", "
 const veganIndexTags = ["Veganes Menü[1]:", "Veganuary Menü[1]:", "Veganuary Menü1]:", "Plant-based Menü[1]:", "Plant based Menü[1]:", "Plant-based Menü[2]:", "Plant based Menü[2]:"];
 const taggedStrings = [...veggieIndexTags, ...veganIndexTags];
 
-let cachedMenuData = null;
-let lastMenuCachedAt = 0;
-
 function isToday(timestamp) {
   const inputDate = new Date(timestamp);
   const today = new Date();
@@ -140,15 +137,15 @@ function extractAdditivesAsArray(target) {
 function splitNormalAndVariant(aTitleList) {
   const variantIList = [];
 
-  const normList = [];
-  const variList = [];
+  let normList = [];
+  let variList = [];
 
 
   const oderIndex = aTitleList.findIndex(element => element.trim().includes("oder:"));
   if(oderIndex !== -1) {
     // Meal contains alternative without spacifications (veggi/vegan)
-    const normList = aTitleList.slice(0, oderIndex);
-    const variList = aTitleList.slice(oderIndex+1);
+    normList = aTitleList.slice(0, oderIndex);
+    variList = aTitleList.slice(oderIndex+1);
 
     return [normList, variList];
   }
@@ -180,15 +177,14 @@ function detectAltVariant(target) {
   for (let i = 0; i < target.length; i++) {
     if (veggieIndexTags.some(tag => target[i].includes(tag))) return 1;
     if (veganIndexTags.some(tag => target[i].includes(tag))) return 2;
-    if (target[i].trim() === "oder:") return 3;
+    if (target[i].trim().toLowerCase() === "oder:") return 3;
   }
   return 0;
 }
 
 async function fetchMensaData() {
-  // trycatch
   try {
-    const [studiApi, legacyApi] = await Promise.all([
+    const [studiResult, legacyResult] = await Promise.allSettled([
       fetch(
         "https://www.studierendenwerk-kaiserslautern.de/fileadmin/templates/stw-kl/loadcsv/load_db_speiseplan.php?canteens=1",
         {
@@ -201,32 +197,30 @@ async function fetchMensaData() {
             "Expires": "0",
           },
         }
-      ).then((response) => response.json()),
+      ).then((r) => r.json()),
+
       fetch("https://www.mensa-kl.de/api.php?format=json&date=all", {
-          method: "GET",
-          // next: { revalidate: 900 },
-          headers: {
-            "Referrer-Policy": "strict-origin-when-cross-origin",
-            "Cache-Control": "no-store, no-cache, must-revalidate",
-            "Pragma": "no-cache",
-            "Expires": "0",
-          },
-      }).then((response) => response.json()),
+        method: "GET",
+        headers: {
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
+      }).then((r) => r.json()),
     ]);
-    return {studiApi, legacyApi};
+
+    return {
+      studiApi: studiResult.status === "fulfilled" ? studiResult.value : [],
+      legacyApi: legacyResult.status === "fulfilled" ? legacyResult.value : [],
+    };
   } catch (error) {
-    console.warn("Network error or server not responding:", error.message);
+    console.warn("Unexpected error:", error.message);
+    return { studiApi: [], legacyApi: [] };
   }
 }
 
 async function ParseMenu() {
-
-    // Invalidate cache if no last cachedate exists, length of data is 0 or last cached date is older than 3 hours or the schedule is from yesterday
-    if (lastMenuCachedAt && cachedMenuData?.length > 0 && (Date.now() - lastMenuCachedAt) < 15 * 60 * 1000 && isToday(lastMenuCachedAt)) {
-      return cachedMenuData;
-    }
-
-
     const inputData = await fetchMensaData();
 
     let menuData = [];
@@ -278,6 +272,7 @@ async function ParseMenu() {
       ].filter(Boolean);
 
       // create usable hash from title
+      //const murmurID2 = murmur.v3(mergedATitleList.join("")).toString(16).substring(0, 8);// The following system is much better but the ai dataset would be broken if we change it
       const murmurID = murmur
         .v3(
           mergedATitleList[0] +
@@ -393,10 +388,6 @@ async function ParseMenu() {
             meals: sortedMeals
         };
     });
-
-  // Cache menu data
-  cachedMenuData = parsedMenu;
-  lastMenuCachedAt = Date.now();
 
   // fire
   return parsedMenu;

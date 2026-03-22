@@ -19,7 +19,6 @@ export default function NotFound() {
           align-items: center;
           height: 100vh;
           width: 100vw;
-          background: #fff;
   
           text-align: center;
           font-family: system-ui, sans-serif;
@@ -37,7 +36,8 @@ export default function NotFound() {
           padding: 0.5rem 1rem;
           border: none;
           border-radius: 0.5rem;
-          background-color: #cacaca;
+          background-color: var(--darkbox-bg);
+          color: var(--main-text);
           font-size: 1.1rem;
           cursor: pointer;}
       `}</style>
@@ -46,8 +46,6 @@ export default function NotFound() {
         body {
           margin: 0;
           padding: 0;
-          background: #fff;
-          color: black;
           font-family: system-ui, sans-serif;
         }
       `}</style>

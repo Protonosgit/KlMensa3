@@ -78,6 +78,7 @@ async function requestNutrition(rlist) {
 // je höher der Score, desto gesünder!  
 // [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...]',
 //
+
   try {
 
     const chatCompletion = await groq.chat.completions.create({
@@ -85,7 +86,7 @@ async function requestNutrition(rlist) {
         {
           role: "system",
           content:
-            'Du erhälst eine List mit Einträgen einer deutschen aktuellen Mensa-Speisekarte und hast die Aufgabe, die Nährwerte für jedes Gericht so präzise wie möglich zu schätzen. Gib alle Daten in einer JSON-String-Liste zurück, sollte das nicht möglich sein überspringst jeden Eintrag der nicht berechnet werden kann und sei dabei Fehlertollerant! Das Format: [{"aID":"00000000","Kalorien_kcal":a,"Fett_g":b,"Zucker_g":c,"Protein_g":d,"Kohlenhydrate_g":e,"Score_%":f}, ...] , achte auf Ganzzahlen, der Gesundheits-Score ist höher, je gesünder etwas ist!',
+            'Du erhälst eine List mit Einträgen einer deutschen aktuellen Mensa-Speisekarte und hast die Aufgabe, die Nährwerte für jedes Gericht so präzise wie möglich zu berechnen. Gib alle Daten im JSON-Format zurück, sollte das garnicht möglich sein, ignoriere den problematischen Eitrag und fahre fort! Format: [{"aID":"1234abc","Kalorien_kcal":1234,"Fett_g":123,"Zucker_g":123,"Protein_g":123,"Kohlenhydrate_g":1234,"Score_%":100}, ...] , achte auf Ganzzahlen, der Gesundheits-Score ist höher, je gesünder etwas ist!',
         },
         {
           role: "user",
@@ -94,7 +95,7 @@ async function requestNutrition(rlist) {
       ],
 
       "model": "openai/gpt-oss-120b",
-      "temperature": 0.27,
+      "temperature": 0.6,
       "max_completion_tokens": 8192,
       "top_p": 1,
       "stream": false,

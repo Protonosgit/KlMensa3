@@ -26,7 +26,7 @@ export default async function ScheduleGrid({}) {
   const settings = safeJSONParse(cookieStore.get('settings')?.value);
 
   let menuData = await retrieveMenuCached();
-  const maxMealCount = settings?.nolimit ? undefined : 8;
+  const maxMealCount = settings?.nolimit ? undefined : 7;
   const menu = menuData?.slice(0, maxMealCount);
 
 
@@ -34,7 +34,8 @@ export default async function ScheduleGrid({}) {
   if (!menu || !menu?.length) {
     return (
       <div className={styles.emptyList}>
-        <p>Api did not return a valid menu on time!</p>
+        <h3>API fault</h3>
+        <p>The studierendenwerk API is currently unavailable. <br/>Please try again later <br/> ＞﹏＜</p>
       </div>
     );
   }
