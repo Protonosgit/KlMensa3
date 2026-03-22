@@ -316,7 +316,7 @@ export default function SettingsModal() {
                   <Switch
                     id="nolimit"
                     title="No Limits"
-                    description="Display more days (slow)"
+                    description="Display more days (slow + may change)"
                     defaultChecked={settings.nolimit}
                     onChange={(checked) =>
                       handleSettingChange("nolimit", checked)

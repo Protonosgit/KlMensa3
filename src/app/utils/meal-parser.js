@@ -183,10 +183,8 @@ function detectAltVariant(target) {
 }
 
 async function fetchMensaData() {
-  // trycatch
   try {
-    // this should REDUNDAT!!!!! previously it was but due to a change this was removed
-    const [studiApi, legacyApi] = await Promise.all([
+    const [studiResult, legacyResult] = await Promise.allSettled([
       fetch(
         "https://www.studierendenwerk-kaiserslautern.de/fileadmin/templates/stw-kl/loadcsv/load_db_speiseplan.php?canteens=1",
         {
@@ -199,22 +197,26 @@ async function fetchMensaData() {
             "Expires": "0",
           },
         }
-      ).then((response) => response.json()),
+      ).then((r) => r.json()),
+
       fetch("https://www.mensa-kl.de/api.php?format=json&date=all", {
-          method: "GET",
-          // next: { revalidate: 900 },
-          headers: {
-            "Referrer-Policy": "strict-origin-when-cross-origin",
-            "Cache-Control": "no-store, no-cache, must-revalidate",
-            "Pragma": "no-cache",
-            "Expires": "0",
-          },
-      }).then((response) => response.json()),
+        method: "GET",
+        headers: {
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
+      }).then((r) => r.json()),
     ]);
-    return {studiApi, legacyApi};
+
+    return {
+      studiApi: studiResult.status === "fulfilled" ? studiResult.value : [],
+      legacyApi: legacyResult.status === "fulfilled" ? legacyResult.value : [],
+    };
   } catch (error) {
-    console.warn("Network error or server not responding:", error.message);
-    return { studiApi: [], legacyApi: [] }
+    console.warn("Unexpected error:", error.message);
+    return { studiApi: [], legacyApi: [] };
   }
 }
 
