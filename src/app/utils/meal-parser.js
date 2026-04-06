@@ -189,7 +189,7 @@ async function fetchMensaData() {
         "https://www.studierendenwerk-kaiserslautern.de/fileadmin/templates/stw-kl/loadcsv/load_db_speiseplan.php?canteens=1",
         {
           method: "GET",
-          next: { revalidate: 1000 },
+          // next: { revalidate: 1000 },
           headers: {
             "Referrer-Policy": "strict-origin-when-cross-origin",
             "Cache-Control": "no-store, no-cache, must-revalidate",
@@ -313,9 +313,8 @@ async function ParseMenu() {
       // maybe index the oder: tag and split string when legacy api does nto want to fix this issue
       const sisterItem = rawLegacyApi.find((item) => decode(item?.title || "").toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
       const brotherItem = rawLegacyApi.find((item) => decode(item?.title || "").toLowerCase().replace(/[^a-z]/g, "").includes(altMatchKey));
-      // The one above is experimental even though it should be obvious that the solution below is borderline dumb
-      //const brotherItem = rawLegacyApi.find(option => option?.loc === sisterItem?.loc && option?.price === sisterItem?.price && option?.date === sisterItem?.date && option?.m_id !== sisterItem?.m_id);
 
+      
       menuData.push({
         date: obj?.proddatum,
         murmurID,
