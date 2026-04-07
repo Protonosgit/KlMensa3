@@ -1,15 +1,15 @@
 export default function manifest() {
   return {
-    name: "KL Mensa",
-    short_name: "kl-mensa",
-    description: "RPTU mennsa schedule tracking app",
+    name: "Kl-Mensa - Mensaplan",
+    short_name: "KL mensa",
+    description: "Mensaplan der RPTU in Kaiserslautern",
     //lang: 'en',
     categories: ["health", "tools", "education"],
     start_url: "/",
     //scope: '/',
     display: "standalone", // mb try fullscreen
     background_color: "#f3bd1d",
-    theme_color: "#2ab85e", // only testing
+    theme_color: "#f3bd1d",
     orientation: "portrait",
 
     icons: [

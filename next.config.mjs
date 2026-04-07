@@ -1,51 +1,67 @@
 /** @type {import('next').NextConfig} */
 
+import withPWAInit from "next-pwa";
+
+const withPWA = withPWAInit({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === "development",
+});
+
 const nextConfig = {
+  //reactStrictMode: true,
   cacheComponents: false,
-  // basePath: "/",
 
   images: {
     remotePatterns: [
-    { protocol: 'https', hostname: 'mensa-kl.de' },
-    { protocol: 'https', hostname: '*.mensa-kl.de' },
-    ]
+      { protocol: "https", hostname: "mensa-kl.de" },
+      { protocol: "https", hostname: "*.mensa-kl.de" },
+    ],
   },
-  // For backwards compatibility
-  webpack(config, { webpack }) {
+
+  // SVG handling (Webpack fallback)
+  webpack(config) {
     const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg'),
+      rule.test?.test?.(".svg"),
     );
+
     if (fileLoaderRule) {
       config.module.rules.push(
         {
           ...fileLoaderRule,
           test: /\.svg$/i,
-          resourceQuery: /url/, // *.svg?url
+          resourceQuery: /url/,
         },
         {
           test: /\.svg$/i,
           issuer: fileLoaderRule.issuer,
-          resourceQuery: { not: [...(fileLoaderRule.resourceQuery?.not ?? []), /url/] },
-          use: ['@svgr/webpack'],
+          resourceQuery: {
+            not: [...(fileLoaderRule.resourceQuery?.not ?? []), /url/],
+          },
+          use: ["@svgr/webpack"],
         },
       );
+
       fileLoaderRule.exclude = /\.svg$/i;
     }
+
     return config;
   },
+
   // Turbopack config
   turbopack: {
     rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
       },
-      '*.svg?url': {
+      "*.svg?url": {
         loaders: [],
-        as: '*.svg',
+        as: "*.svg",
       },
     },
   },
 };
 
-export default nextConfig;
+export default withPWA(nextConfig);
