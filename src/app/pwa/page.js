@@ -11,6 +11,7 @@ export default function InstallPWA() {
   const [prompt, setPrompt] = useState(null);
 
   useEffect(() => {
+    navigator.serviceWorker.register('/pwa-worker.js');
     const handler = (e) => {
       e.preventDefault();
       setPrompt(e);
@@ -52,7 +53,6 @@ export default function InstallPWA() {
   }, []);
 
   const handleInstallPrompt = async () => {
-    navigator.serviceWorker.register('/pwa-worker.js');
     if (!prompt) {
       alert("Please attempt a manual installation.");
       return;
