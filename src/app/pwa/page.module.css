@@ -1,0 +1,26 @@
+.subtitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding-bottom: 0.3rem;
+}
+.description {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+.description a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+
+    @media (max-width: 768px) {
+      .headerTitle {
+        font-size: 1.8rem;
+      }
+      .headerSubtitle {
+        font-size: 14px;
+      }
+      .description {
+        font-size: 1rem;
+      }
+    }

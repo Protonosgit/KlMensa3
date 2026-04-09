@@ -132,8 +132,8 @@ export default function MealModal() {
 
   useEffect(() => {
     // Read simple user cookie if present
-    const userCookie = getCookie("access_token");
-    setUser(userCookie);
+    const tokenObject = getCookie("account_data");
+    setUser(tokenObject);
 
     return () => {
       mounted.current = false;

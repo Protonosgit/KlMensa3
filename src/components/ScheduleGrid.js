@@ -40,7 +40,7 @@ export default async function ScheduleGrid({}) {
     );
   }
 
-const weekdayFormatter = new Intl.DateTimeFormat(undefined, {
+const weekdayFormatter = new Intl.DateTimeFormat("de-DE", {
   weekday: "long",
 });
 

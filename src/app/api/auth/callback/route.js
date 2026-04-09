@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { neon } from '@neondatabase/serverless';
-
+import crypto from 'crypto';
 
 export async function GET(request) {
   const sql = neon(process.env.NEON_DATABASE_URL);
@@ -26,32 +26,44 @@ export async function GET(request) {
     return NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=1");
   }
 
-  // legacy site should provide this information
-  // const hereshouldbeanapi = {email: "test12345@fmail.cow",hashedId: "2c042f25af393f70495953f482e9f4ed",reviews: 3571, images: 1}
-  // if it fails, throw an error because token invalid
+  // mock api
+  const hereshouldbeanapi = {email: "test12345@fmail.cow", reviews: 3571, images: 1}
+  // Throw error if secret is invalid !!!
 
-  // const res = await sql.query(
-  //   `INSERT INTO users (email, hash_id) VALUES ($1, $2) ON CONFLICT (email) DO NOTHING`,
-  //   [hereshouldbeanapi.email, hereshouldbeanapi.hashedId]
-  // );
 
-  // response.cookies.set("account_data", JSON.stringify(hereshouldbeanapi), {
-  //   // maybe use httponlyy
-  //   secure: process.env.NODE_ENV === "production",
-  //   path: "/",
-  //   maxAge: 15552000, // 6 months
-  // });
+  // Create / Get account
+  const userResult = await sql.query(
+    `INSERT INTO users (email)
+     VALUES ($1)
+     ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email
+     RETURNING id`,
+    [hereshouldbeanapi.email]
+  );
+  
+  const accountId = userResult[0]?.id;
+  if (!accountId) {
+    console.error("Failed to resolve user account id");
+    return NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN + "?authstatus=1");
+  }
 
+  // Create session for user
+  const sessionToken = crypto.randomBytes(32).toString("hex");
+  await sql.query(
+    `INSERT INTO sessions (account_id, token, expires_at)
+     VALUES ($1, $2, NOW() + INTERVAL '365 days')`,
+    [accountId, sessionToken]
+  );
 
     // Store secret as cookie and return home
   const response = NextResponse.redirect(process.env.NEXT_PUBLIC_CURRENT_DOMAIN+"?authstatus=0");
   response.cookies.delete("csrf_token", { path: "/" });
-  response.cookies.set("access_token", userAccessToken, {
-    // maybe use httponly
-    path: "/",
+  response.cookies.set("account_data", JSON.stringify({sessionToken, email: hereshouldbeanapi.email, legacyToken: userAccessToken}), {
+    // maybe use httponlyy
     secure: process.env.NODE_ENV === "production",
+    path: "/",
     maxAge: 15552000, // 6 months
   });
+
 
   return response;
 }
