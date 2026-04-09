@@ -40,8 +40,8 @@ export default function SettingsModal() {
     schedulenoti: false,
     experiments : false,
   });
-  const [loggedIn, setloggedIn] = useState(false);
-  const [user, setUser] = useState();
+
+  const [user, setUser] = useState(null);
   const [registration, setRegistration] = useState(null);
   const [webpushSubscription, setWebpushSubscription] = useState(null);
 
@@ -54,10 +54,10 @@ export default function SettingsModal() {
 
     // Fetch user data from mkl
     async function fetchUserData() {
-      const tokenString = getCookie("access_token");
-      if (tokenString) {
-        setloggedIn(true);
-        // setUser(user);
+      const tokenObject = getCookie("account_data");
+
+      if (tokenObject) {
+        setUser(tokenObject);
       }
     }
     fetchUserData();
@@ -217,8 +217,7 @@ export default function SettingsModal() {
 
   // Handle user logout.
   async function handleLogout() {
-    document.cookie =
-      "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
+    // send api message to clear session
       document.cookie =
       "account_data=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
     document.location.reload();
@@ -271,7 +270,7 @@ export default function SettingsModal() {
                       ? styles.tabElementActive
                       : ""
                   }`}
-                  onClick={() => {loggedIn? (setSelectedTab("notifications")):(toast.error("Please log in to use notifications!"))}}
+                  onClick={() => {user? (setSelectedTab("notifications")):(toast.error("Please log in to use notifications!"))}}
                 >
                   Notifications
                 </p>
@@ -462,10 +461,10 @@ export default function SettingsModal() {
                     className={styles.popupOption}
                     // style={{ display: "none" }}
                   >
-                    {loggedIn ? (
+                    {user ? (
                       <div className={styles.popupUserContainer}>
                         <p className={styles.userAccounttext}>
-                          <b>demo@testmail.com</b>
+                          <b>{user?.email}</b>
                         </p>
                         {userAccountData?.metadata?.theme && <CatIcon />}
                         <div className={styles.activitySection}>
@@ -488,12 +487,12 @@ export default function SettingsModal() {
                       </div>
                     ) : (
                       <a
-                        href="/api/auth/login"
+                        // href="/api/auth/login"
                         className={styles.popupUserContainer}
                       >
                         <button
                           className={styles.popupButton}
-                          onClick={() => handleLogin()}
+                          onClick={() => toast('Temporarily disabled!', { icon: '🚫',})}
                         >
                           Login with MKL
                           <img src="/mkl_icon.webp" />

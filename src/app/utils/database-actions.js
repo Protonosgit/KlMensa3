@@ -30,7 +30,8 @@ export async function rateMeal(legacyId, stars) {
         return { error: "Invalid rating", data: null };
     }
     const store = await cookies();
-    const tokenString = store.get('access_token')?.value;
+    const tokenStringObj = store.get('account_data')?.value && JSON.parse(store.get('account_data')?.value);
+    const tokenString = tokenStringObj?.legacyToken || null;
     if(!tokenString) {
         return { error: "Not logged in", data: null };
     }

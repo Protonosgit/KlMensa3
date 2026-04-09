@@ -21,3 +21,7 @@ export async function GET() {
 
   return res;
 }
+
+export async function DELETE(req, res) {
+  
+}

@@ -3,7 +3,7 @@
 
 async function requestUserData() {
     try {
-        const tokenString = getCookie("access_token");
+        const tokenString = getCookie("account_data"); // adapt to new cookie schema
         const response = await fetch(`${process.env.NEXT_PUBLIC_LEGACY_API_URL}/api/v1/about-user`, { method: 'GET', headers: { Authorization: `Bearer ${tokenString}` }});
         const user = await response.json();
 
@@ -14,23 +14,33 @@ async function requestUserData() {
 }
 
 
-function setCookie(name, value, days) {
-    if (typeof days !== "number" || days <= 0) {
-        days = 60*60*24*365;
+function getCookie(name) {
+    const cookies = document.cookie
+        .split(';')
+        .map(c => c.trim())
+        .reduce((acc, cookie) => {
+            const [key, val] = cookie.split('=');
+            acc[key] = decodeURIComponent(val || '');
+            return acc;
+        }, {});
+    
+    const value = cookies[name];
+    if (!value) return null;
+    
+    // Auto-parse JSON
+    try {
+        return JSON.parse(value);
+    } catch {
+        return value;
     }
-    const expires = "; expires=" + new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${value || ""}${expires}; path=/`;
 }
 
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
+function setCookie(name, value, days = 365) {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    const expires = `expires=${date.toUTCString()}`;
+    const stringValue = typeof value === 'object' ? JSON.stringify(value) : value;
+    document.cookie = `${name}=${encodeURIComponent(stringValue)}; ${expires}; path=/; SameSite=Strict`;
 }
 
 
