@@ -1,22 +1,13 @@
-const CACHE_NAME = 'app-cache-v1';
-const OFFLINE_URL = '/offline.html';
+const CACHE_NAME = 'pages-v1';
 
-const ASSETS_TO_CACHE = [
-  '/',
-  OFFLINE_URL,
-  '/manifest.json',
-];
-
-// Install
+// Install → optional pre-cache
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
-  );
   self.skipWaiting();
 });
 
-// Activate
+// Activate → cleanup old caches
 self.addEventListener('activate', (event) => {
+  console.log('Activating');
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
@@ -29,29 +20,28 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch (Stale-While-Revalidate for navigation)
+// Fetch handler
 self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      caches.match(event.request).then((cached) => {
-        const networkFetch = fetch(event.request)
-          .then((response) => {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, clone);
-            });
-            return response;
-          })
-          .catch(() => caches.match(OFFLINE_URL));
+  console.log('Fetching', event.request.url);
+  const req = event.request;
 
+  // Only handle page navigation
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(async (cache) => {
+        const cached = await cache.match(req);
+
+        const networkFetch = fetch(req)
+          .then((res) => {
+            // Update cache in background
+            cache.put(req, res.clone());
+            return res;
+          })
+          .catch(() => cached); // fallback if offline
+
+        // Return cached immediately if exists
         return cached || networkFetch;
       })
     );
-    return;
   }
-
-  // Static assets cache-first
-  event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
-  );
 });

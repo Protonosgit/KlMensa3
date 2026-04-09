@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useModalStore } from "@/app/utils/contextStore";
+import toast from "react-hot-toast";
 
 
 export default function MealModalTrigger({meals}) {
@@ -29,6 +30,12 @@ export default function MealModalTrigger({meals}) {
       window.history.replaceState(null, '', "/");
     }
 
+    const handleOffline = () => {
+      toast('OFFLINE: \n Interactivity disabled!', { icon: '🔴',})
+    };
+
+    window.addEventListener('offline', handleOffline);
+
     // load modal by onclick
     const cards = document.querySelectorAll("#mealcard")
     cards.forEach((card) => {
@@ -42,6 +49,10 @@ export default function MealModalTrigger({meals}) {
         
       })
     })
+
+    return () => {
+      window.removeEventListener('offline', handleOffline);
+    };
   }, [])
 
   return null

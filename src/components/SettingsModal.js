@@ -17,6 +17,7 @@ import { getCookie, setCookie } from "@/app/utils/client-utils";
 import {
   revalidatePage,
 } from "@/app/utils/database-actions";
+import { se } from "date-fns/locale";
 
 export default function SettingsModal() {
   // State variables for managing modal visibility, settings, and user authentication
@@ -47,9 +48,9 @@ export default function SettingsModal() {
 
   useEffect(() => {
     // Fetch settings from cookies and initialize state
-    const settingsString = getCookie("settings")?.trim();
-    if (settingsString) {
-      setSettings(JSON.parse(settingsString));
+    const settingsCookie = getCookie("settings");
+    if (settingsCookie) {
+      setSettings(settingsCookie);
     }
 
     // Fetch user data from mkl
@@ -496,6 +497,12 @@ export default function SettingsModal() {
                         >
                           Login with MKL
                           <img src="/mkl_icon.webp" />
+                        </button>
+                        <button
+                          className={styles.popupButton}
+                          onClick={() => toast('Please use MKL!', { icon: '🦔',})}
+                        >
+                          Login
                         </button>
                       </a>
                     )}
