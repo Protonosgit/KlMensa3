@@ -31,7 +31,7 @@ export default function MealModalTrigger({meals}) {
     }
 
     const handleOffline = () => {
-      toast('OFFLINE: \n Interactivity disabled!', { icon: '🔴',})
+      toast('Offline mode enabled!', { icon: '🔴',})
     };
 
     window.addEventListener('offline', handleOffline);
