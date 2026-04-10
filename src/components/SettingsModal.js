@@ -100,7 +100,7 @@ export default function SettingsModal() {
     const handleEscapePress = (event) => {
       if (event.key === "Escape" && modalVisible) {
         setModalVisible(false);
-        window.history.back();
+        window.history.replaceState(null, '', "/");
       }
     };
 
@@ -232,6 +232,7 @@ export default function SettingsModal() {
         className={shared.headderButton}
         title="Settings and Account"
         onClick={() => {
+          if(!navigator.onLine) {toast.error("You are offline!"); return;}
           setModalVisible(true);
           window.history.pushState(
             null,

@@ -16,7 +16,8 @@ export default function MealModalTrigger({meals}) {
   }, [isOpen]);
 
   function enableModalMode(targetId) {
-    if (isOpen) return true;
+    if(!navigator.onLine) {toast.error("You are offline!"); return false;}
+    if (isOpen) return false;
     const meal = meals?.flatMap(day => day.meals).find(meal => meal.murmurID === targetId);
     if(!meal) return false;
     openModal(meal);

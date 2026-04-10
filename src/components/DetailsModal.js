@@ -55,7 +55,7 @@ export default function MealModal() {
     setSubmittedRating(0);
     closeModal();
     try {
-      window.history.back();
+      window.history.replaceState(null, '', "/");
     } catch (e) {}
   }, [closeModal]);
 
@@ -290,6 +290,7 @@ const MealTitle = () => {
                 e.currentTarget.src = "/plate_placeholder.png";
               } 
             }}
+
             src={
               selectedVariant == 0
                 ? meal?.image
