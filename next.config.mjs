@@ -10,6 +10,19 @@ const nextConfig = {
     { protocol: 'https', hostname: '*.mensa-kl.de' },
     ]
   },
+  async headers() {
+    return [
+      {
+        source: "/fallback.png",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
+  },
   // For backwards compatibility
   webpack(config, { webpack }) {
     const fileLoaderRule = config.module.rules.find((rule) =>

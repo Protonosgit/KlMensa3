@@ -284,14 +284,11 @@ const MealTitle = () => {
         <div className={styles.popupImageContainer}>
           {/* Render meal image from any source or placeholder */}
           <Image
-          priority
+            priority
             onError={(e) => {
-              const img = e.currentTarget;
-              if (img.dataset.fallbackApplied) return;
-              img.onerror = null;
-              img.removeAttribute("srcset");
-              img.dataset.fallbackApplied = "1";
-              img.src = "/plate_placeholder.png";
+              if(e.currentTarget !== "/plate_placeholder.png") {
+                e.currentTarget.src = "/plate_placeholder.png";
+              } 
             }}
             src={
               selectedVariant == 0
