@@ -12,6 +12,31 @@
   text-decoration: underline;
 }
 
+.installButton {
+  display: flex;
+  background-color: var(--primary-color);
+  color: var(--main-bg);
+  border: none;
+  padding: 0.5rem 0.8rem;
+  width: 100%;
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+.arrow {
+  margin-left: 0.5rem;
+}
+
+.disclaimer {
+  font-size: 0.8rem;
+  color: var(--subtitle-text);
+}
+
 
     @media (max-width: 768px) {
       .headerTitle {

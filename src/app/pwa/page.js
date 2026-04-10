@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import shared from "@/styles/shared_page.module.css";
+import { ArrowDownToLine } from "lucide-react";
 
 export default function InstallPWA() {
   const [platform, setPlatform] = useState(null);
@@ -11,7 +12,6 @@ export default function InstallPWA() {
   const [prompt, setPrompt] = useState(null);
 
   useEffect(() => {
-    navigator.serviceWorker.register('/pwa-worker.js');
     const handler = (e) => {
       e.preventDefault();
       setPrompt(e);
@@ -42,7 +42,7 @@ export default function InstallPWA() {
       !/chrome|crios|crmo|edg|opr/i.test(ua)
     ) {
       engine = "safari";
-    } else if (/chrome|crios|crmo|edg|opr/i.test(ua)) {
+    } else if (/chrome|chromite|crios|crmo|edg|opr/i.test(ua)) {
       engine = "chromium";
     }
 
@@ -54,30 +54,38 @@ export default function InstallPWA() {
 
   const handleInstallPrompt = async () => {
     if (!prompt) {
-      alert("Please attempt a manual installation.");
+      alert("Your browser does not support this feature. Please follow the guide below!");
       return;
     }
 
     prompt.prompt();
 
-    const result = await prompt.userChoice;
-    console.log("Install result:", result.outcome);
+    await prompt.userChoice;
 
     setPrompt(null);
   };
+
+    const directInstallButton = () => {
+      return (<button className={styles.installButton} onClick={handleInstallPrompt}>Direct Install <ArrowDownToLine className={styles.arrow} size={20} /></button>)
+    }
+
 
   const renderInstructions = () => {
     switch (platform) {
       case "windows":
         if (browser === "chromium")
-          return (<button onClick={handleInstallPrompt}>Install</button>);
+          return (<>
+          {directInstallButton()}
+          <Image src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/></>);
         if (browser === "gecko" || browser === "safari")
           return (<p>Your browser does not support Progressive Web Apps on Windows.</p>);
       case "android":
         if (browser === "chromium")
-          return <button onClick={handleInstallPrompt}>Install</button>;
+          return (<>
+          {directInstallButton()}
+          <Image src="/screenshots/and_chro_pwahint.png" loading="eager" alt="windows-chromium" width={300} height={300}/></>);
         if (browser === "gecko")
-          return (<Image src="/screenshots/and_firef_pwahint.png" loading="eager" alt="install screenshot" width={400} height={400}/>);
+          return (<Image src="/screenshots/and_firef_pwahint.png" loading="eager" alt="install screenshot" width={300} height={300}/>);
       case "ios":
         if (browser === "safari")
           return (<p>Tap Share → "Add to Home Screen"→ Enable "Open as Web App".</p>);
@@ -85,9 +93,10 @@ export default function InstallPWA() {
           return <p>Only Safari supports Progressive Web Apps on iOS.</p>;
       case "macos":
         if (browser === "chromium")
-          return (<Image src="/screenshots/win_edge_pwahint.png" alt="windows-chromium" width={400} height={80}/>);
+          return (<>{directInstallButton()}
+          <Image src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/></>);
         if (browser === "safari")
-          return (<Image src="/screenshots/win_edge_pwahint.png" alt="windows-chromium" width={400} height={80}/>);
+          return (<Image src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/>);
         if (browser === "gecko")
           return (<p>Your browser does not support Progressive Web Apps on MacOS.</p>);
       default:
@@ -115,9 +124,10 @@ export default function InstallPWA() {
 
       <main className={shared.main}>
         <div style={{ padding: 20 }}>
-          <h1>Install PWA (Dev test)</h1>
+          <h1>Web App</h1>
 
           {renderInstructions()}
+          <p className={styles.disclaimer} >Depending on your OS or browser features like offline mode or sync might not be supported!</p>
         </div>
       </main>
     </div>
