@@ -7,7 +7,6 @@ self.addEventListener('install', (event) => {
 
 // Activate → cleanup old caches
 self.addEventListener('activate', (event) => {
-  console.log('Activating');
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
@@ -22,7 +21,6 @@ self.addEventListener('activate', (event) => {
 
 // Fetch handler
 self.addEventListener('fetch', (event) => {
-  console.log('Fetching', event.request.url);
   const req = event.request;
 
   // Only handle page navigation

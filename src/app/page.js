@@ -4,6 +4,7 @@ import Schedule from '@/components/ScheduleGrid';
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { InfoIcon } from "lucide-react";
+import Script from "next/script";
 
 const DynamicSettingsModal = dynamic(() => import("@/components/SettingsModal"), { ssr: true });
 const DynamicFilterModal = dynamic(() => import("@/components/FilterModal"), { ssr: true });
@@ -57,15 +58,16 @@ export default async function Home() {
       <footer className={shared.footer}>
         <div className={shared.linkGrid}>
           <a href="https://www.studierendenwerk-kaiserslautern.de/de/" className={shared.footerLink}>Studierendenwerk</a>
-          <a href="https://rptu.de" className={shared.footerLink}>RPTU</a>
           <a href="https://www.mensa-kl.de/legal.html" className={shared.footerLink}>Privacy Policy</a>
           <a href="https://www.mensa-kl.de/#upload" className={shared.footerLink}>Images/Ratings</a>
+          <a href="/pwa" className={shared.footerLink}>App</a>
           <a href="/about" className={shared.footerLink}>About</a>
           <a href="https://github.com/Protonosgit/KlMensa3/issues" className={shared.footerLink}>Report issue</a>
           <a href="https://github.com/Protonosgit/KlMensa3" className={shared.footerLink}>Source</a>
           <a href="/api/menu_v1" className={shared.footerLink}>Api</a>
         </div>
-           <p>2025 kl-mensa v2 prototype{/* 🇺🇦 */}<br/></p>
+           <p>2026 kl-mensa v2 prototype{/* 🇺🇦 */}<br/></p>
+        <Script id="worker-init" strategy="afterInteractive">{`navigator.serviceWorker.register('/pwa-worker.js');`}</Script>
       </footer>
       <DynamicScrollToTopButton />
     </div>
