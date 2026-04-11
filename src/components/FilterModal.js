@@ -18,7 +18,7 @@ const mealLocationClearname = [
   { name: "Abendmensa", codes: [4] },
 ];
 
-// Missing:  weichtiere, bio, lupine, geschwärzt, gewachst, phenylalanine
+// Missing:  weichtiere, bio, lupine, geschwärzt, gewachst
 const mealAdditiveClearname = [
   { name: "Lactose", code: "la" },
   { name: "Gluten", code: "gl" },

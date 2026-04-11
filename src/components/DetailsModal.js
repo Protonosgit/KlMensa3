@@ -274,6 +274,30 @@ const MealTitle = () => {
     );
   }
 
+
+  const FreitextInfo = () => {
+    const freilist = meal?.mergedFreitextList || [];
+    return (
+            <>
+            <div className={shared.divider} style={{display: freilist.length > 0 ? "block" : "none"}} />
+            {freilist.map((freitext, index) => (
+              <div key={index} className={styles.infoText}>
+                {freitext?.includes("Uhr") ? (
+                  <Clock10Icon size={18} className={styles.otherIcon} />
+                ) : freitext?.includes("DIY") ? (
+                  <Scale size={18} className={styles.otherIcon} />
+                ) : freitext?.includes("Vegetarisch") ? (
+                  <Leaf size={18} className={styles.otherIcon} />
+                ) : (
+                  <InfoIcon size={18} className={styles.otherIcon} />
+                )}
+                <p>{freitext}</p>
+              </div>
+            ))}
+            </>
+    );
+  }
+
   if (!meal || !isOpen) return null;
 
 
@@ -480,24 +504,8 @@ const MealTitle = () => {
           )}
 
           {/* Additional information */}
-          {meal?.mergedFreitextList[0] && (
-            <>
-              <div className={shared.divider} />
-              <p className={styles.sectionTitle}>Information</p>
-              <div className={styles.infoText}>
-                {meal?.mergedFreitextList[0]?.includes("Uhr") ? (
-                  <Clock10Icon size={18} className={styles.otherIcon} />
-                ) : meal?.mergedFreitextList[0]?.includes("DIY") ? (
-                  <Scale size={18} className={styles.otherIcon} />
-                ) : meal?.mergedFreitextList[0]?.includes("Vegetarisch") ? (
-                  <Leaf size={18} className={styles.otherIcon} />
-                ) : (
-                  <InfoIcon size={18} className={styles.otherIcon} />
-                )}
-                <p>{meal?.mergedFreitextList[0]}</p>
-              </div>
-            </>
-          )}
+          <FreitextInfo />
+
 
           {/* Additive chips */}
           <div className={styles.detailsSection}>
