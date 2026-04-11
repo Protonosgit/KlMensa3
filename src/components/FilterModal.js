@@ -4,6 +4,7 @@ import shared from "@/styles/shared.module.css";
 import { useEffect, useState } from "react";
 import { revalidatePage } from "@/app/utils/database-actions";
 import { Filter, MapPin, Beef, FlaskConical, Trash2, XIcon, Check } from "lucide-react";
+import toast from "react-hot-toast";
 
 // Define clear names and codes for meal locations, additives, and proteins.
 const mealLocationClearname = [
@@ -238,7 +239,7 @@ export default function FilterModal({}) {
 
   function handleCloseModal() {
     setModalVisible(false);
-    window.history.back();
+    window.history.replaceState(null, '', "/");
   }
 
   useEffect(() => {
@@ -256,6 +257,7 @@ export default function FilterModal({}) {
         className={shared.headderButton}
         title="Meal filters"
         onClick={() => {
+          if(!navigator.onLine) {toast.error("You are offline!"); return;}
           setModalVisible(true);
           window.history.pushState(null, "", window.location.pathname + "#filter");
         }}

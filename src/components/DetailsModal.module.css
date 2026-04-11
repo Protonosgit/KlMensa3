@@ -5,6 +5,7 @@
     z-index: 2;
     background: var(--main-bg); */
     overflow: hidden;
+    height: 400px;
 }
   
   .popupImage {
@@ -359,8 +360,27 @@
   border-bottom: none;
 }
 
+@media (any-pointer: coarse) and (min-width: 881px) and (max-width: 1380px) {
+    .popupImageContainer {
+      height: 300px;
+    }
+    .popupImage {
+      height: 300px;
+      border-radius: 0;
+    }
+    .popupTitle {
+      font-size: 1.2rem;
+    }
+    .star.active {
+      color: var(--main-text);
+    }
+  }
+
   /* Responsive Design */
   @media (max-width: 880px) {
+    .popupImageContainer {
+      height: 280px;
+    }
     .popupImage {
     height: 280px;
     border-radius: 0;
@@ -411,17 +431,4 @@
   .popupImage:hover ~ .overlayActionsBar {
     opacity: 0.3;
   }
-  }
-
-@media (any-pointer: coarse) and (min-width: 801px) and (max-width: 1380px) {
-    .popupImage {
-      height: 300px;
-      border-radius: 0;
-    }
-    .popupTitle {
-      font-size: 1.2rem;
-    }
-    .star.active {
-      color: var(--main-text);
-    }
   }

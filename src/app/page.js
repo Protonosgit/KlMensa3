@@ -67,7 +67,7 @@ export default async function Home() {
           <a href="/api/menu_v1" className={shared.footerLink}>Api</a>
         </div>
            <p>2026 kl-mensa v2 prototype{/* 🇺🇦 */}<br/></p>
-        <Script id="worker-init" strategy="afterInteractive">{`navigator.serviceWorker.register('/pwa-worker.js');`}</Script>
+        <Script id="worker-init" strategy="afterInteractive">{`navigator.serviceWorker.register('/cache-worker.js');`}</Script>
       </footer>
       <DynamicScrollToTopButton />
     </div>

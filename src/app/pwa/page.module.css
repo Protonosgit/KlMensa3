@@ -28,6 +28,9 @@
   cursor: pointer;
   border-radius: 0.5rem;
 }
+.hintImage {
+  margin-top: 0.5rem;
+}
 .arrow {
   margin-left: 0.5rem;
 }

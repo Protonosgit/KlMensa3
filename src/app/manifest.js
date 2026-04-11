@@ -27,25 +27,36 @@ export default function manifest() {
       // },
     ],
 
-    // screenshots: [
-    //   {
-    //     src: "/screenshot1.png",
-    //     sizes: "1280x720",
-    //     type: "image/png",
-    //   },
-    // ],
+    screenshots: [
+      {
+        src: "/screenshots/home_page.jpeg",
+        sizes: "1280x720", // 1080x2106
+        type: "image/jpeg",
+      },
+      {
+        src: "/screenshots/details_page.jpeg",
+        sizes: "1280x720", // 1080x2106
+        type: "image/jpeg",
+      },
+      {
+        src: "/screenshots/settings_page.jpeg",
+        sizes: "1280x720", // 1080x2106
+        type: "image/jpeg",
+      }
+    ],
 
     // protocol_handlers: [
     //   {
-    //     protocol: 'web+myapp',
+    //     protocol: 'web+klmensa',
     //     url: '/?url=%s',
     //   },
     // ],
     
     // shortcuts: [
     //   {
-    //     name: "About page",
-    //     url: "/about",
+    //     name: "Settings",
+    //     url: "/#settings",
+    //     description: "Settings page",
     //     icons: [{ src: "/shortcut.png", sizes: "96x96" }],
     //   },
     // ],

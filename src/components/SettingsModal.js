@@ -17,7 +17,6 @@ import { getCookie, setCookie } from "@/app/utils/client-utils";
 import {
   revalidatePage,
 } from "@/app/utils/database-actions";
-import { se } from "date-fns/locale";
 
 export default function SettingsModal() {
   // State variables for managing modal visibility, settings, and user authentication
@@ -76,7 +75,7 @@ export default function SettingsModal() {
 
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       // Register service worker
-      navigator.serviceWorker.register('/service-worker.js')
+      navigator.serviceWorker.register('/notification-worker.js')
         .then((reg) => {
           setRegistration(reg);
           reg.pushManager.getSubscription().then((sub) => {
@@ -100,7 +99,7 @@ export default function SettingsModal() {
     const handleEscapePress = (event) => {
       if (event.key === "Escape" && modalVisible) {
         setModalVisible(false);
-        window.history.back();
+        window.history.replaceState(null, '', "/");
       }
     };
 
@@ -232,6 +231,7 @@ export default function SettingsModal() {
         className={shared.headderButton}
         title="Settings and Account"
         onClick={() => {
+          if(!navigator.onLine) {toast.error("You are offline!"); return;}
           setModalVisible(true);
           window.history.pushState(
             null,
