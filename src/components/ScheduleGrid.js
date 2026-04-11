@@ -1,33 +1,45 @@
-import { cookies } from 'next/headers';
+"use client";
 import {retrieveMenuCached, ParseMenu} from '@/app/utils/meal-parser';
 import styles from "../app/page.module.css";
 import Meal from './MealCard';
 import { applyFilterList } from '@/app/utils/filter.js';
 import dynamic from "next/dynamic";
 import MealModalTrigger from './CardModalTrigger';
+import { getCookie } from "@/app/utils/client-utils";
+import { useEffect, useState } from 'react';
 
 const DynamicMealPopup = dynamic(() => import("./DetailsModal"), { ssr: true });
 
 
-export default async function ScheduleGrid({}) {
 
-  const safeJSONParse = (str) => {
-    try {
-      return JSON.parse(str);
-    } catch (e) {
-      return null;
+export default function ScheduleGrid({}) {
+  const [locationFilter, setLocationFilter] = useState([]);
+  const [proteinFilter, setProteinFilter] = useState([]);
+  const [additiveFilter, setAdditiveFilter] = useState([]);
+  const [settings, setSettings] = useState(null);
+  const [menu, setMenu] = useState([]);
+
+  useEffect(() => {
+    async function loadAllData() {
+      const settings = getCookie('settings');
+      const proteinCookie = getCookie("protein");
+      const additiveCookie = getCookie("additive");
+      const locationCookie = getCookie("location");
+    
+      const menuData = await retrieveMenuCached();
+      const maxMealCount = settings?.nolimit ? undefined : 7;
+      const menu = menuData?.slice(0, maxMealCount);
+      setMenu(menu);
+      setLocationFilter(locationCookie);
+      setProteinFilter(proteinCookie);
+      setAdditiveFilter(additiveCookie);
+      setSettings(settings);
+    
     }
-  };
+    loadAllData();
+  
+  }, []);
 
-  const cookieStore = await cookies();
-  const locationFilter = safeJSONParse(cookieStore.get('location')?.value);
-  const proteinFilter = safeJSONParse(cookieStore.get('protein')?.value);
-  const additiveFilter = safeJSONParse(cookieStore.get('additive')?.value);
-  const settings = safeJSONParse(cookieStore.get('settings')?.value);
-
-  let menuData = await retrieveMenuCached();
-  const maxMealCount = settings?.nolimit ? undefined : 7;
-  const menu = menuData?.slice(0, maxMealCount);
 
 
   // Check if menu data is available

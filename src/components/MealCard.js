@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { Star, Bot, SoupIcon, SaladIcon, Flame, MoonIcon, BadgePlusIcon } from "lucide-react";
 import styles from "./MealCard.module.css";
@@ -5,7 +6,7 @@ import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
 
-export default async function MealCard({ meal, mealIndex, dayIndex, settings }) {
+export default function MealCard({ meal, mealIndex, dayIndex, settings }) {
   //  star rating meal (non-interactive)
   const StaticStars = () => {
     return (
