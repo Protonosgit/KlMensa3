@@ -42,7 +42,7 @@ export default function InstallPWA() {
       !/chrome|crios|crmo|edg|opr/i.test(ua)
     ) {
       engine = "safari";
-    } else if (/chrome|chromite|crios|crmo|edg|opr/i.test(ua)) {
+    } else if (/chrome|crios|crmo|edg|opr/i.test(ua)) {
       engine = "chromium";
     }
 
@@ -76,27 +76,27 @@ export default function InstallPWA() {
         if (browser === "chromium")
           return (<>
           {directInstallButton()}
-          <Image src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/></>);
+          <Image className={styles.hintImage} src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={350} height={90}/></>);
         if (browser === "gecko" || browser === "safari")
           return (<p>Your browser does not support Progressive Web Apps on Windows.</p>);
       case "android":
         if (browser === "chromium")
           return (<>
           {directInstallButton()}
-          <Image src="/screenshots/and_chro_pwahint.png" loading="eager" alt="windows-chromium" width={300} height={300}/></>);
+          <Image className={styles.hintImage} src="/screenshots/and_chro_pwahint.png" loading="eager" alt="windows-chromium" width={300} height={300}/></>);
         if (browser === "gecko")
-          return (<Image src="/screenshots/and_firef_pwahint.png" loading="eager" alt="install screenshot" width={300} height={300}/>);
+          return (<Image className={styles.hintImage} src="/screenshots/and_firef_pwahint.png" loading="eager" alt="install screenshot" width={300} height={300}/>);
       case "ios":
         if (browser === "safari")
-          return (<p>Tap Share → "Add to Home Screen"→ Enable "Open as Web App".</p>);
+          return (<Image className={styles.hintImage} src="/screenshots/ios_safa_pwahint.png" loading="eager" alt="install screenshot" width={300} height={300}/>);
         if (browser !== "safari")
           return <p>Only Safari supports Progressive Web Apps on iOS.</p>;
       case "macos":
         if (browser === "chromium")
           return (<>{directInstallButton()}
-          <Image src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/></>);
+          <Image className={styles.hintImage} src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/></>);
         if (browser === "safari")
-          return (<Image src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/>);
+          return (<Image className={styles.hintImage} src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/>);
         if (browser === "gecko")
           return (<p>Your browser does not support Progressive Web Apps on MacOS.</p>);
       default:

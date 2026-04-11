@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo, useCallback, Suspense } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import shared from "@/styles/shared.module.css";
@@ -32,7 +32,6 @@ import VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon from "../../public/icons/VeganOpIcon.svg";
 import { useModalStore } from "@/app/utils/contextStore";
-import {retrieveMenuCached} from "@/app/utils/meal-parser";
 
 const UploadBox = dynamic(() => import("./UploadBox"), {
   ssr: false,
