@@ -23,15 +23,15 @@ export default function InstallPWA() {
     let os = "unknown";
     let engine = "unknown";
 
-    if (/windows nt/i.test(ua)) {
+    if (ua.includes("windows")) {
       os = "windows";
-    } else if (/android/i.test(ua)) {
+    } else if (ua.includes("android")) {
       os = "android";
-    } else if (/iphone|ipad|ipod/i.test(ua)) {
+    } else if (ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod")) {
       os = "ios";
-    } else if (/mac os x/i.test(ua)) {
+    } else if (ua.includes("macintosh")) {
       os = "macos";
-    } else if (/linux/i.test(ua)) {
+    } else if (ua.includes("linux") && !ua.includes("android") && !ua.includes("cros")) {
       os = "linux";
     }
 
@@ -46,6 +46,7 @@ export default function InstallPWA() {
       engine = "chromium";
     }
 
+    console.log(os, engine);
     setPlatform(os);
     setBrowser(engine);
 
@@ -76,7 +77,7 @@ export default function InstallPWA() {
         if (browser === "chromium")
           return (<>
           {directInstallButton()}
-          <Image className={styles.hintImage} src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={350} height={90}/></>);
+          <Image className={styles.hintImage} src="/screenshots/win_chrom_pwahint.png" loading="eager" alt="windows-chromium" width={500} height={500}/></>);
         if (browser === "gecko" || browser === "safari")
           return (<p>Your browser does not support Progressive Web Apps on Windows.</p>);
       case "android":
@@ -94,14 +95,14 @@ export default function InstallPWA() {
       case "macos":
         if (browser === "chromium")
           return (<>{directInstallButton()}
-          <Image className={styles.hintImage} src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/></>);
+          <Image className={styles.hintImage} src="/screenshots/win_chrom_pwahint.png" loading="eager" alt="windows-chromium" width={500} height={500}/></>);
         if (browser === "safari")
-          return (<Image className={styles.hintImage} src="/screenshots/win_edge_pwahint.png" loading="eager" alt="windows-chromium" width={400} height={80}/>);
+          return (<Image className={styles.hintImage} src="/screenshots/win_chrom_pwahint.png" loading="eager" alt="windows-chromium" width={500} height={500}/>);
         if (browser === "gecko")
           return (<p>Your browser does not support Progressive Web Apps on MacOS.</p>);
       default:
         return (
-          <p>Your OS was not detected. Please search for instructions oninstalling PWAs.</p>
+          <p>Your OS was not detected. Please search for instructions on installing PWAs.</p>
         );
     }
   };
