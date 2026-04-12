@@ -71,7 +71,7 @@ export default function InstallPWA() {
     }
 
 
-  const renderInstructions = () => {
+  const AdaptiveInstructions = () => {
     switch (platform) {
       case "windows":
         if (browser === "chromium")
@@ -127,7 +127,7 @@ export default function InstallPWA() {
         <div style={{ padding: 20 }}>
           <h1>Web App</h1>
 
-          {renderInstructions()}
+          <AdaptiveInstructions />
           <p className={styles.disclaimer} >Depending on your OS or browser features like offline mode or sync might not be supported!</p>
         </div>
       </main>
