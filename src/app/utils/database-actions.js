@@ -33,7 +33,7 @@ export async function rateMeal(legacyId, stars) {
     const tokenStringObj = store.get('account_data')?.value && JSON.parse(store.get('account_data')?.value);
     const tokenString = tokenStringObj?.legacyToken || null;
     if(!tokenString) {
-        return { error: "Not logged in", data: null };
+        return { error: "Fault 0: No token", data: null };
     }
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_LEGACY_API_URL}/api/v1/rate-meal`, { method: 'POST',body: JSON.stringify({ meal_id: legacyId, rating: stars }), headers: { Authorization: `Bearer ${tokenString}` }});
@@ -43,7 +43,7 @@ export async function rateMeal(legacyId, stars) {
           return { error: null, data: result };
         }
 
-        return { error: "Rating blocked", data: result?.data };
+        return { error: "Fault 1: Server issue", data: result?.data };
 
     } catch (error) {
         console.log(error);

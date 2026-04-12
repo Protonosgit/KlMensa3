@@ -74,17 +74,13 @@ export default function SettingsModal() {
     }
 
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      // Register service worker
-      navigator.serviceWorker.register('/notification-worker.js')
-        .then((reg) => {
-          setRegistration(reg);
-          reg.pushManager.getSubscription().then((sub) => {
-            setWebpushSubscription(sub);
-          });
-        })
-        .catch((error) => {
-          console.error('Service Worker registration failed:', error);
+      navigator.serviceWorker.ready.then((reg) => {
+        if(reg.pushManager === null) return;
+        setRegistration(reg);
+        reg.pushManager.getSubscription().then((sub) => {
+          setWebpushSubscription(sub);
         });
+      });
     }
   }, []);
 
@@ -159,6 +155,11 @@ export default function SettingsModal() {
 
     const subscribeUser = async () => {
     try {
+      if(!registration?.pushManager) {
+        toast.error('Service worker not found');
+        handleCloseModal();
+        return;
+      }
       const sub = await registration?.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY

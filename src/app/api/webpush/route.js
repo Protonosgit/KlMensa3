@@ -12,9 +12,19 @@ export async function POST(req) {
     const sql = neon(process.env.NEON_DATABASE_URL);
     const subscription = await req.json();
     const account_data = JSON.parse(req.cookies.get('account_data')?.value) || {};
+
+    const accountID = await sql`SELECT account_id FROM sessions WHERE token = ${account_data?.sessionToken}`;
+
+    if(!accountID[0]?.account_id) {
+      res.headers.set('Set-Cookie', 'account_data=; Max-Age=0; Secure; SameSite=Strict; Path=/');
+      throw new Error('No account found');
+    }
+    if(!subscription?.endpoint || !subscription?.keys) {
+      throw new Error('No subscription found');
+    }
     
     // Store subscription in database
-    await sql`INSERT INTO pushlist (hash_id, endpoint, auth, p256dh, timeslot) VALUES (${account_data.hashedId}, ${subscription.endpoint}, ${subscription.keys.auth}, ${subscription.keys.p256dh}, 0)`;
+    await sql`INSERT INTO pushlist (account_id, endpoint, auth, p256dh, timeslot) VALUES (${accountID[0]?.account_id}, ${subscription.endpoint}, ${subscription.keys.auth}, ${subscription.keys.p256dh}, 0)`;
 
 
     return new Response(JSON.stringify({ message: 'Subscription successful' }), {
