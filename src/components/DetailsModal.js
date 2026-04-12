@@ -278,23 +278,31 @@ const MealTitle = () => {
   const FreitextInfo = () => {
     const freilist = meal?.mergedFreitextList || [];
     return (
-            <>
-            <div className={shared.divider} style={{display: freilist.length > 0 ? "block" : "none"}} />
-            {freilist.map((freitext, index) => (
-              <div key={index} className={styles.infoText}>
-                {freitext?.includes("Uhr") ? (
-                  <Clock10Icon size={18} className={styles.otherIcon} />
-                ) : freitext?.includes("DIY") ? (
-                  <Scale size={18} className={styles.otherIcon} />
-                ) : freitext?.includes("Vegetarisch") ? (
-                  <Leaf size={18} className={styles.otherIcon} />
-                ) : (
-                  <InfoIcon size={18} className={styles.otherIcon} />
-                )}
-                <p>{freitext}</p>
-              </div>
-            ))}
-            </>
+      <>
+        {freilist.length > 0 && (
+          <>
+          <div className={shared.divider} />
+            <div className={styles.sectionTitle}>
+              <p>Information</p>
+            </div>
+          </>
+        )}
+
+        {freilist.map((freitext, index) => (
+          <div key={index} className={styles.infoText}>
+            {freitext?.includes("Uhr") ? (
+              <Clock10Icon size={18} className={styles.otherIcon} />
+            ) : freitext?.includes("DIY") ? (
+              <Scale size={18} className={styles.otherIcon} />
+            ) : freitext?.includes("Vegetarisch") ? (
+              <Leaf size={18} className={styles.otherIcon} />
+            ) : (
+              <InfoIcon size={18} className={styles.otherIcon} />
+            )}
+            <p>{freitext}</p>
+          </div>
+        ))}
+      </>
     );
   }
 
@@ -585,7 +593,7 @@ const MealTitle = () => {
               onClick={() => handleRequestImageTakedown()}
             >
               Request image removal
-              <FlagIcon style={{ marginLeft: "5px" }} size={18} />
+              <FlagIcon style={{ marginLeft: "5px" }} size={15} />
             </div>
           </div>
         </div>

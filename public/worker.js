@@ -33,44 +33,44 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
 
   // Cache always first, fast as f but buggy
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      caches.open(PAGE_CACHE).then(async (cache) => {
-        const cached = await cache.match(req);
+  // if (req.mode === 'navigate') {
+  //   event.respondWith(
+  //     caches.open(PAGE_CACHE).then(async (cache) => {
+  //       const cached = await cache.match(req);
 
-        const networkFetch = fetch(req)
-          .then((res) => {
-            cache.put(req, res.clone());
-            return res;
-          })
-          .catch(() => cached);
+  //       const networkFetch = fetch(req)
+  //         .then((res) => {
+  //           cache.put(req, res.clone());
+  //           return res;
+  //         })
+  //         .catch(() => cached);
 
-        return cached || networkFetch;
-      })
-    );
-    return;
-  }
+  //       return cached || networkFetch;
+  //     })
+  //   );
+  //   return;
+  // }
 
   // Online first, cache only offline
-//   if (req.mode === 'navigate') {
-//   event.respondWith(
-//     caches.open(PAGE_CACHE).then(async (cache) => {
-//       try {
-//         const fresh = await fetch(req);
+  if (req.mode === 'navigate') {
+  event.respondWith(
+    caches.open(PAGE_CACHE).then(async (cache) => {
+      try {
+        const fresh = await fetch(req);
 
-//         if (fresh && fresh.status === 200) {
-//           cache.put(req, fresh.clone());
-//         }
+        if (fresh && fresh.status === 200) {
+          cache.put(req, fresh.clone());
+        }
 
-//         return fresh;
-//       } catch (err) {
-//         const cached = await cache.match(req);
-//         return cached;
-//       }
-//     })
-//   );
-//   return;
-// }
+        return fresh;
+      } catch (err) {
+        const cached = await cache.match(req);
+        return cached;
+      }
+    })
+  );
+  return;
+}
 
 
 //  detect image requests
