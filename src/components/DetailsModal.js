@@ -178,7 +178,7 @@ export default function MealModal() {
           saveRatingLocal(rating);
           toast.success("Rating saved");
         } else {
-          toast.error("Rating unavailable, please wait");
+          toast.error(res?.error);
           setSubmittedRating(previous);
         }
         
