@@ -149,6 +149,7 @@ export default function SettingsModal() {
       key === "pricecat"
     ) {
       //window.location.reload();
+      caches.delete("pages");
       revalidatePage();
     }
   };
@@ -219,6 +220,8 @@ export default function SettingsModal() {
   // Handle user logout.
   async function handleLogout() {
     // send api message to clear session
+    caches.delete("pages");
+    caches.delete("images");
       document.cookie =
       "account_data=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
     document.location.reload();
@@ -232,7 +235,7 @@ export default function SettingsModal() {
         className={shared.headderButton}
         title="Settings and Account"
         onClick={() => {
-          if(!navigator.onLine) {toast.error("You are offline!"); return;}
+          if(!navigator.onLine) {toast('Offline', { icon: '⛔',}); return;}
           setModalVisible(true);
           window.history.pushState(
             null,
@@ -335,9 +338,9 @@ export default function SettingsModal() {
                         handleSettingChange("pricecat", e.target.value)
                       }
                     >
-                      <option value="stu">Students</option>
-                      <option value="bed">Employees</option>
-                      <option value="gas">Guests</option>
+                      <option value="0">Students</option>
+                      <option value="1">Employees</option>
+                      <option value="2">Guests</option>
                     </select>
                   </div>
 

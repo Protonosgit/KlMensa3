@@ -191,6 +191,7 @@ export default function FilterModal({}) {
 
     loadFilters();
     try {
+      caches.delete("pages");
       await revalidatePage();
     } finally {
     }
@@ -257,7 +258,7 @@ export default function FilterModal({}) {
         className={shared.headderButton}
         title="Meal filters"
         onClick={() => {
-          if(!navigator.onLine) {toast.error("You are offline!"); return;}
+          if(!navigator.onLine) {toast('Offline', { icon: '⛔',}); return;}
           setModalVisible(true);
           window.history.pushState(null, "", window.location.pathname + "#filter");
         }}
