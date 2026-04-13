@@ -5,8 +5,8 @@
 //
 
 
-const PAGE_CACHE = 'pages-v2';
-const IMAGE_CACHE = 'images-v2';
+const PAGE_CACHE = 'pages';
+const IMAGE_CACHE = 'images';
 
 // Install
 self.addEventListener('install', (event) => {
@@ -108,6 +108,7 @@ const isImageRequest = (req) => {
     );
     return;
   }
+  
 });
 
 //

@@ -16,7 +16,7 @@ export default function MealModalTrigger({meals}) {
   }, [isOpen]);
 
   function enableModalMode(targetId) {
-    if(!navigator.onLine) {toast.error("You are offline!"); return false;}
+    if(!navigator.onLine) {toast('Offline', { icon: '⛔',}); return false;}
     if (isOpen) return false;
     const meal = meals?.flatMap(day => day.meals).find(meal => meal.murmurID === targetId);
     if(!meal) return false;
@@ -30,12 +30,6 @@ export default function MealModalTrigger({meals}) {
     if(!enableModalMode(urlParams.get("artid"))) {
       window.history.replaceState(null, '', "/");
     }
-
-    const handleOffline = () => {
-      toast('Offline mode enabled!', { icon: '🔴',})
-    };
-
-    window.addEventListener('offline', handleOffline);
 
     // load modal by onclick
     const cards = document.querySelectorAll("#mealcard")
@@ -52,7 +46,7 @@ export default function MealModalTrigger({meals}) {
     })
 
     return () => {
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("click", enableModalMode);
     };
   }, [])
 

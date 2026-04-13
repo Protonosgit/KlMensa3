@@ -439,9 +439,7 @@ const MealTitle = () => {
           <MealTitle />
 
           <div className={styles.popupPriceRating}>
-            <span title="Price" className={styles.popupPrice}>
-              {meal?.price?.stu || meal?.price?.price}
-            </span>
+            <span title="Price" className={styles.popupPrice}>{meal?.price && (meal?.price[parseInt(settings?.pricecat) || 0]+"€") || ''}</span>
             <div className={styles.popupRating}>
               <div
                 className={shared.tooltipWrapper}
