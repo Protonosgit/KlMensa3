@@ -360,12 +360,11 @@
   border-bottom: none;
 }
 
-@media (any-pointer: coarse) and (min-width: 881px) and (max-width: 1380px) {
+@media (min-width: 881px) and (max-width: 1380px) {
     .popupImageContainer {
-      height: 300px;
+      height: 400px;
     }
     .popupImage {
-      height: 300px;
       border-radius: 0;
     }
     .popupTitle {

@@ -6,7 +6,7 @@
 
 
 const PAGE_CACHE = 'pages';
-const IMAGE_CACHE = 'images';
+const ASSET_CACHE = 'assets';
 
 // Install
 self.addEventListener('install', (event) => {
@@ -19,7 +19,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys.map((key) => {
-          if (![PAGE_CACHE, IMAGE_CACHE].includes(key)) {
+          if (![PAGE_CACHE, ASSET_CACHE].includes(key)) {
             return caches.delete(key);
           }
         })
@@ -29,51 +29,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-
-  // Cache always first, fast as f but buggy
-  // if (req.mode === 'navigate') {
-  //   event.respondWith(
-  //     caches.open(PAGE_CACHE).then(async (cache) => {
-  //       const cached = await cache.match(req);
-
-  //       const networkFetch = fetch(req)
-  //         .then((res) => {
-  //           cache.put(req, res.clone());
-  //           return res;
-  //         })
-  //         .catch(() => cached);
-
-  //       return cached || networkFetch;
-  //     })
-  //   );
-  //   return;
-  // }
-
-  // Online first, cache only offline
-  if (req.mode === 'navigate') {
-  event.respondWith(
-    caches.open(PAGE_CACHE).then(async (cache) => {
-      try {
-        const fresh = await fetch(req);
-
-        if (fresh && fresh.status === 200) {
-          cache.put(req, fresh.clone());
-        }
-
-        return fresh;
-      } catch (err) {
-        const cached = await cache.match(req);
-        return cached;
-      }
-    })
-  );
-  return;
-}
-
-
-//  detect image requests
+// check if image is image
 const isImageRequest = (req) => {
   const url = new URL(req.url);
 
@@ -83,33 +39,67 @@ const isImageRequest = (req) => {
   );
 };
 
-  // Handle images Next/external
-  if (isImageRequest(req)) {
-    event.respondWith(
-      caches.open(IMAGE_CACHE).then(async (cache) => {
-        const cached = await cache.match(req);
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
 
-        if (cached) {
-          return cached;
-        }
+  if (req.method !== 'GET') return;
 
-        try {
-          const res = await fetch(req);
-
-          if (res && res.status === 200) {
-            cache.put(req, res.clone());
-          }
-
-          return res;
-        } catch (err) {
-          return cached;
-        }
-      })
-    );
+  //html
+  if (req.mode === 'navigate') {
+    event.respondWith(handleHTML(req));
     return;
   }
-  
+
+  // images
+  if (isImageRequest(req)) {
+    event.respondWith(handleAssets(req));
+    return;
+  }
+
+  // css/js
+  if (
+    req.destination === 'style' ||
+    req.destination === 'script'
+  ) {
+    event.respondWith(handleAssets(req));
+    return;
+  }
 });
+
+// Directly from server when online because SSR might break
+async function handleHTML(req) {
+  const cache = await caches.open(PAGE_CACHE);
+
+  try {
+    const fresh = await fetch(req);
+
+    if (fresh && fresh.status === 200) {
+      cache.put(req, fresh.clone());
+    }
+
+    return fresh;
+  } catch (err) {
+    const cached = await cache.match(req);
+    return cached || new Response('Offline', { status: 503 });
+  }
+}
+
+// always stale while revalidate for speeeed
+async function handleAssets(req) {
+  const cache = await caches.open(ASSET_CACHE);
+  const cached = await cache.match(req);
+
+  const networkFetch = fetch(req)
+    .then((res) => {
+      if (res && res.status === 200) {
+        cache.put(req, res.clone());
+      }
+      return res;
+    })
+    .catch(() => null);
+
+  return cached || networkFetch;
+}
 
 //
 //
