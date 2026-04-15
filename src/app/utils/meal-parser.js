@@ -9,7 +9,8 @@ import { decode } from "he";
 // Due to someone making frequent typos this list contains some very special variants which should not be considered as a mistake on my side ;)
 //
 const veggieIndexTags = ["Vegetarisches Menü[1]:", "Vegetarischer Bagel[1]:", "Vegetarisches Menü[2]:"];
-const veganIndexTags = ["Veganes Menü[1]:", "Veganuary Menü[1]:", "Veganuary Menü1]:", "Plant-based Menü[1]:", "Plant based Menü[1]:", "Plant-based Menü[2]:", "Plant based Menü[2]:"];
+const veganIndexTags = ["Veganes Menü[1]:", "Veganuary Menü[1]:", "Plant-based Menü[1]:", "Plant based Menü[1]:", "Plant-based Menü[2]:", "Plant based Menü[2]:"];
+const additionalConTags = ["[1]:", "[2]:", "1]:", "2]:"]; // not used
 const taggedStrings = [...veggieIndexTags, ...veganIndexTags];
 
 function isToday(timestamp) {
