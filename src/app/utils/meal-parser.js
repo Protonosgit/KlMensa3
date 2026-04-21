@@ -6,33 +6,24 @@ import { decode } from "he";
 
 
 // List of tags that indicate veggie or vegan
-// Due to someone making frequent typos this list contains some very special variants which should not be considered as a mistake on my side ;)
+// Due to someone making frequent typos this list contains some special variants
 //
-const veggieIndexTags = ["Vegetarisches Menü[1]:", "Vegetarischer Bagel[1]:", "Vegetarisches Menü[2]:"];
-const veganIndexTags = ["Veganes Menü[1]:", "Veganuary Menü[1]:", "Plant-based Menü[1]:", "Plant based Menü[1]:", "Plant-based Menü[2]:", "Plant based Menü[2]:"];
-const additionalConTags = ["[1]:", "[2]:", "1]:", "2]:"]; // not used
+
+const veggieIndexTags = ["Vegetarisches Menü", "Vegetarischer Bagel", "Vegetarisches Menü"];
+const veganIndexTags = ["Veganes Menü", "Veganuary Menü", "Plant-based Menü", "Plant based Menü"];
+const additionalConTags = ["[1]:", "[2]:", "[3]:", "1]:", "2]:", "3]:"];
 const taggedStrings = [...veggieIndexTags, ...veganIndexTags];
 
-function isToday(timestamp) {
-  const inputDate = new Date(timestamp);
-  const today = new Date();
-
-  return (
-    inputDate.getFullYear() === today.getFullYear() &&
-    inputDate.getMonth() === today.getMonth() &&
-    inputDate.getDate() === today.getDate()
-  );
-}
 
 function removeUnwantedStrings(target, strings) {
-  return target.map(s => strings.reduce((acc, cur) => acc.replace(cur, "@&@"), s));
+  return target.map(s => [...strings, ...additionalConTags].reduce((acc, cur) => acc.replace(cur, "@&@"), s));
 }
 
 function stripAdditivesFromArray(target) {
   return target.map(s =>
     s.replace(/\s*\(([0-9A-Za-zÄäÖöÜüß.,\/\-\s]+)\)\s*$/g, (match, inside) =>
       inside.includes("@&@") ? match : ""
-    ).replace("@&@", "").replace(/[\(\)]/g, "")
+    ).replace(/@&@/g, "").replace(/[\(\)]/g, "")
   );
 }
 function extractAdditivesAsArray(target) {
