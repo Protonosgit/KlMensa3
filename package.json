@@ -10,7 +10,7 @@
     "analyze": "next experimental-analyze"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.2",
+    "@neondatabase/serverless": "^1.1.0",
     "@svgr/webpack": "^8.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -18,13 +18,13 @@
     "groq-sdk": "^1.1.1",
     "he": "^1.2.0",
     "heic2any": "^0.0.4",
-    "lucide-react": "^1.8.0",
+    "lucide-react": "^1.14.0",
     "murmurhash": "^2.0.1",
-    "next": "^16.2.3",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "next": "^16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "react-hot-toast": "^2.6.0",
     "web-push": "^3.6.7",
-    "zustand": "^5.0.11"
+    "zustand": "^5.0.13"
   }
 }
