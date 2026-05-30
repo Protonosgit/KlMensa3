@@ -19,13 +19,18 @@ function removeUnwantedStrings(target, strings) {
   return target.map(s => [...strings, ...additionalConTags].reduce((acc, cur) => acc.replace(cur, "@&@"), s));
 }
 
+const additiveCleaner = /\(\s*(?:[A-Za-z0-9]{1,2}(?:\s*,\s*[A-Za-z0-9]{1,2})*)\s*\)/g;
+
+const additiveDetector = /\s*\(\s*([A-Za-z0-9]{1,2}(?:\s*,\s*[A-Za-z0-9]{1,2})*)\s*\)\s*$/g;
+
 function stripAdditivesFromArray(target) {
   return target.map(s =>
-    s.replace(/\s*\(([0-9A-Za-zÄäÖöÜüß.,\/\-\s]+)\)\s*$/g, (match, inside) =>
+    s.replace(additiveDetector, (match, inside) =>
       inside.includes("@&@") ? match : ""
     ).replace(/@&@/g, "").replace(/[\(\)]/g, "")
   );
 }
+
 function extractAdditivesAsArray(target) {
   const regex = /\(([^)]+)\)/g;
   return target.map(part => {
@@ -221,10 +226,9 @@ async function ParseMenu() {
       const matchKey = titleReg?.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
       const altMatchKey = titleAlt?.flat().join("").toLowerCase().replace(/[^a-z]/g, "");
       // maybe index the oder: tag and split string when legacy api does nto want to fix this issue
-      const sisterItem = rawLegacyApi.find((item) => decode(item?.title || "").toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
-      const brotherItem = rawLegacyApi.find((item) => decode(item?.title || "").toLowerCase().replace(/[^a-z]/g, "").includes(altMatchKey));
+      const sisterItem = rawLegacyApi.find((item) => decode(item?.title_with_additives || "").replace(additiveCleaner, '').toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
+      const brotherItem = rawLegacyApi.find((item) => decode(item?.title_with_additives || "").replace(additiveCleaner, '').toLowerCase().replace(/[^a-z]/g, "").includes(altMatchKey));
 
-      
       menuData.push({
         date: obj?.proddatum,
         murmurID,
