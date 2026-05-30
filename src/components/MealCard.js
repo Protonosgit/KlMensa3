@@ -4,6 +4,7 @@ import styles from "./MealCard.module.css";
 import  VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon  from "../../public/icons/VeganOpIcon.svg";
+import EmptyPlate from "../../public/icons/EmptyPlate.svg";
 
 export default async function MealCard({ meal, mealIndex, dayIndex, settings }) {
   //  star rating meal (non-interactive)
@@ -34,14 +35,23 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
         data-id={meal?.murmurID}
         className={styles.mealCard}
         style={{ background: meal?.partialFiltered ? "repeating-linear-gradient(45deg, rgba(255,0,0,0.3), rgba(255,0,0,0.3) 10px, transparent 10px, transparent 20px)" : "" }}>
-          <Image
+
+          {meal?.image ? (
+            <Image
             priority={mealIndex < 6 && dayIndex === 0}
             loading={mealIndex < 6 && dayIndex === 0 ? "eager" : "lazy"}
-            src={meal?.image ? meal?.imageUrl : "/plate_placeholder.png"}
+            src={meal?.imageUrl}
             alt="dish-image" title={"Meal image"} 
             className={styles.mealImage}
             data-layout={settings?.layout}
             width={302} height={227} />
+          ):(
+            <div className={styles.emptyPlate}>
+              <EmptyPlate />
+            </div>
+            
+          )}
+
 
         <p className={styles.mealLocation}>
           {meal?.dpartname}
