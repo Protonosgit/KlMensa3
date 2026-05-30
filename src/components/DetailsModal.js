@@ -31,8 +31,8 @@ import {
 import VeganIcon from "../../public/icons/VeganIcon.svg";
 import VeggieOpIcon from "../../public/icons/VeggieOpIcon.svg";
 import VeganOpIcon from "../../public/icons/VeganOpIcon.svg";
+import EmptyPlate from "../../public/icons/EmptyPlate.svg";
 import { useModalStore } from "@/app/utils/contextStore";
-
 const UploadBox = dynamic(() => import("./UploadBox"), {
   ssr: false,
   loading: () => null,
@@ -313,30 +313,24 @@ const MealTitle = () => {
     <div title="" className={shared.popupOverlay} onClick={() => {requestCloseModal()}}>
       <div className={shared.popupContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.popupImageContainer}>
-          {/* Render meal image from any source or placeholder */}
-          <Image
+          {/* Error handling removed for now */}
+          {meal?.image ? (
+            <Image
             priority
-            onError={(e) => {
-              if(e.currentTarget !== "/plate_placeholder.png") {
-                e.currentTarget.src = "/plate_placeholder.png";
-              } 
-            }}
-
             src={
               selectedVariant == 0
-                ? meal?.image
                   ? meal?.imageUrl
-                  : "/plate_placeholder.png"
-                : meal?.altImage
-                ? meal?.altImageUrl
-                : "/plate_placeholder.png"
+                : meal?.altImageUrl
             }
-            title={meal?.titleReg[0]}
-            alt="dish-image"
+            alt="dish-image" title={"Meal image"} 
             className={styles.popupImage}
-            width={640}
-            height={310}
-          />
+            width={640} height={310} />
+          ):(
+            <div className={styles.emptyPlate}>
+              <EmptyPlate />
+            </div>
+            
+          )}
 
           <div className={styles.overlayLocationBar}>
             <p title="Location" className={styles.popupLocation}>
