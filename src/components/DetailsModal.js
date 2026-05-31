@@ -86,6 +86,7 @@ export default function MealModal() {
     try {
       return JSON.parse(str);
     } catch (e) {
+      console.log(e);
       return null;
     }
   };
@@ -117,8 +118,7 @@ export default function MealModal() {
     setSelectedVariant(0);
     // load settings from cookie (fast path and avoid deep compares)
     const settingsCookie = getCookie("settings");
-    const parsedSettings = settingsCookie ? safeJSONParse(settingsCookie) : null;
-    if (parsedSettings) setSettings(parsedSettings);
+    if (settingsCookie) setSettings(settingsCookie);
 
     loadStars(0);
 
