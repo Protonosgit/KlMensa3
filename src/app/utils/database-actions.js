@@ -33,7 +33,7 @@ export async function rateMeal(legacyId, stars) {
     const tokenStringObj = store.get('account_data')?.value && JSON.parse(store.get('account_data')?.value);
     const tokenString = tokenStringObj?.legacyToken || null;
     if(!tokenString) {
-        return { error: "Fault 0: No token", data: null };
+        return { error: "Not logged in", data: null };
     }
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_LEGACY_API_URL}/api/v1/rate-meal`, { method: 'POST',body: JSON.stringify({ meal_id: legacyId, rating: stars }), headers: { Authorization: `Bearer ${tokenString}` }});
@@ -43,7 +43,7 @@ export async function rateMeal(legacyId, stars) {
           return { error: null, data: result };
         }
 
-        return { error: "Fault 1: Server issue", data: result?.data };
+        return { error: result?.data?.message || "Server error", data: null };
 
     } catch (error) {
         console.log(error);
@@ -65,6 +65,7 @@ export async function sendSystemTGMessage(text) {
     var raw = JSON.stringify({
       chat_id: process.env.TELEGRAM_CHAT_ID,
       text: text,
+      parse_mode: "HTML"
     });
 
     const res = await fetch(
@@ -78,6 +79,9 @@ export async function sendSystemTGMessage(text) {
         redirect: "follow",
       }
     );
+    if(res.status !== 200) {
+      return { error: "Server error", data: null };
+    }
 
     return { error: null, data: null };
   } catch (error) {

@@ -37,6 +37,11 @@
   margin-top: 4px;
 }
 
+.subtitleIcon {
+  width: 20px;
+  height: 20px;
+}
+
 .main {
   flex-grow: 1;
   padding: 0rem 0;
@@ -89,6 +94,10 @@
   .linkGrid {
     grid-template-columns: repeat(2, 2fr);
   }
+  .subtitleIcon {
+    width: 15px;
+    height: 15px;
+}
 }
 
 

@@ -96,10 +96,10 @@ async function requestNutrition(rlist) {
 
       "model": "openai/gpt-oss-120b",
       "temperature": 0.6,
-      "max_completion_tokens": 8192,
+      "max_completion_tokens": 8000,
       "top_p": 1,
       "stream": false,
-      "reasoning_effort": "high",
+      "reasoning_effort": "medium",
       "response_format": {
         "type": "json_object"
       },

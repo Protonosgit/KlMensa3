@@ -189,12 +189,15 @@ export default function MealModal() {
       }
     }
 
+    // Mealtype: \n
+
   // Handle reporting a comment or image.
   async function handleRequestImageTakedown() {
     const answer = prompt("Please provide the reason for the takedown", "Accidental upload");
     if(!answer) return;
     if(answer.length > 0 && answer.length < 31) {
-      await sendSystemTGMessage(`Image reported: ${meal?.legacyId} / ${meal?.legacyId_alt} for variant ${selectedVariant} with reason: ${answer}`);
+      // This is vulnerable to hijacking but it will be reworked soon and im not stupid
+      await sendSystemTGMessage(`Image reported with reason: ${answer} \n <a href="https://mensa-kl.de/meals/${meal?.selectedVariant === 0 ? meal?.legacyId : meal?.legacyId_alt}">Item</a>`);
       toast.success("Request sent!");
     } else {
       toast.error("Invalid reason");
