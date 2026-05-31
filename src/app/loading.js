@@ -1,5 +1,5 @@
 import styles from "@/styles/shared_page.module.css";
-
+import Icon from "../../public/icons/Icon.svg";
 export default function Loading() { 
 
   return (
@@ -9,7 +9,7 @@ export default function Loading() {
           <div className={styles.headerContent}>
             <div className={styles.headerTitleSection}>
               <h1 className={styles.headerTitle}>Mensa KL</h1>
-              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen Universität in Kaiserslautern. Listen to Ghost!</h2>
+              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen <Icon className={styles.subtitleIcon}/>niversität in Kaiserslautern. Listen to Ghost!</h2>
             </div>
           </div>
         </div>

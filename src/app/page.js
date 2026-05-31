@@ -3,8 +3,8 @@ import shared from "@/styles/shared_page.module.css";
 import Schedule from '@/components/ScheduleGrid';
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import { InfoIcon } from "lucide-react";
 import Script from "next/script";
+import Icon from "../../public/icons/Icon.svg";
 
 const DynamicSettingsModal = dynamic(() => import("@/components/SettingsModal"), { ssr: true });
 const DynamicFilterModal = dynamic(() => import("@/components/FilterModal"), { ssr: true });
@@ -34,17 +34,17 @@ export default async function Home() {
         <div className={shared.headerWrapper}>
           <div className={shared.headerContent}>
             <div className={shared.headerTitleSection}>
-              <h1 className={shared.headerTitle}>Mensa KL</h1>
-              <h2 className={shared.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen Universität in Kaiserslautern</h2>
+              <h1 className={shared.headerTitle}> Mensa KL</h1>
+              <h2 className={shared.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen <Icon className={shared.subtitleIcon}/>niversität in Kaiserslautern</h2>
             </div>
           </div>
         </div>
       </header>
 
-      <div className={styles.newsBox} >
+      {/* <div className={styles.newsBox} >
         <p className={styles.newsTitle}><InfoIcon size={20} />Shutdown</p>
         <p className={styles.newsText}>Due to unforseen circumstances, kl-mensa will be shutting down in July 2026! Please use the legacy site.</p>
-      </div>
+      </div> */}
 
       <main className={shared.main}>
         <div className={styles.headerButtonSection}>
@@ -66,7 +66,7 @@ export default async function Home() {
           <a href="https://github.com/Protonosgit/KlMensa3" className={shared.footerLink}>Source</a>
           <a href="/api/menu_v1" className={shared.footerLink}>Api</a>
         </div>
-           <p>2026 kl-mensa v2 prototype{/* 🇺🇦 */}<br/></p>
+           <p>2026 kl-mensa prototype{/* 🇺🇦 */}<br/></p>
         <Script id="worker-init" strategy="afterInteractive">{`navigator.serviceWorker.register('/worker.js');`}</Script>
       </footer>
       <DynamicScrollToTopButton />

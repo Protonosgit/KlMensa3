@@ -2,7 +2,7 @@ import Link from "next/link";
 import styles from "./page.module.css";
 import shared from "@/styles/shared_page.module.css"
 import { CodeIcon } from "lucide-react";
-
+import Icon from "../../../public/icons/Icon.svg";
 
 export default function ReportPage() {   
 
@@ -15,7 +15,7 @@ export default function ReportPage() {
           <div className={shared.headerContent}>
             <Link href={"/"} className={shared.headerTitleSection}>
               <h1 className={shared.headerTitle}>Mensa KL</h1>
-              <h2 className={shared.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen Universität in Kaiserslautern</h2>
+              <h2 className={shared.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen <Icon className={shared.subtitleIcon}/>niversität in Kaiserslautern</h2>
             </Link>
           </div>
         </div>

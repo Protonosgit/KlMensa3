@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import shared from "@/styles/shared_page.module.css";
 import { ArrowDownToLine } from "lucide-react";
+import Icon from "../../../public/icons/Icon.svg";
 
 export default function InstallPWA() {
   const [platform, setPlatform] = useState(null);
@@ -91,7 +92,7 @@ export default function InstallPWA() {
         if (browser === "safari")
           return (<Image className={styles.hintImage} src="/screenshots/ios_safa_pwahint.png" loading="eager" alt="install screenshot" width={300} height={300}/>);
         if (browser !== "safari")
-          return <p>Only Safari supports Progressive Web Apps on iOS.</p>;
+          return <p>Only Safari supports Progressive Web Apps on iOS!</p>;
       case "macos":
         if (browser === "chromium")
           return (<>{directInstallButton()}
@@ -115,7 +116,7 @@ export default function InstallPWA() {
             <Link href={"/"} className={shared.headerTitleSection}>
               <h1 className={shared.headerTitle}>Mensa KL</h1>
               <h2 className={shared.headerSubtitle}>
-                Mensaplan der Rheinland-Pfälzischen Technischen Universität in
+                Mensaplan der Rheinland-Pfälzischen Technischen <Icon className={shared.subtitleIcon}/>niversität in
                 Kaiserslautern
               </h2>
             </Link>

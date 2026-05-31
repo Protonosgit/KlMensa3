@@ -149,9 +149,9 @@ export default function SettingsModal() {
       key === "pricecat"
     ) {
       //window.location.reload();
-      caches.delete("pages");
       revalidatePage();
     }
+    caches.delete("pages");
   };
 
     const subscribeUser = async () => {
