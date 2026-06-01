@@ -5,55 +5,192 @@
 const PAGE_CACHE = 'pages';
 const IMAGE_CACHE = 'images';
 const META_CACHE = 'cache-metadata';
-const META_KEY = 'last-update-date';
 
-const getTodayKey = () => {
-  const now = new Date();
-  return `${now.getUTCFullYear()}-${now.getUTCMonth() + 1}-${now.getUTCDate()}`;
+const PAGE_META_KEY = 'page-last-update';
+
+const UPDATE_CUTOFF_HOUR = 10;
+const UPDATE_CUTOFF_MINUTE = 30;
+
+const getTodayKey = (date = new Date()) => {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+};
+
+const getMinutesSinceMidnight = (date = new Date()) => {
+  return date.getHours() * 60 + date.getMinutes();
+};
+
+const isBeforeCutoff = (date = new Date()) => {
+  return (
+    getMinutesSinceMidnight(date) <
+    UPDATE_CUTOFF_HOUR * 60 + UPDATE_CUTOFF_MINUTE
+  );
 };
 
 const isSameDay = (storedDate, today) => storedDate === today;
 
-const getCacheDate = async () => {
+const getPageCacheMeta = async () => {
   const cache = await caches.open(META_CACHE);
-  const metaResponse = await cache.match(META_KEY);
-  if (!metaResponse) return null;
+  const response = await cache.match(PAGE_META_KEY);
+
+  if (!response) return null;
 
   try {
-    const json = await metaResponse.json();
-    return json.date || null;
+    return await response.json();
   } catch {
     return null;
   }
 };
 
-const setCacheDate = async (date = getTodayKey()) => {
+const setPageCacheMeta = async (
+  date = getTodayKey(),
+  updatedAt = new Date().toISOString()
+) => {
   const cache = await caches.open(META_CACHE);
-  const payload = JSON.stringify({ date });
-  await cache.put(
-    META_KEY,
-    new Response(payload, {
-      headers: { 'Content-Type': 'application/json' },
-    })
-  );
-};
 
-const purgePageAndImageCaches = async () => {
-  await Promise.all(
-    [PAGE_CACHE, IMAGE_CACHE].map(async (cacheName) => {
-      const cache = await caches.open(cacheName);
-      const requests = await cache.keys();
-      await Promise.all(requests.map((request) => cache.delete(request)));
-    })
+  await cache.put(
+    PAGE_META_KEY,
+    new Response(
+      JSON.stringify({
+        date,
+        updatedAt,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
   );
 };
 
 const isImageRequest = (req) => {
   const url = new URL(req.url);
-  return req.destination === 'image' || url.pathname.startsWith('/_next/image');
+
+  return (
+    req.destination === 'image' ||
+    url.pathname.startsWith('/_next/image')
+  );
 };
 
-self.addEventListener('install', (event) => {
+const shouldUseNetworkFirst = async (cached) => {
+  const now = new Date();
+  const today = getTodayKey(now);
+
+  const meta = await getPageCacheMeta();
+
+  const hasSameDayMeta =
+    meta?.date && isSameDay(meta.date, today);
+
+  const lastUpdatedAt = meta?.updatedAt
+    ? new Date(meta.updatedAt)
+    : null;
+
+  const nowAfterCutoff = !isBeforeCutoff(now);
+
+  const lastUpdateBeforeCutoff = lastUpdatedAt
+    ? isBeforeCutoff(lastUpdatedAt)
+    : false;
+
+  return (
+    !cached ||
+    !hasSameDayMeta ||
+    (
+      hasSameDayMeta &&
+      nowAfterCutoff &&
+      lastUpdateBeforeCutoff
+    )
+  );
+};
+
+const fetchAndStore = async (
+  req,
+  cache,
+  updateMetadata = false
+) => {
+  try {
+    const fresh = await fetch(req);
+
+    if (fresh && fresh.ok) {
+      await cache.put(req, fresh.clone());
+
+      // freshmark
+      if (updateMetadata) {
+        await setPageCacheMeta(
+          getTodayKey(),
+          new Date().toISOString()
+        );
+      }
+    }
+
+    return fresh;
+  } catch {
+    return null;
+  }
+};
+
+const handleCachedRequest = async (
+  event,
+  req,
+  cacheName,
+  updateMetadata = false
+) => {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(req);
+
+  const networkFirst =
+    await shouldUseNetworkFirst(cached);
+
+  // old cache networtk firrst
+  if (networkFirst) {
+    const fresh = await fetchAndStore(
+      req,
+      cache,
+      updateMetadata
+    );
+
+    if (fresh) {
+      return fresh;
+    }
+
+    // Network failed use cache
+    return (
+      cached ||
+      new Response('Offline', {
+        status: 503,
+        statusText: 'Service Unavailable',
+      })
+    );
+  }
+
+  // same day valid swr
+  if (cached) {
+    event.waitUntil(
+      fetchAndStore(
+        req,
+        cache,
+        updateMetadata
+      )
+    );
+
+    return cached;
+  }
+
+  const fresh = await fetchAndStore(
+    req,
+    cache,
+    updateMetadata
+  );
+
+  return (
+    fresh ||
+    new Response('Offline', {
+      status: 503,
+      statusText: 'Service Unavailable',
+    })
+  );
+};
+
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
@@ -62,14 +199,22 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys.map((key) => {
-          if (![PAGE_CACHE, IMAGE_CACHE, META_CACHE].includes(key)) {
+          if (
+            ![
+              PAGE_CACHE,
+              IMAGE_CACHE,
+              META_CACHE,
+            ].includes(key)
+          ) {
             return caches.delete(key);
           }
+
           return Promise.resolve();
         })
       )
     )
   );
+
   self.clients.claim();
 });
 
@@ -81,93 +226,29 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (req.mode === 'navigate') {
-    event.respondWith(handleNavigationRequest(req));
+    event.respondWith(
+      handleCachedRequest(
+        event,
+        req,
+        PAGE_CACHE,
+        true 
+      )
+    );
+
     return;
   }
 
   if (isImageRequest(req)) {
-    event.respondWith(handleImageRequest(req));
-    return;
+    event.respondWith(
+      handleCachedRequest(
+        event,
+        req,
+        IMAGE_CACHE,
+        false
+      )
+    );
   }
 });
-
-const handleNavigationRequest = async (req) => {
-  const cache = await caches.open(PAGE_CACHE);
-  const cached = await cache.match(req);
-  const today = getTodayKey();
-  const lastUpdate = await getCacheDate();
-  const stale = !lastUpdate || !isSameDay(lastUpdate, today);
-
-  if (stale) {
-    try {
-      const fresh = await fetch(req);
-
-      if (fresh && fresh.ok) {
-        await purgePageAndImageCaches();
-        await cache.put(req, fresh.clone());
-        await setCacheDate(today);
-      }
-
-      return fresh;
-    } catch {
-      return cached || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
-    }
-  }
-
-  try {
-    const fresh = await fetch(req);
-
-    if (fresh && fresh.ok) {
-      await cache.put(req, fresh.clone());
-      await setCacheDate(today);
-    }
-
-    return fresh;
-  } catch {
-    return cached || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
-  }
-};
-
-const handleImageRequest = async (req) => {
-  const cache = await caches.open(IMAGE_CACHE);
-  const cached = await cache.match(req);
-  const today = getTodayKey();
-  const lastUpdate = await getCacheDate();
-  const stale = !lastUpdate || !isSameDay(lastUpdate, today);
-
-  if (stale) {
-    try {
-      const fresh = await fetch(req);
-
-      if (fresh && fresh.ok) {
-        await purgePageAndImageCaches();
-        await cache.put(req, fresh.clone());
-        await setCacheDate(today);
-      }
-
-      return fresh;
-    } catch {
-      return cached || Response.error();
-    }
-  }
-
-  if (cached) {
-    return cached;
-  }
-
-  try {
-    const fresh = await fetch(req);
-
-    if (fresh && fresh.ok) {
-      await cache.put(req, fresh.clone());
-      await setCacheDate(today);
-    }
-
-    return fresh;
-  } catch {
-    return Response.error();
-  }
-};
 
 //
 // Notification stuff
@@ -189,16 +270,20 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
   event.waitUntil(
-    clients.matchAll({ type: 'window' }).then((windowClients) => {
-      for (const client of windowClients) {
-        const url = new URL(client.url);
-        if (url.origin === location.origin) {
-          return client.focus();
+    clients.matchAll({ type: 'window' }).then(
+      (windowClients) => {
+        for (const client of windowClients) {
+          const url = new URL(client.url);
+
+          if (url.origin === location.origin) {
+            return client.focus();
+          }
+        }
+
+        if (clients.openWindow) {
+          return clients.openWindow('/');
         }
       }
-      if (clients.openWindow) {
-        return clients.openWindow('/');
-      }
-    })
+    )
   );
 });
