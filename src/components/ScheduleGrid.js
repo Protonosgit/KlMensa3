@@ -8,17 +8,25 @@ import MealModalTrigger from './CardModalTrigger';
 
 const DynamicMealPopup = dynamic(() => import("./DetailsModal"), { ssr: true });
 
+// Move formatters outside to avoid recreation
+const WEEKDAY_FORMATTER = new Intl.DateTimeFormat("de-DE", {
+  weekday: "long",
+});
+
+const DAY_MONTH_FORMATTER = new Intl.DateTimeFormat("de-DE", {
+  day: "2-digit",
+  month: "2-digit",
+});
+
+const safeJSONParse = (str) => {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    return null;
+  }
+};
 
 export default async function ScheduleGrid({}) {
-
-  const safeJSONParse = (str) => {
-    try {
-      return JSON.parse(str);
-    } catch (e) {
-      return null;
-    }
-  };
-
   const cookieStore = await cookies();
   const locationFilter = safeJSONParse(cookieStore.get('location')?.value);
   const proteinFilter = safeJSONParse(cookieStore.get('protein')?.value);
@@ -29,8 +37,6 @@ export default async function ScheduleGrid({}) {
   const maxMealCount = settings?.nolimit ? undefined : 7;
   const menu = menuData?.slice(0, maxMealCount);
 
-
-  // Check if menu data is available
   if (!menu || !menu?.length) {
     return (
       <div className={styles.emptyList}>
@@ -40,49 +46,43 @@ export default async function ScheduleGrid({}) {
     );
   }
 
-const weekdayFormatter = new Intl.DateTimeFormat("de-DE", {
-  weekday: "long",
-});
+  // Pre-calculate filter
+  const menuWithFilteredMeals = menu.map(day => ({
+    ...day,
+    filteredMeals: applyFilterList(
+      locationFilter,
+      proteinFilter,
+      additiveFilter,
+      day?.meals
+    )
+  }));
 
-const dayMonthFormatter = new Intl.DateTimeFormat("de-DE", {
-  day: "2-digit",
-  month: "2-digit",
-});
 
   return (
     <>
-      {menu.map((day, dayIndex) => {
+      {menuWithFilteredMeals.map((day, dayIndex) => {
         return (
           <div key={dayIndex} className={styles.dayContainer}>
             <div className={styles.dayHeader}>
-              <h3 className={styles.dayTitle}>{weekdayFormatter.format(new Date(day.date))}</h3>
-              <h3 className={styles.dayTitle}>{dayMonthFormatter.format(new Date(day.date))}</h3>
+              <h3 className={styles.dayTitle}>{WEEKDAY_FORMATTER.format(new Date(day.date))}</h3>
+              <h3 className={styles.dayTitle}>{DAY_MONTH_FORMATTER.format(new Date(day.date))}</h3>
             </div>
-            <div
-              className={styles.mealList}>
-              {applyFilterList(
-                locationFilter,
-                proteinFilter,
-                additiveFilter,
-                day?.meals
-              ).map((meal, mealIndex) => {
-
-                return (
-                  <Meal
-                    key={mealIndex}
-                    meal={meal}
-                    mealIndex={mealIndex}
-                    dayIndex={dayIndex}
-                    settings={settings}
-                  />
-                );
-              })}
+            <div className={styles.mealList}>
+              {day.filteredMeals.map((meal, mealIndex) => (
+                <Meal
+                  key={mealIndex}
+                  meal={meal}
+                  mealIndex={mealIndex}
+                  dayIndex={dayIndex}
+                  settings={settings}
+                />
+              ))}
             </div>
           </div>
         );
       })}
       <DynamicMealPopup />
-      <MealModalTrigger meals={menu}/>
+      <MealModalTrigger meals={menuWithFilteredMeals}/>
     </>
   );
 }
