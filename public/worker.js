@@ -91,15 +91,11 @@ const shouldUseNetworkFirst = async (cached) => {
     ? isBeforeCutoff(lastUpdatedAt)
     : false;
 
-  return (
-    !cached ||
-    !hasSameDayMeta ||
-    (
-      hasSameDayMeta &&
-      nowAfterCutoff &&
-      lastUpdateBeforeCutoff
-    )
-  );
+    const isMetaValid = meta?.updatedAt
+  ? (Date.now() - new Date(meta.updatedAt).getTime()) < MAX_AGE_MS
+  : false;
+
+  return !cached || !isMetaValid;
 };
 
 const fetchAndStore = async (
@@ -134,14 +130,17 @@ const handleCachedRequest = async (
   cacheName,
   updateMetadata = false
 ) => {
+
   const cache = await caches.open(cacheName);
   const cached = await cache.match(req);
+  console.log("checking3")
 
-  const networkFirst =
-    await shouldUseNetworkFirst(cached);
+  
+  const networkFirst = await shouldUseNetworkFirst(cached);
 
   // old cache networtk firrst
   if (networkFirst) {
+    console.log('network first');
     const fresh = await fetchAndStore(
       req,
       cache,
@@ -149,8 +148,10 @@ const handleCachedRequest = async (
     );
 
     if (fresh) {
+      console.log('fresh');
       return fresh;
     }
+    console.log('offline');
 
     // Network failed use cache
     return (
@@ -164,6 +165,7 @@ const handleCachedRequest = async (
 
   // same day valid swr
   if (cached) {
+    console.log('swr');
     event.waitUntil(
       fetchAndStore(
         req,
@@ -188,6 +190,31 @@ const handleCachedRequest = async (
       statusText: 'Service Unavailable',
     })
   );
+};
+
+const handleImageRequest = async (req) => {
+  const cache = await caches.open(IMAGE_CACHE);
+
+  const cached = await cache.match(req);
+
+  if (cached) {
+    return cached;
+  }
+
+  try {
+    const response = await fetch(req);
+
+    if (response.ok) {
+      await cache.put(req, response.clone());
+    }
+
+    return response;
+  } catch {
+    return new Response('Offline', {
+      status: 503,
+      statusText: 'Service Unavailable',
+    });
+  }
 };
 
 self.addEventListener('install', () => {
@@ -231,22 +258,17 @@ self.addEventListener('fetch', (event) => {
         event,
         req,
         PAGE_CACHE,
-        true 
+        true
       )
     );
-
     return;
   }
 
   if (isImageRequest(req)) {
     event.respondWith(
-      handleCachedRequest(
-        event,
-        req,
-        IMAGE_CACHE,
-        false
-      )
+      handleImageRequest(req)
     );
+    return;
   }
 });
 

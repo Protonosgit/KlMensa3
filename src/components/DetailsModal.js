@@ -39,7 +39,7 @@ const UploadBox = dynamic(() => import("./UploadBox"), {
 });
 
 export default function MealModal() {
-  const { isOpen, meal, openModal, closeModal } = useModalStore();
+  const { isOpen, meal, closeModal } = useModalStore();
   const [user, setUser] = useState(null);
   const [settings, setSettings] = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -313,33 +313,38 @@ const MealTitle = () => {
 
 
   return (
-    <div title="" className={shared.popupOverlay} onClick={() => {requestCloseModal()}}>
+    <div
+      title=""
+      className={shared.popupOverlay}
+      onClick={() => {
+        requestCloseModal();
+      }}
+    >
       <div className={shared.popupContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.popupImageContainer}>
           {/* Error handling removed for now */}
           {meal?.image ? (
             <Image
-            priority
-            src={
-              selectedVariant == 0
-                  ? meal?.imageUrl
-                : meal?.altImageUrl
-            }
-            alt="dish-image" title={"Meal image"} 
-            className={styles.popupImage}
-            width={640} height={310} />
-          ):(
+              priority
+              src={selectedVariant == 0 ? meal?.imageUrl : meal?.altImageUrl}
+              alt="dish-image"
+              title={"Meal image"}
+              className={styles.popupImage}
+              width={640}
+              height={310}
+            />
+          ) : (
             <div className={styles.emptyPlate}>
               <EmptyPlate />
             </div>
-            
           )}
 
           <div className={styles.overlayLocationBar}>
             <p title="Location" className={styles.popupLocation}>
               {meal.dpartname}
 
-              {meal?.dpname == "Robotic Kitchen" || meal?.dpname == "Frische ausgewogene Bowls" ? (
+              {meal?.dpname == "Robotic Kitchen" ||
+              meal?.dpname == "Frische ausgewogene Bowls" ? (
                 <Bot size={20} className={styles.otherIcon} />
               ) : (
                 ""
@@ -392,7 +397,9 @@ const MealTitle = () => {
             <div
               className={styles.popupActionButton}
               style={{ display: submittedRating ? "flex" : "none" }}
-              onClick={(e) => {handleSubmitRating(null)}}
+              onClick={(e) => {
+                handleSubmitRating(null);
+              }}
             >
               <StarOff size={18} />
             </div>
@@ -403,7 +410,7 @@ const MealTitle = () => {
               onClick={() =>
                 navigator.clipboard.writeText(
                   `${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}?artid=` +
-                    meal?.murmurID
+                    meal?.murmurID,
                 ) && toast.success("Link copied to clipboard!")
               }
             >
@@ -436,7 +443,11 @@ const MealTitle = () => {
           <MealTitle />
 
           <div className={styles.popupPriceRating}>
-            <span title="Price" className={styles.popupPrice}>{meal?.price && (meal?.price[parseInt(settings?.pricecat) || 0]+"€") || ''}</span>
+            <span title="Price" className={styles.popupPrice}>
+              {(meal?.price &&
+                meal?.price[parseInt(settings?.pricecat) || 0] + "€") ||
+                ""}
+            </span>
             <div className={styles.popupRating}>
               <div
                 className={shared.tooltipWrapper}
@@ -489,11 +500,20 @@ const MealTitle = () => {
               {meal.altType === 1 && (
                 <VeggieOpIcon size={20} className={styles.altIcon} />
               )}
-              {meal.altType === 2 && <VeganOpIcon size={20} className={styles.altIcon} />}
-              {meal.altType === 3 && <BadgePlusIcon size={20} className={styles.altIcon} />}
+              {meal.altType === 2 && (
+                <VeganOpIcon size={20} className={styles.altIcon} />
+              )}
+              {meal.altType === 3 && (
+                <BadgePlusIcon size={20} className={styles.altIcon} />
+              )}
               <div>
                 <p className={styles.altTitle}>
-                  {meal?.altType === 2 ? "Vegan" : meal?.altType === 1 ? "Veggie": ""} Alternative
+                  {meal?.altType === 2
+                    ? "Vegan"
+                    : meal?.altType === 1
+                      ? "Veggie"
+                      : ""}{" "}
+                  Alternative
                 </p>
                 <p className={styles.altDescription}>{meal?.titleAlt.flat()}</p>
               </div>
@@ -508,7 +528,6 @@ const MealTitle = () => {
 
           {/* Additional information */}
           <FreitextInfo />
-
 
           {/* Additive chips */}
           <div className={styles.detailsSection}>
@@ -525,9 +544,26 @@ const MealTitle = () => {
                     title={additive?.name}
                     onClick={() => setSelectedAdditive(additive?.code)}
                     className={styles.dietaryTag}
-                    style={{opacity:selectedVariant === 0 ? 
-                      ((meal?.titleRegAdditives?.flat().includes(additive?.code) || !meal?.titleAltAdditives?.flat()?.includes(additive?.code)) ? 1 : 0.35) : 
-                      ((!meal?.titleRegAdditives.flat()?.includes(additive?.code) || meal?.titleAltAdditives?.flat()?.includes(additive?.code)) ? 1 : 0.35),}}
+                    style={{
+                      opacity:
+                        selectedVariant === 0
+                          ? meal?.titleRegAdditives
+                              ?.flat()
+                              .includes(additive?.code) ||
+                            !meal?.titleAltAdditives
+                              ?.flat()
+                              ?.includes(additive?.code)
+                            ? 1
+                            : 0.35
+                          : !meal?.titleRegAdditives
+                                .flat()
+                                ?.includes(additive?.code) ||
+                              meal?.titleAltAdditives
+                                ?.flat()
+                                ?.includes(additive?.code)
+                            ? 1
+                            : 0.35,
+                    }}
                     key={additive?.code}
                   >
                     {additive?.name}
@@ -540,40 +576,41 @@ const MealTitle = () => {
           </div>
 
           {/* Nutrition */}
-          {nutrition && selectedVariant === 0 ? (
-            <div className={styles.detailsSection}>
-              <div className={shared.divider} />
-              <div className={styles.sectionTitle}>
-                <p>Nutrition</p>
-                <p className={styles.sectionContext}>
-                  <SparklesIcon size={18} />
-                  AI powered
-                </p>
-              </div>
-              <table
-                title="Nutritional value is estimated by ai and can be wrong"
-                className={styles.nutritionTable}
-              >
-                <thead>
-                  <tr>
-                    <th>Calories</th>
-                    <th>Protein</th>
-                    <th>Fat</th>
-                    <th>Carbohydrates</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{nutrition?.kalorien_kcal+" kcal" || "?"}</td>
-                    <td>{nutrition?.protein_g+" g" || "?"}</td>
-                    <td>{nutrition?.fett_g+" g" || "?"}</td>
-                    <td>{nutrition?.kohlenhydrate_g+" g" || "?"}</td>
-                  </tr>
-                </tbody>
-              </table>
-              {/* <a href="https://ernaehrung.de/tipps/allgemeine_infos/">More information</a> */}
-            </div>
-          ) : null}
+
+              {nutrition && selectedVariant === 0 ? (
+                <div className={styles.detailsSection}>
+                  <div className={shared.divider} />
+                  <div className={styles.sectionTitle}>
+                    <p>Nutrition</p>
+                    <p className={styles.sectionContext}>
+                      <SparklesIcon size={18} />
+                      AI powered
+                    </p>
+                  </div>
+                  <table
+                    title="Nutritional value is estimated by ai and can be wrong"
+                    className={styles.nutritionTable}
+                  >
+                    <thead>
+                      <tr>
+                        <th>Calories</th>
+                        <th>Protein</th>
+                        <th>Fat</th>
+                        <th>Carbs</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{nutrition?.calories || "..." + " kcal"}</td>
+                        <td>{nutrition?.protein || "..." + " g"}</td>
+                        <td>{nutrition?.fat || "..." + " g"}</td>
+                        <td>{nutrition?.carbs || "..." + " g"}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {/* <a href="https://ernaehrung.de/tipps/allgemeine_infos/">More information</a> */}
+                </div>
+              ) : null}
 
           {/* Image upload section */}
           <div className={shared.divider} />
@@ -581,7 +618,7 @@ const MealTitle = () => {
             <div className={styles.sectionTitle}>
               <p>Submit image</p>
             </div>
-              <UploadBox mealId={meal?.legacyId} />
+            <UploadBox mealId={meal?.legacyId} />
             <div
               className={shared.centerFlat}
               title="Report image for takedown"

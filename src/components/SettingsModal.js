@@ -497,14 +497,14 @@ export default function SettingsModal() {
                       >
                         <button
                           className={styles.popupButton}
-                          onClick={() => toast('Temporarily disabled!', { icon: '🚫',})}
+                          onClick={() => toast('Coming soon!', { icon: '🚫',})}
                         >
                           Login with MKL
                           <img src="/mkl_icon.webp" />
                         </button>
                         <button
                           className={styles.popupButton}
-                          onClick={() => toast('Please use MKL!', { icon: '🦔',})}
+                          onClick={() => toast('Coming soon!', { icon: '🚫',})}
                         >
                           Login
                         </button>
