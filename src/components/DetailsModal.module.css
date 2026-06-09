@@ -366,6 +366,28 @@
   border-bottom: none;
 }
 
+.nutriBarBox {
+  margin: 0.5rem 0;
+  width: 100%;
+  height: 12px;
+  background: linear-gradient(
+      90deg,
+      #d9534f 0%,
+      #f0ad4e 30%,
+      #ffd500 50%,
+      #5cb85c 100%
+    );
+  border-radius: 10px;
+  align-items: center;
+  display: flex;
+}
+
+.nutriBar {
+  height: 22px;
+  border-right: 14px solid var(--main-text);
+}
+
+
 @media (min-width: 881px) and (max-width: 1380px) {
     .popupImageContainer {
       height: 400px;
