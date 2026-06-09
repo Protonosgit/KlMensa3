@@ -172,6 +172,7 @@ export default function FilterModal({}) {
     // reload local state and then revalidate
     loadFilters();
     try {
+      navigator.serviceWorker.controller?.postMessage({ type: 'CLEAR_PAGE_CACHE' });
       await revalidatePage();
     } finally {
       // handleCloseModal();
@@ -191,9 +192,10 @@ export default function FilterModal({}) {
 
     loadFilters();
     try {
-      caches.delete("pages");
+      navigator.serviceWorker.controller?.postMessage({ type: 'CLEAR_PAGE_CACHE' });
       await revalidatePage();
-    } finally {
+    } catch (e) {
+      console.log(e);
     }
   }
 
