@@ -149,6 +149,7 @@ export default function SettingsModal() {
       key === "pricecat"
     ) {
       //window.location.reload();
+      navigator.serviceWorker.controller?.postMessage({ type: 'CLEAR_PAGE_CACHE' });
       revalidatePage();
     }
     caches.delete("pages");
