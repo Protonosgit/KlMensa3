@@ -601,10 +601,10 @@ const MealTitle = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{nutrition?.calories || "..." + " kcal"}</td>
-                        <td>{nutrition?.protein || "..." + " g"}</td>
-                        <td>{nutrition?.fat || "..." + " g"}</td>
-                        <td>{nutrition?.carbs || "..." + " g"}</td>
+                        <td>{nutrition?.calories + " kcal" || "..." }</td>
+                        <td>{nutrition?.protein + " g" || "..." }</td>
+                        <td>{nutrition?.fat + " g" || "..." + " g"}</td>
+                        <td>{nutrition?.carbs + " g" || "..."}</td>
                       </tr>
                     </tbody>
                   </table>

@@ -353,6 +353,7 @@
   padding: 0.5rem 0.75rem;
   text-align: center;
   border-bottom: 1px solid var(--darkbox-border);
+  width: 25%;
 }
 
 .nutritionTable thead th {
