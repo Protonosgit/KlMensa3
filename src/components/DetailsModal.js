@@ -608,6 +608,9 @@ const MealTitle = () => {
                       </tr>
                     </tbody>
                   </table>
+                  <div className={styles.nutriBarBox}>
+                    <div style={{width: nutrition?.score+"%" }} className={styles.nutriBar}/>
+                  </div>
                   {/* <a href="https://ernaehrung.de/tipps/allgemeine_infos/">More information</a> */}
                 </div>
               ) : null}
