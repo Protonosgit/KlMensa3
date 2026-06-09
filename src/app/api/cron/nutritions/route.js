@@ -110,7 +110,8 @@ export async function GET( req, res ) {
     const sql = neon(`${process.env.NEON_DATABASE_URL}`);
 
     try {
-      const rawmenu = (await retrieveMenuCached()).slice(1, 2); // Only run for following day
+      const rawmenu = (await retrieveMenuCached()).slice(1, 2);
+
       //
       // Here objects should be filtered out which have a nutrition set present
       //
@@ -179,7 +180,7 @@ async function urlToBase64(imageUrl) {
 
 function makeListReadable(list) {
   return list
-    .filter((meal) => meal.dpartname === "Essen 1" || meal.dpartname === "Essen 2")
+    .filter((meal) => meal.dpartname === "Essen 1" || meal.dpartname === "Essen 2" || meal.dpartname === "Eintopf 1")
     .map((meal) => {
       const title = meal.titleReg?.map((item) => item);
       const aiD = meal.murmurID;
@@ -187,7 +188,7 @@ function makeListReadable(list) {
 
       return {
         text: `[ID: ${aiD}] ${title} (${additives})`,
-        image: meal.imageUrl.replace(".webp", ".jpeg"),
+        image: meal.imageUrl?.replace(".webp", ".jpeg"),
         aID: aiD,
       };
     });
@@ -201,7 +202,7 @@ async function requestNutrition(rlist) {
         apiKey: process.env.GEMENI_API_KEY,
     });
 
-    const parts =  [{text: `Analyze this food image and provide detailed nutritional information. Identify the main dish/meal name and break down all individual food items with their estimated portion sizes. Use knowledge of the image (if attached), title and additives: ${rlist.text} Respond ONLY with valid structured JSON, no additional text or formatting and use units like kcal for calories, mg/g for (micro-)/nutrients and % for the health score focused on the nutritional value (higher is better). If a meal could not be parsed respond with: {error: "three_word_reason"}. Example: {"aID": "00000000", "score": 100, "dishTitle": "meal title here","items": [{"name": "most relevant part","portion": "150g"},{"name": "another item","portion": "200g"},],"nutrition": {"calories": 0,"protein": 0,"carbohydrates": 0,"fat": 0,"fiber": 0, "sugar: 0},"micronutrients": {"vitamin_b12":0.0,"iron": 0.0,"sodium": 0.0,"calcium": 0.0}}`,}];
+    const parts =  [{text: `Analyze this food image and provide detailed nutritional information. Identify the main dish/meal name and break down all individual food items with their estimated portion sizes. Use knowledge of the image (if attached), title and additives: ${rlist.text} Respond ONLY with valid structured JSON, no additional text or formatting and use units like kcal for calories, mg/g for (micro-)/nutrients and % for the health score focused on the nutritional value (higher is better but be critical). If a meal could not be parsed respond with: {error: "three_word_reason"}. Example: {"aID": "00000000", "score": 100, "dishTitle": "meal title here","items": [{"name": "most relevant part","portion": "150g"},{"name": "another item","portion": "200g"},],"nutrition": {"calories": 0,"protein": 0,"carbohydrates": 0,"fat": 0,"fiber": 0, "sugar: 0},"micronutrients": {"vitamin_b12":0.0,"iron": 0.0,"sodium": 0.0,"calcium": 0.0}}`,}];
 
     const base64image = await urlToBase64(rlist.image);
     if(base64image && base64image.length > 10) {

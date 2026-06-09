@@ -246,6 +246,10 @@ self.addEventListener(
     }
 
     if (req.mode === 'navigate') {
+      const url = new URL(req.url);
+      if(url.pathname !== '/') {
+        return fetch(req);
+    }
       event.respondWith(
         handleDocument(event, req)
       );
