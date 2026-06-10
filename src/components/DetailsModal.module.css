@@ -385,7 +385,11 @@
 
 .nutriBar {
   height: 22px;
-  border-right: 14px solid var(--main-text);
+  width: 12px; 
+  height: 180%;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  background-color: var(--main-text);
 }
 
 

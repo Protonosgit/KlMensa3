@@ -53,7 +53,7 @@ export default async function MealCard({ meal, mealIndex, dayIndex, settings }) 
           )}
 
 
-        <p className={styles.mealLocation}>
+        <p className={styles.mealLocation} id="mealLocation" data-id={meal?.dpartname}>
           {meal?.dpartname}
 
           {meal?.dpname == "Robotic Kitchen" || meal?.dpname == "Frische ausgewogene Bowls" ? <Bot size={20} className={styles.otherIcon} /> : ""}

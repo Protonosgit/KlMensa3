@@ -15,10 +15,10 @@ export default function MealModalTrigger({meals}) {
     };
   }, [isOpen]);
 
-  function enableModalMode(targetId) {
+  function enableModalMode(targetId, targetLocation) {
     if(!navigator.onLine) {toast('Offline', { icon: '⛔',}); return false;}
     if (isOpen) return false;
-    const meal = meals?.flatMap(day => day.meals).find(meal => meal.murmurID === targetId);
+    const meal = meals?.flatMap(day => day.meals).find(meal => meal.murmurID === targetId && (meal.dpartname === targetLocation || !targetLocation));
     if(!meal) return false;
     openModal(meal);
     return true;
@@ -37,8 +37,10 @@ export default function MealModalTrigger({meals}) {
       card.addEventListener("click", (event) => {
         const el = event.currentTarget
         const id = el.dataset.id
+        const locationElement = el.querySelector("#mealLocation")
+        const location = locationElement.dataset.id
 
-        if(enableModalMode(id)) {
+        if(enableModalMode(id, location)) {
           window.history.pushState(null, '', window.location.href + "?artid=" + id);
         }
         
