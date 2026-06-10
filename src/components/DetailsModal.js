@@ -323,7 +323,7 @@ const MealTitle = () => {
       <div className={shared.popupContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.popupImageContainer}>
           {/* Error handling removed for now */}
-          {meal?.image ? (
+          {(meal?.image && selectedVariant === 0) || (meal?.altImage && selectedVariant === 1) ? (
             <Image
               priority
               src={selectedVariant == 0 ? meal?.imageUrl : meal?.altImageUrl}
@@ -571,7 +571,7 @@ const MealTitle = () => {
                 ))}
               </div>
             ) : (
-              <p className={styles.sectionContext}>Read the title</p>
+              <p className={styles.sectionContext}>No special additives</p>
             )}
           </div>
 
@@ -609,7 +609,7 @@ const MealTitle = () => {
                     </tbody>
                   </table>
                   <div className={styles.nutriBarBox}>
-                    <div style={{width: nutrition?.score+"%" }} className={styles.nutriBar}/>
+                    <div style={{marginLeft: nutrition?.score+"%" }} className={styles.nutriBar} />
                   </div>
                   {/* <a href="https://ernaehrung.de/tipps/allgemeine_infos/">More information</a> */}
                 </div>
