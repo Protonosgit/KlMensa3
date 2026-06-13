@@ -39,6 +39,7 @@ export default function SettingsModal() {
     booknoti: false,
     schedulenoti: false,
     experiments : false,
+    nutritionai: true
   });
 
   const [user, setUser] = useState(null);
@@ -148,11 +149,12 @@ export default function SettingsModal() {
       key === "shortitle" ||
       key === "pricecat"
     ) {
-      //window.location.reload();
       navigator.serviceWorker.controller?.postMessage({ type: 'CLEAR_PAGE_CACHE' });
       revalidatePage();
+    } else if(key === "nutritionai") {
+      console.log('reloading');
+      window.location.reload();
     }
-    caches.delete("pages");
   };
 
     const subscribeUser = async () => {
@@ -325,6 +327,15 @@ export default function SettingsModal() {
                     defaultChecked={settings.nolimit}
                     onChange={(checked) =>
                       handleSettingChange("nolimit", checked)
+                    }
+                  />
+                  <Switch
+                    id="nutritionai"
+                    title="Nutritions"
+                    description="Estimate nutrition with AI"
+                    defaultChecked={settings.nutritionai}
+                    onChange={(checked) =>
+                      handleSettingChange("nutritionai", checked)
                     }
                   />
 

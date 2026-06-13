@@ -1,320 +1,272 @@
-//
-// Caching stuff
-//
 
-const PAGE_CACHE = 'pages-v1';
-const ASSET_CACHE = 'assets-v1';
-const IMAGE_CACHE = 'images-v1';
 
-const CUTOFF_HOUR = 11;
-const CUTOFF_MINUTE = 15;
+/*
 
-const getDayKey = (date) =>
-  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+Caching stuff
 
-const isBeforeCutoff = (date) =>
-  date.getHours() * 60 + date.getMinutes() <
-  CUTOFF_HOUR * 60 + CUTOFF_MINUTE;
+*/
 
-const isImageRequest = (req) => {
-  const url = new URL(req.url);
-
-  return (
-    req.destination === 'image' ||
-    url.pathname.startsWith('/_next/image')
-  );
+const CONFIG = {
+  CACHE_VERSION: 'v1', // update to invalidate
+  FRESH_CUTOFF_HOUR: 11,
+  FRESH_CUTOFF_MINUTE: 15,
 };
 
-const cacheResponse = async (cache, req, response) => {
-  const headers = new Headers(response.headers);
+const MAIN_CACHE = `main-cache-${CONFIG.CACHE_VERSION}`;
+const IMAGE_CACHE = `image-cache-${CONFIG.CACHE_VERSION}`;
+const CURRENT_CACHES = [MAIN_CACHE, IMAGE_CACHE];
 
-  headers.set(
-    'sw-cached-at',
-    new Date().toISOString()
+const TIMESTAMP_HEADER = 'x-sw-cached-on';
+
+const IMAGE_PATH_PREFIX = '/_next/image';
+const EXCLUDED_PREFIXES = ['/api'];
+
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    (async () => {
+      try {
+        const cache = await caches.open(MAIN_CACHE);
+        // precache root document
+        await cache.add('/');
+      } catch (err) {}
+      await self.skipWaiting();
+    })()
   );
+});
 
-  const cachedResponse = new Response(
-    await response.clone().blob(),
-    {
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames
+          .filter((name) => !CURRENT_CACHES.includes(name))
+          .map((name) => caches.delete(name))
+      );
+      await self.clients.claim();
+    })()
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const bucket = getBucket(request);
+
+  if (bucket === 'image') {
+    event.respondWith(imageCacheFirst(request));
+    return;
+  }
+
+  // if (bucket === 'main') {
+  //   event.respondWith(mainStrategy(event, request));
+  // }
+
+});
+
+
+function getBucket(request) {
+  if (request.method !== 'GET') return null;
+
+  const url = new URL(request.url);
+
+  // Same origin
+  if (url.origin !== self.location.origin) return null;
+
+  // Exclusions
+  if (EXCLUDED_PREFIXES.some((prefix) => url.pathname.startsWith(prefix))) {
+    return null;
+  }
+
+  // nextjs img
+  if (url.pathname.startsWith(IMAGE_PATH_PREFIX) || request.destination === 'image') {
+    return 'image';
+  }
+
+  // only root
+  if (request.mode === 'navigate') {
+    return url.pathname === '/' ? 'main' : null;
+  }
+
+  // assets only from root
+  if (request.referrer) {
+    try {
+      const referrerUrl = new URL(request.referrer);
+      if (referrerUrl.origin === self.location.origin && referrerUrl.pathname !== '/') {
+        return null;
+      }
+    } catch (err) {}
+  }
+
+  return 'main';
+}
+
+
+async function imageCacheFirst(request) {
+  const cache = await caches.open(IMAGE_CACHE);
+  const cached = await cache.match(request);
+  if (cached) return cached;
+
+  const response = await fetch(request);
+  if (response && response.ok) {
+    cache.put(request, response.clone());
+  }
+  return response;
+}
+
+// time check
+async function mainStrategy(event, request) {
+  const cache = await caches.open(MAIN_CACHE);
+  const cached = await cache.match(request);
+
+  if (cached) {
+    const cachedDate = getCacheTimestamp(cached);
+    const age = cachedDate ? classifyCacheAge(cachedDate) : 'stale-day';
+
+    switch (age) {
+      case 'fresh-morning':
+        return cached;
+
+      case 'fresh-afternoon':
+        // stale-while-revalidate.
+        event.waitUntil(
+          fetchAndCache(request, cache).catch(() => {})
+        );
+        return cached;
+
+      case 'stale-day':
+      default:
+        try {
+          return await fetchAndCache(request, cache);
+        } catch (err) {
+          return cached;
+        }
+    }
+  }
+
+  // no cache
+  return fetchAndCache(request, cache);
+}
+
+
+async function fetchAndCache(request, cache) {
+  const response = await fetch(request);
+  if (response && response.ok) {
+    await putWithTimestamp(cache, request, response.clone());
+  }
+  return response;
+}
+
+async function putWithTimestamp(cache, request, response) {
+  try {
+    const body = await response.blob();
+    const headers = new Headers(response.headers);
+    headers.set(TIMESTAMP_HEADER, new Date().toISOString());
+
+    const stamped = new Response(body, {
       status: response.status,
       statusText: response.statusText,
       headers,
-    }
-  );
+    });
 
-  await cache.put(req, cachedResponse);
-};
-
-const fetchAndCache = async (req, cache) => {
-  const response = await fetch(req);
-
-  if (response.ok) {
-    await cacheResponse(
-      cache,
-      req,
-      response.clone()
-    );
+    await cache.put(request, stamped);
+  } catch (err) {
+    // cache without timestamp
+    try {
+      await cache.put(request, response);
+    } catch (_) {}
   }
+}
 
-  return response;
-};
+function getCacheTimestamp(response) {
+  const header = response.headers.get(TIMESTAMP_HEADER);
+  if (!header) return null;
+  const date = new Date(header);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
 
-const shouldUseNetworkFirstForDocument = async (
-  cached
-) => {
-  if (!cached) {
-    return true;
-  }
-
-  const cachedAt =
-    cached.headers.get('sw-cached-at');
-
-  if (!cachedAt) {
-    return true;
-  }
-
-  const cachedDate = new Date(cachedAt);
+function classifyCacheAge(cachedDate) {
   const now = new Date();
 
-  const cacheDay = getDayKey(cachedDate);
-  const today = getDayKey(now);
+  const isSameDay =
+    cachedDate.getFullYear() === now.getFullYear() &&
+    cachedDate.getMonth() === now.getMonth() &&
+    cachedDate.getDate() === now.getDate();
 
-  // Cache from a previous day
-  if (cacheDay !== today) {
-    return true;
-  }
+  if (!isSameDay) return 'stale-day';
 
-  // Today's cache was created before 11:15
-  if (isBeforeCutoff(cachedDate)) {
-    return true;
-  }
+  const cutoff = new Date(cachedDate);
+  cutoff.setHours(CONFIG.FRESH_CUTOFF_HOUR, CONFIG.FRESH_CUTOFF_MINUTE, 0, 0);
 
-  // Today's cache was created after 11:15
-  return false;
-};
-
-const offlineResponse = () =>
-  new Response('Offline', {
-    status: 503,
-    statusText: 'Service Unavailable',
-  });
-
-const handleDocument = async (
-  event,
-  req
-) => {
-  const cache = await caches.open(
-    PAGE_CACHE
-  );
-
-  const cached = await cache.match(req);
-
-  const networkFirst =
-    await shouldUseNetworkFirstForDocument(
-      cached
-    );
-
-  if (networkFirst) {
-    try {
-      return await fetchAndCache(
-        req,
-        cache
-      );
-    } catch {
-      return cached || offlineResponse();
-    }
-  }
-
-  // Stale-while-revalidate
-  if (cached) {
-    event.waitUntil(
-      fetchAndCache(req, cache).catch(
-        () => {}
-      )
-    );
-
-    return cached;
-  }
-
-  try {
-    return await fetchAndCache(
-      req,
-      cache
-    );
-  } catch {
-    return offlineResponse();
-  }
-};
-
-const handleImage = async (req) => {
-  const cache = await caches.open(
-    IMAGE_CACHE
-  );
-
-  const cached = await cache.match(req);
-
-  if (cached) {
-    return cached;
-  }
-
-  try {
-    const response = await fetch(req);
-
-    if (response.ok) {
-      await cache.put(
-        req,
-        response.clone()
-      );
-    }
-
-    return response;
-  } catch {
-    return offlineResponse();
-  }
-};
-
-const handleAsset = async (
-  event,
-  req
-) => {
-  const cache = await caches.open(
-    ASSET_CACHE
-  );
-
-  const cached = await cache.match(req);
-
-  if (cached) {
-    event.waitUntil(
-      fetchAndCache(req, cache).catch(
-        () => {}
-      )
-    );
-
-    return cached;
-  }
-
-  try {
-    return await fetchAndCache(
-      req,
-      cache
-    );
-  } catch {
-    return offlineResponse();
-  }
-};
-
-self.addEventListener('install', () => {
-  self.skipWaiting();
-});
-
-self.addEventListener(
-  'activate',
-  (event) => {
-    const allowedCaches = [
-      PAGE_CACHE,
-      ASSET_CACHE,
-      IMAGE_CACHE,
-    ];
-
-    event.waitUntil(
-      caches.keys().then((keys) =>
-        Promise.all(
-          keys.map((key) => {
-            if (
-              !allowedCaches.includes(key)
-            ) {
-              return caches.delete(key);
-            }
-
-            return Promise.resolve();
-          })
-        )
-      )
-    );
-
-    self.clients.claim();
-  }
-);
-
-self.addEventListener(
-  'fetch',
-  (event) => {
-    const req = event.request;
-
-    if (req.method !== 'GET') {
-      return;
-    }
-
-    if (req.mode === 'navigate') {
-      const url = new URL(req.url);
-      if(url.pathname !== '/') {
-        return fetch(req);
-    }
-      event.respondWith(
-        handleDocument(event, req)
-      );
-      return;
-    }
-
-    if (isImageRequest(req)) {
-      event.respondWith(
-        handleImage(req)
-      );
-      return;
-    }
-
-    event.respondWith(
-      handleAsset(event, req)
-    );
-  }
-);
+  return cachedDate < cutoff ? 'fresh-morning' : 'fresh-afternoon';
+}
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'CLEAR_PAGE_CACHE') {
     event.waitUntil(
-      caches.delete(PAGE_CACHE).then(() => {
-        event.ports[0]?.postMessage({ success: true, message: 'Page cache cleared' });
-      }).catch((error) => {
-        event.ports[0]?.postMessage({ success: false, message: 'Failed to clear cache', error });
-      })
+      Promise.all(CURRENT_CACHES.map((name) => caches.delete(name)))
     );
   }
 });
 
-//
-// Notification stuff
-//
 
-self.addEventListener('push', (event) => {
-  const data = event.data.json();
+/*
 
-  event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: data.icon,
-      data: { url: data.url },
-    })
-  );
-});
+Notification stuff
 
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
+*/
 
-  event.waitUntil(
-    clients.matchAll({ type: 'window' }).then(
-      (windowClients) => {
-        for (const client of windowClients) {
-          const url = new URL(client.url);
+self.addEventListener(
+  'push',
+  (event) => {
+    const data =
+      event.data?.json?.() ?? {};
 
-          if (url.origin === location.origin) {
-            return client.focus();
+    event.waitUntil(
+      self.registration.showNotification(
+        data.title,
+        {
+          body: data.body,
+          icon: data.icon,
+          data: {
+            url: data.url,
+          },
+        }
+      )
+    );
+  }
+);
+
+self.addEventListener(
+  'notificationclick',
+  (event) => {
+    event.notification.close();
+
+    event.waitUntil(
+      clients
+        .matchAll({
+          type: 'window',
+        })
+        .then((windowClients) => {
+          for (const client of windowClients) {
+            const url = new URL(
+              client.url
+            );
+
+            if (
+              url.origin ===
+              location.origin
+            ) {
+              return client.focus();
+            }
           }
-        }
 
-        if (clients.openWindow) {
-          return clients.openWindow('/');
-        }
-      }
-    )
-  );
-});
+          if (clients.openWindow) {
+            return clients.openWindow(
+              '/'
+            );
+          }
+        })
+    );
+  }
+);

@@ -24,5 +24,4 @@ Be informed that the dev, build and hosted version behave differently!
 - studierendenwerk-kaiserslautern.de
 
 ## Forbidden usage
-Due to resource constraints, bot/scraper/spam traffic is strictly prohibited and will be rewarded with a personal entry inside my firewall!
-Please use the provided API.
+Due to resource constraints, bot/scraper/spam traffic is strictly prohibited!
