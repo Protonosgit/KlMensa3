@@ -35,7 +35,7 @@ export default async function Home() {
           <div className={shared.headerContent}>
             <div className={shared.headerTitleSection}>
               <h1 className={shared.headerTitle}> Mensa KL</h1>
-              <h2 className={shared.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen <Icon className={shared.subtitleIcon}/>niversität in Kaiserslautern</h2>
+              <h2 className={shared.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen <span style={{whiteSpace: "nowrap"}}><Icon className={shared.subtitleIcon}/>niversität</span> in Kaiserslautern</h2>
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default async function Home() {
           <a href="/about" className={shared.footerLink}>About</a>
           <a href="https://github.com/Protonosgit/KlMensa3/issues" className={shared.footerLink}>Report issue</a>
           <a href="https://github.com/Protonosgit/KlMensa3" className={shared.footerLink}>Source</a>
-          <a href="/api/menu_v1" className={shared.footerLink}>Api</a>
+          <a href="/api/menu_v1" className={shared.footerLink}>Api V1</a>
         </div>
            <p>2026 kl-mensa prototype{/* 🇺🇦 */}<br/></p>
         <Script id="worker-init" strategy="afterInteractive">{`navigator.serviceWorker.register('/worker.js');`}</Script>

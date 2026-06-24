@@ -103,6 +103,7 @@ export default function MealModal() {
 
   async function loadNutrition (id) {
     if (!id) return;
+    if (settings?.nutritionai === false) return null;
     try {
       const res = await getNutritionForId(id);
       if (!mounted.current) return;

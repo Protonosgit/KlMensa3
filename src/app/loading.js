@@ -9,7 +9,7 @@ export default function Loading() {
           <div className={styles.headerContent}>
             <div className={styles.headerTitleSection}>
               <h1 className={styles.headerTitle}>Mensa KL</h1>
-              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen <Icon className={styles.subtitleIcon}/>niversität in Kaiserslautern. Listen to Ghost!</h2>
+              <h2 className={styles.headerSubtitle}>Mensaplan der Rheinland-Pfälzischen Technischen <span style={{whiteSpace: "nowrap"}}><Icon className={styles.subtitleIcon}/>niversität</span> in Kaiserslautern. Listen to Ghost!</h2>
             </div>
           </div>
         </div>

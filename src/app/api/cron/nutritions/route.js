@@ -15,7 +15,7 @@ const model = "gemini-3.1-flash-lite";
 const aiconfig = {
   maxOutputTokens: 5031,
   thinkingConfig: {
-    thinkingLevel: "MINIMAL",
+    thinkingLevel: "LOW",
   },
   temperature: 0.1,
   topP: 0.5,
@@ -112,19 +112,27 @@ export async function GET(req, res) {
   try {
     const rawmenu = (await retrieveMenuCached()).slice(1, 2);
 
-    //
-    // Here objects should be filtered out which have a nutrition set present
-    //
     const mealsList = rawmenu.flatMap((entry) => entry.meals).flat();
     const dedupedList = [...new Set(mealsList)];
-    const readableList = makeListReadable(dedupedList);
+    const idList = dedupedList.map((entry) => entry.murmurID);
 
-    // return NextResponse.json({ readableList }); // debugging
+    const existingList = await sql.query(
+      `SELECT a_id FROM nutrition WHERE a_id = ANY($1)`,
+      [idList]
+    );
+
+    const filteredList = dedupedList.filter((entry) => {
+      return !existingList.find((item) => item.a_id === entry.murmurID);
+    });
+
+    const readableList = makeListReadable(filteredList);
+
+
+    //return NextResponse.json({ readableList }); // debugging
 
     for (let i = 0; i < readableList.length; i++) {
       try {
         const aiResult = await requestNutrition(readableList[i]);
-        console.log(aiResult);
         if (aiResult.error || !aiResult.data) {
           console.warn("Ai detection faulted");
           continue;
