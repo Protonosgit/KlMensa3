@@ -58,9 +58,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // if (bucket === 'main') {
-  //   event.respondWith(mainStrategy(event, request));
-  // }
+  if (bucket === 'main') {
+    event.respondWith(mainStrategy(event, request));
+  }
 
 });
 
@@ -83,9 +83,9 @@ function getBucket(request) {
     return 'image';
   }
 
-  // only root
+  // Navigation requests should be handled by the browser directly.
   if (request.mode === 'navigate') {
-    return url.pathname === '/' ? 'main' : null;
+    return null;
   }
 
   // assets only from root
@@ -150,6 +150,10 @@ async function mainStrategy(event, request) {
 
 
 async function fetchAndCache(request, cache) {
+  if (request.mode === 'navigate') {
+    return fetch(request, { cache: 'no-store' });
+  }
+
   const response = await fetch(request);
   if (response && response.ok) {
     await putWithTimestamp(cache, request, response.clone());

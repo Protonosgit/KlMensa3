@@ -509,14 +509,14 @@ export default function SettingsModal() {
                       >
                         <button
                           className={styles.popupButton}
-                          onClick={() => toast('Coming soon!', { icon: '🚫',})}
+                          onClick={() => toast('Disabled due to api conflict', { icon: '🚫',})}
                         >
                           Login with MKL
                           <img src="/mkl_icon.webp" />
                         </button>
                         <button
                           className={styles.popupButton}
-                          onClick={() => toast('Coming soon!', { icon: '🚫',})}
+                          onClick={() => toast('Not yet implemented', { icon: '🚫',})}
                         >
                           Login
                         </button>

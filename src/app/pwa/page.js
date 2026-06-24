@@ -116,7 +116,7 @@ export default function InstallPWA() {
             <Link href={"/"} className={shared.headerTitleSection}>
               <h1 className={shared.headerTitle}>Mensa KL</h1>
               <h2 className={shared.headerSubtitle}>
-                Mensaplan der Rheinland-Pfälzischen Technischen <Icon className={shared.subtitleIcon}/>niversität in
+                Mensaplan der Rheinland-Pfälzischen Technischen <span style={{whiteSpace: "nowrap"}}><Icon className={shared.subtitleIcon}/>niversität</span> in
                 Kaiserslautern
               </h2>
             </Link>
