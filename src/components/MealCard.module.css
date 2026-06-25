@@ -245,6 +245,9 @@
       font-size: 0.8rem;
       padding: 0.3rem 0.5rem;
     }
+    [data-layout="biglist"] .emptyPlate {
+      width: 100%;
+    }
 
     /* Grid styles */
     [data-layout="grid"] .mealCard {
@@ -266,5 +269,8 @@
       width: 100%;
       height: 8rem;
       border-radius: 0.5rem 0.5rem 0 0;
+    }
+    [data-layout="grid"] .emptyPlate {
+      width: 100%;
     }
   }

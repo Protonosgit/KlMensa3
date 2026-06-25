@@ -18,6 +18,9 @@ export const metadata = {
   title: "Mensa-KL - Der Mensaplan der RPTU in Kaiserslautern / Landau",
   description: "Mensa KL ermöglicht das einsehen des aktuellen Speiseplans der RPTU, sowie das abgeben von Bewertungen und Bildern zu Mahlzeiten",
   keywords: ["Mensa","RPTU","Kaiserslautern","Speiseplan","Uni"],
+    icons: {
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Mensa-KL",
     description: "Mensa KL ermöglicht das einsehen des aktuellen Speiseplans der RPTU, sowie das abgeben von Bewertungen und Bildern zu Mahlzeiten",
