@@ -24,7 +24,7 @@ export const metadata = {
   openGraph: {
     title: "Mensa-KL",
     description: "Mensa KL ermöglicht das einsehen des aktuellen Speiseplans der RPTU, sowie das abgeben von Bewertungen und Bildern zu Mahlzeiten",
-    images: [`${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}/logo.png`],
+    images: [`${process.env.NEXT_PUBLIC_CURRENT_DOMAIN}/favicon.png`],
     site_name: "Mensa-KL",
     url: process.env.NEXT_PUBLIC_CURRENT_DOMAIN,
   },
