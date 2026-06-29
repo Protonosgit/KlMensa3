@@ -26,7 +26,7 @@ const safeJSONParse = (str) => {
   }
 };
 
-export default async function ScheduleGrid({}) {
+export default async function ScheduleGrid() {
   const cookieStore = await cookies();
   const locationFilter = safeJSONParse(cookieStore.get('location')?.value);
   const proteinFilter = safeJSONParse(cookieStore.get('protein')?.value);
@@ -34,6 +34,7 @@ export default async function ScheduleGrid({}) {
   const settings = safeJSONParse(cookieStore.get('settings')?.value);
 
   let menuData = await retrieveMenuCached();
+
   const maxMealCount = settings?.nolimit ? undefined : 7;
   const menu = menuData?.slice(0, maxMealCount);
 
@@ -41,7 +42,7 @@ export default async function ScheduleGrid({}) {
     return (
       <div className={styles.emptyList}>
         <h3>API fault</h3>
-        <p>The studierendenwerk API is currently unavailable. <br/>Please try again later <br/> ＞﹏＜</p>
+        <p>The Studierendenwerk API is currently unavailable. <br/>Please try again later <br/> ＞﹏＜</p>
       </div>
     );
   }
@@ -56,6 +57,7 @@ export default async function ScheduleGrid({}) {
       day?.meals
     )
   }));
+
 
 
   return (

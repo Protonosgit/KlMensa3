@@ -27,8 +27,8 @@ export async function GET(req, res) {
   const payload = JSON.stringify({
     title: "Heute in der Mensa",
     body: titles,
-    icon: "/favicon.png",
-    badge: "/favicon.png",
+    icon: "/icon.png",
+    badge: "/icon.png",
     url: "/",
     timestamp: Date.now()
   });

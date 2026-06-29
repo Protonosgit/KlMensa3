@@ -97,6 +97,7 @@ function detectAltVariant(target) {
   return 0;
 }
 
+
 async function fetchMensaData() {
   try {
     const [studiResult, legacyResult] = await Promise.allSettled([
@@ -104,25 +105,31 @@ async function fetchMensaData() {
         "https://www.studierendenwerk-kaiserslautern.de/fileadmin/templates/stw-kl/loadcsv/load_db_speiseplan.php?canteens=1",
         {
           method: "GET",
-          // next: { revalidate: 1000 },
+          cache: "force-cache",
+          next: { revalidate: 1200 },
           headers: {
-            "Referrer-Policy": "strict-origin-when-cross-origin",
-            "Cache-Control": "no-store, no-cache, must-revalidate",
-            "Pragma": "no-cache",
-            "Expires": "0",
           },
         }
-      ).then((r) => r.json()),
+      ).then(async (r) => {
+        if (!r.ok) {
+          throw new Error(`Studierendenwerk request failed with status ${r.status}`);
+        }
+        return r.json();
+      }),
 
       fetch("https://www.mensa-kl.de/api.php?format=json&date=all", {
         method: "GET",
+        cache: "force-cache",
+        next: { revalidate: 1200 },
         headers: {
-          "Referrer-Policy": "strict-origin-when-cross-origin",
-          "Cache-Control": "no-store, no-cache, must-revalidate",
-          "Pragma": "no-cache",
-          "Expires": "0",
+
         },
-      }).then((r) => r.json()),
+      }).then(async (r) => {
+        if (!r.ok) {
+          throw new Error(`Mensa KL request failed with status ${r.status}`);
+        }
+        return r.json();
+      }),
     ]);
 
     return {
@@ -130,7 +137,7 @@ async function fetchMensaData() {
       legacyApi: legacyResult.status === "fulfilled" ? legacyResult.value : [],
     };
   } catch (error) {
-    console.warn("Unexpected error:", error.message);
+    console.warn("Unexpected error:", error instanceof Error ? error.message : error);
     return { studiApi: [], legacyApi: [] };
   }
 }
@@ -140,10 +147,16 @@ async function ParseMenu() {
 
     let menuData = [];
 
-    // Filter out everything exept robotic kitchen and kl mensa
-    const lfStudiApi = inputData.studiApi.filter(item => item.ort_id === 310 || item.ort_id === 410);
 
-    const rawLegacyApi = inputData?.legacyApi;
+    // Filter out everything exept robotic kitchen and kl mensa
+    const studiApi = Array.isArray(inputData?.studiApi) ? inputData.studiApi : [];
+    const lfStudiApi = studiApi.filter(item => item?.ort_id === 310 || item?.ort_id === 410);
+
+    const rawLegacyApi = Array.isArray(inputData?.legacyApi) ? inputData.legacyApi : [];
+
+    if (!lfStudiApi.length) {
+      return [];
+    }
 
     // Iterate over meals
     for (let i = 0; i < lfStudiApi.length; i++) { // DEBUG !!!!! for (let i = 0; i < lfStudiApi.length; i++) {
@@ -229,6 +242,7 @@ async function ParseMenu() {
       const sisterItem = rawLegacyApi.find((item) => decode(item?.title_with_additives || "").replace(additiveCleaner, '').toLowerCase().replace(/[^a-z]/g, "").includes(matchKey));
       const brotherItem = rawLegacyApi.find((item) => decode(item?.title_with_additives || "").replace(additiveCleaner, '').toLowerCase().replace(/[^a-z]/g, "").includes(altMatchKey));
 
+      
       menuData.push({
         date: obj?.proddatum,
         murmurID,

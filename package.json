@@ -10,23 +10,21 @@
     "analyze": "next experimental-analyze"
   },
   "dependencies": {
-    "@google/genai": "^2.8.0",
+    "@google/genai": "^2.10.0",
     "@neondatabase/serverless": "^1.1.0",
     "@svgr/webpack": "^8.1.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
+    "date-fns": "^4.4.0",
     "he": "^1.2.0",
     "heic2any": "^0.0.4",
-    "lucide-react": "^1.14.0",
-    "mime": "^4.1.0",
+    "lucide-react": "^1.22.0",
     "murmurhash": "^2.0.1",
-    "next": "^16.2.6",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
+    "next": "^16.2.9",
+    "npm": "^11.17.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "react-hot-toast": "^2.6.0",
     "web-push": "^3.6.7",
-    "zustand": "^5.0.13"
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@types/node": "^25.9.1"
