@@ -14,7 +14,7 @@ export default function manifest() {
 
     icons: [
       {
-        src: "/favicon.png",
+        src: "/icon.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "any maskable",

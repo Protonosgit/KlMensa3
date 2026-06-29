@@ -59,7 +59,7 @@ export default async function Home() {
         <div className={shared.linkGrid}>
           <a href="https://www.studierendenwerk-kaiserslautern.de/de/" className={shared.footerLink}>Studierendenwerk</a>
           <a href="https://www.mensa-kl.de/legal.html" className={shared.footerLink}>Privacy Policy</a>
-          <a href="https://www.mensa-kl.de/#upload" className={shared.footerLink}>Images/Ratings</a>
+          <a href="https://www.mensa-kl.de/upload" className={shared.footerLink}>Images/Ratings</a>
           <a href="/pwa" className={shared.footerLink}>App</a>
           <a href="/about" className={shared.footerLink}>About</a>
           <a href="https://github.com/Protonosgit/KlMensa3/issues" className={shared.footerLink}>Report issue</a>

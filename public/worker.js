@@ -19,7 +19,7 @@ const CURRENT_CACHES = [MAIN_CACHE, IMAGE_CACHE];
 const TIMESTAMP_HEADER = 'x-sw-cached-on';
 
 const IMAGE_PATH_PREFIX = '/_next/image';
-const EXCLUDED_PREFIXES = ['/api'];
+const EXCLUDED_PREFIXES = ['/api', '/_next/data'];
 
 
 self.addEventListener('install', (event) => {
@@ -84,7 +84,7 @@ function getBucket(request) {
   }
 
   // Navigation requests should be handled by the browser directly.
-  if (request.mode === 'navigate') {
+  if (request.mode === 'navigate' || url.pathname === '/') {
     return null;
   }
 
@@ -139,6 +139,9 @@ async function mainStrategy(event, request) {
         try {
           return await fetchAndCache(request, cache);
         } catch (err) {
+          if (request.mode === 'navigate') {
+            return (await cache.match('/')) || cached;
+          }
           return cached;
         }
     }
